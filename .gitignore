@@ -5,6 +5,7 @@
 .ipynb_checkpoints/
 myenv/
 *.log
+__pycache__/
 
 ### front
 # dependencies
