@@ -1,6 +1,10 @@
+### vscode
+.vscode/
+
 ### py
 .ipynb_checkpoints/
 myenv/
+*.log
 
 ### front
 # dependencies
