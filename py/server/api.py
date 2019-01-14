@@ -54,8 +54,12 @@ def get_key_attrs(dataset_name):
     data = pd.read_csv(dataset_path)
     key_attrs = findKeyAttrs(data, protect_attr)
 
-    findGroups = FindGroups(key_attrs)
-    key_groups = findGroups.key_groups()
+    key_vals = {}
+    for key_attr in key_attrs:
+        key_vals[key_attr] = list(set(data[key_attr]))
+
+    findGroups = FindGroups(key_vals)
+    key_groups = findGroups.key_groups
 
 
     return json.dumps({
