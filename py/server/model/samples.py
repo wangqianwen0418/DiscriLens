@@ -157,7 +157,7 @@ class FindGroups(object):
         self.key_vals = key_vals
         self.key_attrs = [k for k in key_vals]
         self.key_groups = []
-        generate_groups(key_vals, 0, {} )
+        self.generate_groups( 0, {} )
         
         
 
@@ -183,7 +183,7 @@ class FindGroups(object):
             index_[self.key_attrs[depth]] = k
             if depth < len(self.key_attrs)-1: 
                 depth_ = depth+1 
-                generate_groups(self.key_vals, depth_, index_)
+                self.generate_groups(depth_, index_)
             else:
                 self.key_groups.append(index_)
 
