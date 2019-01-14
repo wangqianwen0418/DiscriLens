@@ -10,6 +10,8 @@ import copy
 from model.data_encoder import DataEncoder
 from model.helpers import find_range_cols
 
+
+
 # Data generator
 class DataGene(object):   
     def __init__(self, data, sample_num=10, class_col='class'):
@@ -101,19 +103,23 @@ def findKeyAttrs(samples, protect_attr, result_attr = 'class'):
     pc = pc()
     pc.start_vm()
     from pycausal import search as s
-    # must keep the above order
-
-    ### use bayes Est to find the key attributes
-    ### slow, extract more key attributes 
-    graph = s.bayesEst(samples, depth = 0, alpha = 0.05, verbose = True)
-    ### OR use Fast Greedy Equivalence Search
-    ### faster than bayes, get less key attributes
-    # graph = s.tetradrunner()
-    # graph.getAlgorithmParameters(algoId = 'fges', scoreId = 'bdeu')
-    # graph.run(algoId = 'fges', dfs = samples, scoreId = 'bdeu', priorKnowledge = None, dataType = 'discrete',
-    #        structurePrior = 0.5, samplePrior = 0.5, maxDegree = 5, faithfulnessAssumed = True, verbose = False)
-    
-#     graph.getNodes()
+    # pc import must keep the above order
+   
+    # choose a causal mining algorithm
+    causal = 'fges'
+    if causal == 'bayes':
+        ### use bayes Est to find the key attributes
+        ### somewhat slow, extract more key attributes 
+        graph = s.bayesEst(samples, depth = 0, alpha = 0.05, verbose = True)
+    else:
+        ## OR use Fast Greedy Equivalence Search
+        ## faster than bayes, get less key attributes
+        graph = s.tetradrunner()
+        graph.getAlgorithmParameters(algoId = 'fges', scoreId = 'bdeu')
+        graph.run(algoId = 'fges', dfs = samples, scoreId = 'bdeu', priorKnowledge = None, dataType = 'discrete',
+               structurePrior = 0.5, samplePrior = 0.5, maxDegree = 5, faithfulnessAssumed = True, verbose = False)
+        
+    # graph.getNodes()
     key_attrs = []
     print('edges', graph.getEdges())
     for edge in graph.getEdges():
