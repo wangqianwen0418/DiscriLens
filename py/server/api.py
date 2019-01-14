@@ -1,6 +1,8 @@
 from flask import request, jsonify, Blueprint, current_app, Response
-from model import generate_samples, generate_model_samples, ModelGene, findKeyAttrs
+from model import generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups
 import pandas as pd
+
+import json
 
 api = Blueprint('api', __name__)
 
@@ -51,4 +53,12 @@ def get_key_attrs(dataset_name):
     dataset_path = '../data/{}_clean.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
     key_attrs = findKeyAttrs(data, protect_attr)
-    return ', '.join(key_attrs)
+
+    findGroups = FindGroups(key_attrs)
+    key_groups = findGroups.key_groups()
+
+
+    return json.dumps({
+        'key_attrs':key_attrs,
+        'key_groups': key_groups
+        })
