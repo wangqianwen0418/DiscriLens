@@ -41,3 +41,14 @@ def get_samples():
     # return Response( model_samples.to_csv(header=True, index=True), mimetype='text/csv')
 
 
+@api.route('/key_attrs/<string:dataset_name>', methods=['GET'])
+def get_key_attrs(dataset_name):
+    """
+    Fetch the key attributes of a dataset (training data).
+    E.g.: /api/key_attrs/credit
+    """
+    protect_attr = ''
+    dataset_path = '../data/{}_clean.csv'.format(dataset_name)
+    data = pd.read_csv(dataset_path)
+    key_attrs = findKeyAttrs(data, protect_attr)
+    return ', '.join(key_attrs)
