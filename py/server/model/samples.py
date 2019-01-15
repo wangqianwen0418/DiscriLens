@@ -14,7 +14,7 @@ from model.helpers import find_range_cols
 
 # Data generator
 class DataGene(object):   
-    def __init__(self, data, sample_num=10, class_col='class'):
+    def __init__(self, data, sample_num=3000, class_col='class'):
         """
         Args:
             data(pandas DataFrame): origin training data
@@ -187,20 +187,28 @@ class FindGroups(object):
             else:
                 self.key_groups.append(index_)
 
-    def locate_items(self, model_samples):
-        for group in self.key_groups:
+    def locate_items(self, model_samples, protect_attr):
+        protect_vals = list(set(model_samples[protect_attr]))
+
+        for i, group in enumerate(self.key_groups):
             group_items = model_samples.copy()
             for attr in group:
                 group_items = group_items.loc[group_items[attr]==group[attr]]
-            print(group, len(group_items))
+            # print(group, len(group_items))
+            self.key_groups[i]['items'] =  {}
             if len(group_items)>0:
                 for val in protect_vals:
                     # based on protected attribute
+                    self.key_groups[i]['items'][val] =  {}
                     group_items_ = group_items.loc[group_items[protect_attr] == val]
-                    if len(group_items)>0:
+                    if len(group_items_)>0:
                         group_reject = group_items_.loc[group_items_['class'] == 0]
                         group_accept = group_items_.loc[group_items_['class'] == 1]
                         p_0 = len(group_reject)/len(group_items_)
                         p_1 = len(group_accept)/len(group_items_)
-                        print(val, "{:.2f}".format(p_0), "{:.2f}".format(p_1), len(group_items_))
+                        self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
+                        self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
+                        # print(val, "{:.2f}".format(p_0), "{:.2f}".format(p_1), len(group_items_))
+
+        return self.key_groups
 
