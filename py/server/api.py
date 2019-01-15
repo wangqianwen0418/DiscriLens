@@ -1,46 +1,98 @@
 from flask import request, jsonify, Blueprint, current_app, Response
 from model import generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups
 import pandas as pd
+from joblib import dump, load
 
 import json
+import os
 
 api = Blueprint('api', __name__)
+cache_path = './cache'
 
 ######################
 # API Starts here
 ######################
-
-
 @api.route('/dataset/<string:dataset_name>', methods=['GET'])
 def get_dataset(dataset_name):
     """Fetch dataset by id"""
     dataset_path = '../data/{}_clean.csv'.format(dataset_name)
-    csvfile = open(dataset_path, 'r')
-    return Response(csvfile, mimetype='text/csv')
+    df = pd.read_csv(dataset_path, 'r')
+    return df.to_json()
 
-@api.route('/samples', methods=['GET'])
+
+
+@api.route('/generate_samples', methods=['GET'])
 def get_samples():
     """
-    Fetch the info of classifiers.
-    E.g.: /api/samples?dataset=credit&model=knn
+    train model on the training data,
+    return the generated samples based on the training data
+    E.g.: /api/generate_samples?dataset=credit&model=knn
     """
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
     dataset_path = '../data/{}_clean.csv'.format(dataset_name)
 
+    sample_num = 3000
     data = pd.read_csv(dataset_path)
-    samples = generate_samples(data, 3000)
+    # samples = generate_samples(data, sample_num)
 
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(data)
-    print('model score', score)
-    model_samples = generate_model_samples(data, 10, model, encoder)
-    print(model_samples[:1],len(model_samples))
+    model_samples = generate_model_samples(data, sample_num, model, encoder)
+    # add the ID col
+    model_samples['id'] = model_samples.index
+    # print('model score', score)
 
-    protect_attr = 'sex'
-    key_attrs = findKeyAttrs(model_samples, protect_attr)
-    return ', '.join(key_attrs)
-    # return Response( model_samples.to_csv(header=True, index=True), mimetype='text/csv')
+    # save mdeol & samples to cache
+    samples_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    model_samples.to_csv(samples_path, index=False)
+    model_path = os.path.join(cache_path, '{}_{}.joblib'.format(dataset_name, model_name))
+    dump(model, model_path) 
+
+    return model_samples.to_json(orient='records')
+
+
+@api.route('/groups', methods=['GET'])
+def get_groups():
+    """
+    Fetch the info of classifiers.
+    E.g.: /api/groups?dataset=credit&model=knn
+    """
+
+    dataset_name = request.args.get('dataset', None, type=str)
+    model_name = request.args.get('model', None, type=str)
+
+    # get traiing data
+    dataset_path = '../data/{}_clean.csv'.format(dataset_name)
+    data = pd.read_csv(dataset_path)
+
+    # get model samples
+    sample_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    model_samples = pd.read_csv(sample_path)
+
+    protect_attr='sex'
+    key_attrs = findKeyAttrs(data, protect_attr)
+
+    key_vals = {}
+    for key_attr in key_attrs:
+        key_vals[key_attr] = list(set(data[key_attr]))
+
+    findGroups = FindGroups(key_vals)
+    key_groups = findGroups.locate_items(model_samples, protect_attr)
+    
+    
+
+    return_value = {
+        'key_attrs': key_attrs,
+        'key_groups': key_groups
+    }
+   
+    return jsonify(return_value)
+
+
+
+
+
 
 
 @api.route('/key_attrs/<string:dataset_name>', methods=['GET'])
@@ -54,15 +106,7 @@ def get_key_attrs(dataset_name):
     data = pd.read_csv(dataset_path)
     key_attrs = findKeyAttrs(data, protect_attr)
 
-    key_vals = {}
-    for key_attr in key_attrs:
-        key_vals[key_attr] = list(set(data[key_attr]))
-
-    findGroups = FindGroups(key_vals)
-    key_groups = findGroups.key_groups
-
 
     return json.dumps({
-        'key_attrs':key_attrs,
-        'key_groups': key_groups
+        'key_attrs':key_attrs
         })
