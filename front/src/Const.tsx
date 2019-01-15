@@ -1,0 +1,5 @@
+export const GENERATE_SAMPLES = 'GENERATE_SAMPLES'
+export type GENERATE_SAMPLES = typeof GENERATE_SAMPLES
+
+export const FIND_GROUPS = 'FIND_GROUPS'
+export type FIND_GROUPS = typeof FIND_GROUPS
