@@ -1,0 +1,5 @@
+.samples{
+    width: 100%;
+    height: calc( (100vh - var(--header-height) ) * 0.2 ) !important;
+    overflow: auto;
+}

@@ -21,12 +21,12 @@ def get_dataset(dataset_name):
 
 
 
-@api.route('/generate_samples', methods=['GET'])
+@api.route('/samples', methods=['GET'])
 def get_samples():
     """
     train model on the training data,
     return the generated samples based on the training data
-    E.g.: /api/generate_samples?dataset=credit&model=knn
+    E.g.: /api/samples?dataset=credit&model=knn
     """
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
@@ -40,7 +40,8 @@ def get_samples():
     model, encoder, score = model_gene.fit_model(data)
     model_samples = generate_model_samples(data, sample_num, model, encoder)
     # add the ID col
-    model_samples['id'] = model_samples.index
+    # model_samples['id'] = model_samples.index
+    model_samples.insert(loc=0, column='id', value=model_samples.index)
     # print('model score', score)
 
     # save mdeol & samples to cache
