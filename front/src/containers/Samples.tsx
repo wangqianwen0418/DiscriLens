@@ -4,9 +4,10 @@ import { connect} from 'react-redux';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
-    console.info(state.samples)
+    // console.info(state.samples)
     return {
-        samples: state.samples
+        samples: state.samples,
+        featch_samples_status: state.fetch_samples_status
     };
 }
 

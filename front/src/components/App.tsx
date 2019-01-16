@@ -38,7 +38,7 @@ class App extends React.Component {
   //   const url = '/groups?dataset=credit&model=knn'
   //   const res = await axiosInstance.get(url);
   //   if (res.status === 200) {
-  //     console.info(res.data)
+  //     // console.info(res.data)
   //     this.setState(
   //       {
   //         samples: res.data.model_samples,
