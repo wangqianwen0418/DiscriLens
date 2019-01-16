@@ -1,5 +1,5 @@
 export interface DataItem{
-    [key:string]: any
+    [key:string]: number|string
 }
 
 export interface KeyGroup{

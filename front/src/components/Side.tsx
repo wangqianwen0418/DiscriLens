@@ -5,7 +5,7 @@ import {Select, Button} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
-  onGenerateSamples: (dataset_name:string, model_name:string) => void
+  onStart: (dataset_name:string, model_name:string) => void
 }
 
 export interface State{
@@ -23,7 +23,7 @@ export default class Side extends React.Component<Props, State>{
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
-    this.onGenerateSamples = this.onGenerateSamples.bind(this)
+    this.onStart = this.onStart.bind(this)
   }
   selectDataset(e:string){
     this.setState({dataset_name: e})
@@ -31,23 +31,23 @@ export default class Side extends React.Component<Props, State>{
   selectModel(e:string){
     this.setState({model_name: e})
   }
-  onGenerateSamples(e:any){
+  onStart(e:any){
     e.preventDefault();
     let {model_name, dataset_name} = this.state
-    this.props.onGenerateSamples(dataset_name, model_name)
+    this.props.onStart(dataset_name, model_name)
   }
   public render(){
-      return <div onSubmit={this.onGenerateSamples} className='Side'>
-        <Select placeholder="dataset" style={{ width: '100%' }} onChange={this.selectDataset}>
+      return <div onSubmit={this.onStart} className='Side'>
+        <Select defaultValue='credit' style={{ width: '100%' }} onChange={this.selectDataset}>
           <Option value="credit">credit</Option>
         </Select>
 
-        <Select placeholder="model" style={{ width: '100%' }} onChange={this.selectModel}>
+        <Select defaultValue='knn' style={{ width: '100%' }} onChange={this.selectModel}>
           <Option value="knn">knn</Option>
           <Option value="rf">rf</Option>
         </Select>
 
-        <Button type="primary" shape="circle" icon="search" onClick={this.onGenerateSamples}/>
+        <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>
     </div>
   }
 }

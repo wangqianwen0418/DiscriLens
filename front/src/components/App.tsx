@@ -5,7 +5,7 @@ import {Col, Row} from 'antd';
 
 import Samples from 'containers/Samples';
 import Side from 'containers/Side';
-
+import AppMiddle from 'components/AppMiddle';
 
 // const axiosInstance = axios.create({
 //   baseURL: `http://localhost:7777/api/`,
@@ -56,7 +56,7 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <p className="App-title">Discrimination in Machine Learning</p>
         </header>
-        <Row className='App-middle'/>
+        <AppMiddle />
         <Row className='App-bottom'>
           <Col span={3}>
             <Side/>

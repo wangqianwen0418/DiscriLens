@@ -1,6 +1,7 @@
 import {GENERATE_SAMPLES, FIND_GROUPS, CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, KeyGroup, Status} from 'types';
+import { Dispatch } from 'react';
 
 const axiosInstance = axios.create({
     baseURL: `http://localhost:7777/api/`,
@@ -9,6 +10,15 @@ const axiosInstance = axios.create({
         'Access-Control-Allow-Origin': '*'
     }
 });
+
+export type ThunkAction<R, S, E> = (dispatch: Dispatch<S>, getState: () => S, extraArgument: E) => R;
+
+export interface Dispatch<S> {
+  <R, E>(asyncAction: ThunkAction<R, S, E>): R;
+}
+export interface Dispatch<S> {
+  <A>(action:A &{type:any}): A &{type:any};
+}
 
 /*****************
 all about groups
@@ -40,7 +50,7 @@ export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus 
 
 export const FetchGroups = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
-        ChangeGroupsFetchStatus(Status.PENDING)
+        dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
         const url = `/groups?dataset=${dataset_name}&model=${model_name}`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
@@ -51,7 +61,7 @@ export const FetchGroups = (dataset_name:string, model_name: string)=>{
                 dispatch(FindGroups(key_attrs, key_groups))
             }
         }).then(()=>{
-            ChangeGroupsFetchStatus(Status.COMPLETE)
+            dispatch( ChangeGroupsFetchStatus(Status.COMPLETE) )
         })
     };
 }
@@ -86,19 +96,34 @@ export const FetchSamples = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
         const url = `/samples?dataset=${dataset_name}&model=${model_name}`
-        axiosInstance
-        .get(url)
-        .then((response: AxiosResponse) => {
-            if (response.status !=200) {
-                throw Error(response.statusText);
-            }else{
-                let samples = response.data
-                dispatch(GenerateSamples(samples))
-            }
-        }).then(()=>{
-            dispatch(ChangeSamplesFetchStatus(Status.COMPLETE))
-        })
+
+        return axiosInstance
+                .get(url)
+                .then((response: AxiosResponse) => {
+                    if (response.status !=200) {
+                        throw Error(response.statusText);
+                    }else{
+                        let samples = response.data
+                        dispatch(GenerateSamples(samples))
+                    }
+                }).then(()=>{
+                    dispatch(ChangeSamplesFetchStatus(Status.COMPLETE))
+                })
     };
+}
+
+
+// combine to start
+
+export const Start = (dataset_name:string, model_name: string)=>{
+    return (dispatch: any)=>{
+        dispatch(ChangeSamplesFetchStatus(Status.PENDING))
+        dispatch(ChangeGroupsFetchStatus(Status.PENDING))
+        FetchSamples(dataset_name, model_name)(dispatch)
+        .then(
+            () =>{ dispatch (FetchGroups(dataset_name, model_name))}
+        )
+    }
 }
 
 export type AllActions = FindGroups|GenerateSamples|ChangeSamplesFetchStatus|ChangeGroupsFetchStatus
