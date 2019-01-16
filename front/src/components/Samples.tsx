@@ -1,10 +1,11 @@
 import * as React from 'react';
-// import {Table} from 'antd';
-import {DataItem} from 'types';
+import {Icon} from 'antd';
+import {DataItem, Status} from 'types';
 import './Samples.css';
 
 export interface IProps{
- samples: DataItem[]
+ samples: DataItem[],
+ featch_samples_status: Status
 }
 
 export interface IState{
@@ -12,9 +13,13 @@ export interface IState{
 }
 export default class Samples extends React.Component<IProps, IState>{
     public render(){
-        let {samples} = this.props
-        console.info(samples)
-        if (samples.length>0){
+        let {samples, featch_samples_status} = this.props
+        // console.info(featch_samples_status)
+        if (featch_samples_status==Status.PENDING){
+            return <div className='samples' >
+            <Icon type="sync" spin={true} />
+            </div>
+        }else if(samples.length>0){
             let columns = Object.keys(samples[0])
             return <div className='samples'>
             <table>

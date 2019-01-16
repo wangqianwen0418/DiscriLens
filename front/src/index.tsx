@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createStore,applyMiddleware } from 'redux';
 import rootReducer from 'reducers';
-import { StoreState} from 'types';
+import { StoreState, Status} from 'types';
 
 
 import 'antd/dist/antd.css';
@@ -16,7 +16,9 @@ import 'antd/dist/antd.css';
 const initState:StoreState = {
   key_attrs: [],
   key_groups: [],
-  samples: []
+  samples: [],
+  fetch_samples_status: Status.INACTIVE,
+  fetch_groups_status: Status.INACTIVE
 }
 
 const store = createStore(
