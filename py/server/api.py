@@ -49,8 +49,9 @@ def get_samples():
     model_samples.to_csv(samples_path, index=False)
     model_path = os.path.join(cache_path, '{}_{}.joblib'.format(dataset_name, model_name))
     dump(model, model_path) 
-
-    return model_samples.to_json(orient='records')
+    jsonfile = model_samples.to_json(orient='records')
+    
+    return jsonfile
 
 
 @api.route('/groups', methods=['GET'])
@@ -87,6 +88,9 @@ def get_groups():
         'key_attrs': key_attrs,
         'key_groups': key_groups
     }
+
+    f = open('test.json','w')
+    json.dump(return_value, f)
    
     return jsonify(return_value)
 

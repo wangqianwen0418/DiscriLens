@@ -11,14 +11,24 @@ import rootReducer from 'reducers';
 import { StoreState, Status} from 'types';
 
 
+
 import 'antd/dist/antd.css';
 
+// const initState:StoreState = {
+//   key_attrs: [],
+//   key_groups: [],
+//   samples: [],
+//   fetch_samples_status: Status.INACTIVE,
+//   fetch_groups_status: Status.INACTIVE
+// }
+
+let testJSON = require('./test.json'), testJSON2 = require('./test2.json');
 const initState:StoreState = {
-  key_attrs: [],
-  key_groups: [],
-  samples: [],
-  fetch_samples_status: Status.INACTIVE,
-  fetch_groups_status: Status.INACTIVE
+  key_attrs: testJSON2.key_attrs,
+  key_groups: testJSON2.key_groups,
+  samples: testJSON,
+  fetch_samples_status: Status.COMPLETE,
+  fetch_groups_status: Status.COMPLETE
 }
 
 const store = createStore(

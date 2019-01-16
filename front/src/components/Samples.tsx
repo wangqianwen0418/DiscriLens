@@ -17,15 +17,22 @@ export default class Samples extends React.Component<IProps, IState>{
         // console.info(featch_samples_status)
         if (featch_samples_status==Status.PENDING){
             return <div className='samples' >
-            <Icon type="sync" spin={true} />
+            <Icon 
+                type="sync" 
+                spin={true} 
+                style={{fontSize: '40px', margin: '10px'}}
+            />
             </div>
         }else if(samples.length>0){
             let columns = Object.keys(samples[0])
             return <div className='samples'>
             <table>
                 {/* header */}
+                <thead>
                 <tr>{columns.map(d=>{ return <th key={d}>{d}</th> })}</tr>
+                </thead>
                 {/* table body */}
+                <tbody>
                 {samples.map((sample:DataItem, i:number)=>{
                     return <tr key={`id_${i}`}> 
                     {columns.map(k=>{
@@ -35,11 +42,12 @@ export default class Samples extends React.Component<IProps, IState>{
                     })}
                     </tr>
                 })}
+                </tbody>
             </table>
             </div>
         }else{
             return <div className='samples' >
-            No sample
+            No Data
             </div>
         }
         
