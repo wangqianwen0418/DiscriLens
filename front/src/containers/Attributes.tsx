@@ -8,6 +8,7 @@ export function mapStateToProps(state:StoreState, ownProps?:any) {
     return {
         samples: state.samples,
         key_attrs: state.key_attrs,
+        key_groups: state.key_groups,
         fetch_groups_status: state.fetch_groups_status
     };
 }

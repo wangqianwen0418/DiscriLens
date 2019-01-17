@@ -29,7 +29,7 @@ const COLORS: string[] = [
     "#BCBC3D",
     "#07C1CD"
     ]
-let names:string[] = []
+let names:string[] = ['male', 'female']
 
 export  const getColor = (name: string): string =>{
         let idx: number = names.indexOf(name)
