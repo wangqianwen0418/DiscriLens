@@ -195,20 +195,24 @@ class FindGroups(object):
             for attr in group:
                 group_items = group_items.loc[group_items[attr]==group[attr]]
             # print(group, len(group_items))
-            self.key_groups[i]['items'] =  {}
+            self.key_groups[i]['items'] =  group_items.index.tolist()
+            score = []
             if len(group_items)>0:
                 for val in protect_vals:
                     # based on protected attribute
-                    self.key_groups[i]['items'][val] =  {}
+                    # self.key_groups[i]['items'][val] =  {}
                     group_items_ = group_items.loc[group_items[protect_attr] == val]
                     if len(group_items_)>0:
                         group_reject = group_items_.loc[group_items_['class'] == 0]
                         group_accept = group_items_.loc[group_items_['class'] == 1]
                         p_0 = len(group_reject)/len(group_items_)
                         p_1 = len(group_accept)/len(group_items_)
-                        self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
-                        self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
-                        # print(val, "{:.2f}".format(p_0), "{:.2f}".format(p_1), len(group_items_))
-
+                        score.append(p_1)
+                        # self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
+                        # self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
+                        # print(val, "{:.2f}".format(p_0), "{:.2f}".format(p_1), len(group_items_)) 
+            self.key_groups[i]['score'] =  abs(score[0]-score[1])
+            self.key_groups[i]['scores'] =  score
+        self.key_groups.sort(key=lambda x: x['score'] , reverse=True)
         return self.key_groups
 

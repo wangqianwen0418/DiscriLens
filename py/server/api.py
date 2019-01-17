@@ -47,9 +47,11 @@ def get_samples():
     # save mdeol & samples to cache
     samples_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
     model_samples.to_csv(samples_path, index=False)
+    model_samples.to_json('./test.json', orient='records')
     model_path = os.path.join(cache_path, '{}_{}.joblib'.format(dataset_name, model_name))
     dump(model, model_path) 
     jsonfile = model_samples.to_json(orient='records')
+    
     
     return jsonfile
 
@@ -89,7 +91,7 @@ def get_groups():
         'key_groups': key_groups
     }
 
-    f = open('test.json','w')
+    f = open('test2.json','w')
     json.dump(return_value, f)
    
     return jsonify(return_value)
