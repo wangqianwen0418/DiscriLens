@@ -207,7 +207,6 @@ class FindGroups(object):
                         group_reject = group_items_.loc[group_items_['class'] == 0]
                         group_accept = group_items_.loc[group_items_['class'] == 1]
                         p_0 = len(group_reject)/len(group_items_)
-                        score.append(p_0)
                         p_1 = len(group_accept)/len(group_items_)
                         score.append(p_1)
                         # self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
