@@ -1,4 +1,4 @@
-marriage,sex,checking_status,duration,credit_history,purpose,credit_amount,savings_status,employment,installment_commitment,other_parties,residence_since,property_magnitude,age,other_payment_plans,housing,existing_credits,job,num_dependents,own_telephone,foreign_worker,class
+marriage,gender,checking_status,duration,credit_history,purpose,credit_amount,savings_status,employment,installment_commitment,other_parties,residence_since,property_magnitude,age,other_payment_plans,housing,existing_credits,job,num_dependents,own_telephone,foreign_worker,class
 single,male,<0,4<x<21,critical/other existing credit,radio/tv,250<x<4793,no known savings,>=7,4,none,4,real estate,x>61,none,own,2,skilled,1,yes,yes,good
 div/dep/mar,female,0<=X<200,38<x<55,existing paid,radio/tv,4793<x<9337,<100,1<=X<4,2,none,2,real estate,19<x<33,none,own,1,skilled,1,none,yes,bad
 single,male,no checking,4<x<21,critical/other existing credit,education,250<x<4793,<100,4<=X<7,2,none,3,real estate,47<x<61,none,own,1,unskilled resident,2,none,yes,good
