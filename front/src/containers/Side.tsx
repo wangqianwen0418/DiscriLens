@@ -11,7 +11,7 @@ export function mapStateToProps(state:StoreState) {
 
 export function mapDispatchToProps(dispatch: any) {
     return {
-        onStart:(dataset_name: string, model_name:string, protect_name: string)=>{dispatch(Start(dataset_name, model_name, protect_name))}
+        onStart:(dataset_name: string, model_name:string, protect_attr: string)=>{dispatch(Start(dataset_name, model_name, protect_attr))}
     }
 }
 
