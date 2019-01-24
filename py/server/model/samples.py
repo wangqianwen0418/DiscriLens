@@ -195,7 +195,8 @@ class FindGroups(object):
             for attr in group:
                 group_items = group_items.loc[group_items[attr]==group[attr]]
             # print(group, len(group_items))
-            self.key_groups[i]['items'] =  group_items.index.tolist()
+            self.key_groups[i]['items'] = group_items.index.tolist()
+            
             score = []
             if len(group_items)>0:
                 for val in protect_vals:
