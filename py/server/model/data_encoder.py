@@ -53,8 +53,10 @@ class DataEncoder(object):
 
         # One-hot encode the whole feature matrix.
         # Set sparse to False so that we can test for NaNs in the output
-        self.cat_encoder = OneHotEncoder(categories='auto',sparse=False)
-        self.cat_encoder.fit(cats)
+        self.cat_encoder = OneHotEncoder(n_values='auto',sparse=False)
+        # if Category column exists          
+        if cats.shape[1] != 0:
+            self.cat_encoder.fit(cats)
 
         # Train an encoder for the label as well
         labels = np.array(data[[self.class_column]])
@@ -83,7 +85,10 @@ class DataEncoder(object):
             cats[column] = encoder.transform(cats[column])
 
         # one-hot encode the categorical features
-        X = self.cat_encoder.transform(cats)
+        if cats.shape[1] != 0:
+            X = self.cat_encoder.transform(cats)
+        else:
+            X = cats
         
         if self.class_column in data:
             nums = data.drop([self.class_column], axis=1).select_dtypes(include=['int']).values
