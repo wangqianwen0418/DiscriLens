@@ -17,26 +17,27 @@ import csv
 import numpy as np
 
 
-def find_rules(file_path, minimum_support, min_len, protect_attr, target_attr):
+def find_rules(df, minimum_support, min_len, protect_attr, target_attr):
     """
     Args:
-        file_path (string): csv file path
+        df (pandas dataframe): columns are attributes, each row is an item
         minimum_support(int): the minimum number of occurrences of the rules. e.g., support(A, B, C)
         min_len: the minimum length of the antecedent itemsets. e.g., len([A,B])=2
         protect_attr(string): specifi the consequent attribute. e.g., gender
         target_attr(string): specifi the consequent attribute, e.g., class
     Return:
-        pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pnd', 'conf_pd', 'elift']
+        pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift', 'sup_pd', 'sup_pnd']
             antecedent (list of string, e.g., [VisITedResources=x>74, NationalITy=Jordan])
             pd (string): e.g., gender=F
             cls (string): e.g., class=M
             conf_pnd(float): conf(antecedent -> cls)
             conf_pd(float): conf(antecedent+pd -> cls)
             elift(float): conf_pd/conf_pnd
+            sup_pnd(int): support(antecedent+cls)
+            sup_pd(int): support(antecedent+pd+cls)
 
     """
-    df = pandas.read_csv(file_path)
-    # apply col name to each cell
+    # apply col name to each cell for mining frequent itemsets
     new_df = pandas.DataFrame({col:str(col)+'=' for col in df}, index=df.index) + df.astype(str) 
     # convert to list
     transactions = new_df.values.tolist()
@@ -52,7 +53,7 @@ def find_rules(file_path, minimum_support, min_len, protect_attr, target_attr):
             pd_pairs.loc[len(pd_pairs)] = list(pair[1:])
 
     # find pontential discriminatory rules
-    pd_rules = pandas.DataFrame(columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift'])
+    pd_rules = pandas.DataFrame(columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift', 'sup_pd', 'sup_pnd'])
     # pd_pairs[['antecedent', 'pd']].copy()
     # pd_rules['conf_pnd'] = np.nan
     # pd_rules['conf_pd'] = np.nan
@@ -71,7 +72,7 @@ def find_rules(file_path, minimum_support, min_len, protect_attr, target_attr):
             if not pd_cls.empty:
                 conf_pnd = float(pnd_cls.sup/pnd_cls.antecedent_sup)
                 conf_pd = float(pd_cls.sup/pd_cls.antecedent_sup)
-                pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, conf_pd/conf_pnd]
+                pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, conf_pd/conf_pnd, float(pd_cls.sup), float(pnd_cls.sup)]
     
     pd_rules.sort_values(by=['elift'])
     print(pd_rules.to_string())
@@ -399,4 +400,7 @@ class FPNode(object):
             return "<%s (root)>" % type(self).__name__
         return "<%s %r (%r)>" % (type(self).__name__, self.item, self.count)
 
-find_rules('../../data/academic_clean.csv', minimum_support=10, min_len=1, protect_attr='gender=F', target_attr='class',)
+if __name__  == "__main__":
+    file_path = '../../data/academic_clean.csv'
+    df = pandas.read_csv(file_path)
+    find_rules(df, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class',)
