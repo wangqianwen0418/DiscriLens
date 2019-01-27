@@ -74,8 +74,7 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr):
                 conf_pd = float(pd_cls.sup/pd_cls.antecedent_sup)
                 pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, conf_pd/conf_pnd, float(pd_cls.sup), float(pnd_cls.sup)]
     
-    pd_rules.sort_values(by=['elift'])
-    print(pd_rules.to_string())
+    pd_rules = pd_rules.sort_values(by=['elift'])
 
     return pd_rules
 
