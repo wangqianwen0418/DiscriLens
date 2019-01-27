@@ -17,7 +17,7 @@ import csv
 import numpy as np
 
 
-def find_rules(df, minimum_support, min_len, protect_attr, target_attr):
+def find_rules(df, minimum_support, min_len, protect_attr, target_attr, elift_th):
     """
     Args:
         df (pandas dataframe): columns are attributes, each row is an item
@@ -25,6 +25,7 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr):
         min_len: the minimum length of the antecedent itemsets. e.g., len([A,B])=2
         protect_attr(string): specifi the consequent attribute. e.g., gender
         target_attr(string): specifi the consequent attribute, e.g., class
+        elift_th ([float, float])
     Return:
         pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift', 'sup_pd', 'sup_pnd']
             antecedent (list of string, e.g., [VisITedResources=x>74, NationalITy=Jordan])
@@ -72,7 +73,9 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr):
             if not pd_cls.empty:
                 conf_pnd = float(pnd_cls.sup/pnd_cls.antecedent_sup)
                 conf_pd = float(pd_cls.sup/pd_cls.antecedent_sup)
-                pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, conf_pd/conf_pnd, float(pd_cls.sup), float(pnd_cls.sup)]
+                elift = float(conf_pd/conf_pnd)
+                if not elift_th[0] <= elift <= elift_th[1]:
+                    pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, elift, float(pd_cls.sup), float(pnd_cls.sup)]
     
     pd_rules = pd_rules.sort_values(by=['elift'])
 
@@ -402,4 +405,4 @@ class FPNode(object):
 if __name__  == "__main__":
     file_path = '../../data/academic_clean.csv'
     df = pandas.read_csv(file_path)
-    find_rules(df, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class',)
+    find_rules(df, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[0.9 , 1.1])
