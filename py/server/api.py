@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint, current_app, Response
-from model import generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups
+from model import generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups, find_rules
 import pandas as pd
 from joblib import dump, load
 
@@ -26,34 +26,48 @@ def get_samples():
     """
     train model on the training data,
     return the generated samples based on the training data
-    E.g.: /api/samples?dataset=credit&model=knn
+    E.g.: /api/samples?dataset=credit&model=knn&num=3000
     """
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
+    model_name = '{}_{}'.format(dataset_name, model_name)
+    sample_num = request.args.get('num', None, type=int)
     dataset_path = '../data/{}_clean.csv'.format(dataset_name)
 
-    sample_num = 3000
     data = pd.read_csv(dataset_path)
-    # samples = generate_samples(data, sample_num)
-
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(data)
     model_samples = generate_model_samples(data, sample_num, model, encoder)
-    # add the ID col
-    # model_samples['id'] = model_samples.index
+    # add the ID col as the first col
     model_samples.insert(loc=0, column='id', value=model_samples.index)
-    # print('model score', score)
 
     # save mdodl & samples to cache
-    samples_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    samples_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     model_samples.to_csv(samples_path, index=False)
-    model_samples.to_json('../../front/src/testdata/test.json', orient='records')
-    model_path = os.path.join(cache_path, '{}_{}.joblib'.format(dataset_name, model_name))
+    # model_samples.to_json('../../front/src/testdata/test.json', orient='records')
+    model_path = os.path.join(cache_path, '{}.joblib'.format(model_name))
     dump(model, model_path) 
     jsonfile = model_samples.to_json(orient='records')
     
     
     return jsonfile
+
+@api.route('/pd_rules', methods=['GET'])
+def get_rules():
+    """
+    Fetch the potentially discriminatory rules of a classifier.
+    E.g.: /api/pd_rules?dataset=academic&model=xgb&protect=gender
+    """
+    dataset_name = request.args.get('dataset', None, type=str)
+    protect_attr = request.args.get('protect', None, type=str)
+    model_name = request.args.get('model', None, type=str)
+    model_name = '{}_{}'.format(dataset_name, model_name)
+
+    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
+    model_samples = pd.read_csv(sample_path)
+    rules = find_rules(model_samples, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class')
+
+    return rules.to_json(orient='records')
 
 
 @api.route('/groups', methods=['GET'])
@@ -65,6 +79,7 @@ def get_groups():
 
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
+    model_name = '{}_{}'.format(dataset_name, model_name)
     protect_attr = request.args.get('protect', None, type=str)
 
     # get training data
@@ -72,7 +87,7 @@ def get_groups():
     data = pd.read_csv(dataset_path)
 
     # get model samples
-    sample_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     model_samples = pd.read_csv(sample_path)
 
     
