@@ -6,13 +6,16 @@ decorator==4.3.0
 defusedxml==0.5.0
 entrypoints==0.2.3
 Flask==1.0.2
+Flask-Cors==3.0.7
 ipykernel==5.1.0
 ipython==7.2.0
 ipython-genutils==0.2.0
 ipywidgets==7.4.2
 itsdangerous==1.1.0
+javabridge==1.0.18
 jedi==0.13.2
 Jinja2==2.10
+joblib==0.13.1
 jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.2.4
@@ -33,7 +36,10 @@ prometheus-client==0.5.0
 prompt-toolkit==2.0.7
 ptyprocess==0.6.0
 py-d3==0.3.0
+pycausal==1.1.1
+pydot==1.4.1
 Pygments==2.3.1
+pyparsing==2.3.0
 python-dateutil==2.7.5
 pytz==2018.7
 pyzmq==17.1.2
@@ -52,3 +58,4 @@ wcwidth==0.1.7
 webencodings==0.5.1
 Werkzeug==0.14.1
 widgetsnbextension==3.4.2
+xgboost==0.81

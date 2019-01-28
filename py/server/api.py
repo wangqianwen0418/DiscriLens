@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint, current_app, Response
-from model import num2cate, generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups, get_numAttrs
+from model import num2cate, generate_samples, generate_model_samples, ModelGene, findKeyAttrs, FindGroups, get_numAttrs, find_rules
 import pandas as pd
 from model.samples import DataGene
 from model.data_encoder import DataEncoder
@@ -43,16 +43,13 @@ def get_samples():
     """
     train model on the training data,
     return the generated samples based on the training data
-    E.g.: /api/samples?dataset=credit&model=knn
+    E.g.: /api/samples?dataset=credit&model=knn&num=3000
     """
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
     dataset_path = '../data/{}.csv'.format(dataset_name)
 
-    sample_num = 3000
     data = pd.read_csv(dataset_path)
-    # samples = generate_samples(data, sample_num)
-
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(num2cate(data))
     model_samples, storeData = generate_model_samples(data, sample_num, model, encoder)
@@ -71,6 +68,23 @@ def get_samples():
     return jsonfile
     
 
+@api.route('/pd_rules', methods=['GET'])
+def get_rules():
+    """
+    Fetch the potentially discriminatory rules of a classifier.
+    E.g.: /api/pd_rules?dataset=academic&model=xgb&protect=gender
+    """
+    dataset_name = request.args.get('dataset', None, type=str)
+    protect_attr = request.args.get('protect', None, type=str)
+    model_name = request.args.get('model', None, type=str)
+    model_name = '{}_{}'.format(dataset_name, model_name)
+
+    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
+    model_samples = pd.read_csv(sample_path)
+    rules = find_rules(model_samples, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[0.9, 1.1])
+
+    return rules.to_json(orient='records')
+
 
 @api.route('/groups', methods=['GET'])
 def get_groups():
@@ -88,7 +102,7 @@ def get_groups():
     data = num2cate(data)
 
     # get model samples
-    sample_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     model_samples = pd.read_csv(sample_path)
 
     

@@ -95,6 +95,8 @@ def generate_model_samples(data, sample_num, model, encoder):
     # model predict
     x_samples, _ = encoder.transform(samples)
     y_samples = model.predict(x_samples)
+    # decode the prediction
+    y_samples = encoder.label_encoder.inverse_transform(y_samples)
     
     #  concate 
     model_samples = samplesInit.copy()
