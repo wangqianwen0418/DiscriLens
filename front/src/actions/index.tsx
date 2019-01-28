@@ -26,13 +26,15 @@ all about groups
 export interface FindGroups{
     type:FIND_GROUPS,
     key_attrs: string[],
-    key_groups: KeyGroup[]
+    key_groups: KeyGroup[],
+    num_attrs: string[]
 }
-export const FindGroups = (key_attrs: string[], key_groups: KeyGroup[]):FindGroups => {
+export const FindGroups = (key_attrs: string[], key_groups: KeyGroup[], num_attrs: string[]):FindGroups => {
     return {
         type:FIND_GROUPS,
         key_attrs, 
-        key_groups
+        key_groups,
+        num_attrs
     }
 }
 
@@ -51,14 +53,14 @@ export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus 
 export const FetchGroups = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
         dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
-        const url = `/groups?dataset=${dataset_name}&model=${model_name}`
+        const url = `/groups?dataset=${dataset_name}&model=${model_name}&protectAttr=sex`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
             if (response.status !=200) {
                 throw Error(response.statusText);
             }else{
-                let {key_attrs, key_groups} = response.data
-                dispatch(FindGroups(key_attrs, key_groups))
+                let {key_attrs, key_groups, num_attrs} = response.data
+                dispatch(FindGroups(key_attrs, key_groups, num_attrs))
             }
         }).then(()=>{
             dispatch( ChangeGroupsFetchStatus(Status.COMPLETE) )
@@ -80,7 +82,6 @@ export const GenerateSamples = (samples:DataItem[]):GenerateSamples =>{
         samples
     }
 }
-
 export interface ChangeSamplesFetchStatus{
     type:CHANGE_SAMPLES_FETCH_STATUS,
     status: Status
@@ -95,8 +96,8 @@ export const ChangeSamplesFetchStatus = (status: Status): ChangeSamplesFetchStat
 export const FetchSamples = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
+        //const url = `/samples?dataset=${dataset_name}&model=${model_name}`
         const url = `/samples?dataset=${dataset_name}&model=${model_name}`
-
         return axiosInstance
                 .get(url)
                 .then((response: AxiosResponse) => {

@@ -2,7 +2,7 @@ import Side from 'components/Side';
 import {Start } from 'actions';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-// import { Dispatch } from 'redux';
+//import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
     return {
