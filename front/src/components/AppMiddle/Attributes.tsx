@@ -86,10 +86,9 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
     let xScale = d3.scaleLinear().domain([0,xRecord]).range([0,Math.max(50,xRecord)])
     let yScaleAcc = d3.scaleLinear().domain([0,yRecord[0]]).range([height/2,0]);
     let yScaleRej = d3.scaleLinear().domain([0,yRecord[1]]).range([height/2,height]);
-
+    console.log(ListNum)
     const areasAcc = d3.area<curveData>().x(d=>xScale(d.x)).y1(height/2).y0(d=>yScaleAcc(d.y)).curve(d3.curveMonotoneX)
-    const areasRej = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>yScaleRej(d.z)).y0(height/2).curve(d3.curveMonotoneX)
-
+    const areasRej = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>yScaleRej(d.z)).y0(height/2).curve(d3.curveMonotoneX)    
     if(curveFlag){
         let xRange = [0,0]
         let numbers = highlightRange.match(/\d+/g).map(Number)
@@ -140,6 +139,7 @@ export default class Attributes extends React.Component<Props, State>{
     
     draw(){
         let {samples, key_attrs, key_groups, num_attrs} = this.props
+
         /*******************************
          * protected attrs
         *******************************/
