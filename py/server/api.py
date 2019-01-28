@@ -106,9 +106,6 @@ def get_groups():
     for i, group in enumerate(key_groups):
         key_groups[i]['items'] = list(map(int, key_groups[i]['items']))
 
-
-    
-
     return_value = {
         'key_attrs': key_attrs,
         'key_groups': key_groups
