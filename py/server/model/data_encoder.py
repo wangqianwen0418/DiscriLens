@@ -106,7 +106,7 @@ class DataEncoder(object):
 
         return X, y
     
-    def transform_x(self, data):
+    def transform_x(self, data, onehot=False):
         """
         only transform x, for the generated data
         """
@@ -117,7 +117,7 @@ class DataEncoder(object):
             cats[column] = encoder.transform(cats[column])
 
         # one-hot encode the categorical features
-        if cats.shape[1] != 0:
+        if cats.shape[1] != 0 and onehot:
             X = self.cat_encoder.transform(cats)
         else:
             X = cats
