@@ -50,10 +50,10 @@ export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus 
 }
 
 
-export const FetchGroups = (dataset_name:string, model_name: string)=>{
+export const FetchGroups = (dataset_name:string, model_name: string, protect_name: string)=>{
     return (dispatch:any) => {
         dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
-        const url = `/groups?dataset=${dataset_name}&model=${model_name}&protectAttr=sex`
+        const url = `/groups?dataset=${dataset_name}&model=${model_name}&protect=${protect_name}`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
             if (response.status !=200) {
@@ -77,10 +77,10 @@ export interface GenerateSamples{
 }
 
 export const GenerateSamples = (samples:DataItem[]):GenerateSamples =>{
-    return {
-        type:GENERATE_SAMPLES,
+    return ({
+        type: GENERATE_SAMPLES,
         samples
-    }
+    });
 }
 export interface ChangeSamplesFetchStatus{
     type:CHANGE_SAMPLES_FETCH_STATUS,
@@ -116,13 +116,13 @@ export const FetchSamples = (dataset_name:string, model_name: string)=>{
 
 // combine to start
 
-export const Start = (dataset_name:string, model_name: string)=>{
+export const Start = (dataset_name:string, model_name: string, protect_name: string)=>{
     return (dispatch: any)=>{
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
         dispatch(ChangeGroupsFetchStatus(Status.PENDING))
         FetchSamples(dataset_name, model_name)(dispatch)
         .then(
-            () =>{ dispatch (FetchGroups(dataset_name, model_name))}
+            () =>{ dispatch (FetchGroups(dataset_name, model_name, protect_name))}
         )
     }
 }

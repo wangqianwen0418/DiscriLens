@@ -35,7 +35,7 @@ let initState:StoreState = {
     fetch_samples_status: Status.COMPLETE,
     fetch_groups_status: Status.COMPLETE
   }
-}
+ }
 
 const store = createStore(
   rootReducer,
@@ -51,3 +51,4 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
+
