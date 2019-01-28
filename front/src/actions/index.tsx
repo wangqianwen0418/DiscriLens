@@ -53,7 +53,7 @@ export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus 
 export const FetchGroups = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
         dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
-        const url = `/groups?dataset=${dataset_name}&model=${model_name}&protectAttr=sex`
+        const url = `/groups?dataset=${dataset_name}&model=${dataset_name}_${model_name}&protectAttr=sex`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
             if (response.status !=200) {
@@ -97,7 +97,7 @@ export const FetchSamples = (dataset_name:string, model_name: string)=>{
     return (dispatch:any) => {
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
         //const url = `/samples?dataset=${dataset_name}&model=${model_name}`
-        const url = `/samples?dataset=${dataset_name}&model=${model_name}`
+        const url = `/samples?dataset=${dataset_name}&model=${dataset_name}_${model_name}`
         return axiosInstance
                 .get(url)
                 .then((response: AxiosResponse) => {

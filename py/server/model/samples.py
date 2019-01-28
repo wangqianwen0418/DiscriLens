@@ -88,7 +88,8 @@ def generate_model_samples(data, sample_num, model, encoder):
         model(sklearn model object): already trained model
         encoder(instance of DataGene): instance of DataGene, already fit 
     Return:
-        model_samples(pandas DataFrame): generated samples + model prected labels
+        model_samples(pandas DataFrame): generated samples(not-categorized) for front-end
+        storeData(pandas DataFrame): generated samples(categorized) for storing (saving as file)
     """
     samplesInit = generate_samples(data, sample_num)
     samples = num2cate(samplesInit)
@@ -96,7 +97,7 @@ def generate_model_samples(data, sample_num, model, encoder):
     x_samples, _ = encoder.transform(samples)
     y_samples = model.predict(x_samples)
     # decode the prediction
-    y_samples = encoder.label_encoder.inverse_transform(y_samples)
+    #y_samples = encoder.label_encoder.inverse_transform(y_samples)
     
     #  concate 
     model_samples = samplesInit.copy()

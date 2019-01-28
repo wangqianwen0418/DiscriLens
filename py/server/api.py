@@ -47,14 +47,17 @@ def get_samples():
     """
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
-    dataset_path = '../data/{}.csv'.format(dataset_name)
 
+    sample_num = 3000 # number of generated data 
+    dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
+    # generate samples
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(num2cate(data))
     model_samples, storeData = generate_model_samples(data, sample_num, model, encoder)
+    # here model_samples are non-catogorized data for output while storeData is categorized data for storing
+    
     # add the ID col
-    # model_samples['id'] = model_samples.index
     storeData.insert(loc=0, column='id', value=model_samples.index)
     #store.insert(loc=0, column='id', value=store.index)
     # save mdeol & samples to cache
