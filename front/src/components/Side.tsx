@@ -18,7 +18,7 @@ export default class Side extends React.Component<Props, State>{
     super(props);
 
     this.state = {
-      dataset_name: 'credit',
+      dataset_name: 'dataTest',
       model_name: 'knn'
       };
     this.selectDataset = this.selectDataset.bind(this)
@@ -38,8 +38,9 @@ export default class Side extends React.Component<Props, State>{
   }
   public render(){
       return <div onSubmit={this.onStart} className='Side'>
-        <Select defaultValue='credit' style={{ width: '100%' }} onChange={this.selectDataset}>
-          <Option value="credit">credit</Option>
+        <Select defaultValue='dataTest' style={{ width: '100%' }} onChange={this.selectDataset}>
+          <Option value="dataTest">dataTest</Option>
+          <Option value="xAPI-Edu-Data">xAPI-Edu-Data</Option>
         </Select>
 
         <Select defaultValue='knn' style={{ width: '100%' }} onChange={this.selectModel}>

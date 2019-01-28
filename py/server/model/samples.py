@@ -9,6 +9,7 @@ import copy
 
 from model.data_encoder import DataEncoder
 from model.helpers import find_range_cols
+from model.data_encoder import num2cate
 
 
 
@@ -23,7 +24,7 @@ class DataGene(object):
         self.data = data
         self.sample_num = sample_num
         self.class_col = 'class'
-        
+
     def get_samples(self):
         """
         Return:
@@ -31,8 +32,8 @@ class DataGene(object):
         """
         features = self.data.drop([self.class_col], axis=1)
         range_cols = find_range_cols(self.data)
-        cat_cols = features.select_dtypes(exclude=['int']).drop(range_cols, axis=1).columns
-        num_cols = features.select_dtypes(include=['int']).columns
+        cat_cols = features.select_dtypes(exclude=['int64']).drop(range_cols, axis=1).columns
+        num_cols = features.select_dtypes(include=['int64']).columns
         
         samples = []
         
@@ -54,7 +55,7 @@ class DataGene(object):
             
         
         samples = pd.DataFrame(samples, columns=list(cat_cols)+list(num_cols)+range_cols)
-        return samples        
+        return samples 
 
 def generate_samples(data, sample_num):
     """
@@ -69,6 +70,15 @@ def generate_samples(data, sample_num):
     new_samples = dataGene.get_samples()
     return new_samples
 
+def get_numAttrs(data):
+    dataGene = DataGene(data)
+    features = dataGene.data.drop([dataGene.class_col], axis=1)
+    num_cols = features.select_dtypes(include=['int64']).columns
+    output = 'ert'
+    #for var in num_cols:
+        #output.append(var)
+    return output
+
 def generate_model_samples(data, sample_num, model, encoder):
     """
     models behavior on generated sample data:
@@ -80,16 +90,19 @@ def generate_model_samples(data, sample_num, model, encoder):
     Return:
         model_samples(pandas DataFrame): generated samples + model prected labels
     """
-    samples = generate_samples(data, sample_num)
+    samplesInit = generate_samples(data, sample_num)
+    samples = num2cate(samplesInit)
     # model predict
     x_samples, _ = encoder.transform(samples)
     y_samples = model.predict(x_samples)
     
     #  concate 
-    model_samples = samples.copy()
+    model_samples = samplesInit.copy()
     model_samples['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
 
-    return model_samples
+    storeData = samples.copy()
+    storeData['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
+    return model_samples, storeData
 
 def findKeyAttrs(samples, protect_attr, result_attr = 'class'):
     """
@@ -211,7 +224,12 @@ class FindGroups(object):
                         # self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
                         # self.key_groups[i]['items'][val]['reject'] = group_reject.index.tolist()
                         # print(val, "{:.2f}".format(p_0), "{:.2f}".format(p_1), len(group_items_)) 
-            self.key_groups[i]['score'] =  abs(score[0]-score[1])
+            if(score==[]):
+                self.key_groups[i]['score'] =  0
+            elif(len(score)==1):
+                self.key_groups[i]['score'] =  abs(score[0])
+            else:
+                self.key_groups[i]['score'] =  abs(score[0]-score[1])
             self.key_groups[i]['scores'] =  score
         self.key_groups.sort(key=lambda x: x['score'] , reverse=True)
         return self.key_groups

@@ -4,8 +4,40 @@ from model.helpers import find_range_cols
 
 import pandas as pd
 import numpy as np
+import math
 
 import re
+
+def findRange(thresholds, v):
+    for i, th in enumerate(thresholds):
+        if(v <= th):
+            if i==0:
+                return "0<x<{}".format(thresholds[1])
+            elif i == len(thresholds)-1:
+                return "x>{}".format(thresholds[i-1])
+            else:
+                return "{}<x<{}".format(thresholds[i-1], thresholds[i])
+
+def convert_cate(arr):
+    n = 4 #parts to be divided
+    maxValue = max(arr)
+    minValue = min(arr)
+    thresholds = [ math.floor(i*(maxValue-minValue)/n)+minValue for i in range(n+1)]
+
+    #print([findRange(thresholds, i) for i in arr])
+    
+    return pd.Series([findRange(thresholds, i) for i in arr])
+
+
+def num2cate(dataIn):
+    df = dataIn[:]
+#     new_data = pd.DataFrame()
+    for k in df.columns:
+        if(k in df.select_dtypes(include=['int64'])):
+            values = pd.to_numeric(df[k])
+            df[k] = convert_cate(values.tolist())
+        
+    return df
 
 class DataEncoder(object):
     def __init__(self, class_column='class', cat_columns=None):
@@ -36,10 +68,10 @@ class DataEncoder(object):
 
         # encode categorical columns, leave ordinal values alone
         if self.cat_columns is None:
-            cats = data.drop([self.class_column]+range_col, axis=1).select_dtypes(exclude=['int'])
+            cats = data.drop([self.class_column]+range_col, axis=1).select_dtypes(exclude=['int64'])
             self.cat_columns = cats.columns
         else:
-            cats = data[self.cat_columns].drop(range_col, axis=1).select_dtypes(exclude=['int'])
+            cats = data[self.cat_columns].drop(range_col, axis=1).select_dtypes(exclude=['int64'])
             
         self.cat_cols = cats.columns
         
@@ -53,7 +85,7 @@ class DataEncoder(object):
 
         # One-hot encode the whole feature matrix.
         # Set sparse to False so that we can test for NaNs in the output
-        self.cat_encoder = OneHotEncoder(categories='auto',sparse=False)
+        self.cat_encoder = OneHotEncoder(sparse=False)
         self.cat_encoder.fit(cats)
 
         # Train an encoder for the label as well
@@ -86,9 +118,9 @@ class DataEncoder(object):
         X = self.cat_encoder.transform(cats)
         
         if self.class_column in data:
-            nums = data.drop([self.class_column], axis=1).select_dtypes(include=['int']).values
+            nums = data.drop([self.class_column], axis=1).select_dtypes(include=['int64']).values
         else:
-            nums = data.select_dtypes(include=['int']).values
+            nums = data.select_dtypes(include=['int64']).values
             
        
         # transform range cols into integrate. e.g., <4 -> 1; 4<x<7 -> 2
@@ -96,11 +128,12 @@ class DataEncoder(object):
         for col in self.range_col:
             values = data[col]
             ranges.append( self.range2int(values) )
-        ranges = np.transpose( np.array(ranges) )
 #         print(X.shape, nums.shape, ranges.shape)
-        
-        X = np.concatenate((X, nums, ranges), axis=1)
-        
+        if(ranges==[]):
+            X = np.concatenate((X, nums), axis=1)
+        else:
+            ranges = np.transpose( np.array(ranges) )
+            X = np.concatenate((X, nums, ranges), axis=1)
         return X
     
     def transform_y(self, data):
