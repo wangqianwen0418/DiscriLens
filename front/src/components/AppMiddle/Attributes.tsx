@@ -63,7 +63,7 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
     let xRecord = 0
     let yRecord = [0,0]
     function getStep(){
-        if(ranges.length<20){return 3}
+        if(ranges.length<20){return 2}
         else{return 4}
     }
     let step = getStep()
@@ -71,7 +71,7 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
     let accept_num = 0,
         reject_num = 0
     ranges.map((range:number,range_i)=>{
-        if(((range_i%step==0)&&(range_i!=0))||(range_i==ranges.length - 1)){
+        if(((range_i%step==0)&&(range_i!=0))||(range_i==ranges.length - 1)||((range_i==0))){
             ListNum.push(dataPush(range,accept_num,reject_num))
             xRecord = Math.max(xRecord,range)
             yRecord = [Math.max(yRecord[0],accept_num),Math.max(yRecord[1],reject_num)]
@@ -84,7 +84,7 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
         }
     })
     let xScale = d3.scaleLinear().domain([0,xRecord]).range([0,Math.max(50,xRecord)])
-    let yScaleAcc = d3.scaleLinear().domain([0,yRecord[0]]).range([height,0]);
+    let yScaleAcc = d3.scaleLinear().domain([0,yRecord[0]]).range([height/2,0]);
     let yScaleRej = d3.scaleLinear().domain([0,yRecord[1]]).range([height/2,height]);
 
     const areasAcc = d3.area<curveData>().x(d=>xScale(d.x)).y1(height/2).y0(d=>yScaleAcc(d.y)).curve(d3.curveMonotoneX)
@@ -101,7 +101,7 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
         let ListNumFilter = ListNum.filter((s)=>{
             if((s.x>xRange[0])&&(s.x<=xRange[1]+1)){return s}
             else{return null}})
-
+        //console.log(ranges,ListNum,highlightRange,xRange,ListNumFilter)
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
         <path d={areasAcc(ListNum)||''} style={{fill:'#999'}}/>
         <path d={areasAccSelect(ListNumFilter)||''} style={{fill:'#DE4863'}}/>
