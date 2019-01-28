@@ -38,9 +38,14 @@ export default class Side extends React.Component<Props, State>{
   }
   public render(){
       return <div onSubmit={this.onStart} className='Side'>
-        <Select defaultValue='dataTest' style={{ width: '100%' }} onChange={this.selectDataset}>
+        <Select defaultValue='credit' style={{ width: '100%' }} onChange={this.selectDataset}>
+          <Option value="credit">credit</Option>
+          <Option value="academic">academic</Option>
+          <Option value="give_me_credit">give_me_credit</Option>
+          <Option value="bank_term_deposit">bank_term_deposit</Option>
+          <Option value="adult">adult</Option>
+          <Option value="frisk">frisk</Option>
           <Option value="dataTest">dataTest</Option>
-          <Option value="xAPI-Edu-Data">xAPI-Edu-Data</Option>
         </Select>
 
         <Select defaultValue='knn' style={{ width: '100%' }} onChange={this.selectModel}>

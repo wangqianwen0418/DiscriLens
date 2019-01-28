@@ -18,7 +18,7 @@ cache_path = './cache'
 def get_dataset(dataset_name):
     """Fetch dataset by id"""
     dataset_path = '../data/{}_clean.csv'.format(dataset_name)
-    df = pd.read_csv(dataset_path, 'r')
+    df = pd.read_csv(dataset_path, 'r', delimiter=',')
     return df.to_json()
 
 @api.route('/generate_num/<string:dataset_name>', methods=['GET'])
@@ -76,7 +76,7 @@ def get_samples():
 def get_groups():
     """
     Fetch the info of classifiers.
-    E.g.: /api/groups?dataset=credit&model=knn
+    E.g.: /api/groups?dataset=credit&model=knn&protect=age
     """
 
     dataset_name = request.args.get('dataset', None, type=str)
@@ -91,6 +91,7 @@ def get_groups():
     sample_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
     model_samples = pd.read_csv(sample_path)
 
+    
     key_attrs = findKeyAttrs(data, protect_attr)
 
     key_vals = {}
@@ -105,6 +106,8 @@ def get_groups():
     for i, group in enumerate(key_groups):
         key_groups[i]['items'] = list(map(int, key_groups[i]['items']))
 
+
+    
 
     return_value = {
         'key_attrs': key_attrs,
