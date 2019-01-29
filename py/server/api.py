@@ -99,6 +99,7 @@ def get_groups():
 
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
+    model_name = '{}_{}'.format(dataset_name, model_name)
     protect_attr = request.args.get('protectAttr', None, type=str)
     # get traiing data
     dataset_path = '../data/{}.csv'.format(dataset_name)
