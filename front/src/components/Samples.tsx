@@ -25,7 +25,7 @@ export default class Samples extends React.Component<IProps, IState>{
             </div>
         }else if(samples.length>0){
             let columns = Object.keys(samples[0])
-            return <div className='samples'>
+            return<div className='samples'>
             <table>
                 {/* header */}
                 <thead>
@@ -45,7 +45,7 @@ export default class Samples extends React.Component<IProps, IState>{
                 </tbody>
             </table>
             </div>
-        }else{
+            }else{
             return <div className='samples' >
             No Data
             </div>
