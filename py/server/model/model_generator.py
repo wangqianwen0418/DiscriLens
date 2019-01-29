@@ -41,6 +41,12 @@ class ModelGene(object):
                 metric = "manhattan",
                 n_neighbors = 17
             ),
+            "dataTest_knn": KNeighborsClassifier(
+                algorithm = "ball_tree",
+                leaf_size = 40,
+                metric = "manhattan",
+                n_neighbors = 17
+            ),
             # the academic model is based https://www.kaggle.com/harunshimanto/student-s-academic-performance-with-ml-eda
             "academic_xgb": XGBClassifier(
                 max_depth=10, 

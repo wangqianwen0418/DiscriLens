@@ -3,7 +3,6 @@ import { StoreState } from 'types';
 import {GENERATE_SAMPLES, FIND_GROUPS, CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS} from 'Const'
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
-   console.info('reducer, action', action)
     switch (action.type) {
       case GENERATE_SAMPLES:
         return { ...state, samples:action.samples}
