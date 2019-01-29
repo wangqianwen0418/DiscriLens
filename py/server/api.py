@@ -61,13 +61,16 @@ def get_rules():
     dataset_name = request.args.get('dataset', None, type=str)
     protect_attr = request.args.get('protect', None, type=str)
     model_name = request.args.get('model', None, type=str)
-    model_name = '{}_{}'.format(dataset_name, model_name)
-
-    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
+    if model_name:
+        model_name = '{}_{}'.format(dataset_name, model_name)
+        sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
+    else:
+        sample_path = '../data/{}_clean.csv'.format(dataset_name)
     model_samples = pd.read_csv(sample_path)
-    rules = find_rules(model_samples, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[0.9, 1.1])
+    rules = find_rules(model_samples, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[1, 1])
 
-    return rules.to_json(orient='records')
+    # return rules.to_json(orient='records')
+    return Response(rules.to_csv(), mimetype="text/csv",)
 
 
 @api.route('/groups', methods=['GET'])
