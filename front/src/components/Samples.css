@@ -3,3 +3,19 @@
     height: calc( (100vh - var(--header-height) ) * 0.2 ) !important;
     overflow: auto;
 }
+
+
+table{
+    table-layout: fixed;
+    font-size: 12px;
+    border:1px solid #d9d9d9;
+}
+
+td, th{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    padding: 0 10px;
+    border:1px solid #d9d9d9;
+}

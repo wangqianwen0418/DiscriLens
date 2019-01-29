@@ -6,6 +6,10 @@ export interface KeyGroup{
     [key:string]: any
 }
 
+export interface NumAttr{
+    [key:string]: number
+}
+
 export enum Status {
     COMPLETE = 'complete',
     PENDING = 'pending',
@@ -16,6 +20,7 @@ export interface StoreState{
     key_attrs: string[],
     samples: DataItem[],
     key_groups: KeyGroup[],
+    num_attrs: string[],
     fetch_samples_status: Status,
     fetch_groups_status: Status
 }
