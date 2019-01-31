@@ -54,14 +54,14 @@ def get_samples():
     data = pd.read_csv(dataset_path)
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(data)
-    model_samples = generate_model_samples(data, sample_num, model, encoder)
+    model_samples, _ = generate_model_samples(data, sample_num, model, encoder)
     # add the ID col as the first col
     model_samples.insert(loc=0, column='id', value=model_samples.index)
 
     # save mdodl & samples to cache
     samples_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     model_samples.to_csv(samples_path, index=False)
-    # model_samples.to_json('../../front/src/testdata/test.json', orient='records')
+    model_samples.to_json('../../front/src/testdata/test.json', orient='records')
     model_path = os.path.join(cache_path, '{}.joblib'.format(model_name))
     dump(model, model_path) 
     jsonfile = model_samples.to_json(orient='records')
@@ -100,7 +100,7 @@ def get_groups():
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
     model_name = '{}_{}'.format(dataset_name, model_name)
-    protect_attr = request.args.get('protectAttr', None, type=str)
+    protect_attr = request.args.get('protect', None, type=str)
     # get traiing data
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
