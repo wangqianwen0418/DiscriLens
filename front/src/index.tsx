@@ -20,7 +20,6 @@ let initState:StoreState = {
   key_attrs: [],
   key_groups: [],
   samples: [],
-  num_attrs: [],
   fetch_samples_status: Status.INACTIVE,
   fetch_groups_status: Status.INACTIVE
 }
@@ -31,7 +30,6 @@ let initState:StoreState = {
     key_attrs: testJSON2.key_attrs,
     key_groups: testJSON2.key_groups,
     samples: testJSON,
-    num_attrs: [],
     fetch_samples_status: Status.COMPLETE,
     fetch_groups_status: Status.COMPLETE
   }
