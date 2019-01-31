@@ -50,10 +50,10 @@ export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus 
 }
 
 
-export const FetchGroups = (dataset_name:string, model_name: string)=>{
+export const FetchGroups = (dataset_name:string, model_name: string, protect_attr: string)=>{
     return (dispatch:any) => {
         dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
-        const url = `/groups?dataset=${dataset_name}&model=${dataset_name}_${model_name}&protectAttr=sex`
+        const url = `/groups?dataset=${dataset_name}&model=${dataset_name}_${model_name}&protectAttr=${protect_attr}`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
             if (response.status !=200) {
@@ -116,13 +116,13 @@ export const FetchSamples = (dataset_name:string, model_name: string)=>{
 
 // combine to start
 
-export const Start = (dataset_name:string, model_name: string)=>{
+export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
     return (dispatch: any)=>{
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
         dispatch(ChangeGroupsFetchStatus(Status.PENDING))
         FetchSamples(dataset_name, model_name)(dispatch)
         .then(
-            () =>{ dispatch (FetchGroups(dataset_name, model_name))}
+            () =>{ dispatch (FetchGroups(dataset_name, model_name, protect_attr))}
         )
     }
 }

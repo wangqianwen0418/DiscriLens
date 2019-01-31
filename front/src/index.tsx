@@ -14,7 +14,7 @@ import { StoreState, Status} from 'types';
 
 import 'antd/dist/antd.css';
 
-const TEST = false
+const TEST = true
 
 let initState:StoreState = {
   key_attrs: [],

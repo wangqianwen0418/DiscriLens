@@ -5,12 +5,13 @@ import {Select, Button} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
-  onStart: (dataset_name:string, model_name:string) => void
+  onStart: (dataset_name:string, model_name:string, protect_attr: string) => void
 }
 
 export interface State{
   dataset_name: string,
-  model_name: string
+  model_name: string,
+  protect_attr: string
 }
 
 export default class Side extends React.Component<Props, State>{
@@ -19,10 +20,12 @@ export default class Side extends React.Component<Props, State>{
 
     this.state = {
       dataset_name: 'dataTest',
-      model_name: 'knn'
+      model_name: 'knn',
+      protect_attr: 'sex'
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
+    this.selectProtectAttr = this.selectProtectAttr.bind(this)
     this.onStart = this.onStart.bind(this)
   }
   selectDataset(e:string){
@@ -31,14 +34,17 @@ export default class Side extends React.Component<Props, State>{
   selectModel(e:string){
     this.setState({model_name: e})
   }
+  selectProtectAttr(e:string){
+    this.setState({protect_attr: e})
+  }
   onStart(e:any){
     e.preventDefault();
-    let {model_name, dataset_name} = this.state
-    this.props.onStart(dataset_name, model_name)
+    let {model_name, dataset_name, protect_attr} = this.state
+    this.props.onStart(dataset_name, model_name, protect_attr)
   }
   public render(){
       return <div onSubmit={this.onStart} className='Side'>
-        <Select defaultValue='dataTest' style={{ width: '100%' }} onChange={this.selectDataset}>
+        <Select defaultValue='dataTest' style={{ width: '50%' }} onChange={this.selectDataset}>
           <Option value="credit">credit</Option>
           <Option value="academic">academic</Option>
           <Option value="give_me_credit">give_me_credit</Option>
@@ -48,9 +54,14 @@ export default class Side extends React.Component<Props, State>{
           <Option value="dataTest">dataTest</Option>
         </Select>
 
-        <Select defaultValue='knn' style={{ width: '100%' }} onChange={this.selectModel}>
+        <Select defaultValue='knn' style={{ width: '50%' }} onChange={this.selectModel}>
           <Option value="knn">knn</Option>
           <Option value="rf">rf</Option>
+        </Select>
+
+        <Select defaultValue='sex' style={{ width: '50%' }} onChange={this.selectProtectAttr}>
+          <Option value="sex">sex</Option>
+          <Option value="gender">gender</Option>
         </Select>
 
         <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>

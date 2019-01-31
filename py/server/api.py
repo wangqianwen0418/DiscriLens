@@ -84,7 +84,7 @@ def get_rules():
     else:
         sample_path = '../data/{}_clean.csv'.format(dataset_name)
     model_samples = pd.read_csv(sample_path)
-    rules = find_rules(model_samples, minimum_support=30, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[1, 1])
+    rules = find_rules(model_samples, minimum_support=15, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[1, 1])
 
     # return rules.to_json(orient='records')
     return Response(rules.to_csv(), mimetype="text/csv",)
