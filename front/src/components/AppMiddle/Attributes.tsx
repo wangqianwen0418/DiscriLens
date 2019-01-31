@@ -297,7 +297,7 @@ export default class Attributes extends React.Component<Props, State>{
                 </g>
                 }
             }
-            else{return <g></g>}
+            else{return <g/>}
         }) 
 
 

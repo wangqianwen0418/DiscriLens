@@ -1,0 +1,1219 @@
+,antecedent,pd,cls,conf_pd,conf_pnd,elift,sup_pd,sup_pnd
+1018,"['Relation=Mum', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.4,0.6333333333333333,0.6315789473684211,6.0,19.0
+1006,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Discussion=50<x<74']",gender=F,class=L,0.3333333333333333,0.5,0.6666666666666666,5.0,15.0
+140,"['Relation=Mum', 'Semester=F', 'VisITedResources=49<x<74']",gender=F,class=L,0.35714285714285715,0.5357142857142857,0.6666666666666667,5.0,15.0
+1017,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.4166666666666667,0.625,0.6666666666666667,5.0,15.0
+1007,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Discussion=50<x<74']",gender=F,class=L,0.4166666666666667,0.5833333333333334,0.7142857142857143,5.0,14.0
+1005,"['Relation=Mum', 'Discussion=50<x<74']",gender=F,class=L,0.48148148148148145,0.6481481481481481,0.7428571428571428,13.0,35.0
+245,"['Relation=Mum', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.5454545454545454,0.7272727272727273,0.7499999999999999,6.0,16.0
+940,"['Relation=Mum', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.6153846153846154,0.8076923076923077,0.761904761904762,8.0,21.0
+628,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'VisITedResources=24<x<49']",gender=F,class=L,0.5333333333333333,0.7,0.761904761904762,8.0,21.0
+1022,"['Semester=F', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.45454545454545453,0.5909090909090909,0.7692307692307692,5.0,13.0
+835,"['Relation=Mum', 'SectionID=B', 'StageID=lowerlevel']",gender=F,class=L,0.5555555555555556,0.7222222222222222,0.7692307692307693,5.0,13.0
+873,"['Relation=Mum', 'GradeID=G-04']",gender=F,class=L,0.625,0.8125,0.7692307692307693,5.0,13.0
+689,"['Relation=Mum', 'PlaceofBirth=Iraq']",gender=F,class=L,0.625,0.8125,0.7692307692307693,5.0,13.0
+438,"['Discussion=50<x<74', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.5555555555555556,0.7222222222222222,0.7692307692307693,5.0,13.0
+684,"['Semester=F', 'PlaceofBirth=Iraq']",gender=F,class=L,0.625,0.8125,0.7692307692307693,5.0,13.0
+941,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.625,0.8125,0.7692307692307693,5.0,13.0
+943,"['Semester=F', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.625,0.8125,0.7692307692307693,5.0,13.0
+430,"['Relation=Mum', 'StageID=HighSchool', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.5555555555555556,0.7222222222222222,0.7692307692307693,5.0,13.0
+1045,"['Relation=Mum', 'StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.5555555555555556,0.7222222222222222,0.7692307692307693,5.0,13.0
+635,"['Discussion=50<x<74', 'VisITedResources=24<x<49']",gender=F,class=L,0.6363636363636364,0.8181818181818182,0.7777777777777777,7.0,18.0
+682,"['StageID=HighSchool', 'PlaceofBirth=Iraq']",gender=F,class=L,0.6666666666666666,0.8333333333333334,0.7999999999999999,6.0,15.0
+634,"['SectionID=A', 'VisITedResources=24<x<49']",gender=F,class=L,0.6666666666666666,0.8333333333333334,0.7999999999999999,8.0,20.0
+112,"['Semester=F', 'SectionID=B', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.75,0.7999999999999999,6.0,15.0
+110,"['Relation=Mum', 'SectionID=B', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.75,0.7999999999999999,6.0,15.0
+146,"['Relation=Mum', 'StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.75,0.7999999999999999,6.0,15.0
+1120,"['Relation=Mum', 'NationalITy=Morocco']",gender=F,class=L,0.6666666666666666,0.8333333333333334,0.7999999999999999,6.0,15.0
+1020,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.6,0.75,0.7999999999999999,6.0,15.0
+1034,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'Discussion=50<x<74']",gender=F,class=L,0.6666666666666666,0.8333333333333334,0.7999999999999999,6.0,15.0
+990,"['Semester=F', 'Topic=Biology']",gender=F,class=L,0.5,0.625,0.8,6.0,15.0
+601,"['Relation=Mum', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.5,0.625,0.8,10.0,25.0
+1016,"['SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.5833333333333334,0.7291666666666666,0.8,14.0,35.0
+1025,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Discussion=50<x<74']",gender=F,class=L,0.5,0.625,0.8,8.0,20.0
+828,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=lowerlevel']",gender=F,class=L,0.5454545454545454,0.6818181818181818,0.8,6.0,15.0
+1003,"['ParentAnsweringSurvey=Yes', 'Discussion=50<x<74']",gender=F,class=L,0.52,0.64,0.8125,13.0,32.0
+1009,"['StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.6470588235294118,0.7941176470588235,0.8148148148148149,11.0,27.0
+79,"['Relation=Mum', 'SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.5833333333333334,0.7083333333333334,0.8235294117647058,7.0,17.0
+556,"['Relation=Mum', 'GradeID=G-12']",gender=F,class=L,0.5833333333333334,0.7083333333333334,0.8235294117647058,7.0,17.0
+1012,"['Semester=F', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.6363636363636364,0.7727272727272727,0.8235294117647058,7.0,17.0
+439,"['raisedhands=0<x<25', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7,0.85,0.8235294117647058,7.0,17.0
+935,"['Relation=Mum', 'StageID=HighSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.7,0.85,0.8235294117647058,7.0,17.0
+939,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.7,0.85,0.8235294117647058,7.0,17.0
+293,"['Relation=Mum', 'StageID=MiddleSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.6363636363636364,0.7727272727272727,0.8235294117647058,7.0,17.0
+434,"['Relation=Mum', 'SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.6363636363636364,0.7727272727272727,0.8235294117647058,7.0,17.0
+123,"['Relation=Mum', 'Discussion=x<1', 'VisITedResources=49<x<74']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+144,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+400,"['ParentschoolSatisfaction=Good', 'Discussion=x>74', 'VisITedResources=0<x<24']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+592,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.5,0.6,0.8333333333333334,5.0,12.0
+578,"['SectionID=B', 'PlaceofBirth=Egypt']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+563,"['raisedhands=0<x<25', 'GradeID=G-12']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+246,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+557,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'GradeID=G-12']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+524,"['Semester=F', 'SectionID=B', 'raisedhands=50<x<75']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+178,"['Relation=Mum', 'AnnouncementsView=x>73', 'raisedhands=x<0']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+483,"['SectionID=B', 'NationalITy=Egypt']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+435,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+350,"['Relation=Mum', 'NationalITy=Iraq']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+618,"['Relation=Mum', 'StageID=HighSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+558,"['VisITedResources=24<x<49', 'GradeID=G-12']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+608,"['Relation=Mum', 'Semester=F', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.5,0.6,0.8333333333333334,5.0,12.0
+636,"['ParentschoolSatisfaction=Good', 'Discussion=50<x<74', 'VisITedResources=24<x<49']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1211,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'GradeID=G-08']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1187,"['AnnouncementsView=49<x<73', 'NationalITy=Iran']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1174,"['AnnouncementsView=24<x<49', 'Topic=Geology']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1166,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Topic=Geology']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1107,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+1104,"['Relation=Mum', 'StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+1069,"['Relation=Mum', 'Topic=French']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1066,"['SectionID=A', 'NationalITy=Syria']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1064,"['ParentAnsweringSurvey=Yes', 'NationalITy=Syria']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1036,"['Relation=Mum', 'AnnouncementsView=24<x<49', 'Discussion=50<x<74']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1013,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+631,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+1000,"['Discussion=50<x<74', 'Topic=Biology']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+934,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+875,"['StageID=HighSchool', 'GradeID=G-04']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+800,"['Discussion=50<x<74', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+799,"['StageID=HighSchool', 'SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+752,"['Discussion=50<x<74', 'VisITedResources=x>74']",gender=F,class=L,0.5,0.6,0.8333333333333334,5.0,12.0
+735,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+688,"['GradeID=G-09', 'PlaceofBirth=Iraq']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+687,"['raisedhands=0<x<25', 'PlaceofBirth=Iraq']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+681,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=Iraq']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+678,"['Relation=Mum', 'SectionID=A', 'GradeID=G-07']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+659,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'GradeID=G-07']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+945,"['Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.7142857142857143,0.8571428571428571,0.8333333333333334,5.0,12.0
+784,"['Relation=Mum', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.625,0.75,0.8333333333333334,5.0,12.0
+1217,"['Relation=Mum', 'GradeID=G-08']",gender=F,class=L,0.5555555555555556,0.6666666666666666,0.8333333333333334,5.0,12.0
+938,"['SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.7222222222222222,0.8611111111111112,0.8387096774193548,13.0,31.0
+143,"['Semester=F', 'StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.6666666666666666,0.7916666666666666,0.8421052631578947,8.0,19.0
+371,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'VisITedResources=0<x<24']",gender=F,class=L,0.7272727272727273,0.8636363636363636,0.8421052631578948,8.0,19.0
+932,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'raisedhands=0<x<25']",gender=F,class=L,0.7272727272727273,0.8636363636363636,0.8421052631578948,8.0,19.0
+34,"['Relation=Mum', 'Semester=F', 'SectionID=B']",gender=F,class=L,0.5333333333333333,0.6333333333333333,0.8421052631578948,8.0,19.0
+591,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.6111111111111112,0.7222222222222222,0.8461538461538463,11.0,26.0
+311,"['Relation=Mum', 'AnnouncementsView=x>73']",gender=F,class=L,0.6363636363636364,0.75,0.8484848484848485,14.0,33.0
+1028,"['Semester=F', 'Discussion=50<x<74']",gender=F,class=L,0.6086956521739131,0.717391304347826,0.8484848484848486,14.0,33.0
+525,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'raisedhands=50<x<75']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+145,"['SectionID=B', 'StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+1127,"['ParentAnsweringSurvey=Yes', 'NationalITy=Morocco']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+637,"['raisedhands=0<x<25', 'VisITedResources=24<x<49']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+908,"['Relation=Mum', 'Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.75,0.875,0.8571428571428571,9.0,21.0
+419,"['Relation=Mum', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.6818181818181818,0.7954545454545454,0.8571428571428571,15.0,35.0
+661,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'GradeID=G-07']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+627,"['Relation=Mum', 'VisITedResources=24<x<49']",gender=F,class=L,0.6818181818181818,0.7954545454545454,0.8571428571428571,15.0,35.0
+1126,"['SectionID=A', 'NationalITy=Morocco']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+251,"['Semester=F', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+1038,"['Relation=Mum', 'StageID=MiddleSchool', 'Discussion=50<x<74']",gender=F,class=L,0.5454545454545454,0.6363636363636364,0.8571428571428571,6.0,14.0
+441,"['ParentAnsweringSurvey=Yes', 'VisITedResources=24<x<49', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+382,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'VisITedResources=0<x<24']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+383,"['Relation=Mum', 'SectionID=B', 'VisITedResources=0<x<24']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+73,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Discussion=x>74']",gender=F,class=L,0.6923076923076923,0.8076923076923077,0.8571428571428571,9.0,21.0
+20,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'SectionID=B']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,12.0,28.0
+1010,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.6923076923076923,0.8076923076923077,0.8571428571428571,9.0,21.0
+952,"['Semester=F', 'GradeID=G-09']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+996,"['StageID=HighSchool', 'Topic=Biology']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+739,"['Semester=F', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+599,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.5454545454545454,0.6363636363636364,0.8571428571428571,6.0,14.0
+955,"['Relation=Mum', 'GradeID=G-09']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+393,"['Relation=Mum', 'StageID=lowerlevel', 'VisITedResources=0<x<24']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+1046,"['SectionID=B', 'StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+442,"['Relation=Mum', 'VisITedResources=24<x<49', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+389,"['Relation=Mum', 'raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+287,"['Relation=Mum', 'Semester=F', 'Discussion=x<1']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+284,"['Semester=F', 'StageID=HighSchool', 'Discussion=x<1']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+334,"['SectionID=A', 'PlaceofBirth=Iran']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+75,"['Relation=Mum', 'StageID=MiddleSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+1172,"['Discussion=50<x<74', 'Topic=Geology']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+351,"['Semester=F', 'NationalITy=Iraq']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+484,"['raisedhands=x>75', 'NationalITy=Egypt']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+783,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.6666666666666666,0.7777777777777778,0.8571428571428571,6.0,14.0
+796,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.75,0.875,0.8571428571428571,6.0,14.0
+506,"['SectionID=B', 'StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.6,0.7,0.8571428571428572,6.0,14.0
+577,"['Relation=Mum', 'PlaceofBirth=Egypt']",gender=F,class=L,0.6,0.7,0.8571428571428572,6.0,14.0
+237,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'SectionID=A']",gender=F,class=L,0.625,0.7291666666666666,0.8571428571428572,15.0,35.0
+330,"['Relation=Mum', 'Semester=F', 'AnnouncementsView=x>73']",gender=F,class=L,0.6,0.7,0.8571428571428572,6.0,14.0
+1093,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'raisedhands=25<x<50']",gender=F,class=L,0.6,0.7,0.8571428571428572,6.0,14.0
+138,"['Semester=F', 'VisITedResources=49<x<74']",gender=F,class=L,0.64,0.74,0.8648648648648649,16.0,37.0
+523,"['SectionID=B', 'raisedhands=50<x<75']",gender=F,class=L,0.6666666666666666,0.7666666666666667,0.8695652173913042,10.0,23.0
+933,"['StageID=HighSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.7692307692307693,0.8846153846153846,0.8695652173913044,10.0,23.0
+827,"['Relation=Mum', 'StageID=lowerlevel']",gender=F,class=L,0.68,0.78,0.8717948717948718,17.0,39.0
+626,"['ParentAnsweringSurvey=Yes', 'VisITedResources=24<x<49']",gender=F,class=L,0.7083333333333334,0.8125,0.8717948717948718,17.0,39.0
+282,"['Relation=Mum', 'StageID=HighSchool', 'Discussion=x<1']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+431,"['Semester=F', 'StageID=HighSchool', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+1094,"['Relation=Mum', 'SectionID=B', 'raisedhands=25<x<50']",gender=F,class=L,0.5384615384615384,0.6153846153846154,0.8749999999999999,7.0,16.0
+451,"['raisedhands=50<x<75', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+856,"['Relation=Mum', 'SectionID=B', 'raisedhands=x>75']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+395,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'VisITedResources=0<x<24']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+522,"['ParentschoolSatisfaction=Good', 'Discussion=50<x<74', 'raisedhands=50<x<75']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+722,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+316,"['Discussion=x>74', 'AnnouncementsView=x>73']",gender=F,class=L,0.7,0.8,0.8749999999999999,7.0,16.0
+304,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'AnnouncementsView=x>73']",gender=F,class=L,0.6363636363636364,0.7272727272727273,0.875,7.0,16.0
+567,"['Relation=Mum', 'Topic=Chemistry']",gender=F,class=L,0.6363636363636364,0.7272727272727273,0.875,7.0,16.0
+105,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'VisITedResources=49<x<74']",gender=F,class=L,0.6363636363636364,0.7272727272727273,0.875,7.0,16.0
+1182,"['Relation=Mum', 'NationalITy=Iran']",gender=F,class=L,0.6363636363636364,0.7272727272727273,0.875,7.0,16.0
+995,"['Relation=Mum', 'Topic=Biology']",gender=F,class=L,0.6363636363636364,0.7272727272727273,0.875,7.0,16.0
+747,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'VisITedResources=x>74']",gender=F,class=L,0.5833333333333334,0.6666666666666666,0.8750000000000001,7.0,16.0
+541,"['Relation=Mum', 'SectionID=B', 'AnnouncementsView=x<0']",gender=F,class=L,0.5833333333333334,0.6666666666666666,0.8750000000000001,7.0,16.0
+398,"['Relation=Mum', 'Discussion=x>74', 'VisITedResources=0<x<24']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+1156,"['Relation=Mum', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+1086,"['VisITedResources=49<x<74', 'Topic=French']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+508,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'raisedhands=50<x<75']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+789,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+504,"['Semester=F', 'StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.5833333333333334,0.6666666666666666,0.8750000000000001,7.0,16.0
+954,"['StageID=HighSchool', 'GradeID=G-09']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+992,"['SectionID=B', 'Topic=Biology']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+876,"['SectionID=A', 'GradeID=G-04']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+632,"['Relation=Mum', 'StageID=MiddleSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+928,"['Relation=Mum', 'raisedhands=0<x<25']",gender=F,class=L,0.7857142857142857,0.8928571428571429,0.8799999999999999,22.0,50.0
+1033,"['AnnouncementsView=24<x<49', 'Discussion=50<x<74']",gender=F,class=L,0.7857142857142857,0.8928571428571429,0.8799999999999999,11.0,25.0
+1047,"['SectionID=B', 'Discussion=50<x<74']",gender=F,class=L,0.6470588235294118,0.7352941176470589,0.88,11.0,25.0
+521,"['Discussion=50<x<74', 'raisedhands=50<x<75']",gender=F,class=L,0.6875,0.78125,0.88,11.0,25.0
+893,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Semester=F']",gender=F,class=L,0.6111111111111112,0.6944444444444444,0.8800000000000001,11.0,25.0
+680,['PlaceofBirth=Iraq'],gender=F,class=L,0.7894736842105263,0.8947368421052632,0.8823529411764706,15.0,34.0
+71,"['Relation=Mum', 'Discussion=x>74']",gender=F,class=L,0.7142857142857143,0.8095238095238095,0.8823529411764706,15.0,34.0
+104,"['Relation=Mum', 'VisITedResources=49<x<74']",gender=F,class=L,0.6785714285714286,0.7678571428571429,0.8837209302325582,19.0,43.0
+588,"['Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.675,0.7625,0.8852459016393444,27.0,61.0
+19,"['Relation=Mum', 'SectionID=B']",gender=F,class=L,0.6585365853658537,0.7439024390243902,0.8852459016393444,27.0,61.0
+1002,['Discussion=50<x<74'],gender=F,class=L,0.6964285714285714,0.7857142857142857,0.8863636363636364,39.0,88.0
+518,"['Relation=Mum', 'raisedhands=50<x<75']",gender=F,class=L,0.5714285714285714,0.6428571428571429,0.8888888888888887,12.0,27.0
+589,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.5714285714285714,0.6428571428571429,0.8888888888888887,12.0,27.0
+667,"['Semester=F', 'GradeID=G-07']",gender=F,class=L,0.6666666666666666,0.75,0.8888888888888888,8.0,18.0
+607,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+598,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.6956521739130435,0.782608695652174,0.8888888888888888,16.0,36.0
+901,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'raisedhands=0<x<25']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+1209,"['SectionID=B', 'GradeID=G-08']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+872,"['ParentAnsweringSurvey=Yes', 'GradeID=G-04']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+243,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.75,0.84375,0.8888888888888888,12.0,27.0
+52,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+1048,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'Discussion=50<x<74']",gender=F,class=L,0.6666666666666666,0.75,0.8888888888888888,8.0,18.0
+677,"['SectionID=A', 'GradeID=G-07']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+248,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+550,"['StageID=MiddleSchool', 'GradeID=G-12']",gender=F,class=L,0.6666666666666666,0.75,0.8888888888888888,8.0,18.0
+142,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+445,"['Relation=Mum', 'Semester=F', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+150,"['Discussion=50<x<74', 'VisITedResources=49<x<74']",gender=F,class=L,0.7272727272727273,0.8181818181818182,0.8888888888888888,8.0,18.0
+3,"['ParentschoolSatisfaction=Good', 'Relation=Mum']",gender=F,class=L,0.6923076923076923,0.7788461538461539,0.8888888888888888,36.0,81.0
+629,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'VisITedResources=24<x<49']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+239,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'SectionID=A']",gender=F,class=L,0.7058823529411765,0.7941176470588235,0.888888888888889,12.0,27.0
+944,"['StageID=MiddleSchool', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+685,"['SectionID=B', 'PlaceofBirth=Iraq']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+1175,"['ParentschoolSatisfaction=Good', 'Topic=Geology']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+660,"['StageID=HighSchool', 'GradeID=G-07']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+780,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+80,"['StageID=MiddleSchool', 'SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.8,0.9,0.888888888888889,8.0,18.0
+236,"['Relation=Mum', 'SectionID=A']",gender=F,class=L,0.725,0.8125,0.8923076923076922,29.0,65.0
+428,"['StageID=HighSchool', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7647058823529411,0.8529411764705882,0.896551724137931,13.0,29.0
+929,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'raisedhands=0<x<25']",gender=F,class=L,0.8125,0.90625,0.896551724137931,13.0,29.0
+1090,"['Relation=Mum', 'raisedhands=25<x<50']",gender=F,class=L,0.6190476190476191,0.6904761904761905,0.896551724137931,13.0,29.0
+1024,"['ParentschoolSatisfaction=Good', 'Discussion=50<x<74']",gender=F,class=L,0.7096774193548387,0.7903225806451613,0.8979591836734695,22.0,49.0
+1029,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=50<x<74']",gender=F,class=L,0.6923076923076923,0.7692307692307693,0.8999999999999999,9.0,20.0
+125,"['AnnouncementsView=x>73', 'VisITedResources=49<x<74']",gender=F,class=L,0.6923076923076923,0.7692307692307693,0.8999999999999999,9.0,20.0
+433,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.75,0.8333333333333334,0.8999999999999999,9.0,20.0
+617,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.6923076923076923,0.7692307692307693,0.8999999999999999,9.0,20.0
+675,"['Relation=Mum', 'GradeID=G-07']",gender=F,class=L,0.6428571428571429,0.7142857142857143,0.9,9.0,20.0
+803,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8181818181818182,0.9090909090909091,0.9000000000000001,9.0,20.0
+1118,"['ParentschoolSatisfaction=Good', 'NationalITy=Morocco']",gender=F,class=L,0.8181818181818182,0.9090909090909091,0.9000000000000001,9.0,20.0
+1216,"['ParentschoolSatisfaction=Good', 'GradeID=G-08']",gender=F,class=L,0.8181818181818182,0.9090909090909091,0.9000000000000001,9.0,20.0
+427,"['VisITedResources=0<x<24', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8181818181818182,0.9090909090909091,0.9000000000000001,9.0,20.0
+890,"['Relation=Mum', 'Semester=F']",gender=F,class=L,0.6666666666666666,0.7395833333333334,0.9014084507042253,32.0,71.0
+256,"['Relation=Mum', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.6666666666666666,0.7380952380952381,0.9032258064516128,14.0,31.0
+606,"['Semester=F', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.7,0.775,0.9032258064516128,14.0,31.0
+583,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool']",gender=F,class=L,0.7,0.775,0.9032258064516128,14.0,31.0
+141,"['StageID=HighSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.7777777777777778,0.8611111111111112,0.9032258064516129,14.0,31.0
+303,"['SectionID=B', 'AnnouncementsView=x>73']",gender=F,class=L,0.7368421052631579,0.8157894736842105,0.9032258064516129,14.0,31.0
+291,"['StageID=MiddleSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.7777777777777778,0.8611111111111112,0.9032258064516129,14.0,31.0
+4,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Relation=Mum']",gender=F,class=L,0.5833333333333334,0.6458333333333334,0.9032258064516129,14.0,31.0
+900,"['ParentschoolSatisfaction=Good', 'raisedhands=0<x<25']",gender=F,class=L,0.7777777777777778,0.8611111111111112,0.9032258064516129,14.0,31.0
+370,"['Relation=Mum', 'VisITedResources=0<x<24']",gender=F,class=L,0.7916666666666666,0.875,0.9047619047619048,19.0,42.0
+488,"['VisITedResources=x<0', 'Topic=History']",gender=F,class=L,0.5555555555555556,0.6111111111111112,0.9090909090909091,5.0,11.0
+432,"['SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7894736842105263,0.868421052631579,0.9090909090909091,15.0,33.0
+487,"['Relation=Mum', 'Topic=History']",gender=F,class=L,0.5,0.55,0.9090909090909091,5.0,11.0
+72,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Discussion=x>74']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+259,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+704,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'VisITedResources=x>74']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+1091,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'raisedhands=25<x<50']",gender=F,class=L,0.45454545454545453,0.5,0.9090909090909091,5.0,11.0
+1135,"['Relation=Mum', 'NationalITy=Palestine']",gender=F,class=L,0.5555555555555556,0.6111111111111112,0.9090909090909091,5.0,11.0
+503,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.5555555555555556,0.6111111111111112,0.9090909090909091,5.0,11.0
+1039,"['Semester=F', 'StageID=MiddleSchool', 'Discussion=50<x<74']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+1152,"['SectionID=B', 'PlaceofBirth=USA']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+513,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'raisedhands=50<x<75']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+109,"['SectionID=B', 'VisITedResources=49<x<74']",gender=F,class=L,0.7894736842105263,0.868421052631579,0.9090909090909091,15.0,33.0
+671,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'GradeID=G-07']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+668,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'GradeID=G-07']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+95,"['Semester=F', 'SectionID=B', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+343,"['StageID=MiddleSchool', 'GradeID=G-02']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+1052,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'PlaceofBirth=Jordan']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+662,"['AnnouncementsView=24<x<49', 'GradeID=G-07']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+573,"['SectionID=B', 'Topic=Chemistry']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+713,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'VisITedResources=x>74']",gender=F,class=L,0.625,0.6875,0.9090909090909091,5.0,11.0
+686,"['Discussion=x>74', 'PlaceofBirth=Iraq']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+346,"['ParentschoolSatisfaction=Good', 'GradeID=G-02']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+348,"['ParentschoolSatisfaction=Good', 'NationalITy=Iraq']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+693,"['raisedhands=50<x<75', 'NationalITy=lebanon']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+349,"['SectionID=B', 'NationalITy=Iraq']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+345,"['Discussion=50<x<74', 'GradeID=G-02']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+505,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+694,"['Semester=F', 'NationalITy=lebanon']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+515,"['ParentAnsweringSurvey=Yes', 'StageID=lowerlevel', 'raisedhands=50<x<75']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+732,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+730,"['Relation=Mum', 'Semester=F', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+729,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+468,"['ParentschoolSatisfaction=Good', 'Semester=F', 'GradeID=G-11']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+727,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+476,"['Relation=Mum', 'NationalITy=Egypt']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+720,"['ParentschoolSatisfaction=Good', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.7692307692307693,0.8461538461538461,0.9090909090909092,10.0,22.0
+478,"['Relation=Mum', 'StageID=MiddleSchool', 'NationalITy=Egypt']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+465,"['StudentAbsenceDays=Above-7', 'AnnouncementsView=0<x<24', 'GradeID=G-11']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+481,"['AnnouncementsView=x<0', 'NationalITy=Egypt']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+711,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+706,"['Semester=F', 'SectionID=B', 'VisITedResources=x>74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+67,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+335,"['AnnouncementsView=x>73', 'PlaceofBirth=Iran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+336,"['Relation=Mum', 'PlaceofBirth=Iran']",gender=F,class=L,0.7692307692307693,0.8461538461538461,0.9090909090909092,10.0,22.0
+705,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'VisITedResources=x>74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+700,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Topic=English']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+698,"['ParentAnsweringSurvey=Yes', 'Topic=English']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+341,"['StageID=HighSchool', 'PlaceofBirth=Iran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+496,"['StageID=HighSchool', 'PlaceofBirth=Lybia']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+449,"['SectionID=A', 'StageID=lowerlevel', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+391,"['Relation=Mum', 'SectionID=A', 'raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+50,"['Semester=F', 'SectionID=B', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+420,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,10.0,22.0
+566,"['GradeID=G-12', 'Topic=Chemistry']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+569,"['raisedhands=x<0', 'Topic=Chemistry']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+572,"['ParentAnsweringSurvey=Yes', 'VisITedResources=24<x<49', 'Topic=Chemistry']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+414,"['StageID=lowerlevel', 'Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+624,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+412,"['AnnouncementsView=24<x<49', 'Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+411,"['StageID=HighSchool', 'Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+633,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+574,"['AnnouncementsView=x>73', 'Topic=Chemistry']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+580,"['ParentAnsweringSurvey=Yes', 'NationalITy=SaudiArabia']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+401,"['StageID=MiddleSchool', 'Discussion=x>74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+399,"['SectionID=B', 'Discussion=x>74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+397,"['Discussion=x>74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+622,"['Relation=Mum', 'AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+620,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+386,"['raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.7692307692307693,0.8461538461538461,0.9090909090909092,10.0,22.0
+387,"['ParentschoolSatisfaction=Good', 'raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+575,"['StageID=HighSchool', 'Topic=Chemistry']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+49,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+561,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'GradeID=G-12']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+559,"['raisedhands=x<0', 'GradeID=G-12']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+679,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'GradeID=G-07']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+448,"['SectionID=C', 'StageID=lowerlevel', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+520,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'raisedhands=50<x<75']",gender=F,class=L,0.4166666666666667,0.4583333333333333,0.9090909090909092,5.0,11.0
+443,"['StageID=HighSchool', 'VisITedResources=24<x<49', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+674,"['StageID=MiddleSchool', 'raisedhands=0<x<25', 'GradeID=G-07']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+440,"['VisITedResources=24<x<49', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+664,"['ParentAnsweringSurvey=Yes', 'raisedhands=50<x<75', 'GradeID=G-07']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+364,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'SectionID=C']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+375,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+66,"['Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+532,"['SectionID=B', 'Discussion=x>74', 'AnnouncementsView=x<0']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+655,"['ParentschoolSatisfaction=Good', 'raisedhands=25<x<50', 'Discussion=25<x<50']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+653,"['Relation=Mum', 'SectionID=B', 'Discussion=25<x<50']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+426,"['SectionID=B', 'Discussion=x<1', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+645,"['Discussion=x>74', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+643,"['AnnouncementsView=x>73', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+548,"['ParentschoolSatisfaction=Good', 'raisedhands=25<x<50', 'AnnouncementsView=x<0']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+552,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'GradeID=G-12']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+437,"['Relation=Mum', 'Semester=F', 'SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+733,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+87,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Semester=F', 'Discussion=x>74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+736,"['Relation=Mum', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1065,"['StageID=HighSchool', 'NationalITy=Syria']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1072,"['raisedhands=x<0', 'Topic=French']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+165,"['ParentAnsweringSurvey=Yes', 'Discussion=x>74', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1080,"['Discussion=50<x<74', 'Topic=French']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1081,"['StageID=lowerlevel', 'Topic=French']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1084,"['ParentschoolSatisfaction=Good', 'Discussion=x<1', 'Topic=French']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1062,"['Discussion=25<x<50', 'GradeID=G-05']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1085,"['AnnouncementsView=x>73', 'Topic=French']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+159,"['Relation=Mum', 'SectionID=B', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1095,"['Semester=F', 'SectionID=B', 'raisedhands=25<x<50']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1113,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'SectionID=A', 'raisedhands=25<x<50']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1117,['NationalITy=Morocco'],gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,15.0,33.0
+149,"['StageID=HighSchool', 'raisedhands=25<x<50', 'VisITedResources=49<x<74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+148,"['Relation=Mum', 'raisedhands=25<x<50', 'VisITedResources=49<x<74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+160,"['StageID=MiddleSchool', 'SectionID=B', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+169,"['SectionID=C', 'VisITedResources=49<x<74', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+170,"['Semester=F', 'VisITedResources=49<x<74', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1059,"['SectionID=B', 'GradeID=G-05']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+23,"['Relation=Mum', 'StageID=MiddleSchool', 'SectionID=B']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,10.0,22.0
+1014,"['StudentAbsenceDays=Above-7', 'Semester=F', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1019,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+193,"['AnnouncementsView=x>73', 'VisITedResources=24<x<49', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+192,"['SectionID=B', 'VisITedResources=24<x<49', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1021,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+190,"['Relation=Mum', 'Semester=F', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+187,"['Semester=F', 'StageID=HighSchool', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+185,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1030,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=50<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1035,"['SectionID=A', 'AnnouncementsView=24<x<49', 'Discussion=50<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1040,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'Discussion=50<x<74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+175,"['Semester=F', 'Discussion=x<1', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+174,"['StageID=HighSchool', 'Discussion=x<1', 'raisedhands=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1055,"['Relation=Mum', 'SectionID=A', 'PlaceofBirth=Jordan']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1121,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'NationalITy=Morocco']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+998,"['Discussion=x<1', 'Topic=Biology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1122,"['SectionID=B', 'NationalITy=Morocco']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+137,"['Relation=Mum', 'StageID=lowerlevel', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1168,"['Relation=Mum', 'SectionID=B', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1170,"['Relation=Mum', 'SectionID=A', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1176,"['raisedhands=0<x<25', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1177,"['VisITedResources=0<x<24', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1178,"['StageID=MiddleSchool', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1189,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'NationalITy=Iran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1167,"['SectionID=B', 'Topic=Geology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1196,"['Relation=Mum', 'SectionID=A', 'Topic=Spanish']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1203,"['ParentAnsweringSurvey=Yes', 'Topic=Science']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1205,"['SectionID=A', 'Topic=Science']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1206,"['VisITedResources=24<x<49', 'Topic=Science']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1210,"['Semester=F', 'SectionID=B', 'GradeID=G-08']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1213,"['raisedhands=25<x<50', 'GradeID=G-08']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1215,"['Discussion=x>74', 'GradeID=G-08']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1197,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'Topic=Spanish']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+113,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=B', 'VisITedResources=49<x<74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1163,"['Semester=F', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1160,"['VisITedResources=24<x<49', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+135,"['StageID=HighSchool', 'SectionID=C', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+133,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1131,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'NationalITy=Morocco']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1133,"['AnnouncementsView=x<0', 'PlaceofBirth=lebanon']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+130,"['StageID=lowerlevel', 'AnnouncementsView=x<0', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+128,"['AnnouncementsView=x<0', 'VisITedResources=49<x<74']",gender=F,class=L,0.7692307692307693,0.8461538461538461,0.9090909090909092,10.0,22.0
+1139,"['StageID=MiddleSchool', 'NationalITy=Palestine']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+126,"['StageID=MiddleSchool', 'AnnouncementsView=x>73', 'VisITedResources=49<x<74']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+124,"['SectionID=B', 'Discussion=x<1', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1142,"['raisedhands=25<x<50', 'Topic=Arabic']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1143,"['ParentschoolSatisfaction=Good', 'Topic=Arabic']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1148,"['Discussion=50<x<74', 'PlaceofBirth=USA']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+1151,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'PlaceofBirth=USA']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1157,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1159,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+1123,"['VisITedResources=x<0', 'NationalITy=Morocco']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+997,"['AnnouncementsView=24<x<49', 'Topic=Biology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+205,"['StageID=MiddleSchool', 'SectionID=B', 'Topic=Quran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+206,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'Topic=Quran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+292,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+786,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+787,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+790,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+792,"['StageID=HighSchool', 'raisedhands=25<x<50', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+794,"['SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+294,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+798,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+469,"['StudentAbsenceDays=Above-7', 'Semester=F', 'GradeID=G-11']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+804,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+811,"['StageID=MiddleSchool', 'Discussion=x>74', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+815,"['raisedhands=x>75', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+274,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'Discussion=x<1']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+818,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'NationalITy=Lybia']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+279,"['Relation=Mum', 'SectionID=B', 'Discussion=x<1']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+781,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+298,"['Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+775,"['Relation=Mum', 'raisedhands=0<x<25', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+319,"['raisedhands=0<x<25', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+318,"['Semester=F', 'Discussion=50<x<74', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+740,"['StudentAbsenceDays=Above-7', 'Semester=F', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+742,"['SectionID=B', 'AnnouncementsView=24<x<49', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+314,"['ParentschoolSatisfaction=Good', 'VisITedResources=x<0', 'AnnouncementsView=x>73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+743,"['StageID=HighSchool', 'AnnouncementsView=24<x<49', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+744,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+756,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'raisedhands=0<x<25', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+308,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'StageID=lowerlevel', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+757,"['ParentAnsweringSurvey=Yes', 'raisedhands=0<x<25', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+762,"['Relation=Mum', 'VisITedResources=x>74', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+763,"['raisedhands=0<x<25', 'VisITedResources=x>74', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+302,"['Semester=F', 'Discussion=x<1', 'AnnouncementsView=x>73']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+766,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+300,"['Semester=F', 'SectionID=A', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+824,"['StageID=lowerlevel', 'Topic=IT']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+39,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+842,"['Relation=Mum', 'SectionID=A', 'StageID=lowerlevel']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+848,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'raisedhands=x>75']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+925,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+926,"['SectionID=A', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+936,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'StageID=HighSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+950,"['Relation=Mum', 'StageID=lowerlevel', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+959,"['StageID=MiddleSchool', 'PlaceofBirth=SaudiArabia']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+217,"['raisedhands=25<x<50', 'NationalITy=Jordan']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+960,"['SectionID=A', 'PlaceofBirth=SaudiArabia']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+964,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Topic=Math']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+971,"['Semester=F', 'raisedhands=0<x<25', 'Topic=Math']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+973,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Topic=Math']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+988,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'StageID=lowerlevel', 'VisITedResources=x<0']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+211,"['VisITedResources=0<x<24', 'Topic=Quran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+210,"['raisedhands=x>75', 'Topic=Quran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+208,"['ParentschoolSatisfaction=Good', 'Discussion=x>74', 'Topic=Quran']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+993,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'Topic=Biology']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+920,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+322,"['Relation=Mum', 'StageID=HighSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+916,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+914,"['Relation=Mum', 'Semester=F', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+266,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'SectionID=A']",gender=F,class=L,0.75,0.825,0.9090909090909092,15.0,33.0
+861,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'Discussion=x>74', 'raisedhands=x>75']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+863,"['Semester=F', 'AnnouncementsView=x<0', 'raisedhands=x>75']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+866,"['SectionID=B', 'VisITedResources=49<x<74', 'raisedhands=x>75']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+868,"['SectionID=B', 'VisITedResources=0<x<24', 'raisedhands=x>75']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+874,"['Discussion=x<1', 'GradeID=G-04']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+258,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+879,"['Topic=French', 'GradeID=G-04']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+882,"['AnnouncementsView=49<x<73', 'NationalITy=Tunis']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+249,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+902,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+903,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+906,"['ParentschoolSatisfaction=Good', 'Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.7142857142857143,0.7857142857142857,0.9090909090909092,5.0,11.0
+242,"['StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.8,0.88,0.9090909090909092,20.0,44.0
+909,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+915,"['Relation=Mum', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,10.0,22.0
+473,"['raisedhands=0<x<25', 'GradeID=G-11']",gender=F,class=L,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+0,['Relation=Mum'],gender=F,class=L,0.7304347826086957,0.8,0.9130434782608695,84.0,184.0
+1041,"['StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.7619047619047619,0.8333333333333334,0.9142857142857141,16.0,35.0
+871,['GradeID=G-04'],gender=F,class=L,0.8,0.875,0.9142857142857144,16.0,35.0
+1088,"['ParentschoolSatisfaction=Good', 'raisedhands=25<x<50']",gender=F,class=L,0.7272727272727273,0.7954545454545454,0.9142857142857144,16.0,35.0
+139,"['ParentschoolSatisfaction=Good', 'Semester=F', 'VisITedResources=49<x<74']",gender=F,class=L,0.7333333333333333,0.8,0.9166666666666665,11.0,24.0
+554,"['ParentschoolSatisfaction=Good', 'GradeID=G-12']",gender=F,class=L,0.7333333333333333,0.8,0.9166666666666665,11.0,24.0
+595,"['Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.75,0.8181818181818182,0.9166666666666666,33.0,72.0
+122,"['Discussion=x<1', 'VisITedResources=49<x<74']",gender=F,class=L,0.8461538461538461,0.9230769230769231,0.9166666666666666,11.0,24.0
+507,"['AnnouncementsView=24<x<49', 'raisedhands=50<x<75']",gender=F,class=L,0.7857142857142857,0.8571428571428571,0.9166666666666667,11.0,24.0
+834,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'StageID=lowerlevel']",gender=F,class=L,0.7857142857142857,0.8571428571428571,0.9166666666666667,11.0,24.0
+38,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7857142857142857,0.8571428571428571,0.9166666666666667,11.0,24.0
+514,"['StageID=lowerlevel', 'raisedhands=50<x<75']",gender=F,class=L,0.7857142857142857,0.8571428571428571,0.9166666666666667,11.0,24.0
+904,"['Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.8095238095238095,0.8809523809523809,0.918918918918919,17.0,37.0
+851,"['Relation=Mum', 'Semester=F', 'raisedhands=x>75']",gender=F,class=L,0.5454545454545454,0.5909090909090909,0.9230769230769229,6.0,13.0
+121,"['Semester=F', 'SectionID=A', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+177,"['SectionID=B', 'AnnouncementsView=x>73', 'raisedhands=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+119,"['StageID=MiddleSchool', 'SectionID=A', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+665,"['VisITedResources=24<x<49', 'GradeID=G-07']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+285,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'Discussion=x<1']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+777,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+403,"['Relation=Mum', 'AnnouncementsView=x>73', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+922,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1129,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'NationalITy=Morocco']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+405,"['Relation=Mum', 'StageID=HighSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+999,"['SectionID=A', 'Topic=Biology']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+921,"['StageID=MiddleSchool', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+129,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=x<0', 'VisITedResources=49<x<74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1136,"['AnnouncementsView=x>73', 'NationalITy=Palestine']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+120,"['Relation=Mum', 'SectionID=A', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+1138,"['Semester=F', 'NationalITy=Palestine']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+970,"['raisedhands=0<x<25', 'Topic=Math']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+912,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+924,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+240,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'SectionID=A']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+725,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+571,"['VisITedResources=24<x<49', 'Topic=Chemistry']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1067,"['raisedhands=0<x<25', 'NationalITy=Syria']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1144,"['StageID=HighSchool', 'Topic=Arabic']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+568,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Topic=Chemistry']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+1147,"['Relation=Mum', 'PlaceofBirth=USA']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+562,"['VisITedResources=0<x<24', 'GradeID=G-12']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+565,"['SectionID=A', 'Topic=Chemistry']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+244,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1141,"['Relation=Mum', 'Topic=Arabic']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1130,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'NationalITy=Morocco']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+771,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+309,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'AnnouncementsView=x>73']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+755,"['Relation=Mum', 'raisedhands=0<x<25', 'VisITedResources=x>74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+378,"['Relation=Mum', 'SectionID=C', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+751,"['Semester=F', 'raisedhands=50<x<75', 'VisITedResources=x>74']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+750,"['ParentschoolSatisfaction=Good', 'raisedhands=50<x<75', 'VisITedResources=x>74']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+219,"['Semester=F', 'NationalITy=Jordan']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+942,"['StudentAbsenceDays=Above-7', 'SectionID=A', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1078,"['Semester=F', 'raisedhands=x>75', 'Topic=French']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1060,"['ParentschoolSatisfaction=Good', 'GradeID=G-05']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+641,"['StageID=MiddleSchool', 'SectionID=B', 'VisITedResources=24<x<49']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+312,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'AnnouncementsView=x>73']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+168,"['ParentschoolSatisfaction=Good', 'VisITedResources=49<x<74', 'raisedhands=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+215,"['Discussion=x>74', 'NationalITy=Jordan']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+966,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'Topic=Math']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+639,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'VisITedResources=24<x<49']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+396,"['SectionID=C', 'StageID=lowerlevel', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+623,"['StageID=MiddleSchool', 'AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+621,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1119,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'NationalITy=Morocco']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+927,"['Discussion=x>74', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+394,"['SectionID=B', 'StageID=lowerlevel', 'VisITedResources=0<x<24']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+390,"['SectionID=A', 'raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+609,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+1114,"['Relation=Mum', 'SectionID=A', 'raisedhands=25<x<50']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1098,"['SectionID=B', 'StageID=lowerlevel', 'raisedhands=25<x<50']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+611,"['Relation=Mum', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,12.0,26.0
+969,"['Relation=Mum', 'Semester=F', 'Topic=Math']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+305,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'AnnouncementsView=x>73']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+1105,"['SectionID=B', 'StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+937,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+761,"['StudentAbsenceDays=Above-7', 'VisITedResources=x>74', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+385,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'VisITedResources=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+325,"['StageID=HighSchool', 'SectionID=C', 'AnnouncementsView=x>73']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+795,"['StudentAbsenceDays=Above-7', 'SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+421,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+272,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Discussion=x<1']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+881,"['Relation=Mum', 'NationalITy=Tunis']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+69,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+186,"['StageID=HighSchool', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1026,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Discussion=50<x<74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+100,"['SectionID=C', 'StageID=lowerlevel', 'Discussion=x>74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+189,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+683,"['AnnouncementsView=24<x<49', 'PlaceofBirth=Iraq']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+718,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+820,"['Discussion=50<x<74', 'NationalITy=Lybia']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+424,"['Relation=Mum', 'Discussion=x<1', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+978,"['StudentAbsenceDays=Above-7', 'Semester=F', 'VisITedResources=x>74', 'Topic=Math']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+263,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+690,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=Iraq']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+692,"['ParentschoolSatisfaction=Good', 'NationalITy=lebanon']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+695,"['SectionID=B', 'NationalITy=lebanon']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1193,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Topic=Spanish']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+96,"['Relation=Mum', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+494,"['Semester=F', 'PlaceofBirth=Lybia']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+492,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'PlaceofBirth=Lybia']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+491,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=Lybia']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+836,"['Semester=F', 'SectionID=B', 'StageID=lowerlevel']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+460,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'GradeID=G-11']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+859,"['ParentschoolSatisfaction=Good', 'Discussion=x>74', 'raisedhands=x>75']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+463,"['StudentAbsenceDays=Above-7', 'VisITedResources=x>74', 'GradeID=G-11']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+464,"['AnnouncementsView=0<x<24', 'GradeID=G-11']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+480,"['Relation=Mum', 'VisITedResources=0<x<24', 'NationalITy=Egypt']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1214,"['StageID=lowerlevel', 'GradeID=G-08']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+813,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+276,"['StageID=HighSchool', 'SectionID=C', 'Discussion=x<1']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+651,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'Discussion=25<x<50']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+676,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'GradeID=G-07']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,6.0,13.0
+808,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1037,"['StageID=MiddleSchool', 'Discussion=50<x<74']",gender=F,class=L,0.6666666666666666,0.7222222222222222,0.923076923076923,12.0,26.0
+1165,"['Relation=Mum', 'Topic=Geology']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,12.0,26.0
+280,"['Semester=F', 'SectionID=B', 'Discussion=x<1']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+180,"['Semester=F', 'AnnouncementsView=x>73', 'raisedhands=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+807,"['Relation=Mum', 'StageID=MiddleSchool', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+544,"['Semester=F', 'StageID=HighSchool', 'AnnouncementsView=x<0']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+1161,"['AnnouncementsView=49<x<73', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+531,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=x>74', 'AnnouncementsView=x<0']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+108,"['Semester=F', 'StageID=MiddleSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.6,0.65,0.923076923076923,6.0,13.0
+894,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'Semester=F']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1171,"['StageID=lowerlevel', 'Topic=Geology']",gender=F,class=L,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+1056,"['raisedhands=0<x<25', 'PlaceofBirth=Jordan']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1097,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'raisedhands=25<x<50']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1201,"['StageID=HighSchool', 'Topic=Spanish']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+117,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=x>74', 'VisITedResources=49<x<74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+94,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+543,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'AnnouncementsView=x<0']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+77,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+65,"['StageID=MiddleSchool', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1204,"['Relation=Mum', 'Topic=Science']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+493,"['Relation=Mum', 'PlaceofBirth=Lybia']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+323,"['Semester=F', 'StageID=HighSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+310,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=x>73']",gender=F,class=L,0.75,0.8125,0.9230769230769231,18.0,39.0
+92,"['ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+793,"['VisITedResources=24<x<49', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+839,"['Relation=Mum', 'Semester=F', 'StageID=lowerlevel']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+333,"['StageID=MiddleSchool', 'PlaceofBirth=Iran']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+957,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=SaudiArabia']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+734,"['StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.8,0.8666666666666667,0.9230769230769231,12.0,26.0
+337,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'PlaceofBirth=Iran']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+339,"['Relation=Mum', 'Semester=F', 'PlaceofBirth=Iran']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+43,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1101,"['Discussion=x>74', 'raisedhands=25<x<50']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+283,"['SectionID=B', 'StageID=HighSchool', 'Discussion=x<1']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+388,"['Semester=F', 'raisedhands=0<x<25', 'VisITedResources=0<x<24']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+326,"['Relation=Mum', 'SectionID=C', 'AnnouncementsView=x>73']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+116,"['Semester=F', 'Discussion=x>74', 'VisITedResources=49<x<74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+232,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+83,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.8,0.8666666666666667,0.9230769230769231,12.0,26.0
+869,"['AnnouncementsView=x>73', 'raisedhands=x>75']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+516,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'raisedhands=50<x<75']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+409,"['Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8,0.8666666666666667,0.9230769230769231,12.0,26.0
+715,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,12.0,26.0
+1186,"['Semester=F', 'StageID=HighSchool', 'NationalITy=Iran']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+102,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'Discussion=x>74']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1194,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Topic=Spanish']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+1116,"['ParentschoolSatisfaction=Good', 'Discussion=50<x<74', 'raisedhands=25<x<50']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+413,"['Semester=F', 'Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.75,0.8125,0.9230769230769231,6.0,13.0
+359,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'SectionID=C']",gender=F,class=L,0.7058823529411765,0.7647058823529411,0.9230769230769232,12.0,26.0
+989,['Topic=Biology'],gender=F,class=L,0.7307692307692307,0.7884615384615384,0.9268292682926829,19.0,41.0
+576,['PlaceofBirth=Egypt'],gender=F,class=L,0.7647058823529411,0.8235294117647058,0.9285714285714286,13.0,28.0
+776,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7647058823529411,0.8235294117647058,0.9285714285714286,13.0,28.0
+1063,['NationalITy=Syria'],gender=F,class=L,0.8666666666666667,0.9333333333333333,0.9285714285714286,13.0,28.0
+347,['NationalITy=Iraq'],gender=F,class=L,0.8125,0.875,0.9285714285714286,13.0,28.0
+630,"['StageID=MiddleSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.8666666666666667,0.9333333333333333,0.9285714285714286,13.0,28.0
+605,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.8125,0.875,0.9285714285714286,13.0,28.0
+247,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.8125,0.875,0.9285714285714286,13.0,28.0
+782,"['StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8125,0.875,0.9285714285714286,13.0,28.0
+534,"['Relation=Mum', 'AnnouncementsView=x<0']",gender=F,class=L,0.65,0.7,0.9285714285714287,13.0,28.0
+1,"['ParentAnsweringSurvey=Yes', 'Relation=Mum']",gender=F,class=L,0.6557377049180327,0.7049180327868853,0.9302325581395348,40.0,86.0
+549,['GradeID=G-12'],gender=F,class=L,0.7692307692307693,0.8269230769230769,0.930232558139535,20.0,43.0
+342,['GradeID=G-02'],gender=F,class=L,0.7368421052631579,0.7894736842105263,0.9333333333333332,14.0,30.0
+12,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+669,"['StageID=MiddleSchool', 'GradeID=G-07']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+972,"['Relation=Mum', 'Topic=Math']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+666,"['ParentAnsweringSurvey=Yes', 'GradeID=G-07']",gender=F,class=L,0.7368421052631579,0.7894736842105263,0.9333333333333332,14.0,30.0
+845,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'raisedhands=x>75']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+962,"['ParentAnsweringSurvey=Yes', 'Topic=Math']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+847,"['Relation=Mum', 'StageID=MiddleSchool', 'raisedhands=x>75']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+501,"['StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.7368421052631579,0.7894736842105263,0.9333333333333332,14.0,30.0
+832,"['Relation=Mum', 'SectionID=C', 'StageID=lowerlevel']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+831,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'StageID=lowerlevel']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+262,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+1180,"['SectionID=A', 'NationalITy=Iran']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+519,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'raisedhands=50<x<75']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+553,"['ParentAnsweringSurvey=Yes', 'GradeID=G-12']",gender=F,class=L,0.7368421052631579,0.7894736842105263,0.9333333333333332,14.0,30.0
+791,"['raisedhands=25<x<50', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+535,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'AnnouncementsView=x<0']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+33,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=B']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+640,"['Relation=Mum', 'SectionID=B', 'VisITedResources=24<x<49']",gender=F,class=L,0.7,0.75,0.9333333333333332,7.0,15.0
+226,"['ParentAnsweringSurvey=Yes', 'SectionID=A']",gender=F,class=L,0.7954545454545454,0.8522727272727273,0.9333333333333332,35.0,75.0
+852,"['Discussion=50<x<74', 'raisedhands=x>75']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+819,"['Relation=Mum', 'NationalITy=Lybia']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+823,"['ParentschoolSatisfaction=Good', 'Topic=IT']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+977,"['Semester=F', 'VisITedResources=x>74', 'Topic=Math']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+321,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+864,"['SectionID=B', 'AnnouncementsView=x<0', 'raisedhands=x>75']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+218,"['ParentschoolSatisfaction=Good', 'NationalITy=Jordan']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+207,"['Discussion=x>74', 'Topic=Quran']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+981,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'VisITedResources=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+260,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+987,"['SectionID=B', 'StageID=lowerlevel', 'VisITedResources=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+967,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Topic=Math']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+833,"['SectionID=B', 'StageID=lowerlevel']",gender=F,class=L,0.8076923076923077,0.8653846153846154,0.9333333333333333,21.0,45.0
+857,"['StageID=MiddleSchool', 'SectionID=B', 'raisedhands=x>75']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+855,"['Semester=F', 'SectionID=B', 'raisedhands=x>75']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+216,"['StageID=HighSchool', 'NationalITy=Jordan']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+748,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'VisITedResources=x>74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+773,"['Semester=F', 'raisedhands=0<x<25', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+877,"['Semester=F', 'GradeID=G-04']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+774,"['StudentAbsenceDays=Above-7', 'raisedhands=0<x<25', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+299,"['Relation=Mum', 'SectionID=A', 'AnnouncementsView=x>73']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+919,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+728,"['Semester=F', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+327,"['Semester=F', 'SectionID=C', 'AnnouncementsView=x>73']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+295,"['Semester=F', 'StageID=MiddleSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+788,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+930,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'raisedhands=0<x<25']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+288,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=x<1']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+968,"['StudentAbsenceDays=Above-7', 'Semester=F', 'Topic=Math']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+214,"['SectionID=B', 'NationalITy=Jordan']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+277,"['Semester=F', 'SectionID=C', 'Discussion=x<1']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+737,"['SectionID=B', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+809,"['SectionID=B', 'PlaceofBirth=venzuela']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+810,"['Discussion=x>74', 'PlaceofBirth=venzuela']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+275,"['Relation=Mum', 'SectionID=C', 'Discussion=x<1']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+723,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+994,"['ParentAnsweringSurvey=Yes', 'Topic=Biology']",gender=F,class=L,0.6363636363636364,0.6818181818181818,0.9333333333333333,7.0,15.0
+1057,"['VisITedResources=24<x<49', 'PlaceofBirth=Jordan']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+699,"['Relation=Mum', 'Topic=English']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+167,"['Relation=Mum', 'VisITedResources=49<x<74', 'raisedhands=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+526,"['Discussion=x<1', 'raisedhands=50<x<75']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+529,"['ParentschoolSatisfaction=Good', 'Discussion=x>74', 'AnnouncementsView=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1074,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'Topic=French']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1075,"['Semester=F', 'StageID=HighSchool', 'Topic=French']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1076,"['SectionID=C', 'Topic=French']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1169,"['SectionID=A', 'Topic=Geology']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1162,"['SectionID=A', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+374,"['Relation=Mum', 'StageID=MiddleSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+115,"['ParentschoolSatisfaction=Good', 'Discussion=x>74', 'VisITedResources=49<x<74']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+1155,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+546,"['Discussion=50<x<74', 'AnnouncementsView=x<0']",gender=F,class=L,0.6363636363636364,0.6818181818181818,0.9333333333333333,7.0,15.0
+1112,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'raisedhands=25<x<50']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+55,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+547,"['raisedhands=25<x<50', 'AnnouncementsView=x<0']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+551,"['SectionID=A', 'GradeID=G-12']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+63,"['ParentschoolSatisfaction=Good', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+1149,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=USA']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1145,"['Semester=F', 'Topic=Arabic']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+415,"['raisedhands=50<x<75', 'VisITedResources=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+381,"['SectionID=B', 'VisITedResources=0<x<24']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,14.0,30.0
+408,"['Relation=Mum', 'SectionID=A', 'VisITedResources=0<x<24']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+134,"['Relation=Mum', 'SectionID=C', 'VisITedResources=49<x<74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1106,"['Semester=F', 'StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+1125,"['Semester=F', 'NationalITy=Morocco']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+82,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+162,"['Relation=Mum', 'Discussion=x>74', 'raisedhands=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+656,"['AnnouncementsView=x>73', 'Discussion=25<x<50']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+446,"['StageID=lowerlevel', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8235294117647058,0.8823529411764706,0.9333333333333333,14.0,30.0
+173,"['ParentschoolSatisfaction=Good', 'Discussion=x<1', 'raisedhands=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+340,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=Iran']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+697,"['StageID=HighSchool', 'Topic=English']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+1212,"['StageID=HighSchool', 'GradeID=G-08']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+475,"['ParentschoolSatisfaction=Good', 'NationalITy=Egypt']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+467,"['Relation=Mum', 'Semester=F', 'GradeID=G-11']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+462,"['VisITedResources=x>74', 'GradeID=G-11']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+495,"['StudentAbsenceDays=Above-7', 'PlaceofBirth=Lybia']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+500,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'raisedhands=50<x<75']",gender=F,class=L,0.6363636363636364,0.6818181818181818,0.9333333333333333,7.0,15.0
+1188,"['SectionID=C', 'NationalITy=Iran']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+457,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'GradeID=G-11']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+24,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool', 'SectionID=B']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+199,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'raisedhands=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+198,"['Relation=Mum', 'StageID=HighSchool', 'raisedhands=x<0']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+471,"['Relation=Mum', 'StageID=HighSchool', 'GradeID=G-11']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1011,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+455,"['ParentAnsweringSurvey=Yes', 'GradeID=G-11']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+517,"['SectionID=A', 'StageID=lowerlevel', 'raisedhands=50<x<75']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1181,"['StageID=lowerlevel', 'NationalITy=Iran']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+663,"['raisedhands=50<x<75', 'GradeID=G-07']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+78,"['SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.8076923076923077,0.8653846153846154,0.9333333333333333,21.0,45.0
+453,"['Semester=F', 'SectionID=B', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1185,"['StageID=HighSchool', 'NationalITy=Iran']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+99,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'Discussion=x>74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+672,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'GradeID=G-07']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+1042,"['SectionID=A', 'StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+1183,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'NationalITy=Iran']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+48,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7777777777777778,0.8333333333333334,0.9333333333333333,7.0,15.0
+511,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'raisedhands=50<x<75']",gender=F,class=L,0.5384615384615384,0.5769230769230769,0.9333333333333333,7.0,15.0
+602,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.875,0.9375,0.9333333333333333,7.0,15.0
+582,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool']",gender=F,class=L,0.8181818181818182,0.875,0.9350649350649352,36.0,77.0
+30,"['Semester=F', 'SectionID=B']",gender=F,class=L,0.7631578947368421,0.8157894736842105,0.935483870967742,29.0,62.0
+369,"['ParentschoolSatisfaction=Good', 'VisITedResources=0<x<24']",gender=F,class=L,0.8461538461538461,0.9038461538461539,0.9361702127659575,22.0,47.0
+897,['raisedhands=0<x<25'],gender=F,class=L,0.8627450980392157,0.9215686274509803,0.9361702127659576,44.0,94.0
+596,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.6818181818181818,0.7272727272727273,0.9374999999999999,15.0,32.0
+176,"['AnnouncementsView=x>73', 'raisedhands=x<0']",gender=F,class=L,0.8823529411764706,0.9411764705882353,0.9375,15.0,32.0
+1070,"['Semester=F', 'Topic=French']",gender=F,class=L,0.8823529411764706,0.9411764705882353,0.9375,15.0,32.0
+509,"['ParentAnsweringSurvey=Yes', 'raisedhands=50<x<75']",gender=F,class=L,0.625,0.6666666666666666,0.9375,15.0,32.0
+1153,['PlaceofBirth=KuwaIT'],gender=F,class=L,0.8823529411764706,0.9411764705882353,0.9375,15.0,32.0
+778,"['Relation=Mum', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.7894736842105263,0.8421052631578947,0.9375000000000001,15.0,32.0
+28,"['ParentschoolSatisfaction=Good', 'SectionID=B']",gender=F,class=L,0.8260869565217391,0.8804347826086957,0.9382716049382716,38.0,81.0
+898,"['ParentAnsweringSurvey=Yes', 'raisedhands=0<x<25']",gender=F,class=L,0.8518518518518519,0.9074074074074074,0.9387755102040816,23.0,49.0
+984,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'VisITedResources=x<0']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+1050,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=Jordan']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+107,"['Relation=Mum', 'StageID=MiddleSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+486,"['ParentschoolSatisfaction=Good', 'Topic=History']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+710,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'VisITedResources=x>74']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+991,"['StageID=MiddleSchool', 'Topic=Biology']",gender=F,class=L,0.6666666666666666,0.7083333333333334,0.9411764705882352,8.0,17.0
+768,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+373,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1071,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Topic=French']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+812,"['Relation=Mum', 'PlaceofBirth=venzuela']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+745,"['ParentschoolSatisfaction=Good', 'VisITedResources=x>74']",gender=F,class=L,0.7619047619047619,0.8095238095238095,0.9411764705882353,16.0,34.0
+539,"['SectionID=B', 'AnnouncementsView=x<0']",gender=F,class=L,0.7619047619047619,0.8095238095238095,0.9411764705882353,16.0,34.0
+1173,"['ParentAnsweringSurvey=Yes', 'Topic=Geology']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1077,"['raisedhands=x>75', 'Topic=French']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+817,"['SectionID=B', 'NationalITy=Lybia']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+164,"['SectionID=B', 'Discussion=x>74', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+510,"['Semester=F', 'raisedhands=50<x<75']",gender=F,class=L,0.6956521739130435,0.7391304347826086,0.9411764705882353,16.0,34.0
+179,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=x>73', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+976,"['StudentAbsenceDays=Above-7', 'VisITedResources=x>74', 'Topic=Math']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+860,"['SectionID=B', 'Discussion=x>74', 'raisedhands=x>75']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1004,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Discussion=50<x<74']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+200,"['Semester=F', 'StageID=HighSchool', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1200,"['VisITedResources=24<x<49', 'Topic=Spanish']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+479,"['VisITedResources=0<x<24', 'NationalITy=Egypt']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+654,"['raisedhands=25<x<50', 'Discussion=25<x<50']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+726,"['Relation=Mum', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+472,"['SectionID=A', 'GradeID=G-11']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+163,"['StageID=MiddleSchool', 'Discussion=x>74', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+406,"['Semester=F', 'StageID=HighSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1128,"['StageID=HighSchool', 'NationalITy=Morocco']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1137,"['SectionID=A', 'NationalITy=Palestine']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+250,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+593,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+238,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'SectionID=A']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+202,"['Relation=Mum', 'Topic=Quran']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+597,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+760,"['VisITedResources=x>74', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+586,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool']",gender=F,class=L,0.7619047619047619,0.8095238095238095,0.9411764705882353,32.0,68.0
+153,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+590,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1150,"['StageID=lowerlevel', 'PlaceofBirth=USA']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+157,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'raisedhands=x<0']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1154,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+754,"['StudentAbsenceDays=Above-7', 'raisedhands=0<x<25', 'VisITedResources=x>74']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+765,"['Relation=Mum', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+770,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+797,"['Semester=F', 'SectionID=A', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+425,"['Semester=F', 'Discussion=x<1', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+56,"['SectionID=B', 'StageID=HighSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+948,"['Relation=Mum', 'SectionID=C', 'raisedhands=0<x<25']",gender=F,class=L,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+1001,"['ParentschoolSatisfaction=Good', 'Topic=Biology']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+1103,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+1195,"['SectionID=A', 'Topic=Spanish']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+986,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'VisITedResources=x<0']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+1208,"['Semester=F', 'GradeID=G-08']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+1109,"['ParentschoolSatisfaction=Good', 'Semester=F', 'raisedhands=25<x<50']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+235,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+213,"['Relation=Mum', 'NationalITy=Jordan']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+1102,"['StageID=HighSchool', 'raisedhands=25<x<50']",gender=F,class=L,0.8,0.85,0.9411764705882354,16.0,34.0
+1043,"['ParentAnsweringSurvey=Yes', 'StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+870,"['StageID=lowerlevel', 'raisedhands=x>75']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+1044,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel', 'Discussion=50<x<74']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+127,"['raisedhands=50<x<75', 'VisITedResources=49<x<74']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+32,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=B']",gender=F,class=L,0.8,0.85,0.9411764705882354,16.0,34.0
+103,['VisITedResources=49<x<74'],gender=F,class=L,0.8163265306122449,0.8673469387755102,0.9411764705882354,40.0,85.0
+1092,"['SectionID=B', 'raisedhands=25<x<50']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,16.0,34.0
+905,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+111,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'VisITedResources=49<x<74']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+865,"['VisITedResources=49<x<74', 'raisedhands=x>75']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+147,"['raisedhands=25<x<50', 'VisITedResources=49<x<74']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+844,"['Relation=Mum', 'raisedhands=x>75']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,16.0,34.0
+652,"['SectionID=B', 'Discussion=25<x<50']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+490,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=Lybia']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+329,"['ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=x>73']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+344,"['Semester=F', 'GradeID=G-02']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+658,"['ParentschoolSatisfaction=Good', 'GradeID=G-07']",gender=F,class=L,0.8,0.85,0.9411764705882354,16.0,34.0
+86,"['Relation=Mum', 'Semester=F', 'Discussion=x>74']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+644,"['raisedhands=25<x<50', 'VisITedResources=24<x<49']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+380,"['Relation=Mum', 'Semester=F', 'VisITedResources=0<x<24']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+297,"['StageID=MiddleSchool', 'SectionID=A', 'AnnouncementsView=x>73']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+447,"['ParentAnsweringSurvey=Yes', 'StageID=lowerlevel', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+60,"['ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+410,"['ParentschoolSatisfaction=Good', 'Discussion=50<x<74', 'VisITedResources=0<x<24']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+64,"['Relation=Mum', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+555,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'GradeID=G-12']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+545,"['SectionID=B', 'StageID=HighSchool', 'AnnouncementsView=x<0']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+429,"['ParentAnsweringSurvey=Yes', 'StageID=HighSchool', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+436,"['Semester=F', 'SectionID=A', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+59,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7272727272727273,0.7727272727272727,0.9411764705882354,8.0,17.0
+821,"['ParentschoolSatisfaction=Good', 'NationalITy=Lybia']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+530,"['Semester=F', 'Discussion=x>74', 'AnnouncementsView=x<0']",gender=F,class=L,0.8,0.85,0.9411764705882354,8.0,17.0
+416,['AnnouncementsView=49<x<73'],gender=F,class=L,0.8367346938775511,0.8877551020408163,0.942528735632184,41.0,87.0
+289,['AnnouncementsView=x>73'],gender=F,class=L,0.8235294117647058,0.8725490196078431,0.9438202247191011,42.0,89.0
+328,"['Semester=F', 'AnnouncementsView=x>73']",gender=F,class=L,0.7727272727272727,0.8181818181818182,0.9444444444444443,17.0,36.0
+537,"['Semester=F', 'AnnouncementsView=x<0']",gender=F,class=L,0.7083333333333334,0.75,0.9444444444444445,17.0,36.0
+613,['VisITedResources=24<x<49'],gender=F,class=L,0.86,0.91,0.945054945054945,43.0,91.0
+657,['GradeID=G-07'],gender=F,class=L,0.8125,0.859375,0.9454545454545454,26.0,55.0
+51,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8666666666666667,0.9166666666666666,0.9454545454545455,26.0,55.0
+281,"['StageID=HighSchool', 'Discussion=x<1']",gender=F,class=L,0.8571428571428571,0.9047619047619048,0.9473684210526315,18.0,38.0
+331,['PlaceofBirth=Iran'],gender=F,class=L,0.8571428571428571,0.9047619047619048,0.9473684210526315,18.0,38.0
+853,"['SectionID=B', 'raisedhands=x>75']",gender=F,class=L,0.8571428571428571,0.9047619047619048,0.9473684210526315,18.0,38.0
+74,"['StageID=MiddleSchool', 'Discussion=x>74']",gender=F,class=L,0.8571428571428571,0.9047619047619048,0.9473684210526315,18.0,38.0
+829,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=lowerlevel']",gender=F,class=L,0.6923076923076923,0.7307692307692307,0.9473684210526316,9.0,19.0
+81,"['Semester=F', 'SectionID=B', 'Discussion=x>74']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+600,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+918,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+42,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+975,"['VisITedResources=x>74', 'Topic=Math']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+716,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+1199,"['ParentschoolSatisfaction=Good', 'Topic=Spanish']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+1054,"['SectionID=A', 'PlaceofBirth=Jordan']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+1053,"['StageID=HighSchool', 'PlaceofBirth=Jordan']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+470,"['StageID=HighSchool', 'GradeID=G-11']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+231,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.6923076923076923,0.7307692307692307,0.9473684210526316,9.0,19.0
+230,"['Relation=Mum', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.782608695652174,0.8260869565217391,0.9473684210526316,18.0,38.0
+1115,"['Discussion=50<x<74', 'raisedhands=25<x<50']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+649,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'Discussion=25<x<50']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+958,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=SaudiArabia']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+1083,"['Discussion=x<1', 'Topic=French']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+377,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'VisITedResources=0<x<24']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+1089,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'raisedhands=25<x<50']",gender=F,class=L,0.6923076923076923,0.7307692307692307,0.9473684210526316,9.0,19.0
+156,"['Relation=Mum', 'StageID=MiddleSchool', 'raisedhands=x<0']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+392,"['StageID=lowerlevel', 'VisITedResources=0<x<24']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,18.0,38.0
+650,"['StageID=lowerlevel', 'Discussion=25<x<50']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+195,"['Relation=Mum', 'Semester=F', 'raisedhands=x<0']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+384,"['AnnouncementsView=24<x<49', 'VisITedResources=0<x<24']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+963,"['ParentschoolSatisfaction=Good', 'Topic=Math']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+93,"['SectionID=B', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+1111,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'raisedhands=25<x<50']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+731,"['StudentAbsenceDays=Above-7', 'SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+307,"['SectionID=B', 'StageID=lowerlevel', 'AnnouncementsView=x>73']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+953,"['SectionID=B', 'GradeID=G-09']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+1015,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'Discussion=50<x<74']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+907,"['StudentAbsenceDays=Above-7', 'Semester=F', 'raisedhands=0<x<25']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+826,"['ParentschoolSatisfaction=Good', 'StageID=lowerlevel']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,27.0,57.0
+114,"['Discussion=x>74', 'VisITedResources=49<x<74']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+540,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'AnnouncementsView=x<0']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+1158,"['StageID=HighSchool', 'PlaceofBirth=KuwaIT']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+257,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.6428571428571429,0.6785714285714286,0.9473684210526316,9.0,19.0
+878,"['ParentschoolSatisfaction=Good', 'GradeID=G-04']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+255,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+25,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'SectionID=B']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+62,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+477,"['StageID=MiddleSchool', 'NationalITy=Egypt']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+362,"['Relation=Mum', 'StageID=HighSchool', 'SectionID=C']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+91,"['Semester=F', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,9.0,19.0
+892,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Semester=F']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+191,"['VisITedResources=24<x<49', 'raisedhands=x<0']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+450,"['Discussion=x>74', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,9.0,19.0
+707,"['ParentAnsweringSurvey=Yes', 'VisITedResources=x>74']",gender=F,class=L,0.75,0.7916666666666666,0.9473684210526316,18.0,38.0
+801,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9,0.95,0.9473684210526316,18.0,38.0
+1207,['GradeID=G-08'],gender=F,class=L,0.8181818181818182,0.8636363636363636,0.9473684210526316,18.0,38.0
+203,"['StageID=MiddleSchool', 'Topic=Quran']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+459,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'GradeID=G-11']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+673,"['raisedhands=0<x<25', 'GradeID=G-07']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+204,"['SectionID=B', 'Topic=Quran']",gender=F,class=L,0.9,0.95,0.9473684210526316,9.0,19.0
+581,['StageID=HighSchool'],gender=F,class=L,0.8409090909090909,0.8863636363636364,0.9487179487179488,74.0,156.0
+88,"['ParentschoolSatisfaction=Good', 'Discussion=x>74']",gender=F,class=L,0.8484848484848485,0.8939393939393939,0.9491525423728814,28.0,59.0
+604,"['SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.8,0.8428571428571429,0.9491525423728814,28.0,59.0
+18,['SectionID=B'],gender=F,class=L,0.8241758241758241,0.8681318681318682,0.9493670886075949,75.0,158.0
+564,['Topic=Chemistry'],gender=F,class=L,0.8260869565217391,0.8695652173913043,0.9500000000000001,19.0,40.0
+11,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'StageID=MiddleSchool']",gender=F,class=L,0.8260869565217391,0.8695652173913043,0.9500000000000001,19.0,40.0
+271,"['Relation=Mum', 'Discussion=x<1']",gender=F,class=L,0.8260869565217391,0.8695652173913043,0.9500000000000001,19.0,40.0
+10,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'StageID=MiddleSchool']",gender=F,class=L,0.7037037037037037,0.7407407407407407,0.9500000000000001,19.0,40.0
+253,"['Semester=F', 'SectionID=A']",gender=F,class=L,0.7837837837837838,0.8243243243243243,0.9508196721311475,29.0,61.0
+352,['ParentschoolSatisfaction=Good'],gender=F,class=L,0.8376068376068376,0.8803418803418803,0.9514563106796117,98.0,206.0
+224,['SectionID=A'],gender=F,class=L,0.8518518518518519,0.8950617283950617,0.9517241379310345,69.0,145.0
+21,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'SectionID=B']",gender=F,class=L,0.5555555555555556,0.5833333333333334,0.9523809523809523,10.0,21.0
+974,"['StudentAbsenceDays=Above-7', 'Topic=Math']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+721,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+474,['NationalITy=Egypt'],gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,20.0,42.0
+738,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'VisITedResources=x>74']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+265,"['ParentschoolSatisfaction=Good', 'SectionID=A']",gender=F,class=L,0.8571428571428571,0.9,0.9523809523809523,30.0,63.0
+313,"['VisITedResources=x<0', 'AnnouncementsView=x>73']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+184,"['Relation=Mum', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+1031,"['StudentAbsenceDays=Above-7', 'Semester=F', 'Discussion=50<x<74']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+862,"['AnnouncementsView=x<0', 'raisedhands=x>75']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+154,"['ParentschoolSatisfaction=Good', 'Relation=Mum', 'raisedhands=x<0']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+286,"['Semester=F', 'Discussion=x<1']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,20.0,42.0
+466,"['Semester=F', 'GradeID=G-11']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+785,"['Semester=F', 'StageID=HighSchool', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+1124,"['StudentAbsenceDays=Above-7', 'NationalITy=Morocco']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+779,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+923,"['Relation=Mum', 'AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+5,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Relation=Mum']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+482,"['Semester=F', 'NationalITy=Egypt']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+301,"['Discussion=x<1', 'AnnouncementsView=x>73']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+252,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool', 'SectionID=A']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+911,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+899,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'raisedhands=0<x<25']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+814,"['ParentschoolSatisfaction=Good', 'PlaceofBirth=venzuela']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+136,"['StageID=lowerlevel', 'VisITedResources=49<x<74']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+880,['NationalITy=Tunis'],gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+267,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'SectionID=A']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+854,"['ParentschoolSatisfaction=Good', 'SectionID=B', 'raisedhands=x>75']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+841,"['ParentAnsweringSurvey=Yes', 'SectionID=A', 'StageID=lowerlevel']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+1082,"['SectionID=B', 'Topic=French']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+54,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+642,"['StageID=lowerlevel', 'VisITedResources=24<x<49']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+1164,['Topic=Geology'],gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,20.0,42.0
+913,"['Semester=F', 'StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.9090909090909091,0.9545454545454546,0.9523809523809523,10.0,21.0
+76,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'Discussion=x>74']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+338,"['Semester=F', 'PlaceofBirth=Iran']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+1198,"['ParentAnsweringSurvey=Yes', 'Topic=Spanish']",gender=F,class=L,0.7692307692307693,0.8076923076923077,0.9523809523809524,10.0,21.0
+887,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F']",gender=F,class=L,0.7142857142857143,0.75,0.9523809523809524,20.0,42.0
+45,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+46,"['SectionID=B', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8695652173913043,0.9130434782608695,0.9523809523809524,20.0,42.0
+47,"['Relation=Mum', 'SectionID=B', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+560,"['SectionID=C', 'GradeID=G-12']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+131,"['ParentschoolSatisfaction=Good', 'VisITedResources=49<x<74']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,20.0,42.0
+502,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'raisedhands=50<x<75']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+220,['PlaceofBirth=Syria'],gender=F,class=L,0.7692307692307693,0.8076923076923077,0.9523809523809524,10.0,21.0
+867,"['VisITedResources=0<x<24', 'raisedhands=x>75']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+361,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'SectionID=C']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+315,"['raisedhands=25<x<50', 'AnnouncementsView=x>73']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+9,"['Relation=Mum', 'StageID=MiddleSchool']",gender=F,class=L,0.8,0.84,0.9523809523809524,40.0,84.0
+1179,['NationalITy=Iran'],gender=F,class=L,0.8,0.84,0.9523809523809524,20.0,42.0
+615,"['StageID=HighSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,20.0,42.0
+402,"['AnnouncementsView=x>73', 'VisITedResources=0<x<24']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+717,"['Relation=Mum', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+367,"['Relation=Mum', 'Semester=F', 'SectionID=C']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+1061,"['Relation=Mum', 'GradeID=G-05']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+332,"['ParentAnsweringSurvey=Yes', 'PlaceofBirth=Iran']",gender=F,class=L,0.8333333333333334,0.875,0.9523809523809524,10.0,21.0
+353,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good']",gender=F,class=L,0.7592592592592593,0.7962962962962963,0.9534883720930233,41.0,86.0
+444,"['Semester=F', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.84,0.88,0.9545454545454545,21.0,44.0
+614,"['ParentschoolSatisfaction=Good', 'VisITedResources=24<x<49']",gender=F,class=L,0.9130434782608695,0.9565217391304348,0.9545454545454545,21.0,44.0
+951,['GradeID=G-09'],gender=F,class=L,0.9130434782608695,0.9565217391304348,0.9545454545454545,21.0,44.0
+152,"['Relation=Mum', 'raisedhands=x<0']",gender=F,class=L,0.9130434782608695,0.9565217391304348,0.9545454545454545,21.0,44.0
+497,['raisedhands=50<x<75'],gender=F,class=L,0.7924528301886793,0.8301886792452831,0.9545454545454546,42.0,88.0
+714,"['Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.8076923076923077,0.8461538461538461,0.9545454545454546,21.0,44.0
+886,"['ParentschoolSatisfaction=Good', 'Semester=F']",gender=F,class=L,0.8113207547169812,0.8490566037735849,0.9555555555555556,43.0,90.0
+188,"['Semester=F', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+584,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+1184,"['Semester=F', 'NationalITy=Iran']",gender=F,class=L,0.7333333333333333,0.7666666666666667,0.9565217391304347,11.0,23.0
+417,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8148148148148148,0.8518518518518519,0.9565217391304347,22.0,46.0
+368,['VisITedResources=0<x<24'],gender=F,class=L,0.88,0.92,0.9565217391304347,44.0,92.0
+183,"['ParentschoolSatisfaction=Good', 'SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+1132,['PlaceofBirth=lebanon'],gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+452,"['SectionID=B', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+132,"['SectionID=C', 'VisITedResources=49<x<74']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+1008,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Discussion=50<x<74']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+749,"['raisedhands=50<x<75', 'VisITedResources=x>74']",gender=F,class=L,0.7333333333333333,0.7666666666666667,0.9565217391304347,11.0,23.0
+234,"['Relation=Mum', 'Semester=F', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.7333333333333333,0.7666666666666667,0.9565217391304347,11.0,23.0
+209,"['ParentschoolSatisfaction=Good', 'Topic=Quran']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+753,"['raisedhands=0<x<25', 'VisITedResources=x>74']",gender=F,class=L,0.9166666666666666,0.9583333333333334,0.9565217391304347,11.0,23.0
+538,"['ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=x<0']",gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+512,"['ParentschoolSatisfaction=Good', 'Semester=F', 'raisedhands=50<x<75']",gender=F,class=L,0.7857142857142857,0.8214285714285714,0.9565217391304348,11.0,23.0
+670,"['SectionID=B', 'GradeID=G-07']",gender=F,class=L,0.7857142857142857,0.8214285714285714,0.9565217391304348,11.0,23.0
+317,"['Discussion=50<x<74', 'AnnouncementsView=x>73']",gender=F,class=L,0.7857142857142857,0.8214285714285714,0.9565217391304348,11.0,23.0
+101,"['SectionID=C', 'Discussion=x>74']",gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+570,"['ParentAnsweringSurvey=Yes', 'Topic=Chemistry']",gender=F,class=L,0.7857142857142857,0.8214285714285714,0.9565217391304348,11.0,23.0
+625,"['raisedhands=50<x<75', 'VisITedResources=24<x<49']",gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+949,"['StageID=lowerlevel', 'raisedhands=0<x<25']",gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+579,['NationalITy=SaudiArabia'],gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+90,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.8461538461538461,0.8846153846153846,0.9565217391304348,11.0,23.0
+610,"['ParentAnsweringSurvey=Yes', 'SectionID=B', 'StageID=HighSchool']",gender=F,class=L,0.6875,0.71875,0.9565217391304348,11.0,23.0
+883,['Semester=F'],gender=F,class=L,0.8198198198198198,0.8558558558558559,0.9578947368421051,91.0,190.0
+910,"['StageID=MiddleSchool', 'raisedhands=0<x<25']",gender=F,class=L,0.92,0.96,0.9583333333333334,23.0,48.0
+499,"['ParentschoolSatisfaction=Good', 'raisedhands=50<x<75']",gender=F,class=L,0.8214285714285714,0.8571428571428571,0.9583333333333334,23.0,48.0
+825,['StageID=lowerlevel'],gender=F,class=L,0.8656716417910447,0.9029850746268657,0.9586776859504131,58.0,121.0
+68,"['StageID=lowerlevel', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8571428571428571,0.8928571428571429,0.9599999999999999,12.0,25.0
+724,"['SectionID=A', 'VisITedResources=x>74']",gender=F,class=L,0.8571428571428571,0.8928571428571429,0.9599999999999999,12.0,25.0
+528,"['Discussion=x>74', 'AnnouncementsView=x<0']",gender=F,class=L,0.8571428571428571,0.8928571428571429,0.9599999999999999,12.0,25.0
+324,"['SectionID=C', 'AnnouncementsView=x>73']",gender=F,class=L,0.8571428571428571,0.8928571428571429,0.9599999999999999,12.0,25.0
+983,"['Relation=Mum', 'VisITedResources=x<0']",gender=F,class=L,0.6666666666666666,0.6944444444444444,0.96,12.0,25.0
+1051,"['Relation=Mum', 'PlaceofBirth=Jordan']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+418,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.75,0.78125,0.96,12.0,25.0
+261,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+489,['PlaceofBirth=Lybia'],gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+1192,"['Relation=Mum', 'Topic=Spanish']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+703,"['SectionID=B', 'VisITedResources=x>74']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+1099,"['VisITedResources=x<0', 'raisedhands=25<x<50']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+70,['Discussion=x>74'],gender=F,class=L,0.8727272727272727,0.9090909090909091,0.96,48.0,100.0
+44,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8,0.8333333333333334,0.96,12.0,25.0
+965,"['Semester=F', 'Topic=Math']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+741,"['AnnouncementsView=24<x<49', 'VisITedResources=x>74']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+616,"['ParentschoolSatisfaction=Good', 'StageID=HighSchool', 'VisITedResources=24<x<49']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+166,"['VisITedResources=49<x<74', 'raisedhands=x<0']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+858,"['Discussion=x>74', 'raisedhands=x>75']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+931,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'raisedhands=0<x<25']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+806,"['StageID=MiddleSchool', 'PlaceofBirth=venzuela']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+456,"['ParentschoolSatisfaction=Good', 'GradeID=G-11']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+57,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8275862068965517,0.8620689655172413,0.9600000000000001,24.0,50.0
+802,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+1023,"['StudentAbsenceDays=Above-7', 'SectionID=A', 'Discussion=50<x<74']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+769,"['ParentschoolSatisfaction=Good', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+772,"['raisedhands=0<x<25', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+172,"['Discussion=x<1', 'raisedhands=x<0']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+708,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'VisITedResources=x>74']",gender=F,class=L,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+846,"['StageID=MiddleSchool', 'raisedhands=x>75']",gender=F,class=L,0.8125,0.84375,0.9629629629629629,13.0,27.0
+306,"['StageID=lowerlevel', 'AnnouncementsView=x>73']",gender=F,class=L,0.8125,0.84375,0.9629629629629629,13.0,27.0
+229,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.7647058823529411,0.7941176470588235,0.9629629629629629,13.0,27.0
+461,"['StudentAbsenceDays=Above-7', 'GradeID=G-11']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+22,"['StageID=MiddleSchool', 'SectionID=B']",gender=F,class=L,0.8666666666666667,0.9,0.962962962962963,26.0,54.0
+1140,['Topic=Arabic'],gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+767,"['StudentAbsenceDays=Above-7', 'Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+196,"['ParentschoolSatisfaction=Good', 'Semester=F', 'raisedhands=x<0']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+363,"['Semester=F', 'StageID=HighSchool', 'SectionID=C']",gender=F,class=L,0.8666666666666667,0.9,0.962962962962963,13.0,27.0
+696,['Topic=English'],gender=F,class=L,0.8666666666666667,0.9,0.962962962962963,13.0,27.0
+1190,"['ParentschoolSatisfaction=Good', 'NationalITy=Iran']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+404,"['StageID=HighSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+619,"['AnnouncementsView=24<x<49', 'VisITedResources=24<x<49']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+1073,"['StageID=HighSchool', 'Topic=French']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+536,"['StageID=lowerlevel', 'AnnouncementsView=x<0']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+712,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'VisITedResources=x>74']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+98,"['StageID=lowerlevel', 'Discussion=x>74']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+485,['Topic=History'],gender=F,class=L,0.6842105263157895,0.7105263157894737,0.962962962962963,13.0,27.0
+372,"['StageID=MiddleSchool', 'VisITedResources=0<x<24']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+746,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'VisITedResources=x>74']",gender=F,class=L,0.9285714285714286,0.9642857142857143,0.962962962962963,13.0,27.0
+222,['ParentAnsweringSurvey=Yes'],gender=F,class=L,0.7948717948717948,0.8247863247863247,0.9637305699481865,93.0,193.0
+1068,['Topic=French'],gender=F,class=L,0.9310344827586207,0.9655172413793104,0.9642857142857142,27.0,56.0
+36,"['Relation=Mum', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.84375,0.875,0.9642857142857143,27.0,56.0
+31,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'SectionID=B']",gender=F,class=L,0.7,0.725,0.9655172413793103,14.0,29.0
+37,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.7777777777777778,0.8055555555555556,0.9655172413793103,14.0,29.0
+27,"['ParentAnsweringSurvey=Yes', 'SectionID=B']",gender=F,class=L,0.7368421052631579,0.7631578947368421,0.9655172413793103,28.0,58.0
+118,"['SectionID=A', 'VisITedResources=49<x<74']",gender=F,class=L,0.7777777777777778,0.8055555555555556,0.9655172413793103,14.0,29.0
+15,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'StageID=MiddleSchool']",gender=F,class=L,0.7777777777777778,0.8055555555555556,0.9655172413793103,14.0,29.0
+542,"['StageID=HighSchool', 'AnnouncementsView=x<0']",gender=F,class=L,0.7777777777777778,0.8055555555555556,0.9655172413793103,14.0,29.0
+29,"['ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'SectionID=B']",gender=F,class=L,0.7777777777777778,0.8055555555555556,0.9655172413793103,14.0,29.0
+458,"['Relation=Mum', 'GradeID=G-11']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+26,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool', 'SectionID=B']",gender=F,class=L,0.875,0.90625,0.9655172413793104,14.0,29.0
+358,"['Relation=Mum', 'SectionID=C']",gender=F,class=L,0.8235294117647058,0.8529411764705882,0.9655172413793104,28.0,58.0
+691,['NationalITy=lebanon'],gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+1027,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Discussion=50<x<74']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+917,"['AnnouncementsView=24<x<49', 'raisedhands=0<x<25']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+228,"['StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.8235294117647058,0.8529411764705882,0.9655172413793104,28.0,58.0
+197,"['StageID=HighSchool', 'raisedhands=x<0']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+888,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good', 'Semester=F']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+1096,"['StageID=lowerlevel', 'raisedhands=25<x<50']",gender=F,class=L,0.875,0.90625,0.9655172413793104,14.0,29.0
+1079,"['ParentschoolSatisfaction=Good', 'Topic=French']",gender=F,class=L,0.9333333333333333,0.9666666666666667,0.9655172413793104,14.0,29.0
+58,"['Semester=F', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8235294117647058,0.8529411764705882,0.9655172413793104,14.0,29.0
+1087,['raisedhands=25<x<50'],gender=F,class=L,0.8431372549019608,0.8725490196078431,0.9662921348314607,43.0,89.0
+264,"['StudentAbsenceDays=Above-7', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+241,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'SectionID=A']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+376,"['SectionID=C', 'VisITedResources=0<x<24']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+357,"['ParentschoolSatisfaction=Good', 'SectionID=C']",gender=F,class=L,0.8333333333333334,0.8611111111111112,0.967741935483871,30.0,62.0
+498,"['SectionID=A', 'raisedhands=50<x<75']",gender=F,class=L,0.8823529411764706,0.9117647058823529,0.967741935483871,15.0,31.0
+822,['Topic=IT'],gender=F,class=L,0.8823529411764706,0.9117647058823529,0.967741935483871,15.0,31.0
+1202,['Topic=Science'],gender=F,class=L,0.8823529411764706,0.9117647058823529,0.967741935483871,15.0,31.0
+423,"['Discussion=x<1', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+366,"['ParentschoolSatisfaction=Good', 'Semester=F', 'SectionID=C']",gender=F,class=L,0.8333333333333334,0.8611111111111112,0.967741935483871,15.0,31.0
+719,"['StudentAbsenceDays=Above-7', 'Semester=F', 'VisITedResources=x>74']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+41,"['Relation=Mum', 'StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8333333333333334,0.8611111111111112,0.967741935483871,15.0,31.0
+422,"['SectionID=C', 'AnnouncementsView=49<x<73']",gender=F,class=L,0.8333333333333334,0.8611111111111112,0.967741935483871,15.0,31.0
+320,"['StageID=HighSchool', 'AnnouncementsView=x>73']",gender=F,class=L,0.8823529411764706,0.9117647058823529,0.967741935483871,15.0,31.0
+407,"['SectionID=A', 'VisITedResources=0<x<24']",gender=F,class=L,0.9375,0.96875,0.967741935483871,15.0,31.0
+980,"['SectionID=B', 'VisITedResources=x<0']",gender=F,class=L,0.8823529411764706,0.9117647058823529,0.967741935483871,15.0,31.0
+830,"['SectionID=C', 'StageID=lowerlevel']",gender=F,class=L,0.8421052631578947,0.868421052631579,0.9696969696969696,16.0,33.0
+233,"['Semester=F', 'StageID=MiddleSchool', 'SectionID=A']",gender=F,class=L,0.7619047619047619,0.7857142857142857,0.9696969696969696,16.0,33.0
+254,"['ParentAnsweringSurvey=Yes', 'Semester=F', 'SectionID=A']",gender=F,class=L,0.7619047619047619,0.7857142857142857,0.9696969696969696,16.0,33.0
+290,"['ParentAnsweringSurvey=Yes', 'AnnouncementsView=x>73']",gender=F,class=L,0.7619047619047619,0.7857142857142857,0.9696969696969696,16.0,33.0
+961,['Topic=Math'],gender=F,class=L,0.8421052631578947,0.868421052631579,0.9696969696969696,16.0,33.0
+158,"['SectionID=B', 'raisedhands=x<0']",gender=F,class=L,0.9411764705882353,0.9705882352941176,0.9696969696969697,16.0,33.0
+296,"['SectionID=A', 'AnnouncementsView=x>73']",gender=F,class=L,0.8888888888888888,0.9166666666666666,0.9696969696969697,16.0,33.0
+985,"['StageID=lowerlevel', 'VisITedResources=x<0']",gender=F,class=L,0.8888888888888888,0.9166666666666666,0.9696969696969697,16.0,33.0
+161,"['Discussion=x>74', 'raisedhands=x<0']",gender=F,class=L,0.9411764705882353,0.9705882352941176,0.9696969696969697,16.0,33.0
+1110,"['SectionID=A', 'raisedhands=25<x<50']",gender=F,class=L,0.9411764705882353,0.9705882352941176,0.9696969696969697,16.0,33.0
+171,"['ParentAnsweringSurvey=Yes', 'raisedhands=x<0']",gender=F,class=L,0.9411764705882353,0.9705882352941176,0.9696969696969697,16.0,33.0
+947,"['SectionID=C', 'raisedhands=0<x<25']",gender=F,class=L,0.9411764705882353,0.9705882352941176,0.9696969696969697,16.0,33.0
+13,"['ParentAnsweringSurvey=Yes', 'StageID=MiddleSchool']",gender=F,class=L,0.7804878048780488,0.8048780487804879,0.9696969696969697,32.0,66.0
+891,"['ParentAnsweringSurvey=Yes', 'Relation=Mum', 'Semester=F']",gender=F,class=L,0.6153846153846154,0.6346153846153846,0.9696969696969698,16.0,33.0
+1146,['PlaceofBirth=USA'],gender=F,class=L,0.8,0.825,0.9696969696969698,16.0,33.0
+17,"['Relation=Mum', 'Semester=F', 'StageID=MiddleSchool']",gender=F,class=L,0.8,0.825,0.9696969696969698,16.0,33.0
+106,"['StageID=MiddleSchool', 'VisITedResources=49<x<74']",gender=F,class=L,0.8,0.825,0.9696969696969698,16.0,33.0
+97,"['ParentAnsweringSurvey=Yes', 'Discussion=x>74']",gender=F,class=L,0.8,0.825,0.9696969696969698,16.0,33.0
+85,"['ParentschoolSatisfaction=Good', 'Semester=F', 'Discussion=x>74']",gender=F,class=L,0.85,0.875,0.9714285714285714,17.0,35.0
+182,"['SectionID=C', 'raisedhands=x<0']",gender=F,class=L,0.9444444444444444,0.9722222222222222,0.9714285714285714,17.0,35.0
+270,"['ParentschoolSatisfaction=Good', 'Discussion=x<1']",gender=F,class=L,0.9444444444444444,0.9722222222222222,0.9714285714285714,17.0,35.0
+273,"['SectionID=C', 'Discussion=x<1']",gender=F,class=L,0.8947368421052632,0.9210526315789473,0.9714285714285714,17.0,35.0
+89,"['StageID=HighSchool', 'Discussion=x>74']",gender=F,class=L,0.85,0.875,0.9714285714285714,17.0,35.0
+816,['NationalITy=Lybia'],gender=F,class=L,0.8947368421052632,0.9210526315789473,0.9714285714285714,17.0,35.0
+155,"['StageID=MiddleSchool', 'raisedhands=x<0']",gender=F,class=L,0.8947368421052632,0.9210526315789473,0.9714285714285714,17.0,35.0
+1134,['NationalITy=Palestine'],gender=F,class=L,0.8095238095238095,0.8333333333333334,0.9714285714285714,17.0,35.0
+61,"['SectionID=A', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.8947368421052632,0.9210526315789473,0.9714285714285714,17.0,35.0
+603,"['StudentAbsenceDays=Above-7', 'Semester=F', 'StageID=HighSchool']",gender=F,class=L,0.9444444444444444,0.9722222222222222,0.9714285714285714,17.0,35.0
+594,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'StageID=HighSchool']",gender=F,class=L,0.9444444444444444,0.9722222222222222,0.9714285714285714,17.0,35.0
+14,"['ParentschoolSatisfaction=Good', 'StageID=MiddleSchool']",gender=F,class=L,0.875,0.9,0.9722222222222222,35.0,72.0
+35,['AnnouncementsView=24<x<49'],gender=F,class=L,0.8983050847457628,0.923728813559322,0.9724770642201835,53.0,109.0
+1108,"['Semester=F', 'raisedhands=25<x<50']",gender=F,class=L,0.9,0.925,0.9729729729729729,18.0,37.0
+278,"['SectionID=B', 'Discussion=x<1']",gender=F,class=L,0.9,0.925,0.9729729729729729,18.0,37.0
+587,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'StageID=HighSchool']",gender=F,class=L,0.9473684210526315,0.9736842105263158,0.9729729729729729,18.0,37.0
+212,['NationalITy=Jordan'],gender=F,class=L,0.8571428571428571,0.8809523809523809,0.9729729729729729,18.0,37.0
+849,"['ParentschoolSatisfaction=Good', 'raisedhands=x>75']",gender=F,class=L,0.8571428571428571,0.8809523809523809,0.9729729729729729,18.0,37.0
+758,['AnnouncementsView=0<x<24'],gender=F,class=L,0.9,0.925,0.9729729729729729,36.0,74.0
+956,['PlaceofBirth=SaudiArabia'],gender=F,class=L,0.9,0.925,0.9729729729729729,18.0,37.0
+982,"['ParentschoolSatisfaction=Good', 'VisITedResources=x<0']",gender=F,class=L,0.8260869565217391,0.8478260869565217,0.9743589743589743,19.0,39.0
+638,"['SectionID=B', 'VisITedResources=24<x<49']",gender=F,class=L,0.8636363636363636,0.8863636363636364,0.9743589743589743,19.0,39.0
+850,"['Semester=F', 'raisedhands=x>75']",gender=F,class=L,0.7916666666666666,0.8125,0.9743589743589743,19.0,39.0
+709,"['Relation=Mum', 'VisITedResources=x>74']",gender=F,class=L,0.8260869565217391,0.8478260869565217,0.9743589743589743,19.0,39.0
+268,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'SectionID=A']",gender=F,class=L,0.95,0.975,0.9743589743589743,19.0,39.0
+53,"['StageID=HighSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.95,0.975,0.9743589743589743,19.0,39.0
+647,"['ParentschoolSatisfaction=Good', 'Discussion=25<x<50']",gender=F,class=L,0.9523809523809523,0.9761904761904762,0.975609756097561,20.0,41.0
+895,"['StudentAbsenceDays=Above-7', 'Relation=Mum', 'Semester=F']",gender=F,class=L,0.9523809523809523,0.9761904761904762,0.975609756097561,20.0,41.0
+227,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'SectionID=A']",gender=F,class=L,0.9523809523809523,0.9761904761904762,0.975609756097561,20.0,41.0
+1100,"['ParentAnsweringSurvey=Yes', 'raisedhands=25<x<50']",gender=F,class=L,0.7692307692307693,0.7884615384615384,0.9756097560975611,20.0,41.0
+843,['raisedhands=x>75'],gender=F,class=L,0.8723404255319149,0.8936170212765957,0.9761904761904763,41.0,84.0
+8,['StageID=MiddleSchool'],gender=F,class=L,0.8736842105263158,0.8947368421052632,0.9764705882352942,83.0,170.0
+194,"['Semester=F', 'raisedhands=x<0']",gender=F,class=L,0.9130434782608695,0.9347826086956522,0.9767441860465115,21.0,43.0
+648,"['Relation=Mum', 'Discussion=25<x<50']",gender=F,class=L,0.9130434782608695,0.9347826086956522,0.9767441860465115,21.0,43.0
+701,['VisITedResources=x>74'],gender=F,class=L,0.8571428571428571,0.8775510204081632,0.9767441860465116,42.0,86.0
+1191,['Topic=Spanish'],gender=F,class=L,0.875,0.8958333333333334,0.9767441860465116,21.0,43.0
+884,"['ParentAnsweringSurvey=Yes', 'Semester=F']",gender=F,class=L,0.7636363636363637,0.7818181818181819,0.9767441860465116,42.0,86.0
+379,"['Semester=F', 'VisITedResources=0<x<24']",gender=F,class=L,0.875,0.8958333333333334,0.9767441860465116,21.0,43.0
+840,"['SectionID=A', 'StageID=lowerlevel']",gender=F,class=L,0.9545454545454546,0.9772727272727273,0.9767441860465117,21.0,43.0
+527,['AnnouncementsView=x<0'],gender=F,class=L,0.8431372549019608,0.8627450980392157,0.9772727272727272,43.0,88.0
+805,['PlaceofBirth=venzuela'],gender=F,class=L,0.9565217391304348,0.9782608695652174,0.9777777777777777,22.0,45.0
+40,"['StageID=MiddleSchool', 'AnnouncementsView=24<x<49']",gender=F,class=L,0.88,0.9,0.9777777777777777,22.0,45.0
+764,"['Semester=F', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9565217391304348,0.9782608695652174,0.9777777777777777,22.0,45.0
+946,"['StudentAbsenceDays=Above-7', 'raisedhands=0<x<25']",gender=F,class=L,0.9565217391304348,0.9782608695652174,0.9777777777777777,22.0,45.0
+838,"['Semester=F', 'StageID=lowerlevel']",gender=F,class=L,0.88,0.9,0.9777777777777777,22.0,45.0
+151,['raisedhands=x<0'],gender=F,class=L,0.9375,0.9583333333333334,0.9782608695652174,45.0,92.0
+585,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'StageID=HighSchool']",gender=F,class=L,0.9583333333333334,0.9791666666666666,0.9787234042553192,23.0,47.0
+759,"['StudentAbsenceDays=Above-7', 'AnnouncementsView=0<x<24']",gender=F,class=L,0.9583333333333334,0.9791666666666666,0.9787234042553192,23.0,47.0
+1058,['GradeID=G-05'],gender=F,class=L,0.92,0.94,0.9787234042553192,23.0,47.0
+533,"['ParentschoolSatisfaction=Good', 'AnnouncementsView=x<0']",gender=F,class=L,0.8888888888888888,0.9074074074074074,0.9795918367346937,24.0,49.0
+454,['GradeID=G-11'],gender=F,class=L,0.96,0.98,0.9795918367346939,24.0,49.0
+201,['Topic=Quran'],gender=F,class=L,0.96,0.98,0.9795918367346939,24.0,49.0
+1049,['PlaceofBirth=Jordan'],gender=F,class=L,0.8620689655172413,0.8793103448275862,0.9803921568627451,25.0,51.0
+6,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Relation=Mum']",gender=F,class=L,0.9615384615384616,0.9807692307692307,0.9803921568627452,25.0,51.0
+885,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Semester=F']",gender=F,class=L,0.9615384615384616,0.9807692307692307,0.9803921568627452,25.0,51.0
+269,['Discussion=x<1'],gender=F,class=L,0.9272727272727272,0.9454545454545454,0.9807692307692307,51.0,104.0
+1032,"['StudentAbsenceDays=Above-7', 'Discussion=50<x<74']",gender=F,class=L,0.9629629629629629,0.9814814814814815,0.981132075471698,26.0,53.0
+84,"['Semester=F', 'Discussion=x>74']",gender=F,class=L,0.8666666666666667,0.8833333333333333,0.9811320754716982,26.0,53.0
+360,"['StageID=HighSchool', 'SectionID=C']",gender=F,class=L,0.9285714285714286,0.9464285714285714,0.9811320754716982,26.0,53.0
+2,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'Relation=Mum']",gender=F,class=L,0.9642857142857143,0.9821428571428571,0.9818181818181819,27.0,55.0
+889,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good', 'Semester=F']",gender=F,class=L,0.9642857142857143,0.9821428571428571,0.9818181818181819,27.0,55.0
+181,"['ParentschoolSatisfaction=Good', 'raisedhands=x<0']",gender=F,class=L,0.9642857142857143,0.9821428571428571,0.9818181818181819,27.0,55.0
+837,"['ParentAnsweringSurvey=Yes', 'StageID=lowerlevel']",gender=F,class=L,0.8529411764705882,0.8676470588235294,0.983050847457627,29.0,59.0
+702,"['StudentAbsenceDays=Above-7', 'VisITedResources=x>74']",gender=F,class=L,0.9666666666666667,0.9833333333333333,0.9830508474576272,29.0,59.0
+354,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes', 'ParentschoolSatisfaction=Good']",gender=F,class=L,0.967741935483871,0.9838709677419355,0.9836065573770492,30.0,61.0
+365,"['Semester=F', 'SectionID=C']",gender=F,class=L,0.9166666666666666,0.9305555555555556,0.9850746268656716,33.0,67.0
+356,['SectionID=C'],gender=F,class=L,0.9102564102564102,0.9230769230769231,0.986111111111111,71.0,144.0
+16,"['Semester=F', 'StageID=MiddleSchool']",gender=F,class=L,0.8571428571428571,0.8690476190476191,0.9863013698630136,36.0,73.0
+646,['Discussion=25<x<50'],gender=F,class=L,0.9523809523809523,0.9642857142857143,0.9876543209876543,40.0,81.0
+612,"['StudentAbsenceDays=Above-7', 'StageID=HighSchool']",gender=F,class=L,0.975609756097561,0.9878048780487805,0.9876543209876543,40.0,81.0
+225,"['StudentAbsenceDays=Above-7', 'SectionID=A']",gender=F,class=L,0.9767441860465116,0.9883720930232558,0.988235294117647,42.0,85.0
+979,['VisITedResources=x<0'],gender=F,class=L,0.8846153846153846,0.8942307692307693,0.9892473118279569,46.0,93.0
+896,"['StudentAbsenceDays=Above-7', 'Semester=F']",gender=F,class=L,0.9807692307692307,0.9903846153846154,0.9902912621359222,51.0,103.0
+7,"['StudentAbsenceDays=Above-7', 'Relation=Mum']",gender=F,class=L,0.9818181818181818,0.990909090909091,0.9908256880733944,54.0,109.0
+223,"['StudentAbsenceDays=Above-7', 'ParentAnsweringSurvey=Yes']",gender=F,class=L,0.9821428571428571,0.9910714285714286,0.9909909909909909,55.0,111.0
+355,"['StudentAbsenceDays=Above-7', 'ParentschoolSatisfaction=Good']",gender=F,class=L,0.9836065573770492,0.9918032786885246,0.9917355371900827,60.0,121.0
+221,['StudentAbsenceDays=Above-7'],gender=F,class=L,0.9918032786885246,0.9959016393442623,0.9958847736625513,121.0,243.0
