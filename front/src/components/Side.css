@@ -4,6 +4,7 @@
 
 .Side {
   padding: 10px;
+  padding-left: 0px;
 }
 
 ::-webkit-scrollbar {
@@ -24,4 +25,9 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
+}
+
+.tool-title{
+  font-size: 8px
+
 }

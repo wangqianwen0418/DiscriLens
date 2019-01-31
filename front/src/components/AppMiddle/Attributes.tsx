@@ -10,7 +10,6 @@ export interface Props{
     key_attrs: string[],
     samples: DataItem[],
     key_groups: KeyGroup[],
-    num_attrs: string[],
     fetch_groups_status: Status
 } 
 export interface State{
@@ -30,6 +29,7 @@ const drawBars= (attr:string, samples:DataItem[],
                 .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)
     let samples_reject = samples.filter((s)=>s.class==0)
     let samples_accept = samples.filter((s)=>s.class==1)
+    let bar_width = bar_w / ranges.length
     return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
         {/* bars */}
         {ranges.map((range:string, range_i)=>{
@@ -42,10 +42,10 @@ const drawBars= (attr:string, samples:DataItem[],
 
 
             return <g key={`${attr}_${range}`} 
-                    transform={`translate(${range_i*(bar_w+bar_margin)}, ${height/2})`}
+                    transform={`translate(${range_i*(bar_width+bar_margin)}, ${height/2})`}
                 >
-                <rect width={bar_w} height={accept_h} y={-1*accept_h} style={{fill: highlight?'#DE4863':'#999' }}/>
-                <rect width={bar_w} height={reject_h} y={0} style={{fill: highlight?'pink':'#bbb'}}/>
+                <rect width={bar_width} height={accept_h} y={-1*accept_h} style={{fill: highlight?'#DE4863':'#999' }}/>
+                <rect width={bar_width} height={reject_h} y={0} style={{fill: highlight?'pink':'#bbb'}}/>
             </g>
         })}
         {/* label */}
@@ -53,7 +53,7 @@ const drawBars= (attr:string, samples:DataItem[],
     
 }
 
-const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag: boolean, highlightRange:string ,offsetX=0, offsetY=0,)=>{
+const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag: boolean, curve_Width: number,  highlightRange:string ,offsetX=0, offsetY=0,)=>{
     let ranges = samples.map(d=>d[attr])
                 .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i) 
                 .sort((a:number,b:number) => a - b)
@@ -71,6 +71,9 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
     let accept_num = 0,
         reject_num = 0
     ranges.map((range:number,range_i)=>{
+        accept_num += samples_accept.filter(s=>s[attr]===range).length
+        reject_num += samples_reject.filter(s=>s[attr]===range).length
+        //console.log(range,samples_accept,samples_reject,range_i,step)
         if(((range_i%step==0)&&(range_i!=0))||(range_i==ranges.length - 1)||((range_i==0))){
             ListNum.push(dataPush(range,accept_num,reject_num))
             xRecord = Math.max(xRecord,range)
@@ -78,17 +81,13 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
             accept_num = 0
             reject_num = 0
         }
-        else{
-            accept_num += samples_accept.filter(s=>s[attr]===range).length
-            reject_num += samples_reject.filter(s=>s[attr]===range).length
-        }
     })
-    let xScale = d3.scaleLinear().domain([0,xRecord]).range([0,Math.max(50,xRecord)])
+    let xScale = d3.scaleLinear().domain([0,xRecord]).range([0,curve_Width])
     let yScaleAcc = d3.scaleLinear().domain([0,yRecord[0]]).range([height/2,0]);
     let yScaleRej = d3.scaleLinear().domain([0,yRecord[1]]).range([height/2,height]);
-    console.log(ListNum)
     const areasAcc = d3.area<curveData>().x(d=>xScale(d.x)).y1(height/2).y0(d=>yScaleAcc(d.y)).curve(d3.curveMonotoneX)
     const areasRej = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>yScaleRej(d.z)).y0(height/2).curve(d3.curveMonotoneX)    
+    //console.log(ranges,ListNum,highlightRange)
     if(curveFlag){
         let xRange = [0,0]
         let numbers = highlightRange.match(/\d+/g).map(Number)
@@ -100,7 +99,6 @@ const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag:
         let ListNumFilter = ListNum.filter((s)=>{
             if((s.x>xRange[0])&&(s.x<=xRange[1]+1)){return s}
             else{return null}})
-        //console.log(ranges,ListNum,highlightRange,xRange,ListNumFilter)
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
         <path d={areasAcc(ListNum)||''} style={{fill:'#999'}}/>
         <path d={areasAccSelect(ListNumFilter)||''} style={{fill:'#DE4863'}}/>
@@ -135,15 +133,13 @@ const drawPies = (values:number[], radius:number, color:string, innerRadius:numb
 
 
 export default class Attributes extends React.Component<Props, State>{
-    public height= 70; bar_margin=1;attr_margin=8;viewSwitch=1;
+    public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1;
     
     draw(){
-        let {samples, key_attrs, key_groups, num_attrs} = this.props
-
+        let {samples, key_attrs, key_groups} = this.props
         /*******************************
          * protected attrs
         *******************************/
-        console.log(num_attrs)
         const protect_attr = 'sex'
         const protect_vals = Object.keys(countItem(samples.map(s=>s[protect_attr])))
 
@@ -155,7 +151,7 @@ export default class Attributes extends React.Component<Props, State>{
             let radius = subsamples.length/samples.length*this.height/2
 
             // return a pie
-            return <g key={protect_val+'_pie'} transform={`translate(${window.innerWidth*0.05*pie_i+20}, ${0})`}>
+            return <g key={protect_val+'_pie'} transform={`translate(${window.innerWidth*0.03}, ${pie_i * this.height})`}>
                 {drawPies(subsamples_count, radius, getColor(protect_val), 0)}
             <text>{ (100*subsamples_count[1]/(subsamples_count[0]+subsamples_count[1])).toFixed(2)+'%' }</text>
             <text y={this.height/2} textAnchor='middle'>{`${protect_val}:${subsamples.length}`}</text>
@@ -199,13 +195,11 @@ export default class Attributes extends React.Component<Props, State>{
                 counts = counts.concat(count)
         })
         let max_accept = Math.max(...counts)
-
-
-        
-        let bar_w = 5//(window.innerWidth*0.8 - attrs.length*this.attr_margin)/counts.length - this.bar_margin
+        // draw bars
+        let bar_w = window.innerWidth*0.9 / attrs.length * 0.6
         let bars = attrs.map((attr:string, attr_i)=>{
             // offset x, y
-            let offsetX = attr_counts[attr_i]*(bar_w+this.bar_margin) + attr_i*(this.attr_margin) 
+            let offsetX = window.innerWidth*0.9 / attrs.length * attr_i
             let offsetY = 0
             let dataType = typeof samples.map(d=>d[attr])
             .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)[0]
@@ -222,14 +216,20 @@ export default class Attributes extends React.Component<Props, State>{
                 </g>
             }
             else{
-                return <g key={attr + 'curves'} transform={`translate(${offsetX+50}, ${offsetY})`}>
+                return <g key={attr + 'curves'} transform={`translate(${offsetX}, ${offsetY})`}>
                 {
-                    drawCurves(attr, samples,this.height,false,'')
+                    drawCurves(attr, samples,this.height,false,bar_w,'')
                 }
+                <text className='attrLabel' x={0} y={2*this.bar_margin} 
+                        transform="rotate(-30)" textAnchor='middle'
+                    >
+                        {cutTxt(attr, attr_counts[attr_i+1]- attr_counts[attr_i]+1)}
+                    </text>
                 </g>
             }
         })
-
+        
+        
         let rule_bars = key_groups.map((group, group_i)=>{
             let groupSamples = samples.filter(d=>{
                 return group.items.indexOf(d.id)!=-1
@@ -276,7 +276,7 @@ export default class Attributes extends React.Component<Props, State>{
                 else{
                     return <g key={attr + 'curves'} transform={`translate(${offsetX+50}, ${offsetY})`}>
                     {
-                        drawCurves(attr, samples,this.height,true, group[attr])
+                        drawCurves(attr, samples,this.height,true,bar_w,group[attr])
                     }
                 </g>
                 }
@@ -290,6 +290,10 @@ export default class Attributes extends React.Component<Props, State>{
                     return <g key={`group_${group_i}`}>
                     {groupBars}
                 </g>
+                } else if(this.viewSwitch==-1){
+                    return <g>
+
+                    </g>
                 } else{
                     return <g key={`group_${group_i}`}>
                     {groupPies}
@@ -299,14 +303,15 @@ export default class Attributes extends React.Component<Props, State>{
             }
             else{return <g></g>}
         }) 
+    
 
 
         return <g>
-            <g className='attrs' transform={`translate(${window.innerWidth*0.15}, ${this.attr_margin*2})`}>
+            <g className='attrs' transform={`translate(${window.innerWidth*0.1}, ${this.attr_margin*2})`}>
                 {bars}
                 {rule_bars}
             </g>
-            <g className='protect_attrs' transform={`translate(${window.innerWidth*0.01}, ${this.height/2})`}>
+            <g className='protect_attrs' transform={`translate(${0}, ${this.height/2})`}>
                 {pies}
             </g>
         </g>

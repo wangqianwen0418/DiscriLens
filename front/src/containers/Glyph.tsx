@@ -1,9 +1,9 @@
-import Attributes from 'components/AppMiddle/Attributes';
+import Glyph from 'components/AppMiddle/Glyph';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
 // import { Dispatch } from 'redux';
 
-export function mapStateToProps(state:StoreState, ownProps?:any) {
+export function mapStateToProps(state:StoreState) {
     // console.info(state.samples)
     return {
         samples: state.samples,
@@ -18,4 +18,4 @@ export function mapDispatchToProps(dispatch: any) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Attributes);
+export default connect(mapStateToProps, mapDispatchToProps)(Glyph);
