@@ -18,7 +18,8 @@ def get_rules(dataset_name, model_name=None):
     
     rules.to_csv('./cache/{}_rules.csv'.format(model_name))
 
-get_rules('credit', 'knn')
-get_rules('credit')
-get_rules('academic', 'xgb')
-get_rules('academic')
+# get_rules('credit', 'knn')
+# get_rules('credit', 'rf')
+# get_rules('credit')
+get_rules('academic', 'lr')
+# get_rules('academic')
