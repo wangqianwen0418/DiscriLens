@@ -6,9 +6,10 @@ import { connect} from 'react-redux';
 export function mapStateToProps(state:StoreState) {
     // console.info(state.samples)
     return {
+        rules: state.rules,
         samples: state.samples,
-        key_attrs: state.key_attrs,
-        key_groups: state.key_groups,
+        thr_rules: state.thr_rules,
+        key_attrs:state.key_attrs,
         fetch_groups_status: state.fetch_groups_status
     };
 }

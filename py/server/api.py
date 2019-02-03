@@ -45,10 +45,11 @@ def get_samples():
     return the generated samples based on the training data
     E.g.: /api/samples?dataset=credit&model=knn&num=3000
     """
+    '''
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
 
-    sample_num = 3000 # number of generated data 
+    sample_num = 1000 # number of generated data 
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
     # generate samples
@@ -57,18 +58,28 @@ def get_samples():
     model_samples, storeData = generate_model_samples(data, sample_num, model, encoder)
     # here model_samples are non-catogorized data for output while storeData is categorized data for storing
     
-    # add the ID col
-    storeData.insert(loc=0, column='id', value=model_samples.index)
+    # add the ID col 
+    #storeData.insert(loc=0, column='id', value=model_samples.index)
     #store.insert(loc=0, column='id', value=store.index)
     # save mdeol & samples to cache
-    samples_path = os.path.join(cache_path, '{}_{}_samples.csv'.format(dataset_name, model_name))
+    samples_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     storeData.to_csv(samples_path, index=False)
     storeData.to_json('./test.json', orient='records')
-    model_path = os.path.join(cache_path, '{}_{}.joblib'.format(dataset_name, model_name))
+    model_path = os.path.join(cache_path, '{}.joblib'.format(model_name))
     dump(model, model_path) 
     jsonfile = model_samples.to_json(orient='records')
     
     return jsonfile
+    '''
+    dataset_path = './cache/test/dataTest_knn_samples.csv'
+    data1 = pd.read_csv(dataset_path)
+    
+    dataset_path = './cache/test/dataTest_knn_samples1.csv'
+    data2 = pd.read_csv(dataset_path)
+
+    dataout = pd.concat([data2,data1])
+
+    return dataout.to_json(orient='records')
     
 
 @api.route('/pd_rules', methods=['GET'])
@@ -134,7 +145,13 @@ def get_groups():
    
     return jsonify(return_value)
 
-
+@api.route('/rules',methods=['GET'])
+def get_rules_exist():
+    dataset_name = request.args.get('dataset', None, type=str)
+    
+    dataset_path = './cache/rules/{}_rules.csv'.format(dataset_name)
+    data = pd.read_csv(dataset_path)
+    return data.to_json(orient='records')
 
 
 
