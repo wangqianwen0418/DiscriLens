@@ -12,6 +12,17 @@ from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
 
+xgb = XGBClassifier(
+                max_depth=10, 
+                learning_rate=0.1, 
+                n_estimators=100,seed=10
+            )
+knn = KNeighborsClassifier(
+                algorithm = "ball_tree",
+                leaf_size = 40,
+                metric = "manhattan",
+                n_neighbors = 17
+            )
 
 class ModelGene(object):   
     def __init__(self, model_name='knn'):
@@ -35,29 +46,21 @@ class ModelGene(object):
                 verbose=0, 
                 warm_start=False
             ),
-            "credit_knn": KNeighborsClassifier(
-                algorithm = "ball_tree",
-                leaf_size = 40,
-                metric = "manhattan",
-                n_neighbors = 17
-            ),
-            "dataTest_knn": KNeighborsClassifier(
-                algorithm = "ball_tree",
-                leaf_size = 40,
-                metric = "manhattan",
-                n_neighbors = 17
-            ),
+            "credit_knn":knn,
+            "dataTest_knn": knn,
             # the academic model is based https://www.kaggle.com/harunshimanto/student-s-academic-performance-with-ml-eda
-            "academic_xgb": XGBClassifier(
-                max_depth=10, 
-                learning_rate=0.1, 
-                n_estimators=100,seed=10
-            ),
+            "academic_xgb": xgb,
             "academic_lr": LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
                 intercept_scaling=1, max_iter=100, multi_class='ovr', n_jobs=1,
                 penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
                 verbose=0, warm_start=False
-          )
+            ),
+            "credit_xgb": xgb,
+            "dataTest_xgb": xgb,
+            "give_credit_xgb": xgb,
+            "give_credit_knn":  knn,
+            "bank_knn": knn,
+            "bank_xgb": xgb
 
         }
         self.model = self.models[model_name]

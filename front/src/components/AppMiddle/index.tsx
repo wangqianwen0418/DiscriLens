@@ -6,10 +6,10 @@
  export default class AppMiddel extends React.Component{
      render(){
          return <div className='App-middle'>
-            <svg className='svg' height='50%'>
+            <svg className='svg'>
                 <Attributes/>
             </svg>
-            <svg className='glyph' height='50%'>
+            <svg className='glyph'>
                 <Glyph/>
             </svg>
          

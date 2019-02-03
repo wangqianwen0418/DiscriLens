@@ -1,4 +1,4 @@
-age,workclass,fnlwgt,education,education_num,relationship,race,sex,hours_per_week,native_country,class
+age,workcla,fnlwgt,education,education_num,relationship,race,sex,hours_per_week,native_country,class
 39, State_gov,77516, Bachelors,13, Not_in_family, White, Male,40, United_States,LOW
 50, Self_emp_not_inc,83311, Bachelors,13, Husband, White, Male,13, United_States,LOW
 38, Private,215646, HS_grad,9, Not_in_family, White, Male,40, United_States,LOW

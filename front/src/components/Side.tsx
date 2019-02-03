@@ -5,14 +5,14 @@ import {Select, Button, Slider, Row, Col} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
-  onStart: (dataset_name:string, model_name:string, protect_attr: string) => void
+  onStart: (dataset_name:string, model_name:string, protect_attr: string) => void,
+  onChange: (thr_rules: number[])=> void
 }
 
 export interface State{
   dataset_name: string,
   model_name: string,
   protect_attr: string,
-  disabled: boolean
 }
 
 export default class Side extends React.Component<Props, State>{
@@ -23,12 +23,11 @@ export default class Side extends React.Component<Props, State>{
       dataset_name: 'dataTest',
       model_name: 'knn',
       protect_attr: 'sex',
-      disabled: false,
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
     this.selectProtectAttr = this.selectProtectAttr.bind(this)
-    this.threSlider = this.threSlider.bind(this)
+    this.onChange = this.onChange.bind(this)
     this.onStart = this.onStart.bind(this)
   }
   selectDataset(e:string){
@@ -40,16 +39,16 @@ export default class Side extends React.Component<Props, State>{
   selectProtectAttr(e:string){
     this.setState({protect_attr: e})
   }
-  threSlider(e:boolean){
-    this.setState({disabled: e})
-  }
   onStart(e:any){
     e.preventDefault();
     let {model_name, dataset_name, protect_attr} = this.state
     this.props.onStart(dataset_name, model_name, protect_attr)
   }
+  onChange(e:any){
+    this.props.onChange(e)
+  }
+
   public render(){
-      const { disabled } = this.state;
       return <div onSubmit={this.onStart} className='Side'>
       <Col span={12}>
         <Row>
@@ -96,7 +95,7 @@ export default class Side extends React.Component<Props, State>{
 
       <Col span={12}>
           <h4 className='tool-title'>Threshold</h4>
-          <Slider min={0} max={2} step={0.01} range defaultValue={[0.5, 1.5]} disabled={disabled} />
+          <Slider min={0.5} max={1.5} step={0.01} range defaultValue={[0.85,1.15]} onChange={this.onChange} />
           <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>
       </Col>       
     </div>
