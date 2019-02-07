@@ -41,3 +41,16 @@ export  const getColor = (name: string): string =>{
             return COLORS[idx % numColor]
         }
     }
+
+interface radiusDraw{
+    innerRadius: number
+    outerRadius: number
+}
+export const getRadius = (name: string, radius: number, radiusF: number): radiusDraw => {
+    let idx: number = names.indexOf(name)
+    if(idx == 1){
+        return {innerRadius: 0,outerRadius: radiusF / 2}
+    } else{
+        return {innerRadius:  radius / 2, outerRadius: radius}
+    }
+}
