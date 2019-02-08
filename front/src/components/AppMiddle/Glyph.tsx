@@ -8,6 +8,7 @@ export interface Props{
     samples: DataItem[],
     thr_rules:number[],
     key_attrs: string[],
+    g_endPos: number[][],
     fetch_groups_status: Status,
 } 
 export interface State{
@@ -123,7 +124,7 @@ const drawLines = (ruleIn: DataItem, attrs: string[], samples: DataItem[],key_at
 export default class Glyph extends React.Component<Props, State>{
     public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1;
     draw(){
-        let {rules, samples, thr_rules, key_attrs} = this.props
+        let {rules, samples, thr_rules, key_attrs, g_endPos} = this.props
         //let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(1000,2000)
         rules = rules.filter((s)=>(s['elift']<thr_rules[0])||(s['elift']>thr_rules[1]))
@@ -141,6 +142,17 @@ export default class Glyph extends React.Component<Props, State>{
             }
             return 0
         })
+    
+        let attrs_new: string[] = []
+        attrs_new = attrs.slice()
+        if(g_endPos.length!=0){
+            for(var i=0;i<attrs.length;i++){
+                console.log(i)
+                console.log(attrs[i])
+                console.log(attrs)
+                attrs_new[g_endPos[i][0]] = attrs[i]
+            }
+        }
         
         let line_interval = window.innerHeight * 0.5 / (rules.length + 1)
 
@@ -148,7 +160,7 @@ export default class Glyph extends React.Component<Props, State>{
 
                 return <g key={rule_i+'rules'} transform={`translate(${window.innerWidth*0.1}, ${5 + line_interval*rule_i})`}>
                 {
-                    drawLines(rule,attrs,samples,key_attrs)
+                    drawLines(rule,attrs_new,samples,key_attrs)
                 }
             </g>         
 

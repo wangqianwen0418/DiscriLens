@@ -5,16 +5,13 @@ import {countItem, cutTxt, getColor} from 'components/helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 
-
-
-//import { line, range } from 'd3';
-
 export interface Props{
     key_attrs: string[],
     samples: DataItem[],
     key_groups: KeyGroup[],
     protected_attr: string,
     fetch_groups_status: Status,
+    changePosArray: (g_endPos:number[][])=>void
 } 
 export interface State{
     selected_bar: string[],
@@ -105,21 +102,6 @@ const drawPies = (values:number[], radius:number, color:string, innerRadius:numb
     })
 
 }
-const drawLines = (key_attrs: string[],height: number,attrs: string[]) => {
-    let width_base = window.innerWidth*0.9 / attrs.length 
-    let ListNum: curveData[] = []
-    const dataPush = (x:number,y:number,z:number):curveData => {return {x,y,z}}
-    ListNum.push(dataPush(- width_base * 0.2,1.3 * height,0))
-    ListNum.push(dataPush(width_base * (key_attrs.length - 0.3) , 1.3 * height,0))
-    const line = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-    
-    return <g key={'key_attrs_line'}>
-                <g key={'verticle_line'}>
-                    <path d={line(ListNum)} style={{fill:'none',stroke:'#fde0dd',strokeWidth:'1px'}}/>
-                </g>
-                
-            </g>
-}
 
 
 export default class Attributes extends React.Component<Props, State>{
@@ -145,19 +127,34 @@ export default class Attributes extends React.Component<Props, State>{
     changeColor(e:string[]){
         this.setState({selected_bar:e})
     }
-
+    
+    changePosArray(e:any){
+        this.props.changePosArray(e)
+    }
+    // stop dragging
     onStop(e:number[]){
+        // array recording every bars' position
         let new_pos = this.state.g_endPos
+        // number of key attrs
         let key_attrNum = this.state.key_attrNum
+        // the position before gragging
         let now_pos = this.state.g_endPos[e[0]][0]
+        // the position after dragging
         let end_pos = e[1]
+        // dragging a component right
         if(end_pos>now_pos){
             new_pos = new_pos.map((pos)=>{
                 if(((pos[0]<=end_pos))&&(pos[0]>now_pos)){return [pos[0]-1,pos[1]]}
                 else{return pos}
             })
-            if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){new_pos[e[0]] = [e[1],0]}
-        }else{
+            // check whether a key attr is dragged out
+            if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){
+                new_pos[e[0]] = [e[1],0]
+                key_attrNum -= 1
+            } else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
+        }
+        // dragging a component left
+        else{
             if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){
                 new_pos[e[0]] = [e[1],]
             }
@@ -165,10 +162,15 @@ export default class Attributes extends React.Component<Props, State>{
                 if(((pos[0]<now_pos))&&(pos[0]>=end_pos)){return [pos[0]+1,pos[1]]}
                 else{return pos}
             })
-            if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){new_pos[e[0]] = [e[1],1]}
+            // check whether a key attr is dragged in
+            if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){
+                new_pos[e[0]] = [e[1],1]
+                key_attrNum += 1
+            }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
         }
         this.setState({g_endPos:new_pos})
-        console.log(this.state.g_endPos)
+        this.setState({key_attrNum:key_attrNum})
+        this.changePosArray(this.state.g_endPos)
     }
 
     /**
@@ -280,13 +282,12 @@ export default class Attributes extends React.Component<Props, State>{
         //******************** draw bars
         // the overall length of all bars of each attribute
         let bar_w = window.innerWidth*0.9 / attrs.length * 0.6
-        // loop all attributes
+        // loop all attributes and draw bars for each one
         let bars = attrs.map((attr:string, attr_i)=>{
-            // offset x, y
-            // numerical or categorical attribute
+            // check whether numerical or categorical attribute
             let dataType = typeof samples.map(d=>d[attr])
             .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)[0]
-            
+            // trigger event of stop dragging 
             let stopPos = (e:any) =>{
                 if(this.state.g_endPos==null){this.initendPos(attrs.length,key_attrs.length)}
                 let posNum = Math.floor((e.x - 0.1 * window.innerWidth )/ (window.innerWidth*0.9 / attrs.length))
@@ -295,8 +296,10 @@ export default class Attributes extends React.Component<Props, State>{
 
             let offsetX = window.innerWidth*0.9 / attrs.length * attr_i
             let offsetY = 0
+            // init position of draggable components
             let draggablePos:ControlPosition = {x:0,y:0}
             let textColor = 'black'
+            // whether key attributes or non-key attributes 
             if(this.state.g_endPos==null){
                 textColor = attr_i<key_attrs.length?'red':'black'
                 draggablePos = null
@@ -349,9 +352,6 @@ export default class Attributes extends React.Component<Props, State>{
             }
         }) 
         return <g>
-            <g className='attr_lines' transform={`translate(${window.innerWidth*0.1}, ${this.attr_margin*2})`}>
-               {drawLines(key_attrs,this.height,attrs)}
-            </g>
             <g className='attrs' transform={`translate(${window.innerWidth*0.1}, ${this.attr_margin*2})`}>
                 {bars}
             </g>
