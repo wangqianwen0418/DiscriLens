@@ -1,4 +1,4 @@
-import {GENERATE_SAMPLES, FIND_GROUPS, GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, CHANGE_RULES_FETCH_STATUS} from 'Const';
+import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, CHANGE_RULES_FETCH_STATUS} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, KeyGroup, Status} from 'types';
 import { Dispatch } from 'react';
@@ -195,6 +195,27 @@ export const ChangeProtectedAttribute = (protected_attr:string)=>{
         return dispatch(ChangeProtectedAttr(protected_attr))
     };
 }
+
+/*****************
+all about bars array
+*****************/ 
+export interface BarArray{
+    type:BAR_ARRAY,
+    g_endPos:number[][]
+}
+
+export const BarArray = (g_endPos:number[][]):BarArray =>{
+    return ({
+        type: BAR_ARRAY,
+        g_endPos
+    });
+}
+
+export const ChangeBarArray = (g_endPos:number[][])=>{
+    return (dispatch:any) => {
+        return dispatch(BarArray(g_endPos))
+    };
+}
 // combine to start
 
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
@@ -218,5 +239,11 @@ export const Rule = (thr_rules: number[])=>{
     }
 }
 
+export const Pos = (g_endPos: number[][])=>{
+    return (dispatch: any)=>{
+        dispatch(ChangeBarArray(g_endPos))
+    }
+}
+
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
-|ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr
+|ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|BarArray

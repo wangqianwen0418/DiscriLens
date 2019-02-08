@@ -25,6 +25,7 @@ let initState:StoreState = {
   fetch_samples_status: Status.INACTIVE,
   fetch_groups_status: Status.INACTIVE,
   thr_rules:[0.85,1.15],
+  g_endPos: [],
 }
 
  if (TEST){

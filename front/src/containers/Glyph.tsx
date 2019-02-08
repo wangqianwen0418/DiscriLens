@@ -10,6 +10,7 @@ export function mapStateToProps(state:StoreState) {
         samples: state.samples,
         thr_rules: state.thr_rules,
         key_attrs:state.key_attrs,
+        g_endPos: state.g_endPos,
         fetch_groups_status: state.fetch_groups_status
     };
 }
