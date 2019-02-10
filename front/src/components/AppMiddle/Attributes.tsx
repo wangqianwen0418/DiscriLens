@@ -319,12 +319,12 @@ export default class Attributes extends React.Component<Props, State>{
             // categorical attr, draw bars
             if(dataType=='string'){
                 return <Draggable 
-                    key={attr}
+                    key={attr + '_bar'} 
                     axis="x"
                     defaultPosition={{x: offsetX, y: offsetY}}
                     position={draggablePos}
                     onStop={stopPos}>
-                <g transform={`translate(${0}, ${0})`}>
+                <g transform={`translate(${0}, ${0})`} className="attr">
                 {
                     this.drawBars(attr, samples, bar_w, max_accept, max_reject,this.height,selected_bar)
                 }
@@ -340,12 +340,12 @@ export default class Attributes extends React.Component<Props, State>{
             // numerical attr, draw areas
             else{
                 return <Draggable
-                key={attr}
+                key={attr + '_curve'} 
                 axis="x"
                 defaultPosition={{x: offsetX, y: offsetY}}
                 position={draggablePos}
                 onStop={stopPos}>
-                    <g key={attr + 'curves'} transform={`translate(${offsetX}, ${offsetY})`}>
+                    <g className="attr" transform={`translate(${offsetX}, ${offsetY})`}>
                         {
                             drawCurves(attr, samples,this.height,false,bar_w)
                         }
