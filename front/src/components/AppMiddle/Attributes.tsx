@@ -25,67 +25,72 @@ export interface curveData{
 }
 
 
-const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag: boolean, curve_Width: number,  highlightRange:string ,offsetX=0, offsetY=0,)=>{
+const drawCurves = (attr: string, samples: DataItem[],height: number, curveFlag: boolean, curve_Width: number, offsetX=0, offsetY=0,)=>{
+    // get ranges of this attr
     let ranges = samples.map(d=>d[attr])
                 .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i) 
                 .sort((a:number,b:number) => a - b)
-    let ListNum : curveData[] = []
-    let samples_reject = samples.filter((s)=>s.class==0)
-    let samples_accept = samples.filter((s)=>s.class==1)
-    let xRecord = 0
-    let yRecord = [0,0]
+
+    // step length to merge data, to smooth curve
     function getStep(){
         if(ranges.length<20){return 2}
         else{return 4}
     }
     let step = getStep()
+
+    // array recording curve nodes after merging
+    let ListNum : curveData[] = []
     const dataPush = (x:number,y:number,z:number):curveData => {return {x,y,z}}
+    // split samples by class
+    let samples_reject = samples.filter((s)=>s.class==0)
+    let samples_accept = samples.filter((s)=>s.class==1)
+    // xRecord is the min & max value of x-axis ([min of x,max of x])
+    let xRecord = [Infinity,0]
+    // yRecord is the max values of accept & reject y-axis ([max of acc,max of rej])
+    let yRecord = [0,0]
+      
+    // split numerical range into categorical one
+
+    // accept data instances number and reject data instances number 
     let accept_num = 0,
         reject_num = 0
+    // range_num records now range interval 
+    // loop all values of this attr
     ranges.map((range:number,range_i)=>{
         accept_num += samples_accept.filter(s=>s[attr]===range).length
         reject_num += samples_reject.filter(s=>s[attr]===range).length
         //console.log(range,samples_accept,samples_reject,range_i,step)
         if(((range_i%step==0)&&(range_i!=0))||(range_i==ranges.length - 1)||((range_i==0))){
+
             ListNum.push(dataPush(range,accept_num,reject_num))
-            xRecord = Math.max(xRecord,range)
+            xRecord = [Math.min(xRecord[0],range),Math.max(xRecord[1],range)]
             yRecord = [Math.max(yRecord[0],accept_num),Math.max(yRecord[1],reject_num)]
             accept_num = 0
             reject_num = 0
         }
     })
-    let xScale = d3.scaleLinear().domain([0,xRecord]).range([0,curve_Width])
+    
+    
+    // curve x-axis
+    let xScale = d3.scaleLinear().domain([xRecord[0],xRecord[1]]).range([0,curve_Width])
+    // curve y-axis for data with class = 1
     let yScaleAcc = d3.scaleLinear().domain([0,yRecord[0]]).range([height/2,0]);
+    // curve y-axis for data woth class = 0
     let yScaleRej = d3.scaleLinear().domain([0,yRecord[1]]).range([height/2,height]);
+    // draw areas based on axis
     const areasAcc = d3.area<curveData>().x(d=>xScale(d.x)).y1(height/2).y0(d=>yScaleAcc(d.y)).curve(d3.curveMonotoneX)
     const areasRej = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>yScaleRej(d.z)).y0(height/2).curve(d3.curveMonotoneX)    
-    //console.log(ranges,ListNum,highlightRange)
-    if(curveFlag){
-        let xRange = [0,0]
-        let numbers = highlightRange.match(/\d+/g).map(Number)
-        if(numbers.length==2){xRange = [numbers[0],numbers[1]]}
-        else if(highlightRange.includes('>')){xRange = [numbers[0],xRecord]}
-        else{xRange = [0,numbers[0]]}
-        const areasAccSelect = d3.area<curveData>().x(d=>xScale(d.x)).y1(height/2).y0(d=>yScaleAcc(d.y)).curve(d3.curveMonotoneX)
-        const areasRejSelect = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>yScaleRej(d.z)).y0(height/2).curve(d3.curveMonotoneX)
-        let ListNumFilter = ListNum.filter((s)=>{
-            if((s.x>xRange[0])&&(s.x<=xRange[1]+1)){return s}
-            else{return null}})
-        return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
-        <path d={areasAcc(ListNum)||''} style={{fill:'#999'}}/> 
-        <path d={areasAccSelect(ListNumFilter)||''} style={{fill:'#DE4863'}}/>
-        <path d={areasRej(ListNum)||''} style={{fill:'#bbb'}}/>
-        <path d={areasRejSelect(ListNumFilter)||''} style={{fill:'pink'}}/>
-    </g>
-    }
-    
 
     return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
-        <path d={areasAcc(ListNum)||''} style={{fill:'#999'}}/>   
-        <path d={areasRej(ListNum)||''} style={{fill:'#bbb'}}/>
-    </g>
+        
+        
+            <g>
+                <path d={areasAcc(ListNum)||''} style={{fill:'#999'}}/>   
+                <path d={areasRej(ListNum)||''} style={{fill:'#bbb'}}/>
+            </g>
+            </g>
 
-} 
+}
 const drawPies = (values:number[], radius:number, color:string, innerRadius:number)=>{
     // convert a list of values to format that can feed into arc generator
     let pie = d3.pie()
@@ -155,18 +160,18 @@ export default class Attributes extends React.Component<Props, State>{
         }
         // dragging a component left
         else{
-            if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){
-                new_pos[e[0]] = [e[1],]
+            if(end_pos>=0){
+                new_pos = new_pos.map((pos)=>{
+                    if(((pos[0]<now_pos))&&(pos[0]>=end_pos)){return [pos[0]+1,pos[1]]}
+                    else{return pos}
+                })
+                // check whether a key attr is dragged in
+                if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){
+                    new_pos[e[0]] = [e[1],1]
+                    key_attrNum += 1
+                }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
             }
-            new_pos = new_pos.map((pos)=>{
-                if(((pos[0]<now_pos))&&(pos[0]>=end_pos)){return [pos[0]+1,pos[1]]}
-                else{return pos}
-            })
-            // check whether a key attr is dragged in
-            if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){
-                new_pos[e[0]] = [e[1],1]
-                key_attrNum += 1
-            }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
+                
         }
         this.setState({drag_array:new_pos})
         this.setState({key_attrNum:key_attrNum})
@@ -307,6 +312,7 @@ export default class Attributes extends React.Component<Props, State>{
                 let x = window.innerWidth*0.9 / attrs.length * this.state.drag_array[attr_i][0]
                 let y = 0
                 textColor = this.state.drag_array[attr_i][1]==1?'red':'black'
+                if(x<0){x=0}
                 draggablePos.x = x
                 draggablePos.y = y
             }
@@ -341,7 +347,7 @@ export default class Attributes extends React.Component<Props, State>{
                 onStop={stopPos}>
                     <g key={attr + 'curves'} transform={`translate(${offsetX}, ${offsetY})`}>
                         {
-                            drawCurves(attr, samples,this.height,false,bar_w,'')
+                            drawCurves(attr, samples,this.height,false,bar_w)
                         }
                         <text className='attrLabel' x={0} y={2*this.bar_margin} 
                             transform="rotate(-30)" textAnchor='middle'
