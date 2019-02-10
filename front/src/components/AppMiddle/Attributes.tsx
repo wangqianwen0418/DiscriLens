@@ -204,7 +204,7 @@ export default class Attributes extends React.Component<Props, State>{
                 let mouseEnter = () => this.changeColor([attr,range])
                 // recover bar's color when mouseOut
                 let mouseOut = () => this.changeColor(['',''])
-                return <Tooltip title={range}>
+                return <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
                     <g key={`${attr}_${range}`} 
                         transform={`translate(${range_i*(bar_width)}, ${height/2})`}
                         onMouseEnter={mouseEnter} onMouseOut={mouseOut}>
@@ -313,12 +313,13 @@ export default class Attributes extends React.Component<Props, State>{
             }
             // categorical attr, draw bars
             if(dataType=='string'){
-                return <Draggable
+                return <Draggable 
+                    key={attr}
                     axis="x"
                     defaultPosition={{x: offsetX, y: offsetY}}
                     position={draggablePos}
                     onStop={stopPos}>
-                <g key={attr} transform={`translate(${0}, ${0})`}>
+                <g transform={`translate(${0}, ${0})`}>
                 {
                     this.drawBars(attr, samples, bar_w, max_accept, max_reject,this.height,selected_bar)
                 }
@@ -334,6 +335,7 @@ export default class Attributes extends React.Component<Props, State>{
             // numerical attr, draw areas
             else{
                 return <Draggable
+                key={attr}
                 axis="x"
                 defaultPosition={{x: offsetX, y: offsetY}}
                 position={draggablePos}
