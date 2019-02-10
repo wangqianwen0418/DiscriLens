@@ -3,17 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.12.3",
+    "antd": "^3.13.0",
     "axios": "^0.18.0",
+    "color-interpolate": "^1.0.4",
     "d3": "^5.7.0",
+    "draggable": "^4.2.0",
     "just-animate": "^2.5.1",
     "react": "^16.7.0",
+    "react-beautiful-dnd": "^10.0.4",
+    "react-dnd": "^7.0.2",
     "react-dom": "^16.7.0",
+    "react-draggable": "^3.1.1",
     "react-redux": "^6.0.0",
     "react-scripts-ts": "3.1.0",
     "redux": "^4.0.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
+    "tslib": "^1.9.3",
     "web-request": "^1.0.7"
   },
   "scripts": {
@@ -25,7 +31,7 @@
   "devDependencies": {
     "@types/d3": "^5.7.0",
     "@types/jest": "^23.3.12",
-    "@types/node": "^10.12.18",
+    "@types/node": "^10.12.21",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.12",

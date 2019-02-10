@@ -17,10 +17,13 @@ export enum Status {
 }
 
 export interface StoreState{
-    key_attrs: string[],
-    samples: DataItem[],
-    key_groups: KeyGroup[],
-    num_attrs: string[],
-    fetch_samples_status: Status,
-    fetch_groups_status: Status
+    key_attrs: string[], // record key attrs
+    samples: DataItem[],    // record all samples 
+    rules: DataItem[],  // record all rules
+    key_groups: KeyGroup[], // record all data of key attrs
+    fetch_samples_status: Status,   // loading status
+    fetch_groups_status: Status,    // loadinf status
+    thr_rules: number[],    // slider bar interaction, select threshold of rule filtering
+    protected_attr: string, // record protected attr
+    drag_array: number[][],   // array to record each attr's location, used for dragging function
 }

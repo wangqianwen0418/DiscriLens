@@ -12,12 +12,12 @@ def findRange(thresholds, v):
     for i, th in enumerate(thresholds):
         if(v <= th):
             if i==0:
-                return "0<x<{}".format(thresholds[1])
+                    return "x<{}".format(th)
             elif i == len(thresholds)-1:
-                return "x>{}".format(thresholds[i-1])
+                    return "x>{}".format(thresholds[i-1])
             else:
-                return "{}<x<{}".format(thresholds[i-1], thresholds[i])
-
+                    return "{}<x<{}".format(thresholds[i-1], thresholds[i])
+                
 def convert_cate(arr):
     n = 4 #parts to be divided
     maxValue = max(arr)
@@ -33,7 +33,7 @@ def num2cate(dataIn):
     df = dataIn[:]
 #     new_data = pd.DataFrame()
     for k in df.columns:
-        if(k in df.select_dtypes(include=['int64'])):
+        if(k in df.select_dtypes(include=['int64','float64'])):
             values = pd.to_numeric(df[k])
             df[k] = convert_cate(values.tolist())
         
