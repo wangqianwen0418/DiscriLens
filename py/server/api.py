@@ -48,13 +48,10 @@ def get_samples():
     '''
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
-    model_name = '{}_{}'.format(dataset_name, model_name)
-    sample_num = request.args.get('num', None, type=int)
-    dataset_path = '../data/{}_clean.csv'.format(dataset_name)
-
     sample_num = 1000 # number of generated data 
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
+    # generate samples
     model_gene = ModelGene(model_name)
     model, encoder, score = model_gene.fit_model(num2cate(data))
     model_samples, storeData = generate_model_samples(data, sample_num, model, encoder)
@@ -83,8 +80,6 @@ def get_samples():
 
     return dataout.to_json(orient='records')
     
-    
-    return jsonfile
 
 @api.route('/pd_rules', methods=['GET'])
 def get_rules():
@@ -95,13 +90,11 @@ def get_rules():
     dataset_name = request.args.get('dataset', None, type=str)
     protect_attr = request.args.get('protect', None, type=str)
     model_name = request.args.get('model', None, type=str)
-    if model_name:
-        model_name = '{}_{}'.format(dataset_name, model_name)
-        sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
-    else:
-        sample_path = '../data/{}_clean.csv'.format(dataset_name)
+    model_name = '{}_{}'.format(dataset_name, model_name)
+
+    sample_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
     model_samples = pd.read_csv(sample_path)
-    rules = find_rules(model_samples, minimum_support=15, min_len=1, protect_attr='gender=F', target_attr='class', risk_th=[0, 0])
+    rules = find_rules(model_samples, minimum_support=15, min_len=1, protect_attr='gender=F', target_attr='class', elift_th=[1, 1])
 
     # return rules.to_json(orient='records')
     return Response(rules.to_csv(), mimetype="text/csv",)
@@ -116,8 +109,7 @@ def get_groups():
 
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
-    model_name = '{}_{}'.format(dataset_name, model_name)
-    protect_attr = request.args.get('protect', None, type=str)
+    protect_attr = request.args.get('protectAttr', None, type=str)
     # get traiing data
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
@@ -156,8 +148,7 @@ def get_groups():
 def get_rules_exist():
     dataset_name = request.args.get('dataset', None, type=str)
     
-    #dataset_path = './cache/rules/{}_rules.csv'.format(dataset_name)
-    dataset_path = './cache/test/dataTest_knn_rules.csv'
+    dataset_path = './cache/rules/{}_rules.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
     return data.to_json(orient='records')
 
