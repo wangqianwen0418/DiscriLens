@@ -225,13 +225,11 @@ export default class Glyph extends React.Component<Props, State>{
                 drag_array.map((drag,drag_i)=>{drag_arrayPos.push(drag[0])})
                 rules_out.map((rule_out:string[])=>{
                     // if any attrs in this rule are not in key attrs, rule_counter++
-                    
-                
                     if(key_attrs.includes(rule_out[0])==false){rule_counter += 1}
+                    // check whether this attr is folded
                     if(drag_array.length>0){
-                        console.log(drag_array)
-                        if((this.state.rule_click==true)&&(attrs[drag_array[drag_arrayPos.indexOf(0)][0]]==rule_out[0])){rule_keyAttrCounter += 1}
-                        if((this.state.rule_click==false)&&(attrs[drag_array[drag_arrayPos.indexOf(0)][0]]==rule_out[0])){rule_counter += 1}
+                        if((this.state.rule_click==true)&&(attrs[drag_arrayPos.indexOf(0)]==rule_out[0])){rule_keyAttrCounter += 1}
+                        if((this.state.rule_click==false)&&(attrs[drag_arrayPos.indexOf(0)]==rule_out[0])){rule_counter += 1}
                     }
                 })
                 // remove rules containing non-key attrs

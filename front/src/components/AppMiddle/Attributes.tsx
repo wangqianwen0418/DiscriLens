@@ -75,7 +75,6 @@ export default class Attributes extends React.Component<Props, State>{
                 else{return pos}
             })
             // check whether a key attr is dragged out
-            console.log(key_attrNum)
             if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){
                 new_pos[e[0]] = [e[1],0]
                 key_attrNum -= 1
@@ -96,6 +95,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
                 
         }
+        console.log(new_pos)
         attrs = attrs.filter((_:any,attr_i:number)=>new_pos[attr_i][1]==1)
         this.setState({drag_array:new_pos})
         this.setState({key_attrNum:key_attrNum})
