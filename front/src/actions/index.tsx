@@ -1,4 +1,7 @@
-import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, CHANGE_RULES_FETCH_STATUS} from 'Const';
+import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, 
+    GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
+    CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, 
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, KeyGroup, Status} from 'types';
 import { Dispatch } from 'react';
@@ -216,6 +219,9 @@ export const ChangeBarArray = (drag_array:number[][])=>{
         return dispatch(BarArray(drag_array))
     };
 }
+
+
+
 // combine to start
 
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
@@ -245,5 +251,20 @@ export const Pos = (drag_array: number[][])=>{
     }
 }
 
+/*****************
+change key attrs
+*****************/ 
+
+export interface ChangeKeyAttr{
+    type: CHANGE_KEY_ATTR,
+    key_attrs: string[]
+}
+export const ChangeKeyAttr = (key_attrs: string[])=>{
+    return {
+        type: CHANGE_KEY_ATTR,
+        key_attrs
+    }
+}
+
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
-|ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|BarArray
+|ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|BarArray|ChangeKeyAttr
