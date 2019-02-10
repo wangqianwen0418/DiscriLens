@@ -1,0 +1,84 @@
+,antecedent,pd,cls,conf_pd,conf_pnd,elift,sup_pd,sup_pnd
+38,"['relationship= Not-in-family', 'education= Masters']",sex= Female,class=LOW,0.5555555555555556,0.6842105263157895,0.811965811965812,5.0,13.0
+40,"['relationship= Not-in-family', 'education_num=x>12', 'education= Masters']",sex= Female,class=LOW,0.5555555555555556,0.6842105263157895,0.811965811965812,5.0,13.0
+8,"['education_num=x>12', 'education= Bachelors', 'hours_per_week=1<x<25']",sex= Female,class=LOW,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+9,"['education= Bachelors', 'hours_per_week=1<x<25']",sex= Female,class=LOW,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+6,"['education_num=x>12', 'hours_per_week=1<x<25']",sex= Female,class=LOW,0.875,0.9411764705882353,0.9296875,7.0,16.0
+76,"['fnlwgt=274186<x<527198', 'relationship= Unmarried']",sex= Female,class=LOW,0.7777777777777778,0.8260869565217391,0.9415204678362573,14.0,19.0
+66,"['fnlwgt=274186<x<527198', 'workcla= Local-gov']",sex= Female,class=LOW,0.8571428571428571,0.8947368421052632,0.9579831932773109,6.0,17.0
+2,"['education= Bachelors', 'relationship= Own-child']",sex= Female,class=LOW,0.9166666666666666,0.9545454545454546,0.9603174603174602,11.0,21.0
+3,"['education_num=x>12', 'education= Bachelors', 'relationship= Own-child']",sex= Female,class=LOW,0.9166666666666666,0.9545454545454546,0.9603174603174602,11.0,21.0
+20,"['relationship= Not-in-family', 'hours_per_week=50<x<74']",sex= Female,class=LOW,0.75,0.7777777777777778,0.9642857142857143,9.0,28.0
+5,['hours_per_week=1<x<25'],sex= Female,class=LOW,0.9354838709677419,0.9658119658119658,0.9685983442763345,58.0,113.0
+10,"['education= Some-college', 'hours_per_week=1<x<25']",sex= Female,class=LOW,0.9444444444444444,0.9705882352941176,0.9730639730639731,17.0,33.0
+51,"['relationship= Not-in-family', 'education= Assoc-voc']",sex= Female,class=LOW,0.9230769230769231,0.9444444444444444,0.9773755656108598,12.0,17.0
+7,"['fnlwgt=274186<x<527198', 'hours_per_week=1<x<25']",sex= Female,class=LOW,0.9444444444444444,0.9615384615384616,0.9822222222222222,17.0,25.0
+52,"['relationship= Not-in-family', 'race= Black']",sex= Female,class=LOW,0.9166666666666666,0.9310344827586207,0.9845679012345679,11.0,27.0
+26,"['relationship= Not-in-family', 'education_num=x>12']",sex= Female,class=LOW,0.7222222222222222,0.7333333333333333,0.9848484848484849,26.0,55.0
+64,"['age=53<x<71', 'workcla= Local-gov']",sex= Female,class=LOW,0.8333333333333334,0.8461538461538461,0.9848484848484849,5.0,11.0
+32,"['relationship= Not-in-family', 'fnlwgt=274186<x<527198']",sex= Female,class=LOW,0.9166666666666666,0.9285714285714286,0.9871794871794871,22.0,52.0
+41,['workcla= Self-emp-not-inc'],sex= Female,class=LOW,0.75,0.7586206896551724,0.9886363636363636,9.0,66.0
+31,"['relationship= Not-in-family', 'education_num=x>12', 'fnlwgt=274186<x<527198']",sex= Female,class=LOW,0.8571428571428571,0.8666666666666667,0.9890109890109889,6.0,13.0
+70,"['education_num=x>12', 'relationship= Unmarried']",sex= Female,class=LOW,0.7777777777777778,0.7857142857142857,0.98989898989899,7.0,11.0
+73,"['race= Black', 'relationship= Unmarried']",sex= Female,class=LOW,0.9583333333333334,0.9642857142857143,0.9938271604938271,23.0,27.0
+0,['relationship= Own-child'],sex= Female,class=LOW,0.9807692307692307,0.986013986013986,0.9946808510638298,51.0,141.0
+1,"['education_num=x>12', 'relationship= Own-child']",sex= Female,class=LOW,0.9166666666666666,0.92,0.9963768115942028,11.0,23.0
+18,['relationship= Not-in-family'],sex= Female,class=LOW,0.9090909090909091,0.9119718309859155,0.9968409968409968,120.0,259.0
+44,"['relationship= Not-in-family', 'education= Bachelors']",sex= Female,class=LOW,0.8,0.7884615384615384,1.0146341463414634,20.0,41.0
+42,"['relationship= Not-in-family', 'education_num=x>12', 'education= Bachelors']",sex= Female,class=LOW,0.8,0.7884615384615384,1.0146341463414634,20.0,41.0
+22,['education= Assoc-acdm'],sex= Female,class=LOW,0.8125,0.8,1.015625,13.0,28.0
+33,['relationship= Wife'],sex= Female,class=LOW,0.55,0.5409836065573771,1.0166666666666666,33.0,33.0
+23,"['relationship= Not-in-family', 'age=53<x<71']",sex= Female,class=LOW,0.8666666666666667,0.8518518518518519,1.0173913043478262,13.0,23.0
+69,['relationship= Unmarried'],sex= Female,class=LOW,0.9459459459459459,0.9238095238095239,1.0239621064363331,70.0,97.0
+16,['education= 11th'],sex= Female,class=LOW,1.0,0.9743589743589743,1.0263157894736843,12.0,38.0
+17,"['education_num=4<x<8', 'education= 11th']",sex= Female,class=LOW,1.0,0.9743589743589743,1.0263157894736843,12.0,38.0
+54,"['fnlwgt=274186<x<527198', 'race= Black']",sex= Female,class=LOW,0.9090909090909091,0.8787878787878788,1.0344827586206897,10.0,29.0
+4,"['fnlwgt=274186<x<527198', 'relationship= Own-child']",sex= Female,class=LOW,1.0,0.9655172413793104,1.0357142857142856,12.0,28.0
+60,"['relationship= Not-in-family', 'workcla= Local-gov']",sex= Female,class=LOW,1.0,0.9583333333333334,1.0434782608695652,11.0,23.0
+57,['race= Black'],sex= Female,class=LOW,0.9387755102040817,0.8962264150943396,1.0474758324382385,46.0,95.0
+82,['native_country= Mexico'],sex= Female,class=LOW,1.0,0.9523809523809523,1.05,6.0,20.0
+11,['education_num=4<x<8'],sex= Female,class=LOW,1.0,0.9506172839506173,1.051948051948052,24.0,77.0
+14,"['fnlwgt=274186<x<527198', 'education_num=4<x<8']",sex= Female,class=LOW,1.0,0.9444444444444444,1.0588235294117647,6.0,17.0
+79,"['education_num=4<x<8', 'education= 10th']",sex= Female,class=LOW,1.0,0.9444444444444444,1.0588235294117647,9.0,17.0
+78,['education= 10th'],sex= Female,class=LOW,1.0,0.9444444444444444,1.0588235294117647,9.0,17.0
+29,"['education= Some-college', 'fnlwgt=274186<x<527198']",sex= Female,class=LOW,0.9166666666666666,0.8648648648648649,1.0598958333333333,11.0,32.0
+35,"['education_num=x>12', 'relationship= Wife']",sex= Female,class=LOW,0.4,0.375,1.0666666666666667,6.0,6.0
+12,"['relationship= Not-in-family', 'education_num=4<x<8']",sex= Female,class=LOW,1.0,0.9333333333333333,1.0714285714285714,5.0,14.0
+56,"['education= Bachelors', 'race= Black']",sex= Female,class=LOW,0.7142857142857143,0.6666666666666666,1.0714285714285716,5.0,10.0
+55,"['education_num=x>12', 'education= Bachelors', 'race= Black']",sex= Female,class=LOW,0.7142857142857143,0.6666666666666666,1.0714285714285716,5.0,10.0
+34,"['fnlwgt=274186<x<527198', 'relationship= Wife']",sex= Female,class=LOW,0.6428571428571429,0.6,1.0714285714285716,9.0,9.0
+53,"['education_num=x>12', 'race= Black']",sex= Female,class=LOW,0.7142857142857143,0.6666666666666666,1.0714285714285716,5.0,10.0
+50,['education= Assoc-voc'],sex= Female,class=LOW,0.7619047619047619,0.7083333333333334,1.0756302521008403,16.0,34.0
+58,"['education= Some-college', 'race= Black']",sex= Female,class=LOW,1.0,0.9259259259259259,1.08,14.0,25.0
+47,"['relationship= Not-in-family', 'fnlwgt=274186<x<527198', 'education= Bachelors']",sex= Female,class=LOW,1.0,0.9230769230769231,1.0833333333333333,5.0,12.0
+45,"['relationship= Not-in-family', 'education_num=x>12', 'fnlwgt=274186<x<527198', 'education= Bachelors']",sex= Female,class=LOW,1.0,0.9230769230769231,1.0833333333333333,5.0,12.0
+59,"['age=53<x<71', 'race= Black']",sex= Female,class=LOW,1.0,0.9230769230769231,1.0833333333333333,6.0,12.0
+15,['workcla= State-gov'],sex= Female,class=LOW,0.6428571428571429,0.5897435897435898,1.0900621118012424,9.0,23.0
+77,['age=x>71'],sex= Female,class=LOW,1.0,0.9166666666666666,1.090909090909091,5.0,11.0
+13,"['race= Black', 'education_num=4<x<8']",sex= Female,class=LOW,1.0,0.9166666666666666,1.090909090909091,5.0,11.0
+28,['fnlwgt=274186<x<527198'],sex= Female,class=LOW,0.8405797101449275,0.7679558011049724,1.094567824001668,58.0,139.0
+71,"['education= Some-college', 'relationship= Unmarried']",sex= Female,class=LOW,1.0,0.9130434782608695,1.0952380952380953,15.0,21.0
+68,"['education_num=x>12', 'education= Bachelors', 'workcla= Local-gov']",sex= Female,class=LOW,0.8888888888888888,0.8,1.111111111111111,8.0,12.0
+67,"['education= Bachelors', 'workcla= Local-gov']",sex= Female,class=LOW,0.8888888888888888,0.8,1.111111111111111,8.0,12.0
+81,['relationship= Other-relative'],sex= Female,class=LOW,1.0,0.9,1.1111111111111112,5.0,18.0
+80,['education_num=1<x<4'],sex= Female,class=LOW,1.0,0.8928571428571429,1.1199999999999999,8.0,25.0
+27,['education= Some-college'],sex= Female,class=LOW,0.9473684210526315,0.8416289592760181,1.125636672325976,72.0,186.0
+61,"['race= Black', 'workcla= Local-gov']",sex= Female,class=LOW,1.0,0.8666666666666667,1.1538461538461537,5.0,13.0
+62,['workcla= Local-gov'],sex= Female,class=LOW,0.9285714285714286,0.7972972972972973,1.1646489104116224,26.0,59.0
+72,"['age=53<x<71', 'relationship= Unmarried']",sex= Female,class=LOW,1.0,0.8571428571428571,1.1666666666666667,7.0,12.0
+74,"['education= Bachelors', 'relationship= Unmarried']",sex= Female,class=LOW,1.0,0.8571428571428571,1.1666666666666667,5.0,6.0
+75,"['education_num=x>12', 'education= Bachelors', 'relationship= Unmarried']",sex= Female,class=LOW,1.0,0.8571428571428571,1.1666666666666667,5.0,6.0
+24,['age=53<x<71'],sex= Female,class=LOW,0.84,0.6875,1.2218181818181817,21.0,77.0
+19,['hours_per_week=50<x<74'],sex= Female,class=LOW,0.7222222222222222,0.5882352941176471,1.2277777777777776,13.0,60.0
+65,"['education_num=x>12', 'workcla= Local-gov']",sex= Female,class=LOW,0.8888888888888888,0.7142857142857143,1.2444444444444442,8.0,15.0
+37,['education= Masters'],sex= Female,class=LOW,0.6666666666666666,0.5272727272727272,1.264367816091954,10.0,29.0
+39,"['education_num=x>12', 'education= Masters']",sex= Female,class=LOW,0.6666666666666666,0.5272727272727272,1.264367816091954,10.0,29.0
+63,"['education= Some-college', 'workcla= Local-gov']",sex= Female,class=LOW,1.0,0.7777777777777778,1.2857142857142856,8.0,14.0
+30,"['education_num=x>12', 'fnlwgt=274186<x<527198']",sex= Female,class=LOW,0.7333333333333333,0.5531914893617021,1.3256410256410256,11.0,26.0
+49,['education= Bachelors'],sex= Female,class=LOW,0.7692307692307693,0.5722543352601156,1.3442113442113444,40.0,99.0
+43,"['education_num=x>12', 'education= Bachelors']",sex= Female,class=LOW,0.7692307692307693,0.5722543352601156,1.3442113442113444,40.0,99.0
+25,['education_num=x>12'],sex= Female,class=LOW,0.6986301369863014,0.51171875,1.365261947087734,51.0,131.0
+48,"['fnlwgt=274186<x<527198', 'education= Bachelors']",sex= Female,class=LOW,0.9,0.6571428571428571,1.3695652173913044,9.0,23.0
+46,"['education_num=x>12', 'fnlwgt=274186<x<527198', 'education= Bachelors']",sex= Female,class=LOW,0.9,0.6571428571428571,1.3695652173913044,9.0,23.0
+21,"['education_num=x>12', 'hours_per_week=50<x<74']",sex= Female,class=LOW,0.5,0.3333333333333333,1.5,5.0,15.0
+36,['race= Asian-Pac-Islander'],sex= Female,class=LOW,1.0,0.5652173913043478,1.7692307692307694,9.0,13.0

@@ -60,7 +60,9 @@ class ModelGene(object):
             "give_credit_xgb": xgb,
             "give_credit_knn":  knn,
             "bank_knn": knn,
-            "bank_xgb": xgb
+            "bank_xgb": xgb,
+            "academic_knn": knn,
+            "academic_xgb": xgb
 
         }
         self.model = self.models[model_name]

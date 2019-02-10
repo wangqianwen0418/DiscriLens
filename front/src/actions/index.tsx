@@ -201,19 +201,19 @@ all about bars array
 *****************/ 
 export interface BarArray{
     type:BAR_ARRAY,
-    g_endPos:number[][]
+    drag_array:number[][]
 }
 
-export const BarArray = (g_endPos:number[][]):BarArray =>{
+export const BarArray = (drag_array:number[][]):BarArray =>{
     return ({
         type: BAR_ARRAY,
-        g_endPos
+        drag_array
     });
 }
 
-export const ChangeBarArray = (g_endPos:number[][])=>{
+export const ChangeBarArray = (drag_array:number[][])=>{
     return (dispatch:any) => {
-        return dispatch(BarArray(g_endPos))
+        return dispatch(BarArray(drag_array))
     };
 }
 // combine to start
@@ -239,9 +239,9 @@ export const Rule = (thr_rules: number[])=>{
     }
 }
 
-export const Pos = (g_endPos: number[][])=>{
+export const Pos = (drag_array: number[][])=>{
     return (dispatch: any)=>{
-        dispatch(ChangeBarArray(g_endPos))
+        dispatch(ChangeBarArray(drag_array))
     }
 }
 

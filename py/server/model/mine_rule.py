@@ -1,13 +1,5 @@
 # encoding: utf-8
 
-"""
-A Python implementation of the FP-growth algorithm.
-
-Basic usage of the module:
-    > from fp_growth import find_freq_itemsets
-    > find_freq_itemsets(transactions, minimum_support)
-    > find_dis_rules(transactions, min_conf, min_elift)
-"""
 
 from collections import defaultdict, namedtuple
 
@@ -17,7 +9,7 @@ import csv
 import numpy as np
 
 
-def find_rules(df, minimum_support, min_len, protect_attr, target_attr, elift_th):
+def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=None, elift_th=None):
     """
     Args:
         df (pandas dataframe): columns are attributes, each row is an item
@@ -25,19 +17,26 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, elift_th
         min_len: the minimum length of the antecedent itemsets. e.g., len([A,B])=2
         protect_attr(string): specifi the consequent attribute. e.g., gender
         target_attr(string): specifi the consequent attribute, e.g., class
+        risk_th ([float, float])
         elift_th ([float, float])
     Return:
-        pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift', 'sup_pd', 'sup_pnd']
+        pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'risk_dif', 'elift', 'sup_pd', 'sup_pnd']
             antecedent (list of string, e.g., [VisITedResources=x>74, NationalITy=Jordan])
             pd (string): e.g., gender=F
             cls (string): e.g., class=M
             conf_pnd(float): conf(antecedent -> cls)
             conf_pd(float): conf(antecedent+pd -> cls)
-            elift(float): conf_pd/conf_pnd
+            risk_dif(float): conf_pd - conf_pnd
+            elift(float): conf_pd / conf_pnd
             sup_pnd(int): support(antecedent+cls)
             sup_pd(int): support(antecedent+pd+cls)
 
     """
+    #
+    if not risk_th:
+        risk_th=[0,0]
+    if not elift_th:
+        elift_th=[1,1]
     # apply col name to each cell for mining frequent itemsets
     new_df = pandas.DataFrame({col:str(col)+'=' for col in df}, index=df.index) + df.astype(str) 
     # convert to list
@@ -54,12 +53,7 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, elift_th
             pd_pairs.loc[len(pd_pairs)] = list(pair[1:])
 
     # find pontential discriminatory rules
-    pd_rules = pandas.DataFrame(columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'elift', 'sup_pd', 'sup_pnd'])
-    # pd_pairs[['antecedent', 'pd']].copy()
-    # pd_rules['conf_pnd'] = np.nan
-    # pd_rules['conf_pd'] = np.nan
-    # pd_rules['elift'] = np.nan
-
+    pd_rules = pandas.DataFrame(columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'risk_dif', 'elift', 'sup_pd', 'sup_pnd'])
 
     for pair in pd_pairs.itertuples(): 
         pnd_items = pair.antecedent # potentially non discrimination itemsets
@@ -73,11 +67,12 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, elift_th
             if not pd_cls.empty:
                 conf_pnd = float(pnd_cls.sup/pnd_cls.antecedent_sup)
                 conf_pd = float(pd_cls.sup/pd_cls.antecedent_sup)
+                risk_dif = float(conf_pd-conf_pnd)
                 elift = float(conf_pd/conf_pnd)
-                if not elift_th[0] <= elift <= elift_th[1]:
-                    pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, elift, float(pd_cls.sup), float(pnd_cls.sup)]
+                if not risk_th[0] <= risk_dif <= risk_th[1]:
+                    pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, risk_dif, elift, float(pd_cls.sup), float(pnd_cls.sup)]
     
-    pd_rules = pd_rules.sort_values(by=['elift'])
+    pd_rules = pd_rules.sort_values(by=['risk_dif'])
 
     return pd_rules
 

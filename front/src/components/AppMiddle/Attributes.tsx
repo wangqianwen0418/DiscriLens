@@ -15,7 +15,7 @@ export interface Props{
 } 
 export interface State{
     selected_bar: string[],
-    g_endPos: number[][],
+    drag_array: number[][],
     key_attrNum: number,
 } 
 export interface curveData{
@@ -110,7 +110,7 @@ export default class Attributes extends React.Component<Props, State>{
         super(props)
         this.state={
             selected_bar: ['',''],
-            g_endPos: null,
+            drag_array: null,
             key_attrNum: 0,
         }
         this.changeColor = this.changeColor.bind(this)
@@ -119,7 +119,7 @@ export default class Attributes extends React.Component<Props, State>{
     }
 
     initendPos(attrs_length:number,key_attrsLength:number){
-        this.setState({g_endPos:Array.apply(null, Array(attrs_length)).map((_:any, i:any)=> 
+        this.setState({drag_array:Array.apply(null, Array(attrs_length)).map((_:any, i:any)=> 
             [i,(key_attrsLength>i)?1:0])})
         this.setState({key_attrNum:key_attrsLength})
     }
@@ -134,11 +134,11 @@ export default class Attributes extends React.Component<Props, State>{
     // stop dragging
     onStop(e:number[]){
         // array recording every bars' position
-        let new_pos = this.state.g_endPos
+        let new_pos = this.state.drag_array
         // number of key attrs
         let key_attrNum = this.state.key_attrNum
         // the position before gragging
-        let now_pos = this.state.g_endPos[e[0]][0]
+        let now_pos = this.state.drag_array[e[0]][0]
         // the position after dragging
         let end_pos = e[1]
         // dragging a component right
@@ -168,9 +168,9 @@ export default class Attributes extends React.Component<Props, State>{
                 key_attrNum += 1
             }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
         }
-        this.setState({g_endPos:new_pos})
+        this.setState({drag_array:new_pos})
         this.setState({key_attrNum:key_attrNum})
-        this.changePosArray(this.state.g_endPos)
+        this.changePosArray(this.state.drag_array)
     }
 
     /**
@@ -248,7 +248,7 @@ export default class Attributes extends React.Component<Props, State>{
         // remove the attribute 'id' and 'class'
         //attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
-        attrs.splice(attrs.indexOf('sex'), 1)
+        attrs.splice(attrs.indexOf(protected_attr), 1)
         // move key attributes to the front
         attrs.sort((a,b)=>{
             if(key_attrs.indexOf(a)!=-1){
@@ -289,7 +289,7 @@ export default class Attributes extends React.Component<Props, State>{
             .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
             let stopPos = (e:any) =>{
-                if(this.state.g_endPos==null){this.initendPos(attrs.length,key_attrs.length)}
+                if(this.state.drag_array==null){this.initendPos(attrs.length,key_attrs.length)}
                 let posNum = Math.floor((e.x - 0.1 * window.innerWidth )/ (window.innerWidth*0.9 / attrs.length))
                 this.onStop([attr_i,posNum])
             }
@@ -300,13 +300,13 @@ export default class Attributes extends React.Component<Props, State>{
             let draggablePos:ControlPosition = {x:0,y:0}
             let textColor = 'black'
             // whether key attributes or non-key attributes 
-            if(this.state.g_endPos==null){
+            if(this.state.drag_array==null){
                 textColor = attr_i<key_attrs.length?'red':'black'
                 draggablePos = null
             }else{
-                let x = window.innerWidth*0.9 / attrs.length * this.state.g_endPos[attr_i][0]
+                let x = window.innerWidth*0.9 / attrs.length * this.state.drag_array[attr_i][0]
                 let y = 0
-                textColor = this.state.g_endPos[attr_i][1]==1?'red':'black'
+                textColor = this.state.drag_array[attr_i][1]==1?'red':'black'
                 draggablePos.x = x
                 draggablePos.y = y
             }

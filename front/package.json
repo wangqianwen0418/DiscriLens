@@ -5,7 +5,9 @@
   "dependencies": {
     "antd": "^3.13.0",
     "axios": "^0.18.0",
+    "color-interpolate": "^1.0.4",
     "d3": "^5.7.0",
+    "draggable": "^4.2.0",
     "just-animate": "^2.5.1",
     "react": "^16.7.0",
     "react-beautiful-dnd": "^10.0.4",

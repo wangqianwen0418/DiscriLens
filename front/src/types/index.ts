@@ -25,5 +25,5 @@ export interface StoreState{
     fetch_groups_status: Status,    // loadinf status
     thr_rules: number[],    // slider bar interaction, select threshold of rule filtering
     protected_attr: string, // record protected attr
-    g_endPos: number[][],   // <g> 's end position, record the position of each attr's corresponding bars
+    drag_array: number[][],   // array to record each attr's location, used for dragging function
 }
