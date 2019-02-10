@@ -26,5 +26,5 @@ export type CHANGE_RULE_THRESHOLD = typeof CHANGE_RULE_THRESHOLD
 export const BAR_ARRAY = 'BAR_ARRAY'
 export type BAR_ARRAY = typeof BAR_ARRAY
 
-
-
+export const CHANGE_KEY_ATTR = "CHANGE_KEY_ATTR"
+export type CHANGE_KEY_ATTR = typeof CHANGE_KEY_ATTR
