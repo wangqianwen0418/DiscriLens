@@ -20,21 +20,16 @@ let initState:StoreState = {
   key_attrs: [],
   key_groups: [],
   samples: [],
-  num_attrs: [],
+  rules: [],
+  protected_attr: '',
   fetch_samples_status: Status.INACTIVE,
-  fetch_groups_status: Status.INACTIVE
+  fetch_groups_status: Status.INACTIVE,
+  thr_rules:[-0.1,0.1],
+  drag_array: [],
 }
 
  if (TEST){
-  let testJSON = require('./testdata/test.json'), testJSON2 = require('./testdata/test2.json');
-  initState = {
-    key_attrs: testJSON2.key_attrs,
-    key_groups: testJSON2.key_groups,
-    samples: testJSON,
-    num_attrs: [],
-    fetch_samples_status: Status.COMPLETE,
-    fetch_groups_status: Status.COMPLETE
-  }
+ 
  }
 
 const store = createStore(
