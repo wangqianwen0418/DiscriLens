@@ -50,6 +50,7 @@ export default class Side extends React.Component<Props, State>{
   }
 
   public render(){
+    let {thr_rules} = this.props
 
       return <div onSubmit={this.onStart} className='Side'>
       <Col span={12}>
@@ -96,8 +97,8 @@ export default class Side extends React.Component<Props, State>{
       </Col>
 
       <Col span={12}>
-          <h4 className='tool-title'>Threshold</h4>
-          <Slider min={-0.1} max={0.1} step={0.01} range defaultValue={[-0.2,0.2]} onChange={this.onChange} />
+          <h4 className='tool-title'>Threshold: {String.fromCharCode(60)} {thr_rules[0]}  or {String.fromCharCode(62)} {thr_rules[1]} </h4>
+          <Slider min={-1} max={1} step={0.01} range={true} defaultValue={[-0.2,0.2]} onChange={this.onChange} />
           <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>
       </Col>       
     </div>
