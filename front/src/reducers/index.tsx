@@ -1,6 +1,9 @@
 import { AllActions } from 'actions';
 import { StoreState } from 'types';
-import {BAR_ARRAY,GENERATE_SAMPLES,GENERATE_RULES, FIND_GROUPS, CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, CHANGE_GROUPS_FETCH_STATUS} from 'Const'
+import {BAR_ARRAY,GENERATE_SAMPLES,GENERATE_RULES, 
+  FIND_GROUPS, CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
+  CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
+  CHANGE_GROUPS_FETCH_STATUS, CHANGE_KEY_ATTR} from 'Const'
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
     switch (action.type) {
@@ -22,6 +25,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return { ...state, thr_rules: action.thr_rules}
       case BAR_ARRAY:
         return { ...state, drag_array: action.drag_array}
+      case CHANGE_KEY_ATTR:
+        return {...state, key_attrs: action.key_attrs}
       default:
         return state;
     }

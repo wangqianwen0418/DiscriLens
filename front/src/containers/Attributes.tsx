@@ -1,6 +1,6 @@
 import Attributes from 'components/AppMiddle/Attributes';
 import { StoreState } from 'types';
-import {Pos} from 'actions';
+import {Pos, ChangeKeyAttr} from 'actions';
 import { connect} from 'react-redux';
 // import { Dispatch } from 'redux';
 
@@ -18,7 +18,8 @@ export function mapStateToProps(state:StoreState) {
 
 export function mapDispatchToProps(dispatch: any) {
     return {
-        changePosArray:(drag_array:number[][])=>{dispatch(Pos(drag_array))}
+        changePosArray:(drag_array:number[][])=>{dispatch(Pos(drag_array))},
+        onChangeKeyAttr: (key_attrs:string[])=>{dispatch(ChangeKeyAttr(key_attrs))}
     }
 }
 

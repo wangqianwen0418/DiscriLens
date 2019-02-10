@@ -48,7 +48,6 @@ def get_samples():
     '''
     dataset_name = request.args.get('dataset', None, type=str)
     model_name = request.args.get('model', None, type=str)
-
     sample_num = 1000 # number of generated data 
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
@@ -80,7 +79,6 @@ def get_samples():
     dataout = pd.concat([data2,data1])
 
     return dataout.to_json(orient='records')
-    
     
 
 @api.route('/pd_rules', methods=['GET'])
@@ -150,8 +148,7 @@ def get_groups():
 def get_rules_exist():
     dataset_name = request.args.get('dataset', None, type=str)
     
-    #dataset_path = './cache/rules/{}_rules.csv'.format(dataset_name)
-    dataset_path = './cache/test/dataTest_knn_rules.csv'
+    dataset_path = './cache/rules/{}_rules.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
     return data.to_json(orient='records')
 
