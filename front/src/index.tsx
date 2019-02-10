@@ -24,8 +24,8 @@ let initState:StoreState = {
   protected_attr: '',
   fetch_samples_status: Status.INACTIVE,
   fetch_groups_status: Status.INACTIVE,
-  thr_rules:[0.85,1.15],
-  g_endPos: [],
+  thr_rules:[-0.1,0.1],
+  drag_array: [],
 }
 
  if (TEST){

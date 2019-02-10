@@ -6,6 +6,7 @@ import { connect} from 'react-redux';
 
 export function mapStateToProps(state:StoreState) {
     return {
+        thr_rules: state.thr_rules,
     };
 }
 

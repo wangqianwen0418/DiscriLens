@@ -1,7 +1,7 @@
 from model import find_rules
 import os
 import pandas as pd
-cache_path = './py/server/cache'
+cache_path = './py/server/cache/test'
 
 def get_rules(dataset_name, protect_attr='',model_name=None):
     """
@@ -16,11 +16,9 @@ def get_rules(dataset_name, protect_attr='',model_name=None):
     rules = find_rules(model_samples, minimum_support=5, min_len=1, protect_attr = protect_attr, target_attr='class', elift_th=[1, 1])
 
     
-    rules.to_csv('./py/server/cache/{}_rules.csv'.format(model_name))
+    rules.to_csv('./py/server/cache/test/{}_rules.csv'.format(model_name))
 
 get_rules('dataTest','sex= Female', 'knn')
-#get_rules('dataTest','sex= Female', 'xgb')
-#get_rules('dataTest','sex= Female')
 '''
 get_rules('give_credit','age=0<x<25','knn')
 get_rules('give_credit','age=0<x<25','xgb')

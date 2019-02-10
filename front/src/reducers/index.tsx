@@ -21,7 +21,7 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
       case CHANGE_RULE_THRESHOLD:
         return { ...state, thr_rules: action.thr_rules}
       case BAR_ARRAY:
-        return { ...state, g_endPos: action.g_endPos}
+        return { ...state, drag_array: action.drag_array}
       default:
         return state;
     }
