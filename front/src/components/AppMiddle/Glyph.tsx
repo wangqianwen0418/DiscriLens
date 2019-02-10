@@ -101,11 +101,11 @@ export default class Glyph extends React.Component<Props, State>{
                 
                 const line = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
                 if(rule_i==0){
-                    return <g>
-                    <g key={'baseline'}>
+                    return <g key={rule_i}> 
+                    <g className={`baseline`}>
                        <path d={line(ListNumBase)} style={{fill:'none',stroke:'#f0f0f0',strokeWidth:'1px'}}/>
                     </g>
-                    <g key={rule_i} transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
+                    <g  transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
                         <path d={line(ListNum)} style={{fill:'none',stroke:'#bbb',strokeWidth:'3px'}} />
                         <Tooltip title={attr_pos[rule_i][3]}> 
                             <rect rx={2} width={width_base * 0.6 / attr_pos[rule_i][2]} height={8} style={{fill:this.get_color(risk_dif)}}
