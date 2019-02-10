@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {DataItem, Status, KeyGroup} from 'types';
-import {Icon, Tooltip} from 'antd';
+import {Icon, Tooltip, Button} from 'antd';
 import {countItem, cutTxt, getColor} from 'components/helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
@@ -155,18 +155,18 @@ export default class Attributes extends React.Component<Props, State>{
         }
         // dragging a component left
         else{
-            if((key_attrNum<=end_pos)&&(key_attrNum>now_pos)){
-                new_pos[e[0]] = [e[1],]
+            if(end_pos>=0){
+                new_pos = new_pos.map((pos)=>{
+                    if(((pos[0]<now_pos))&&(pos[0]>=end_pos)){return [pos[0]+1,pos[1]]}
+                    else{return pos}
+                })
+                // check whether a key attr is dragged in
+                if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){
+                    new_pos[e[0]] = [e[1],1]
+                    key_attrNum += 1
+                }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
             }
-            new_pos = new_pos.map((pos)=>{
-                if(((pos[0]<now_pos))&&(pos[0]>=end_pos)){return [pos[0]+1,pos[1]]}
-                else{return pos}
-            })
-            // check whether a key attr is dragged in
-            if((key_attrNum>end_pos)&&(key_attrNum<=now_pos)){
-                new_pos[e[0]] = [e[1],1]
-                key_attrNum += 1
-            }else{new_pos[e[0]] = [e[1],new_pos[e[0]][1]]}
+                
         }
         this.setState({drag_array:new_pos})
         this.setState({key_attrNum:key_attrNum})
@@ -307,6 +307,7 @@ export default class Attributes extends React.Component<Props, State>{
                 let x = window.innerWidth*0.9 / attrs.length * this.state.drag_array[attr_i][0]
                 let y = 0
                 textColor = this.state.drag_array[attr_i][1]==1?'red':'black'
+                if(x<0){x=0}
                 draggablePos.x = x
                 draggablePos.y = y
             }
@@ -352,6 +353,14 @@ export default class Attributes extends React.Component<Props, State>{
             }
         }) 
         return <g>
+                
+            <foreignObject  transform={`translate(${window.innerWidth*0.1}, ${this.attr_margin*2})`}>
+                <Button 
+                    type="primary"
+                    style={{fontSize:'10px'}}    >
+                    <Icon type="right"/>
+                </Button>
+            </foreignObject>
             <g className='attrs' transform={`translate(${window.innerWidth*0.1}, ${this.attr_margin*2})`}>
                 {bars}
             </g>
