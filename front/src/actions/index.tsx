@@ -245,5 +245,10 @@ export const Pos = (drag_array: number[][])=>{
     }
 }
 
+export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
+    return (dispatch: any)=>{
+        dispatch(FindGroups(key_attrs, key_groups))
+    }
+}
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|BarArray
