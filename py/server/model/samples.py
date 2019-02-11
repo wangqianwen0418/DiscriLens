@@ -105,8 +105,8 @@ def generate_model_samples(data, sample_num, model, encoder):
 
     storeData = samples.copy()
     storeData['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
-    #return model_samples, storeData
-    return pd.concat([model_samples,storeData]), storeData
+    return model_samples, storeData
+    # return pd.concat([model_samples,storeData]), storeData
 
 def findKeyAttrs(samples, protect_attr, result_attr = 'class'):
     """

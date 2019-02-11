@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, KeyGroup } from 'types';
 import { Icon, Tooltip } from 'antd';
-import { countItem, getColor, GOOD_COLOR, BAD_COLOR } from 'Helpers';
+import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 
@@ -190,7 +190,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
 
         }
-        console.info(this.state.drag_array, new_pos, e)
+        // console.info(this.state.drag_array, new_pos, e)
         this.setState({ drag_array: new_pos })
         this.setState({ key_attrNum: key_attrNum })
         this.changePosArray(this.state.drag_array)
@@ -306,7 +306,8 @@ export default class Attributes extends React.Component<Props, State>{
 
         //******************** draw bars
         // the overall length of all bars of each attribute
-        let bar_w = window.innerWidth * 0.9 / attrs.length * 0.8
+        let step = window.innerWidth * 0.4/  key_attrs.length
+        let bar_w = step * 0.8
         // loop all attributes and draw bars for each one
         let bars = attrs.map((attr: string, attr_i) => {
             // check whether numerical or categorical attribute
@@ -315,11 +316,10 @@ export default class Attributes extends React.Component<Props, State>{
             // trigger event of stop dragging 
             let stopPos = (e: any) => {
                 if (this.state.drag_array == null) { this.initendPos(attrs.length, key_attrs.length) }
-                let posNum = Math.floor((e.x - 0.1 * window.innerWidth) / (window.innerWidth * 0.9 / attrs.length))
+                let posNum = Math.floor((e.x - 0.1 * window.innerWidth) / (step))
                 this.onStop([attr_i, posNum])
             }
-            let step = window.innerWidth * 0.9 / attrs.length,
-                keyFlag = (key_attrs.indexOf(attr)>-1),
+            let keyFlag = (key_attrs.indexOf(attr)>-1),
                 offsetX =  keyFlag?
                     step* attr_i // key attribute
                     :
@@ -383,7 +383,7 @@ export default class Attributes extends React.Component<Props, State>{
                             <text 
                                 textAnchor="start" 
                                 fontSize={this.fontSize} >
-                                {attr}
+                                {cutTxt(attr, bar_w*0.8/this.fontSize*2)}
                             </text>
                             <text 
                                 textAnchor="end"

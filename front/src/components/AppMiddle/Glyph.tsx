@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {DataItem, Status} from 'types';
+import {DataItem, Status, Rule} from 'types';
 import {Icon, Tooltip} from 'antd';
 import * as d3 from 'd3';
 
 export interface Props{
-    rules: DataItem[],
+    rules: Rule[],
     samples: DataItem[],
     thr_rules:number[],
     key_attrs: string[],
@@ -138,15 +138,12 @@ export default class Glyph extends React.Component<Props, State>{
             if((rule['risk_dif']<thr_rules[0])||(rule['risk_dif']>thr_rules[1])){
         
                 let risk_dif: number = rule.risk_dif as number
-                let rule_ante: string = rule.antecedent as string
-                //first split the string by "'"
-                let rule_split = rule_ante.split("'") 
-                // remove simples like "[", ","
-                rule_split = rule_split.filter((s)=>s.length>5) 
+                let rule_ante = rule.antecedent 
+                
                 //rules in array format. [[attribute, value],[attr2,value2],....]
                 let rules_out: any = [] 
-                for (var rule_attr in rule_split){ 
-                    let rule_out = rule_split[rule_attr].split("=")
+                for (var rule_attr in rule_ante){ 
+                    let rule_out = rule_ante[rule_attr].split("=")
                     rules_out.push(rule_out)
                 }
                 

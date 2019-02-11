@@ -2,6 +2,18 @@ export interface DataItem{
     [key:string]: number|string
 }
 
+export interface Rule{
+    antecedent:  string[],
+    cls: string,
+    conf_pd: number,
+    conf_pnd: number,
+    elift : number,
+    pd : string,
+    sup_pd : number,
+    sup_pnd : number,
+    risk_dif : number
+}
+
 export interface KeyGroup{
     [key:string]: any
 }
@@ -19,11 +31,11 @@ export enum Status {
 export interface StoreState{
     key_attrs: string[], // record key attrs
     samples: DataItem[],    // record all samples 
-    rules: DataItem[],  // record all rules
+    rules: Rule[],  // record all rules
     key_groups: KeyGroup[], // record all data of key attrs
     fetch_samples_status: Status,   // loading status
     fetch_groups_status: Status,    // loadinf status
-    thr_rules: number[],    // slider bar interaction, select threshold of rule filtering
+    thr_rules: [number, number],    // slider bar interaction, select threshold of rule filtering
     protected_attr: string, // record protected attr
     drag_array: number[][],   // array to record each attr's location, used for dragging function
 }
