@@ -1,11 +1,11 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select, Button, Slider, Row, Col} from 'antd';
+import {Select, Button, Slider, Row, Col, InputNumber} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
-  thr_rules:number[],
+  thr_rules:[number, number],
   onStart: (dataset_name:string, model_name:string, protect_attr: string) => void,
   onChange: (thr_rules: number[])=> void,
 }
@@ -28,6 +28,8 @@ export default class Side extends React.Component<Props, State>{
     this.selectModel = this.selectModel.bind(this)
     this.selectProtectAttr = this.selectProtectAttr.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onChangeLeft = this.onChangeLeft.bind(this)
+    this.onChangeRight = this.onChangeRight.bind(this)
     this.onStart = this.onStart.bind(this)
     // initialize
   }
@@ -45,8 +47,17 @@ export default class Side extends React.Component<Props, State>{
     let {model_name, dataset_name, protect_attr} = this.state
     this.props.onStart(dataset_name, model_name, protect_attr)
   }
-  onChange(e:any){
+  onChange(e:[number, number]){
     this.props.onChange(e)
+    this.setState({}) // force update
+  }
+  onChangeLeft(min:number){
+    this.props.onChange([min, this.props.thr_rules[1]])
+    this.setState({}) // force update
+  }
+  onChangeRight(max:number){
+    this.props.onChange([this.props.thr_rules[0], max])
+    this.setState({}) // force update
   }
 
   public render(){
@@ -97,8 +108,33 @@ export default class Side extends React.Component<Props, State>{
       </Col>
 
       <Col span={12}>
-          <h4 className='tool-title'>Threshold: {String.fromCharCode(60)} {thr_rules[0]}  or {String.fromCharCode(62)} {thr_rules[1]} </h4>
-          <Slider min={-1} max={1} step={0.01} range={true} defaultValue={[-0.2,0.2]} onChange={this.onChange} />
+          <h4 className='tool-title'>
+            Threshold: <br/>
+            {String.fromCharCode(60, 160)} 
+            <InputNumber
+              min={-0.5}
+              max={0}
+              step={0.05}
+              style={{width: "60px"}}
+              size="small"
+              value={thr_rules[0]}  
+              onChange={this.onChangeLeft}
+            />
+            
+            or 
+            {String.fromCharCode(160, 62, 160)} 
+            {/* {thr_rules[1]}  */}
+            <InputNumber
+              min={0}
+              max={0.5}
+              step={0.05}
+              style={{width: "60px"}}
+              size="small"
+              value={thr_rules[1]}  
+              onChange={this.onChangeRight}
+            />
+          </h4>
+          <Slider min={-0.5} max={0.5} step={0.01} range={true} defaultValue={[-0.1,0.1]} onChange={this.onChange} value={thr_rules}/>
           <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>
       </Col>       
     </div>

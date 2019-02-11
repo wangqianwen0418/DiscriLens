@@ -17,14 +17,13 @@ import 'antd/dist/antd.css';
 const TEST = true
 
 let initState:StoreState
- if (TEST){
-    let jsonGroups = require('./testdata/groups_dataTest_knn.json'), 
-    jsonSamples = require('./testdata/dataTest_knn_samples.json'),
-    jsonRule = require('./testdata/dataTest_knn_rules.json')
+if (TEST){
+    let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
+    jsonSamples = require('./testdata/academic_lr_samples.json'),
+    jsonRule = require('./testdata/academic_lr_rules.json')
+    console.info(jsonSamples)
     initState = {
-      key_attrs: ["hours_per_week", 
-      "relationship", 
-      "education_num"],
+      key_attrs,
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,

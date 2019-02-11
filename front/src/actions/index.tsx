@@ -3,7 +3,7 @@ import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR} from 'Const';
 import axios, { AxiosResponse } from 'axios';
-import {DataItem, KeyGroup, Status} from 'types';
+import {DataItem, KeyGroup, Status, Rule} from 'types';
 import { Dispatch } from 'react';
 
 const axiosInstance = axios.create({
@@ -119,10 +119,10 @@ all about rules
 *****************/ 
 export interface GenerateRules{
     type:GENERATE_RULES,
-    rules: DataItem[]
+    rules: Rule[]
 }
 
-export const GenerateRules = (rules:DataItem[]):GenerateRules =>{
+export const GenerateRules = (rules:Rule[]):GenerateRules =>{
     return ({
         type: GENERATE_RULES,
         rules
@@ -162,21 +162,16 @@ all about CHANGING rules
 *****************/ 
 export interface ChangeRuleThresholds{
     type:CHANGE_RULE_THRESHOLD,
-    thr_rules:number[]
+    thr_rules:[number, number]
 }
 
-export const ChangeRuleThresholds = (thr_rules:number[]):ChangeRuleThresholds =>{
+export const ChangeRuleThresholds = (thr_rules:[number, number]):ChangeRuleThresholds =>{
     return ({
         type: CHANGE_RULE_THRESHOLD,
         thr_rules
     });
 }
 
-export const ChangeRuleThr = (thr_rules:number[])=>{
-    return (dispatch:any) => {
-        return dispatch(ChangeRuleThresholds(thr_rules))
-    };
-}
 
 /*****************
 all about protected_attr
@@ -193,12 +188,6 @@ export const ChangeProtectedAttr = (protected_attr:string):ChangeProtectedAttr =
     });
 }
 
-export const ChangeProtectedAttribute = (protected_attr:string)=>{
-    return (dispatch:any) => {
-        return dispatch(ChangeProtectedAttr(protected_attr))
-    };
-}
-
 /*****************
 all about bars array
 *****************/ 
@@ -207,18 +196,13 @@ export interface BarArray{
     drag_array:number[][]
 }
 
-export const BarArray = (drag_array:number[][]):BarArray =>{
+export const ChangeBarArray = (drag_array:number[][]):BarArray =>{
     return ({
         type: BAR_ARRAY,
         drag_array
     });
 }
 
-export const ChangeBarArray = (drag_array:number[][])=>{
-    return (dispatch:any) => {
-        return dispatch(BarArray(drag_array))
-    };
-}
 
 
 
@@ -230,24 +214,12 @@ export const Start = (dataset_name:string, model_name: string, protect_attr: str
         dispatch(ChangeGroupsFetchStatus(Status.PENDING))
         dispatch(ChangeRulesFetchStatus(Status.PENDING))
         dispatch(FetchRules(dataset_name, model_name))
-        dispatch(ChangeProtectedAttribute(protect_attr))
+        dispatch(ChangeProtectedAttr(protect_attr))
         FetchSamples(dataset_name, model_name)(dispatch)
         .then(
             () =>{ 
                 dispatch (FetchGroups(dataset_name, model_name, protect_attr))}
         )
-    }
-}
-
-export const Rule = (thr_rules: number[])=>{
-    return (dispatch: any)=>{
-        dispatch(ChangeRuleThr(thr_rules))
-    }
-}
-
-export const Pos = (drag_array: number[][])=>{
-    return (dispatch: any)=>{
-        dispatch(ChangeBarArray(drag_array))
     }
 }
 

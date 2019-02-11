@@ -1,7 +1,7 @@
 import Glyph from 'components/AppMiddle/Glyph';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import {Rule } from 'actions';
+import { ChangeRuleThresholds } from 'actions';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -19,7 +19,7 @@ export function mapStateToProps(state:StoreState) {
 
 export function mapDispatchToProps(dispatch: any) {
     return {
-        onChange:(thr_rules:number[])=>{dispatch(Rule(thr_rules))}
+        onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))}
     }
 }
 
