@@ -16,7 +16,10 @@ export interface Props{
     
 } 
 export interface State{
+    // the initial attrs array, used to calculated in time attrs position together with drag_array. string[]
     attrs_init: string[],
+    // used to record buttons record and corresponding attr. string[]
+    // element: [attr,boolean]. Boolean=false means shown rules don't contain this attr; similarly boolean=true 
     attrs_button: any[],
 } 
 export interface curveData{
@@ -55,20 +58,30 @@ export default class Glyph extends React.Component<Props, State>{
         this.initAttrs = this.initAttrs.bind(this)
     }
 
+    /**
+     * Initialize state
+     */
     initAttrs = (attrs_init:any,key_attrs:any) =>{
-
+        // attrs_button records all button status for each key attr. All buttons are set to false initially
         let attrs_button = []
-        this.setState({attrs_init:attrs_init})
         for(var i =0;i<key_attrs.length;i++){attrs_button.push([attrs_init[i],true])}
+        this.setState({attrs_init:attrs_init})
         this.setState({attrs_button:attrs_button})
     }
     
-    changeRule = (e:any)=>{
+    /**
+     *  Change state when button is clicked (status reverse) 
+     */
+    changeRule = (num:number)=>{
         let ruleState = this.state.attrs_button
-        ruleState[e][1] = !ruleState[e][1]
+        // button is click, status reverses
+        ruleState[num][1] = !ruleState[num][1]
         this.setState({attrs_button:ruleState})
     }
 
+    /**
+     * Change state when dragging happens
+     */
     updateButton = (key_attrs:string[])=>{
         let button_attrs:string[] = []
         let new_attrButton:any[] = []
