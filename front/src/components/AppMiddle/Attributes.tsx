@@ -101,12 +101,18 @@ export default class Attributes extends React.Component<Props, State>{
             }
                 
         }
+
+        // array of key attrs' position
         let attrs_sort:number[] = []
         new_pos.map((attr,attr_i)=>{
             if(attr[1]==1){attrs_sort.push(attr[0])}
         })
+        // filter out key attrs from initial attrs
         attrs = attrs.filter((_:any,attr_i:number)=>new_pos[attr_i][1]==1)
+        // output key attrs
         let attrs_out = attrs.slice()
+        // let output key attrs sort in the same way as drag_array, meaning that this array 
+        //  has the same order as key attrs in drag_array
         attrs.map((attr:string,attr_i:number)=>{attrs_out[attrs_sort[attr_i]]=attrs[attr_i]})
         this.setState({drag_array:new_pos})
         this.setState({key_attrNum:key_attrNum})
