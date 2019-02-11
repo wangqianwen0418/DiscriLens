@@ -3,6 +3,8 @@ import {DataItem, Status} from 'types';
 import {Icon, Tooltip, Button} from 'antd';
 import * as d3 from 'd3';
 
+import "./Glyph.css"
+
 export interface Props{
     rules: DataItem[],
     samples: DataItem[],
@@ -14,7 +16,8 @@ export interface Props{
     
 } 
 export interface State{
-    rule_click:boolean,
+    attrs_init: string[],
+    attrs_button: any[],
 } 
 export interface curveData{
     x: number,
@@ -45,14 +48,39 @@ export default class Glyph extends React.Component<Props, State>{
     constructor(props:Props){
         super(props)
         this.state={
-            rule_click: false,
+            attrs_init: null,
+            attrs_button: null,
         }
         this.changeRule = this.changeRule.bind(this)
+        this.initAttrs = this.initAttrs.bind(this)
     }
 
-    changeRule = ()=>{
-        let ruleState:boolean = !this.state.rule_click
-        this.setState({rule_click:ruleState})
+    initAttrs = (attrs_init:any,key_attrs:any) =>{
+
+        let attrs_button = []
+        this.setState({attrs_init:attrs_init})
+        for(var i =0;i<key_attrs.length;i++){attrs_button.push([attrs_init[i],true])}
+        this.setState({attrs_button:attrs_button})
+    }
+    
+    changeRule = (e:any)=>{
+        let ruleState = this.state.attrs_button
+        ruleState[e][1] = !ruleState[e][1]
+        this.setState({attrs_button:ruleState})
+    }
+
+    updateButton = (key_attrs:string[])=>{
+        let button_attrs:string[] = []
+        let new_attrButton:any[] = []
+        this.state.attrs_button.map((attr,i)=>{
+            button_attrs.push(attr[0])
+        })
+        key_attrs.map((key_attr,i)=>{
+            if(button_attrs.includes(key_attr)){
+                new_attrButton.push(this.state.attrs_button[button_attrs.indexOf(key_attr)])
+            }else{new_attrButton.push([key_attr,false])}
+        })
+        this.setState({attrs_button:new_attrButton})
     }
 
     get_color = (risk_dif:number )=>{
@@ -131,12 +159,12 @@ export default class Glyph extends React.Component<Props, State>{
                 {Array.apply(null, Array(attr_pos[rule_i][2])).map((_:any, i:any)=>{
                     if(i==attr_pos[rule_i][1]){
                         return <Tooltip title={attr_pos[rule_i][3]}> 
-                            <rect rx={2} width={rect_width} height={rect_width}
+                            <rect width={rect_width} height={rect_width}
                             style={{fill:this.get_color(risk_dif)}} transform={`translate(${width_base * 0.6 / attr_pos[rule_i][2] * i}
                                 , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
                         </Tooltip>
                     }else{
-                        return <rect rx={2} width={rect_width} height={rect_width}
+                        return <rect width={rect_width} height={rect_width}
                         style={{fill:"#bbb"}} transform={`translate(${width_base * 0.6 / attr_pos[rule_i][2] * i}
                         , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
                     }
@@ -192,7 +220,10 @@ export default class Glyph extends React.Component<Props, State>{
             }
             return 0
         })
-    
+        // record the first version of attrs for reference
+        if(this.state.attrs_init==null){this.initAttrs(attrs,key_attrs)}
+        else{attrs=this.state.attrs_init}
+
         let attrs_new: string[] = []
         attrs_new = attrs.slice()
         if(drag_array.length!=0){
@@ -214,35 +245,33 @@ export default class Glyph extends React.Component<Props, State>{
                 rule_split = rule_split.filter((s)=>s.length>5) 
                 //rules in array format. [[attribute, value],[attr2,value2],....]
                 let rules_out: any = [] 
+                let rule_attrs: string[] = []
                 for (var rule_attr in rule_split){ 
                     let rule_out = rule_split[rule_attr].split("=")
                     rules_out.push(rule_out)
+                    rule_attrs.push(rule_out[0])
                 }
                 
                 let rule_counter = 0
-                let rule_keyAttrCounter = 0
                 let drag_arrayPos:number[] = []
                 drag_array.map((drag,drag_i)=>{drag_arrayPos.push(drag[0])})
-                rules_out.map((rule_out:string[])=>{
+                rule_attrs.map((rule_attr:string)=>{
                     // if any attrs in this rule are not in key attrs, rule_counter++
-                    if(key_attrs.includes(rule_out[0])==false){rule_counter += 1}
+                    if(key_attrs.includes(rule_attr)==false){rule_counter += 1}
                     // check whether this attr is folded
-                    if(drag_array.length>0){
-                        if((this.state.rule_click==true)&&(attrs[drag_arrayPos.indexOf(0)]==rule_out[0])){rule_keyAttrCounter += 1}
-                        if((this.state.rule_click==false)&&(attrs[drag_arrayPos.indexOf(0)]==rule_out[0])){rule_counter += 1}
-                    }
                 })
-                // remove rules containing non-key attrs
-                if(!this.state.rule_click){
-                    if(rule_counter==0){
-                        rules_processed.push({rule:rules_out,risk_dif:risk_dif})
-                    }
-                }else{
-                    if((rule_counter==0)&&(rule_keyAttrCounter>=1)){
-                        rules_processed.push({rule:rules_out,risk_dif:risk_dif})
-                    }
+
+                if(drag_array.length>0){
+                    this.state.attrs_button.map((button)=>{
+                        if(button[1]!=rule_attrs.includes(button[0])){
+                            rule_counter += 1
+                        }
+                    })
                 }
-                    
+                // remove rules containing non-key attrs
+                if(rule_counter==0){
+                    rules_processed.push({rule:rules_out,risk_dif:risk_dif})
+                }   
             }
         })
 
@@ -250,7 +279,7 @@ export default class Glyph extends React.Component<Props, State>{
 
 
         let line_interval = window.innerHeight * 0.5 / (rules_processed.length + 1)
-
+        let width_base = window.innerWidth*0.9 / attrs.length
         let rule_lines = rules_processed.map((rule,rule_i)=>{
 
                 return <g key={rule_i+'rules'} transform={`translate(${window.innerWidth*0.1}, ${5 + line_interval*rule_i})`}>
@@ -262,12 +291,25 @@ export default class Glyph extends React.Component<Props, State>{
 
         })
         
-        return <g>
-            
-            <foreignObject transform={`translate(${0}, ${0})`}>
-                        <Button type="primary" shape="circle" icon="caret-right" onClick={this.changeRule} />
-                </foreignObject>
+        return <g key='rule'>
             {rule_lines}
+            {
+                Array.apply(null, Array(key_attrs.length)).map((_:any, i:any)=>{
+                    if(this.state.attrs_button!=null){
+                        let button_click = () =>{
+                            this.changeRule(i)
+                        }
+                        if(this.state.attrs_button.length!=key_attrs.length){this.updateButton(key_attrs)}
+                        
+                        if(i<this.state.attrs_button.length){
+                            return <foreignObject key={'button' + i} width = '10px' height = '10px' transform={`translate(${width_base * (i+0.80)}, ${-3})`}>
+                            <Button shape="circle" icon={this.state.attrs_button[i][1]?"down":"right"} size='small' onClick={button_click} />
+                        </foreignObject>
+                        }else{return null}
+                        
+                    }else{return null}
+                })
+            }
         </g>
     }
     
