@@ -238,5 +238,10 @@ export const ChangeKeyAttr = (key_attrs: string[])=>{
     }
 }
 
+export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
+    return (dispatch: any)=>{
+        dispatch(FindGroups(key_attrs, key_groups))
+    }
+}
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|BarArray|ChangeKeyAttr
