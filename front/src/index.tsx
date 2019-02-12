@@ -43,7 +43,7 @@ if (TEST){
     fetch_samples_status: Status.COMPLETE,
     fetch_groups_status: Status.COMPLETE,
     thr_rules:[-0.1,0.1],
-    drag_array: [],
+    drag_array: []
 }
 }
 
