@@ -10,14 +10,13 @@ export interface Props{
     samples: DataItem[],
     thr_rules:number[],
     key_attrs: string[],
-    drag_array: number[][],
+    drag_array: string[],
+    drag_status: boolean,
     protected_attr: string,
     fetch_groups_status: Status,
-    
+    ChangeDragStatus: (drag_status: boolean)=>void,
 } 
 export interface State{
-    // the initial attrs array, used to calculated in time attrs position together with drag_array. string[]
-    attrs_init: string[],
     // used to record buttons record and corresponding attr. string[]
     // element: [attr,boolean]. Boolean=false means shown rules don't contain this attr; similarly boolean=true 
     attrs_button: any[],
@@ -51,11 +50,11 @@ export default class Glyph extends React.Component<Props, State>{
     constructor(props:Props){
         super(props)
         this.state={
-            attrs_init: null,
             attrs_button: null,
         }
         this.changeRule = this.changeRule.bind(this)
         this.initAttrs = this.initAttrs.bind(this)
+        this.changeDragStatus = this.changeDragStatus.bind(this)
     }
 
     /**
@@ -65,10 +64,13 @@ export default class Glyph extends React.Component<Props, State>{
         // attrs_button records all button status for each key attr. All buttons are set to false initially
         let attrs_button = []
         for(var i =0;i<key_attrs.length;i++){attrs_button.push([attrs_init[i],true])}
-        this.setState({attrs_init:attrs_init})
         this.setState({attrs_button:attrs_button})
     }
     
+    changeDragStatus = (e:boolean) =>{
+        this.props.ChangeDragStatus(e)
+    }
+
     /**
      *  Change state when button is clicked (status reverse) 
      */
@@ -85,10 +87,10 @@ export default class Glyph extends React.Component<Props, State>{
     updateButton = (key_attrs:string[])=>{
         let button_attrs:string[] = []
         let new_attrButton:any[] = []
-        this.state.attrs_button.map((attr,i)=>{
+        this.state.attrs_button.forEach((attr,i)=>{
             button_attrs.push(attr[0])
         })
-        key_attrs.map((key_attr,i)=>{
+        key_attrs.forEach((key_attr,i)=>{
             if(button_attrs.includes(key_attr)){
                 new_attrButton.push(this.state.attrs_button[button_attrs.indexOf(key_attr)])
             }else{new_attrButton.push([key_attr,false])}
@@ -147,38 +149,37 @@ export default class Glyph extends React.Component<Props, State>{
         }
         return <g key={'rules'}>
             {rules_out.map((rule:any,rule_i:any)=>{
-                let width_base = window.innerWidth*0.9 / attrs.length 
+                let width_base = window.innerWidth * 0.4/  key_attrs.length
                 let ListNum: curveData[] = []
                 let ListNumBase: curveData[] = []
                 ListNum.push(dataPush(0,0))
-                ListNum.push(dataPush(width_base * 0.6 , 0))
+                ListNum.push(dataPush(width_base * 0.8 , 0))
                 ListNumBase.push(dataPush(0,0))
                 ListNumBase.push(dataPush(width_base * attrs.length , 0))
                 
                 const line = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
 
                 let output:any
-
                 let num_output = <g transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
                 <path d={line(ListNum)} style={{fill:'none',stroke:'#bbb',strokeWidth:'8px'}} />
                 <Tooltip title={attr_pos[rule_i][3]}> 
-                    <rect rx={2} width={width_base * 0.6 / attr_pos[rule_i][2]} height={8} style={{fill:this.get_color(risk_dif)}}
-                    transform={`translate(${width_base * 0.6 / attr_pos[rule_i][2] * attr_pos[rule_i][1]}, ${-4})`}/>
+                    <rect rx={2} width={width_base * 0.8 / attr_pos[rule_i][2]} height={8} style={{fill:this.get_color(risk_dif)}}
+                    transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * attr_pos[rule_i][1]}, ${-4})`}/>
                 </Tooltip>
                </g>
                 
-                let rect_width = width_base * 0.6 / attr_pos[rule_i][2] / Math.sqrt(2)
+                let rect_width = width_base * 0.4 / attr_pos[rule_i][2] / Math.sqrt(2)
                 let cat_output = <g transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
                 {Array.apply(null, Array(attr_pos[rule_i][2])).map((_:any, i:any)=>{
                     if(i==attr_pos[rule_i][1]){
                         return <Tooltip title={attr_pos[rule_i][3]}> 
                             <rect width={rect_width} height={rect_width}
-                            style={{fill:this.get_color(risk_dif)}} transform={`translate(${width_base * 0.6 / attr_pos[rule_i][2] * i}
+                            style={{fill:this.get_color(risk_dif)}} transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * i}
                                 , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
                         </Tooltip>
                     }else{
                         return <rect width={rect_width} height={rect_width}
-                        style={{fill:"#bbb"}} transform={`translate(${width_base * 0.6 / attr_pos[rule_i][2] * i}
+                        style={{fill:"#bbb"}} transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * i}
                         , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
                     }
                 })}
@@ -233,17 +234,9 @@ export default class Glyph extends React.Component<Props, State>{
             }
             return 0
         })
-        // record the first version of attrs for reference
-        if(this.state.attrs_init==null){this.initAttrs(attrs,key_attrs)}
-        else{attrs=this.state.attrs_init}
 
-        let attrs_new: string[] = []
-        attrs_new = attrs.slice()
-        if(drag_array.length!=0){
-            for(var i=0;i<attrs.length;i++){
-                attrs_new[drag_array[i][0]] = attrs[i]
-            }
-        }
+        // record the first version of attrs for reference
+        if(this.state.attrs_button==null){this.initAttrs(attrs,key_attrs)}
 
         // process rules
         let rules_processed:rules[] = []
@@ -263,8 +256,6 @@ export default class Glyph extends React.Component<Props, State>{
                 }
                 
                 let rule_counter = 0
-                let drag_arrayPos:number[] = []
-                drag_array.map((drag,drag_i)=>{drag_arrayPos.push(drag[0])})
                 rule_attrs.map((rule_attr:string)=>{
                     // if any attrs in this rule are not in key attrs, rule_counter++
                     if(key_attrs.includes(rule_attr)==false){rule_counter += 1}
@@ -289,18 +280,17 @@ export default class Glyph extends React.Component<Props, State>{
 
 
         let line_interval = window.innerHeight * 0.5 / (rules_processed.length + 1)
-        let width_base = window.innerWidth*0.9 / attrs.length
+        let width_base = window.innerWidth * 0.4/  key_attrs.length
         let rule_lines = rules_processed.map((rule,rule_i)=>{
 
                 return <g key={rule_i+'rules'} transform={`translate(${window.innerWidth*0.1}, ${5 + line_interval*rule_i})`}>
                 {
-                    this.drawLines(rule,attrs_new,samples,key_attrs,attrs_num)
+                    this.drawLines(rule,drag_array,samples,key_attrs,attrs_num)
                 }
                 
             </g>         
 
         })
-        
         return <g key='rule'>
             {rule_lines}
             {
@@ -309,10 +299,10 @@ export default class Glyph extends React.Component<Props, State>{
                         let button_click = () =>{
                             this.changeRule(i)
                         }
-                        if(this.state.attrs_button.length!=key_attrs.length){this.updateButton(key_attrs)}
-                        
+                        if(this.props.drag_status){
+                            console.log(drag_array);this.updateButton(drag_array.slice(0,key_attrs.length))}
                         if(i<this.state.attrs_button.length){
-                            return <foreignObject key={'button' + i} width = '10px' height = '10px' transform={`translate(${width_base * (i+0.80)}, ${-3})`}>
+                            return <foreignObject key={'button' + i} width = '10px' height = '10px' transform={`translate(${window.innerWidth*0.1 + width_base * (i-0.18)}, ${-3})`}>
                             <Button shape="circle" icon={this.state.attrs_button[i][1]?"down":"right"} size='small' onClick={button_click} />
                         </foreignObject>
                         }else{return null}
@@ -344,6 +334,7 @@ export default class Glyph extends React.Component<Props, State>{
                 break
             case Status.COMPLETE:
                 content = this.draw()
+                if(this.props.drag_status){this.changeDragStatus(false);}
                 break
             default:
                 break
@@ -352,7 +343,7 @@ export default class Glyph extends React.Component<Props, State>{
 
         return(<g 
             className='glyph' 
-            transform={`translate(${window.innerWidth*0.01}, ${0})`}
+            transform={`translate(${window.innerWidth*0.01}, ${5})`}
         >
             {content}
         </g>        

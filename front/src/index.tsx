@@ -21,7 +21,6 @@ if (TEST){
     let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
     jsonSamples = require('./testdata/academic_lr_samples.json'),
     jsonRule = require('./testdata/academic_lr_rules.json')
-    console.info(jsonSamples)
     initState = {
       key_attrs,
       key_groups: jsonGroups,
@@ -32,6 +31,7 @@ if (TEST){
       fetch_groups_status: Status.COMPLETE,
       thr_rules:[-0.1,0.1],
       drag_array: [],
+      drag_status: false,
   }
 }else{
   initState = {
@@ -43,7 +43,8 @@ if (TEST){
     fetch_samples_status: Status.COMPLETE,
     fetch_groups_status: Status.COMPLETE,
     thr_rules:[-0.1,0.1],
-    drag_array: []
+    drag_array: [],
+    drag_status: false,
 }
 }
 
