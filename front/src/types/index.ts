@@ -37,6 +37,7 @@ export interface StoreState{
     fetch_groups_status: Status,    // loadinf status
     thr_rules: [number, number],    // slider bar interaction, select threshold of rule filtering
     protected_attr: string, // record protected attr
+    show_attrs: string[], // record all the attrs that are shown
     drag_array: string[],   // array to record each attr's location, used for dragging function
     drag_status: boolean, // when a dragging happens, this falg is set to true, then reset to false after function receives the movement
 }
