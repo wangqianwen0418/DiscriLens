@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, KeyGroup } from 'types';
 import { Icon, Tooltip } from 'antd';
-import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
+import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt, getAttrRanges } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 
@@ -29,7 +29,7 @@ export interface curveData {
 }
 
 export default class Attributes extends React.Component<Props, State>{
-    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12;
+    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 50;
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -40,7 +40,7 @@ export default class Attributes extends React.Component<Props, State>{
         this.onStop = this.onStop.bind(this)
         this.initendPos = this.initendPos.bind(this)
         this.changeKeyAttr = this.changeKeyAttr.bind(this)
-        this.changeDrafStatus = this.changeDrafStatus.bind(this)
+        this.changeDragStatus = this.changeDragStatus.bind(this)
     }
 
     initendPos(attrs:string[],key_attrs:string[]){
@@ -49,7 +49,7 @@ export default class Attributes extends React.Component<Props, State>{
         this.changePosArray(attrs)
     }
 
-    changeDrafStatus(e:boolean){
+    changeDragStatus(e:boolean){
         this.props.ChangeDragStatus(e)
     }
 
@@ -88,7 +88,7 @@ export default class Attributes extends React.Component<Props, State>{
         this.props.onChangeKeyAttr(key_attrs)
         this.changePosArray(new_dragArray)
         this.setState({drag_array:new_dragArray}) 
-        this.changeDrafStatus(true)
+        this.changeDragStatus(true)
     }
 
     // stop dragging
@@ -118,14 +118,16 @@ export default class Attributes extends React.Component<Props, State>{
         else{drag_array = new_array}
         this.setState({drag_array:drag_array})
         this.changePosArray(drag_array)
-        this.changeDrafStatus(true)
+        this.changeDragStatus(true)
     }
 
     drawCurves = (attr: string, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
         // get ranges of this attr
-        let ranges = samples.map(d => d[attr])
-            .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
-            .sort((a: number, b: number) => a - b)
+        // let ranges = samples.map(d => d[attr])
+        //     .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+        //     .sort((a: number, b: number) => a - b)
+        let ranges = getAttrRanges(samples, attr)
+        console.info(ranges)
     
         // step length to merge data, to smooth curve
         function getStep() {
@@ -217,8 +219,9 @@ export default class Attributes extends React.Component<Props, State>{
     drawBars = (attr: string, samples: DataItem[],
         bar_w: number, max_accept: number, max_reject: number, height: number, color: string[],
         offsetX = 0, offsetY = 0): JSX.Element => {
-        let ranges = samples.map(d => d[attr])
-            .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+        // let ranges = samples.map(d => d[attr])
+        //     .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+        let ranges = getAttrRanges(samples, attr) 
         let samples_reject = samples.filter((s) => s.class == 0)
         let samples_accept = samples.filter((s) => s.class == 1)
         // a single bar's width
@@ -319,7 +322,8 @@ export default class Attributes extends React.Component<Props, State>{
 
         //******************** draw bars
         // the overall length of all bars of each attribute
-        let step = window.innerWidth * 0.4/  key_attrs.length
+        // let step = window.innerWidth * 0.4/  key_attrs.length
+        let step = 2*this.height/Math.sin(this.rotate/180*Math.PI)
         let bar_w = step * 0.8
         // loop all attributes and draw bars for each one
         let bars = attrs.map((attr: string, attr_i) => {
@@ -388,7 +392,7 @@ export default class Attributes extends React.Component<Props, State>{
                     </g>
                         <g 
                             className='attrLabel' 
-                            transform={`rotate(${keyFlag?0:-50}) translate(${labelX}, ${labelY})`} 
+                            transform={`rotate(${keyFlag?0:-1*this.rotate}) translate(${labelX}, ${labelY})`} 
                             style={{transformOrigin: `(${labelX}, ${labelY})`}}
                         >
                             <rect 
@@ -403,11 +407,11 @@ export default class Attributes extends React.Component<Props, State>{
                             <text 
                                 textAnchor="start" 
                                 fontSize={this.fontSize} >
-                                {cutTxt(attr, bar_w*0.8/this.fontSize*2)}
+                                {cutTxt(attr, bar_w*0.7/this.fontSize*2)}
                             </text>
                             <text 
                                 textAnchor="end"
-                                x={bar_w-this.fontSize} 
+                                x={bar_w-this.fontSize/2} 
                                 fontSize={this.fontSize} 
                                 cursor="pointer"
                                 onClick={changeKeyAttr}>
