@@ -14,12 +14,12 @@ export interface Props{
     drag_status: boolean,
     protected_attr: string,
     fetch_groups_status: Status,
-    ChangeDragStatus: (drag_status: boolean)=>void,
+    changeDragStatus: (drag_status: boolean)=>void,
 } 
 export interface State{
     // used to record buttons record and corresponding attr. string[]
     // element: [attr,boolean]. Boolean=false means shown rules don't contain this attr; similarly boolean=true 
-    attrs_button: any[],
+    attrs_button: [string,boolean][],
 } 
 export interface curveData{
     x: number,
@@ -62,13 +62,13 @@ export default class Glyph extends React.Component<Props, State>{
      */
     initAttrs = (attrs_init:any,key_attrs:any) =>{
         // attrs_button records all button status for each key attr. All buttons are set to false initially
-        let attrs_button = []
+        let attrs_button:[string,boolean][] = []
         for(var i =0;i<key_attrs.length;i++){attrs_button.push([attrs_init[i],true])}
         this.setState({attrs_button:attrs_button})
     }
     
     changeDragStatus = (e:boolean) =>{
-        this.props.ChangeDragStatus(e)
+        this.props.changeDragStatus(e)
     }
 
     /**
