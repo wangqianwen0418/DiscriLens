@@ -21,7 +21,7 @@ export function mapStateToProps(state:StoreState) {
 export function mapDispatchToProps(dispatch: any) {
     return {
         onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
-        ChangeDragStatus: (drag_status: boolean)=>{dispatch(ChangeDragStatus(drag_status))},
+        changeDragStatus: (drag_status: boolean)=>{dispatch(ChangeDragStatus(drag_status))},
     }
 }
 
