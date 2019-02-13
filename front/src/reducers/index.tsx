@@ -3,7 +3,7 @@ import { StoreState } from 'types';
 import {BAR_ARRAY,GENERATE_SAMPLES,GENERATE_RULES, 
   FIND_GROUPS, CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
-  CHANGE_GROUPS_FETCH_STATUS, CHANGE_KEY_ATTR, DRAG_STATUS, SHOW_ATTRS} from 'Const'
+  CHANGE_GROUPS_FETCH_STATUS, CHANGE_KEY_ATTR, DRAG_STATUS} from 'Const'
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
     switch (action.type) {
@@ -29,8 +29,6 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return { ...state, drag_status: action.drag_status}
       case CHANGE_KEY_ATTR:
         return {...state, key_attrs: action.key_attrs}
-      case SHOW_ATTRS:
-        return {...state, show_attrs: action.show_attrs}
       default:
         return state;
     }
