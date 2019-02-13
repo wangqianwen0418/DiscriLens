@@ -13,103 +13,20 @@ export interface Props {
     key_groups: KeyGroup[],
     protected_attr: string,
     fetch_groups_status: Status,
-    onChangeKeyAttr: (key_attrs:string[])=>void
-    changePosArray: (g_endPos: number[][]) => void
+    drag_status: boolean,
+    onChangeKeyAttr: (key_attrs:string[])=>void,
+    changePosArray: (drag_array: string[]) => void,
+    ChangeDragStatus: (drag_status: boolean)=>void,
 }
 export interface State {
     selected_bar: string[],
-    drag_array: number[][],
-    key_attrNum: number,
+    drag_array: string[],
 }
 export interface curveData {
     x: number,
     y: number,
     z: number
 }
-
-const drawCurves = (attr: string, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
-    // get ranges of this attr
-    let ranges = samples.map(d => d[attr])
-        .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
-        .sort((a: number, b: number) => a - b)
-
-    // step length to merge data, to smooth curve
-    function getStep() {
-        if (ranges.length < 20) { return 2 }
-        else { return 4 }
-    }
-    let step = getStep()
-
-    // array recording curve nodes after merging
-    let ListNum: curveData[] = []
-    const dataPush = (x: number, y: number, z: number): curveData => { return { x, y, z } }
-    // split samples by class
-    let samples_reject = samples.filter((s) => s.class == 0)
-    let samples_accept = samples.filter((s) => s.class == 1)
-    // xRecord is the min & max value of x-axis ([min of x,max of x])
-    let xRecord = [Infinity, 0]
-    // yRecord is the max values of accept & reject y-axis ([max of acc,max of rej])
-    let yRecord = [0, 0]
-
-    // split numerical range into categorical one
-
-    // accept data instances number and reject data instances number 
-    let accept_num = 0,
-        reject_num = 0
-    // range_num records now range interval 
-    // loop all values of this attr
-    ranges.map((range: number, range_i) => {
-        accept_num += samples_accept.filter(s => s[attr] === range).length
-        reject_num += samples_reject.filter(s => s[attr] === range).length
-        //console.log(range,samples_accept,samples_reject,range_i,step)
-        if (((range_i % step == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
-
-            ListNum.push(dataPush(range, accept_num, reject_num))
-            xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
-            yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
-            accept_num = 0
-            reject_num = 0
-        }
-    })
-
-
-    // curve x-axis
-    let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
-    // curve y-axis for data with class = 1
-    let yScaleAcc = d3.scaleLinear().domain([0, yRecord[0]]).range([height / 2, 0]);
-    // curve y-axis for data woth class = 0
-    let yScaleRej = d3.scaleLinear().domain([0, yRecord[1]]).range([height / 2, height]);
-    // draw areas based on axis
-    const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
-    const areasRej = d3.area<curveData>().x(d => xScale(d.x)).y1(d => yScaleRej(d.z)).y0(height / 2).curve(d3.curveMonotoneX)
-
-    return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
-
-
-        <g>
-            <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
-            <path d={areasRej(ListNum) || ''} style={{ fill: BAD_COLOR }} />
-        </g>
-    </g>
-
-}
-const drawPies = (values: number[], radius: number, color: string, innerRadius: number) => {
-    // convert a list of values to format that can feed into arc generator
-    let pie = d3.pie()
-    // arc path generator
-    let arc = d3.arc()
-        .cornerRadius(1)
-
-    return pie(values).map((d: any, i) => {
-        let pathData = arc
-            .innerRadius(innerRadius)
-            .outerRadius(radius)(d)
-        // return an arc
-        return <path key={i} d={pathData || ''} fill={color} opacity={0.4 + i * 0.4} />
-    })
-
-}
-
 
 export default class Attributes extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12;
@@ -118,20 +35,22 @@ export default class Attributes extends React.Component<Props, State>{
         this.state = {
             selected_bar: ['', ''],
             drag_array: null,
-            key_attrNum: 0,
         }
         this.changeColor = this.changeColor.bind(this)
         this.onStop = this.onStop.bind(this)
         this.initendPos = this.initendPos.bind(this)
-        this.onChangeKeyAttr = this.onChangeKeyAttr.bind(this)
+        this.changeKeyAttr = this.changeKeyAttr.bind(this)
+        this.changeDrafStatus = this.changeDrafStatus.bind(this)
     }
 
-    initendPos(attrs_length: number, key_attrsLength: number) {
-        this.setState({
-            drag_array: Array.apply(null, Array(attrs_length)).map((_: any, i: any) =>
-                [i, (key_attrsLength > i) ? 1 : 0])
-        })
-        this.setState({ key_attrNum: key_attrsLength })
+    initendPos(attrs:string[],key_attrs:string[]){
+        this.setState({drag_array:attrs})
+        this.props.onChangeKeyAttr(key_attrs)
+        this.changePosArray(attrs)
+    }
+
+    changeDrafStatus(e:boolean){
+        this.props.ChangeDragStatus(e)
     }
 
     changeColor(e: string[]) {
@@ -141,59 +60,148 @@ export default class Attributes extends React.Component<Props, State>{
     changePosArray(e: any) {
         this.props.changePosArray(e)
     }
-    onChangeKeyAttr(attr:string, keyFlag:boolean){
+
+    changeKeyAttr(attr:string, keyFlag:boolean){
         let {key_attrs} = this.props
+        let new_dragArray: any[] = this.state.drag_array
         if(keyFlag){
+            
+            let removed_attr = new_dragArray.indexOf(attr)
+            new_dragArray = new_dragArray.map((d,i)=>{
+                if((i<key_attrs.length-1)&&(i>=removed_attr)){return new_dragArray[i+1]}
+                else if(i==key_attrs.length-1){return attr}
+                else{return d}
+            })
             //remove key attr
             key_attrs.splice(key_attrs.indexOf(attr), 1)
         }else{
+            
+            let added_attr = new_dragArray.indexOf(attr)
+            new_dragArray = new_dragArray.map((d,i)=>{
+                if((i>key_attrs.length)&&(i<=added_attr)){return new_dragArray[i-1]}
+                else if(i==key_attrs.length){return attr}
+                else{return d}
+            })
             // add key attr
             key_attrs.push(attr)
         }
         this.props.onChangeKeyAttr(key_attrs)
-        this.setState({}) // fake update
+        this.changePosArray(new_dragArray)
+        this.setState({drag_array:new_dragArray}) 
+        this.changeDrafStatus(true)
     }
-    // stop dragging
-    onStop(e: number[]) {
-        // array recording every bars' position
-        let new_pos = this.state.drag_array
-        // number of key attrs
-        let key_attrNum = this.state.key_attrNum
-        // the position before gragging
-        let now_pos = this.state.drag_array[e[0]][0]
-        // the position after dragging
-        let end_pos = e[1]
-        // dragging a component right
-        if (end_pos > now_pos) {
-            new_pos = new_pos.map((pos) => {
-                if (((pos[0] <= end_pos)) && (pos[0] > now_pos)) { return [pos[0] - 1, pos[1]] }
-                else { return pos }
-            })
-            // check whether a key attr is dragged out
-            if ((key_attrNum <= end_pos) && (key_attrNum > now_pos)) {
-                new_pos[e[0]] = [e[1], 0]
-                key_attrNum -= 1
-            } else { new_pos[e[0]] = [e[1], new_pos[e[0]][1]] }
-        }
-        // dragging a component left
-        else {
-            if (end_pos >= 0) {
-                new_pos = new_pos.map((pos) => {
-                    if (((pos[0] < now_pos)) && (pos[0] >= end_pos)) { return [pos[0] + 1, pos[1]] }
-                    else { return pos }
-                })
-                // check whether a key attr is dragged in
-                if ((key_attrNum > end_pos) && (key_attrNum <= now_pos)) {
-                    new_pos[e[0]] = [e[1], 1]
-                    key_attrNum += 1
-                } else { new_pos[e[0]] = [e[1], new_pos[e[0]][1]] }
-            }
 
+    // stop dragging
+    onStop(startNum:number,endNum:number){
+        let drag_array:string[] = []
+        let new_array = this.state.drag_array
+        // dragging left
+        if(startNum>endNum){
+            let start_attr = new_array[startNum]
+            new_array.forEach((d,i)=>{
+                if((i>endNum)&&(i<=startNum)){drag_array.push(new_array[i - 1])}
+                else if(i==endNum){ drag_array.push(start_attr)}
+                else{drag_array.push(d)}
+            })
         }
-        // console.info(this.state.drag_array, new_pos, e)
-        this.setState({ drag_array: new_pos })
-        this.setState({ key_attrNum: key_attrNum })
-        this.changePosArray(this.state.drag_array)
+        
+        // dragging right
+        else if(startNum<endNum){
+            let start_attr = new_array[startNum]
+            new_array.forEach((d,i)=>{
+                if((i>=startNum)&&(i<endNum)){drag_array.push(new_array[i + 1])}
+                else if(i==endNum){drag_array.push(start_attr)}
+                else{drag_array.push(d)}
+            })
+            
+        }
+        else{drag_array = new_array}
+        this.setState({drag_array:drag_array})
+        this.changePosArray(drag_array)
+        this.changeDrafStatus(true)
+    }
+
+    drawCurves = (attr: string, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
+        // get ranges of this attr
+        let ranges = samples.map(d => d[attr])
+            .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+            .sort((a: number, b: number) => a - b)
+    
+        // step length to merge data, to smooth curve
+        function getStep() {
+            if (ranges.length < 20) { return 2 }
+            else { return 4 }
+        }
+        let step = getStep()
+    
+        // array recording curve nodes after merging
+        let ListNum: curveData[] = []
+        const dataPush = (x: number, y: number, z: number): curveData => { return { x, y, z } }
+        // split samples by class
+        let samples_reject = samples.filter((s) => s.class == 0)
+        let samples_accept = samples.filter((s) => s.class == 1)
+        // xRecord is the min & max value of x-axis ([min of x,max of x])
+        let xRecord = [Infinity, 0]
+        // yRecord is the max values of accept & reject y-axis ([max of acc,max of rej])
+        let yRecord = [0, 0]
+    
+        // split numerical range into categorical one
+    
+        // accept data instances number and reject data instances number 
+        let accept_num = 0,
+            reject_num = 0
+        // range_num records now range interval 
+        // loop all values of this attr
+        ranges.map((range: number, range_i) => {
+            accept_num += samples_accept.filter(s => s[attr] === range).length
+            reject_num += samples_reject.filter(s => s[attr] === range).length
+            //console.log(range,samples_accept,samples_reject,range_i,step)
+            if (((range_i % step == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
+    
+                ListNum.push(dataPush(range, accept_num, reject_num))
+                xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
+                yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
+                accept_num = 0
+                reject_num = 0
+            }
+        })
+    
+    
+        // curve x-axis
+        let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
+        // curve y-axis for data with class = 1
+        let yScaleAcc = d3.scaleLinear().domain([0, yRecord[0]]).range([height / 2, 0]);
+        // curve y-axis for data woth class = 0
+        let yScaleRej = d3.scaleLinear().domain([0, yRecord[1]]).range([height / 2, height]);
+        // draw areas based on axis
+        const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
+        const areasRej = d3.area<curveData>().x(d => xScale(d.x)).y1(d => yScaleRej(d.z)).y0(height / 2).curve(d3.curveMonotoneX)
+    
+        return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
+    
+    
+            <g>
+                <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
+                <path d={areasRej(ListNum) || ''} style={{ fill: BAD_COLOR }} />
+            </g>
+        </g>
+    
+    }
+    drawPies = (values: number[], radius: number, color: string, innerRadius: number) => {
+        // convert a list of values to format that can feed into arc generator
+        let pie = d3.pie()
+        // arc path generator
+        let arc = d3.arc()
+            .cornerRadius(1)
+    
+        return pie(values).map((d: any, i) => {
+            let pathData = arc
+                .innerRadius(innerRadius)
+                .outerRadius(radius)(d)
+            // return an arc
+            return <path key={i} d={pathData || ''} fill={color} opacity={0.4 + i * 0.4} />
+        })
+    
     }
 
     /**
@@ -260,7 +268,7 @@ export default class Attributes extends React.Component<Props, State>{
             let radius = subsamples.length / samples.length * this.height / 2
             // return a pie
             return <g key={protect_val + '_pie'} transform={`translate(${window.innerWidth * 0.03}, ${pie_i * this.height})`}>
-                {drawPies(subsamples_count, radius, getColor(protect_val), 0)}
+                {this.drawPies(subsamples_count, radius, getColor(protect_val), 0)}
                 <text>{(100 * subsamples_count[1] / (subsamples_count[0] + subsamples_count[1])).toFixed(2) + '%'}</text>
                 <text y={this.height / 2} textAnchor='middle'>{`${protect_val}:${subsamples.length}`}</text>
             </g>
@@ -272,6 +280,7 @@ export default class Attributes extends React.Component<Props, State>{
         //attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
         attrs.splice(attrs.indexOf(protected_attr), 1)
+        
         // move key attributes to the front
         
         attrs.sort((a, b) => {
@@ -283,8 +292,9 @@ export default class Attributes extends React.Component<Props, State>{
                 return a < b? -1: 1
             }
         })
-        let counts: number[] = [] // the height of each bar
-        let attr_counts: number[] = [0] // the number of previous bars when start draw a new attr
+        //if(this.state.attrs_init!=null){attrs=this.state.attrs_init}
+        let counts:number[] = [] // the height of each bar
+        let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
 
         attrs.forEach(attr => {
             let count = Object.values(
@@ -303,6 +313,9 @@ export default class Attributes extends React.Component<Props, State>{
             counts = counts.concat(count)
         })
         let max_accept = Math.max(...counts)
+        
+        
+        if(this.state.drag_array==null){this.initendPos(attrs,key_attrs)}
 
         //******************** draw bars
         // the overall length of all bars of each attribute
@@ -314,12 +327,20 @@ export default class Attributes extends React.Component<Props, State>{
             let dataType = typeof samples.map(d => d[attr])
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
-            let stopPos = (e: any) => {
-                if (this.state.drag_array == null) { this.initendPos(attrs.length, key_attrs.length) }
-                let posNum = Math.floor((e.x - 0.1 * window.innerWidth) / (step))
-                this.onStop([attr_i, posNum])
+            let stopPos = (e:any) =>{
+                let endNum = Math.floor((e.x - 0.3 * bar_w - window.innerWidth * 0.1)/ (window.innerWidth*0.4 / key_attrs.length))
+                let startNum = this.state.drag_array.indexOf(attr)
+                if(keyFlag){
+                    endNum = Math.max(0,endNum)
+                    endNum = Math.min(key_attrs.length - 1,endNum)}
+                else{
+                    endNum = Math.max(key_attrs.length,endNum)
+                    endNum = Math.min(attrs.length,endNum)
+                }
+                this.onStop(startNum,endNum)
             }
             let keyFlag = (key_attrs.indexOf(attr)>-1),
+
                 offsetX =  keyFlag?
                     step* attr_i // key attribute
                     :
@@ -334,7 +355,7 @@ export default class Attributes extends React.Component<Props, State>{
                 // textColor = attr_i < key_attrs.length ? 'red' : 'black'
                 draggablePos = null
             } else {
-                let current_i = this.state.drag_array[attr_i][0]
+                let current_i = this.state.drag_array.indexOf(attr)
                 let x = keyFlag?step*current_i: step*key_attrs.length + (current_i-key_attrs.length)*this.fontSize*2
                 let y = 0
                 // textColor = this.state.drag_array[attr_i][1] == 1 ? 'red' : 'black'
@@ -346,20 +367,19 @@ export default class Attributes extends React.Component<Props, State>{
 
             // label postition
             let labelX = keyFlag?0:-1.5*this.height, labelY = keyFlag?3*this.height: 1.5*this.height
-            const changeKeyAttr = (e:React.SyntheticEvent)=>this.onChangeKeyAttr(attr, keyFlag)
-
+            const changeKeyAttr = (e:React.SyntheticEvent)=>this.changeKeyAttr(attr, keyFlag)
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
                 position={draggablePos}
                 onStop={stopPos}>
                     <g className="attr" cursor="pointer" >
                     <g transform={`translate(${0.3*bar_w}, ${0})`}>
-                        {keyFlag?
+                        {key_attrs.includes(attr)?
                             <g className='attrChart'>
                                 {dataType == 'string'? 
                                     this.drawBars(attr, samples, bar_w, max_accept, max_reject, this.height, selected_bar)
                                     :
-                                    drawCurves(attr, samples, this.height, false, bar_w)
+                                    this.drawCurves(attr, samples, this.height, false, bar_w)
                                 }
                             </g>
                             :
@@ -396,64 +416,7 @@ export default class Attributes extends React.Component<Props, State>{
                         </g>
                     </g>
             </Draggable>
-            // // categorical key attr, draw bars
-            // if (dataType == 'string' && key_attrs.indexOf(attr)!=-1) {
-            //     return <Draggable
-            //         key={attr + '_bar'}
-            //         axis="x"
-            //         defaultPosition={{ x: offsetX, y: offsetY }}
-            //         position={draggablePos}
-            //         onStop={stopPos}>
-            //         <g transform={`translate(${0}, ${0})`} className="attr" cursor="pointer">
-            //             <g className='attrChart'>
-            //                 {
-            //                     this.drawBars(attr, samples, bar_w, max_accept, max_reject, this.height, selected_bar)
-            //                 }
-            //             </g>
-            //             {/* <text className='attrLabel' x={0} y={2 * this.bar_margin}
-            //                 transform="rotate(-30)" textAnchor='middle'
-            //                 fill={textColor}
-            //             >
-            //                 {cutTxt(attr, attr_counts[attr_i + 1] - attr_counts[attr_i] + 1)}
-            //             </text> */}
-            //             <text className='attrLabel' textAnchor="start" y={this.height*2} fontSize={this.fontSize}>
-            //                 {attr}
-            //             </text>
-            //         </g>
-            //     </Draggable>
-            // }
-            // // numerical key attr, draw areas
-            // else if (key_attrs.indexOf(attr)!=-1){
-            //     return <Draggable
-            //         key={attr + '_curve'}
-            //         axis="x"
-            //         defaultPosition={{ x: offsetX, y: offsetY }}
-            //         position={draggablePos}
-            //         onStop={stopPos}>
-            //         <g transform={`translate(${offsetX}, ${offsetY})`} className="attr" cursor="pointer">
-            //             <g className='attrChart'>
-            //                 {
-            //                     drawCurves(attr, samples, this.height, false, bar_w)
-            //                 }
-            //             </g>
-            //             {/* <text className='attrLabel' x={0} y={2 * this.bar_margin}
-            //                 transform="rotate(-30)" textAnchor='middle'
-            //                 fill={textColor}
-            //             >
-            //                 {cutTxt(attr, attr_counts[attr_i + 1] - attr_counts[attr_i] + 1)}
-            //             </text> */}
-            //             <text className='attrLabel' textAnchor="start" y={this.height*2} fontSize={this.fontSize}>
-            //                 {attr}
-            //             </text>
-            //         </g>
-            //     </Draggable>
-            // }
-            // // non-key attributes
-            // else {
-            //     return <g transform={`translate(${offsetX}, ${offsetY+this.height})`} className="attr" cursor="pointer">
-            //         <text transform={`rotate(-90)`} textAnchor="start" fontSize={this.fontSize}>{attr}</text>
-            //     </g> 
-            // }
+            
         })
         return <g>
             <g className='attrs' transform={`translate(${window.innerWidth * 0.1}, ${this.attr_margin * 2})`}>
@@ -468,7 +431,6 @@ export default class Attributes extends React.Component<Props, State>{
         let { fetch_groups_status } = this.props
         let content: JSX.Element = <g />
         // if pending, then return a loading icon
-        //console.log(this.props)
         switch (fetch_groups_status) {
             case Status.INACTIVE:
                 content = <text>no data</text>
