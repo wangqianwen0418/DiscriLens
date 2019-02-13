@@ -1,7 +1,7 @@
 import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, 
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, 
-    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,DRAG_STATUS,SHOW_ATTRS} from 'Const';
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,DRAG_STATUS} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, KeyGroup, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -218,20 +218,7 @@ export const ChangeDragStatus = (drag_status:boolean):DragStatus =>{
     });
 }
 
-/*****************
-all about chaging show_attrs
-*****************/ 
-export interface ShowAttrs{
-    type:SHOW_ATTRS,
-    show_attrs: string[]
-}
 
-export const ChangeShowAttrs = (show_attrs:string[]):ShowAttrs =>{
-    return ({
-        type: SHOW_ATTRS,
-        show_attrs
-    });
-}
 
 // combine to start
 
@@ -273,4 +260,4 @@ export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
 }
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-BarArray|ChangeKeyAttr|DragStatus|ShowAttrs
+BarArray|ChangeKeyAttr|DragStatus
