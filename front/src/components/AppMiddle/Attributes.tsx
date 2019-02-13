@@ -17,10 +17,12 @@ export interface Props {
     onChangeKeyAttr: (key_attrs:string[])=>void,
     changePosArray: (drag_array: string[]) => void,
     ChangeDragStatus: (drag_status: boolean)=>void,
+    ChangeShowAttrs: (show_attrs: string[])=>void,
 }
 export interface State {
     selected_bar: string[],
     drag_array: string[],
+    show_attrs: string[],
 }
 export interface curveData {
     x: number,
@@ -35,18 +37,19 @@ export default class Attributes extends React.Component<Props, State>{
         this.state = {
             selected_bar: ['', ''],
             drag_array: null,
+            show_attrs: [],
         }
         this.changeColor = this.changeColor.bind(this)
         this.onStop = this.onStop.bind(this)
         this.initendPos = this.initendPos.bind(this)
-        this.changeKeyAttr = this.changeKeyAttr.bind(this)
+        this.changeShowAttr = this.changeShowAttr.bind(this)
         this.changeDrafStatus = this.changeDrafStatus.bind(this)
     }
 
     initendPos(attrs:string[],key_attrs:string[]){
         this.setState({drag_array:attrs})
-        this.props.onChangeKeyAttr(key_attrs)
         this.changePosArray(attrs)
+        this.setState({show_attrs:key_attrs})
     }
 
     changeDrafStatus(e:boolean){
@@ -61,31 +64,33 @@ export default class Attributes extends React.Component<Props, State>{
         this.props.changePosArray(e)
     }
 
-    changeKeyAttr(attr:string, keyFlag:boolean){
-        let {key_attrs} = this.props
+
+    changeShowAttr(attr:string, showFlag:boolean){
+        let show_attrs = this.state.show_attrs.slice()
         let new_dragArray: any[] = this.state.drag_array
-        if(keyFlag){
+        if(showFlag){
             
             let removed_attr = new_dragArray.indexOf(attr)
             new_dragArray = new_dragArray.map((d,i)=>{
-                if((i<key_attrs.length-1)&&(i>=removed_attr)){return new_dragArray[i+1]}
-                else if(i==key_attrs.length-1){return attr}
+                if((i<show_attrs.length-1)&&(i>=removed_attr)){return new_dragArray[i+1]}
+                else if(i==show_attrs.length-1){return attr}
                 else{return d}
             })
-            //remove key attr
-            key_attrs.splice(key_attrs.indexOf(attr), 1)
+            //remove show attr
+            show_attrs.splice(show_attrs.indexOf(attr), 1)
         }else{
             
             let added_attr = new_dragArray.indexOf(attr)
             new_dragArray = new_dragArray.map((d,i)=>{
-                if((i>key_attrs.length)&&(i<=added_attr)){return new_dragArray[i-1]}
-                else if(i==key_attrs.length){return attr}
+                if((i>show_attrs.length)&&(i<=added_attr)){return new_dragArray[i-1]}
+                else if(i==show_attrs.length){return attr}
                 else{return d}
             })
             // add key attr
-            key_attrs.push(attr)
+            show_attrs.push(attr)
         }
-        this.props.onChangeKeyAttr(key_attrs)
+        this.props.ChangeShowAttrs(show_attrs)
+        this.setState({show_attrs:show_attrs})
         this.changePosArray(new_dragArray)
         this.setState({drag_array:new_dragArray}) 
         this.changeDrafStatus(true)
@@ -253,7 +258,7 @@ export default class Attributes extends React.Component<Props, State>{
      ******************/
     draw() {
         let { samples, key_attrs, protected_attr } = this.props
-        let { selected_bar } = this.state
+        let { selected_bar , show_attrs} = this.state
         // get numerical data
         samples = samples.slice(0, 1000)
         // protect attribute
@@ -280,7 +285,6 @@ export default class Attributes extends React.Component<Props, State>{
         //attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
         attrs.splice(attrs.indexOf(protected_attr), 1)
-        
         // move key attributes to the front
         
         attrs.sort((a, b) => {
@@ -319,7 +323,8 @@ export default class Attributes extends React.Component<Props, State>{
 
         //******************** draw bars
         // the overall length of all bars of each attribute
-        let step = window.innerWidth * 0.4/  key_attrs.length
+        console.log(show_attrs)
+        let step = window.innerWidth * 0.4/ show_attrs.length
         let bar_w = step * 0.8
         // loop all attributes and draw bars for each one
         let bars = attrs.map((attr: string, attr_i) => {
@@ -330,7 +335,7 @@ export default class Attributes extends React.Component<Props, State>{
             let stopPos = (e:any) =>{
                 let endNum = Math.floor((e.x - 0.3 * bar_w - window.innerWidth * 0.1)/ (window.innerWidth*0.4 / key_attrs.length))
                 let startNum = this.state.drag_array.indexOf(attr)
-                if(keyFlag){
+                if(showFlag){
                     endNum = Math.max(0,endNum)
                     endNum = Math.min(key_attrs.length - 1,endNum)}
                 else{
@@ -339,9 +344,9 @@ export default class Attributes extends React.Component<Props, State>{
                 }
                 this.onStop(startNum,endNum)
             }
-            let keyFlag = (key_attrs.indexOf(attr)>-1),
+            let showFlag = (this.state.show_attrs.indexOf(attr)>-1),
 
-                offsetX =  keyFlag?
+                offsetX =  showFlag?
                     step* attr_i // key attribute
                     :
                     step * key_attrs.length+ this.fontSize*2*(attr_i - key_attrs.length) // non key attribute
@@ -356,18 +361,16 @@ export default class Attributes extends React.Component<Props, State>{
                 draggablePos = null
             } else {
                 let current_i = this.state.drag_array.indexOf(attr)
-                let x = keyFlag?step*current_i: step*key_attrs.length + (current_i-key_attrs.length)*this.fontSize*2
+                let x = showFlag?step*current_i: step*key_attrs.length + (current_i-key_attrs.length)*this.fontSize*2
                 let y = 0
                 // textColor = this.state.drag_array[attr_i][1] == 1 ? 'red' : 'black'
                 if (x < 0) { x = 0 }
                 draggablePos.x = x
                 draggablePos.y = y
             }
-
-
             // label postition
-            let labelX = keyFlag?0:-1.5*this.height, labelY = keyFlag?3*this.height: 1.5*this.height
-            const changeKeyAttr = (e:React.SyntheticEvent)=>this.changeKeyAttr(attr, keyFlag)
+            let labelX = showFlag?0:-1.5*this.height, labelY = showFlag?3*this.height: 1.5*this.height
+            const changeShowAttr = (e:React.SyntheticEvent)=>this.changeShowAttr(attr, showFlag)
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
                 position={draggablePos}
@@ -388,7 +391,7 @@ export default class Attributes extends React.Component<Props, State>{
                     </g>
                         <g 
                             className='attrLabel' 
-                            transform={`rotate(${keyFlag?0:-50}) translate(${labelX}, ${labelY})`} 
+                            transform={`rotate(${showFlag?0:-50}) translate(${labelX}, ${labelY})`} 
                             style={{transformOrigin: `(${labelX}, ${labelY})`}}
                         >
                             <rect 
@@ -410,8 +413,8 @@ export default class Attributes extends React.Component<Props, State>{
                                 x={bar_w-this.fontSize} 
                                 fontSize={this.fontSize} 
                                 cursor="pointer"
-                                onClick={changeKeyAttr}>
-                                {keyFlag?"-":"+"}
+                                onClick={changeShowAttr}>
+                                {showFlag?"-":"+"}
                             </text>
                         </g>
                     </g>

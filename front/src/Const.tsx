@@ -31,3 +31,6 @@ export type BAR_ARRAY = typeof BAR_ARRAY
 
 export const CHANGE_KEY_ATTR = "CHANGE_KEY_ATTR"
 export type CHANGE_KEY_ATTR = typeof CHANGE_KEY_ATTR
+
+export const SHOW_ATTRS = "SHOW_ATTRS"
+export type SHOW_ATTRS = typeof SHOW_ATTRS

@@ -11,6 +11,7 @@ export interface Props{
     thr_rules:number[],
     key_attrs: string[],
     drag_array: string[],
+    show_attrs: string[],
     drag_status: boolean,
     protected_attr: string,
     fetch_groups_status: Status,
@@ -299,8 +300,7 @@ export default class Glyph extends React.Component<Props, State>{
                         let button_click = () =>{
                             this.changeRule(i)
                         }
-                        if(this.props.drag_status){
-                            console.log(drag_array);this.updateButton(drag_array.slice(0,key_attrs.length))}
+                        if(this.props.drag_status){this.updateButton(drag_array.slice(0,key_attrs.length))}
                         if(i<this.state.attrs_button.length){
                             return <foreignObject key={'button' + i} width = '10px' height = '10px' transform={`translate(${window.innerWidth*0.1 + width_base * (i-0.18)}, ${-3})`}>
                             <Button shape="circle" icon={this.state.attrs_button[i][1]?"down":"right"} size='small' onClick={button_click} />
