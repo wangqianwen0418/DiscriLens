@@ -1,7 +1,7 @@
  import * as React from 'react';
  import './index.css';
  import Attributes from 'containers/Attributes';
- import Glyph from 'containers/Glyph';
+ import Itemsets from 'containers/Itemsets';
 
  export default class AppMiddel extends React.Component{
      render(){
@@ -10,7 +10,7 @@
                 <Attributes/>
             </svg>
             <svg className='itemset'>
-                <Glyph/>
+                <Itemsets/>
             </svg>
          
          </div>

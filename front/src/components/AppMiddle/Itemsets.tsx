@@ -3,7 +3,7 @@ import {DataItem, Status, Rule} from 'types';
 import {Icon, Tooltip,Button} from 'antd';
 import * as d3 from 'd3';
 
-import "./Glyph.css"
+import "./Itemsets.css"
 
 export interface Props{
     rules: Rule[],
@@ -45,7 +45,7 @@ const extract_range = (highlightRange:string)=>{
     
 }
 
-export default class Glyph extends React.Component<Props, State>{
+export default class Itemsets extends React.Component<Props, State>{
     public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1;
     constructor(props:Props){
         super(props)

@@ -1,4 +1,4 @@
-import Glyph from 'components/AppMiddle/Glyph';
+import Itemsets from 'components/AppMiddle/Itemsets';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
 import { ChangeRuleThresholds , ChangeDragStatus } from 'actions';
@@ -25,4 +25,4 @@ export function mapDispatchToProps(dispatch: any) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Glyph);
+export default connect(mapStateToProps, mapDispatchToProps)(Itemsets);
