@@ -1,4 +1,7 @@
 import {DataItem} from 'types';
+
+let attrRanges:{[attr:string]: (string|number)[]} = {} // prevent duplicated calculation
+
 const range2num = (range:string|number):number=>{
     if (typeof(range)=="number"){
         return range
@@ -25,10 +28,16 @@ const range2num = (range:string|number):number=>{
     
 }
 export const getAttrRanges =  (samples: DataItem[], attr:string):(string|number)[]=>{
-    let ranges = samples.map(d=>d[attr])
-        .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)
+    if (attrRanges[attr]){
+        return attrRanges[attr]
+    }else {
+        let ranges = samples.map(d=>d[attr])
+            .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)
+        
+        ranges.sort((a, b)=>range2num(a)-range2num(b))
+        attrRanges[attr] = ranges
+        
+        return ranges
+    }
     
-    ranges.sort((a, b)=>range2num(a)-range2num(b))
-    
-    return ranges
 }
