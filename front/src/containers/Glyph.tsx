@@ -11,7 +11,7 @@ export function mapStateToProps(state:StoreState) {
         samples: state.samples,
         thr_rules: state.thr_rules,
         key_attrs:state.key_attrs,
-        drag_array: state.drag_array,
+        drag_array: state.drag_array, 
         protected_attr: state.protected_attr,
         drag_status: state.drag_status,
         show_attrs: state.show_attrs,

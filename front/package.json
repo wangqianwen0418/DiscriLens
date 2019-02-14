@@ -10,6 +10,7 @@
     "draggable": "^4.2.0",
     "just-animate": "^2.5.1",
     "react": "^16.7.0",
+    "react-axis": "^0.2.5",
     "react-beautiful-dnd": "^10.0.4",
     "react-dnd": "^7.0.2",
     "react-dom": "^16.7.0",

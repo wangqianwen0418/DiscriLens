@@ -20,8 +20,8 @@ export function mapDispatchToProps(dispatch: any) {
     return {
         changePosArray:(drag_array:string[])=>{dispatch(ChangeBarArray(drag_array))},
         onChangeKeyAttr: (key_attrs:string[])=>{dispatch(ChangeKeyAttr(key_attrs))},
-        ChangeDragStatus: (drag_status: boolean)=>{dispatch(ChangeDragStatus(drag_status))},
-        ChangeShowAttrs: (show_attrs:string[])=>{dispatch(ChangeShowAttrs(show_attrs))}
+        changeDragStatus: (drag_status: boolean)=>{dispatch(ChangeDragStatus(drag_status))},
+        changeShowAttrs: (show_attrs:string[])=>{dispatch(ChangeShowAttrs(show_attrs))}
     }
 }
 

@@ -1,11 +1,24 @@
-.svg{
+.App-middle .svg_attribute{
     width: 100%;
     height: 40%;
     font-size: 10px;
 }
 
-.glyph{
+.App-middle  .svg_itemset{
     width: 100%;
     height: 58%;
     font-size: 10px;
 }
+
+.App-middle .App-left{
+    float:left;
+    height:100%;
+    width:10%;
+}
+
+.App-middle .App-right{
+    float:right;
+    height:100%;
+    width:85%;
+}
+
