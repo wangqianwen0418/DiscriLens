@@ -11,7 +11,9 @@ export interface Rule{
     pd : string,
     sup_pd : number,
     sup_pnd : number,
-    risk_dif : number
+    risk_dif : number,
+    items: (number|string)[],
+    [key:string]:any
 }
 
 export interface KeyGroup{
