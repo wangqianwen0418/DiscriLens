@@ -1,0 +1,14 @@
+.axis .domain{
+    stroke: #bbb !important;
+}
+
+.axis .tick line{
+    stroke: #bbb !important;
+}
+
+.curseRightIcon svg{
+    width:100%;
+    height:100%;
+    top:0;
+
+}

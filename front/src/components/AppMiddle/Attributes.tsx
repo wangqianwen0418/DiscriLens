@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { DataItem, Status, KeyGroup } from 'types';
 import { Icon, Tooltip } from 'antd';
-import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
+import { countItem, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 
 import "./Attributes.css";
-
 export interface Props {
     key_attrs: string[],
     samples: DataItem[],
@@ -16,8 +15,8 @@ export interface Props {
     drag_status: boolean,
     onChangeKeyAttr: (key_attrs:string[])=>void,
     changePosArray: (drag_array: string[]) => void,
-    ChangeDragStatus: (drag_status: boolean)=>void,
-    ChangeShowAttrs: (show_attrs: string[])=>void,
+    changeDragStatus: (drag_status: boolean)=>void,
+    changeShowAttrs: (show_attrs: string[])=>void,
 }
 export interface State {
     selected_bar: string[],
@@ -50,10 +49,11 @@ export default class Attributes extends React.Component<Props, State>{
         this.setState({drag_array:attrs})
         this.changePosArray(attrs)
         this.setState({show_attrs:key_attrs})
+        this.props.changeShowAttrs(key_attrs)
     }
 
     changeDrafStatus(e:boolean){
-        this.props.ChangeDragStatus(e)
+        this.props.changeDragStatus(e)
     }
 
     changeColor(e: string[]) {
@@ -67,7 +67,8 @@ export default class Attributes extends React.Component<Props, State>{
 
     changeShowAttr(attr:string, showFlag:boolean){
         let show_attrs = this.state.show_attrs.slice()
-        let new_dragArray: any[] = this.state.drag_array
+        let key_attrs = this.props.key_attrs.slice()
+        let new_dragArray: any[] = this.state.drag_array.slice()
         if(showFlag){
             
             let removed_attr = new_dragArray.indexOf(attr)
@@ -78,6 +79,8 @@ export default class Attributes extends React.Component<Props, State>{
             })
             //remove show attr
             show_attrs.splice(show_attrs.indexOf(attr), 1)
+            if(key_attrs.includes(attr)){key_attrs.splice(key_attrs.indexOf(attr), 1)}
+            
         }else{
             
             let added_attr = new_dragArray.indexOf(attr)
@@ -89,17 +92,19 @@ export default class Attributes extends React.Component<Props, State>{
             // add key attr
             show_attrs.push(attr)
         }
-        this.props.ChangeShowAttrs(show_attrs)
+        this.props.changeShowAttrs(show_attrs)
         this.setState({show_attrs:show_attrs})
         this.changePosArray(new_dragArray)
         this.setState({drag_array:new_dragArray}) 
+        this.props.onChangeKeyAttr(key_attrs)
         this.changeDrafStatus(true)
     }
 
     // stop dragging
-    onStop(startNum:number,endNum:number){
+    onStop(attr:string,startNum:number,endNum:number,endReal:number){
         let drag_array:string[] = []
-        let new_array = this.state.drag_array
+        let new_array = this.state.drag_array.slice()
+        let boarder = this.props.key_attrs.slice()
         // dragging left
         if(startNum>endNum){
             let start_attr = new_array[startNum]
@@ -108,6 +113,16 @@ export default class Attributes extends React.Component<Props, State>{
                 else if(i==endNum){ drag_array.push(start_attr)}
                 else{drag_array.push(d)}
             })
+            // add a new key_attr
+            if((startNum>=boarder.length)&&(endNum<boarder.length)){
+                boarder.push(attr)
+            }
+            if((endReal<0)&&(startNum>=boarder.length)){
+                boarder.push(attr)
+            }
+            if((endReal<0)&&(startNum>=boarder.length)){
+                boarder.push(attr)
+            }
         }
         
         // dragging right
@@ -118,15 +133,32 @@ export default class Attributes extends React.Component<Props, State>{
                 else if(i==endNum){drag_array.push(start_attr)}
                 else{drag_array.push(d)}
             })
-            
+            // remove a key_attr
+            if((startNum<boarder.length)&&(endNum>=boarder.length)){
+                boarder.splice(boarder.indexOf(attr),1)
+            } 
+            if((endReal>=this.state.show_attrs.length)&&(startNum<boarder.length)){
+                boarder.splice(boarder.indexOf(attr),1)
+            }
         }
-        else{drag_array = new_array}
+        else{
+            if(startNum!=endReal){
+                if((endReal>=this.state.show_attrs.length)&&(startNum<boarder.length)){
+                    boarder.splice(boarder.indexOf(attr),1)
+                }
+                if((endReal<0)&&(startNum>=boarder.length)){
+                    boarder.push(attr)
+                }
+            }
+            drag_array = new_array
+        }
+        this.props.onChangeKeyAttr(boarder)
         this.setState({drag_array:drag_array})
         this.changePosArray(drag_array)
         this.changeDrafStatus(true)
     }
 
-    drawCurves = (attr: string, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
+    drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
         // get ranges of this attr
         let ranges = samples.map(d => d[attr])
             .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
@@ -192,6 +224,7 @@ export default class Attributes extends React.Component<Props, State>{
         </g>
     
     }
+    /*
     drawPies = (values: number[], radius: number, color: string, innerRadius: number) => {
         // convert a list of values to format that can feed into arc generator
         let pie = d3.pie()
@@ -208,7 +241,7 @@ export default class Attributes extends React.Component<Props, State>{
         })
     
     }
-
+    */
     /**
      * Function to draw bars
      * Inputs:
@@ -219,7 +252,7 @@ export default class Attributes extends React.Component<Props, State>{
      *             selected bar (mouse hover) 
      * 
      * */
-    drawBars = (attr: string, samples: DataItem[],
+    drawBars = (attr: string, attr_i:number, samples: DataItem[],
         bar_w: number, max_accept: number, max_reject: number, height: number, color: string[],
         offsetX = 0, offsetY = 0): JSX.Element => {
         let ranges = samples.map(d => d[attr])
@@ -228,6 +261,17 @@ export default class Attributes extends React.Component<Props, State>{
         let samples_accept = samples.filter((s) => s.class == 1)
         // a single bar's width
         let bar_width = bar_w / ranges.length
+        
+        // draw general situation
+        let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        let generalSituation=(range_i:number)=>{
+            let splitLineData:curveData[] = [{x:bar_width*0.95,y:height / 2,z:0},{x:bar_width*0.95,y:80,z:0}] 
+            return <g>
+                {ranges.length-1!=range_i?
+                <path d={splitLine(splitLineData)} style={{fill:'none',stroke:'#bbb',strokeWidth:'0.5px'}}/>
+                :null}
+            </g>
+        }
         return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
             {/* bars */}
             {ranges.map((range: string, range_i) => {
@@ -246,6 +290,7 @@ export default class Attributes extends React.Component<Props, State>{
                         onMouseEnter={mouseEnter} onMouseOut={mouseOut}>
                         <rect width={bar_width * 0.9} height={accept_h} y={-1 * accept_h} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? '#DE4863' : GOOD_COLOR }} />
                         <rect width={bar_width * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
+                        {generalSituation(range_i)}
                     </g>
                 </Tooltip>
             })}
@@ -262,7 +307,7 @@ export default class Attributes extends React.Component<Props, State>{
         // get numerical data
         samples = samples.slice(0, 1000)
         // protect attribute
-        const protect_vals = Object.keys(countItem(samples.map(s => s[protected_attr])))
+        /*const protect_vals = Object.keys(countItem(samples.map(s => s[protected_attr])))
 
         //******************** draw overview pie charts
         let pies = protect_vals.map((protect_val, pie_i) => {
@@ -277,7 +322,7 @@ export default class Attributes extends React.Component<Props, State>{
                 <text>{(100 * subsamples_count[1] / (subsamples_count[0] + subsamples_count[1])).toFixed(2) + '%'}</text>
                 <text y={this.height / 2} textAnchor='middle'>{`${protect_val}:${subsamples.length}`}</text>
             </g>
-        })
+        })*/
 
         //****************** get all attributes
         let attrs = [...Object.keys(samples[0])]
@@ -296,7 +341,6 @@ export default class Attributes extends React.Component<Props, State>{
                 return a < b? -1: 1
             }
         })
-        //if(this.state.attrs_init!=null){attrs=this.state.attrs_init}
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
 
@@ -323,7 +367,6 @@ export default class Attributes extends React.Component<Props, State>{
 
         //******************** draw bars
         // the overall length of all bars of each attribute
-        console.log(show_attrs)
         let step = window.innerWidth * 0.4/ show_attrs.length
         let bar_w = step * 0.8
         // loop all attributes and draw bars for each one
@@ -333,23 +376,25 @@ export default class Attributes extends React.Component<Props, State>{
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
             let stopPos = (e:any) =>{
-                let endNum = Math.floor((e.x - 0.3 * bar_w - window.innerWidth * 0.1)/ (window.innerWidth*0.4 / key_attrs.length))
+                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ (window.innerWidth*0.4 / show_attrs.length)) 
+                let endReal = endNum
                 let startNum = this.state.drag_array.indexOf(attr)
                 if(showFlag){
                     endNum = Math.max(0,endNum)
-                    endNum = Math.min(key_attrs.length - 1,endNum)}
+                    endNum = Math.min(show_attrs.length - 1,endNum)}
                 else{
-                    endNum = Math.max(key_attrs.length,endNum)
+                    endNum = Math.max(show_attrs.length,endNum)
                     endNum = Math.min(attrs.length,endNum)
                 }
-                this.onStop(startNum,endNum)
+                this.onStop(attr,startNum,endNum,endReal)
+                console.log(endNum,startNum)
             }
             let showFlag = (this.state.show_attrs.indexOf(attr)>-1),
 
                 offsetX =  showFlag?
                     step* attr_i // key attribute
                     :
-                    step * key_attrs.length+ this.fontSize*2*(attr_i - key_attrs.length) // non key attribute
+                    step * show_attrs.length+ this.fontSize*2*(attr_i - show_attrs.length) // non key attribute
 
             let offsetY = 0
             // init position of draggable components
@@ -361,7 +406,7 @@ export default class Attributes extends React.Component<Props, State>{
                 draggablePos = null
             } else {
                 let current_i = this.state.drag_array.indexOf(attr)
-                let x = showFlag?step*current_i: step*key_attrs.length + (current_i-key_attrs.length)*this.fontSize*2
+                let x = showFlag?step*current_i: step*show_attrs.length + (current_i-show_attrs.length)*this.fontSize*2
                 let y = 0
                 // textColor = this.state.drag_array[attr_i][1] == 1 ? 'red' : 'black'
                 if (x < 0) { x = 0 }
@@ -376,13 +421,13 @@ export default class Attributes extends React.Component<Props, State>{
                 position={draggablePos}
                 onStop={stopPos}>
                     <g className="attr" cursor="pointer" >
-                    <g transform={`translate(${0.3*bar_w}, ${0})`}>
-                        {key_attrs.includes(attr)?
+                    <g transform={`translate(${0}, ${0})`}>
+                        {show_attrs.includes(attr)?
                             <g className='attrChart'>
                                 {dataType == 'string'? 
-                                    this.drawBars(attr, samples, bar_w, max_accept, max_reject, this.height, selected_bar)
+                                    this.drawBars(attr, attr_i,samples, bar_w, max_accept, max_reject, this.height, selected_bar)
                                     :
-                                    this.drawCurves(attr, samples, this.height, false, bar_w)
+                                    this.drawCurves(attr, attr_i,samples, this.height, false, bar_w)
                                 }
                             </g>
                             :
@@ -405,7 +450,8 @@ export default class Attributes extends React.Component<Props, State>{
                             />
                             <text 
                                 textAnchor="start" 
-                                fontSize={this.fontSize} >
+                                fontSize={this.fontSize} 
+                                fill={key_attrs.includes(attr)?'red':"black"}>
                                 {cutTxt(attr, bar_w*0.8/this.fontSize*2)}
                             </text>
                             <text 
@@ -421,12 +467,14 @@ export default class Attributes extends React.Component<Props, State>{
             </Draggable>
             
         })
+
+        let boarder = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        let keyAttrBoarder:curveData[] = [{x:(key_attrs.length - 0.2) * step,y:60,z:0},
+            {x:(key_attrs.length - 0.2)* step,y:0,z:0}]
         return <g>
-            <g className='attrs' transform={`translate(${window.innerWidth * 0.1}, ${this.attr_margin * 2})`}>
+            <g className='attrs' transform={`translate(${window.innerWidth * 0.05/  show_attrs.length}, ${this.attr_margin * 2})`}>
                 {bars}
-            </g>
-            <g className='protected_attrs' transform={`translate(${0}, ${this.height / 2})`}>
-                {pies}
+                {<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />}
             </g>
         </g>
     }
