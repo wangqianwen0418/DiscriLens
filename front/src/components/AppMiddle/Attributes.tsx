@@ -22,6 +22,7 @@ export interface State {
     selected_bar: string[],
     drag_array: string[],
     show_attrs: string[],
+    cursorDown: boolean,
 }
 export interface curveData {
     x: number,
@@ -37,12 +38,14 @@ export default class Attributes extends React.Component<Props, State>{
             selected_bar: ['', ''],
             drag_array: null,
             show_attrs: [],
+            cursorDown: false,
         }
         this.changeColor = this.changeColor.bind(this)
         this.onStop = this.onStop.bind(this)
         this.initendPos = this.initendPos.bind(this)
         this.changeShowAttr = this.changeShowAttr.bind(this)
         this.changeDrafStatus = this.changeDrafStatus.bind(this)
+        this.changeCursorStatus = this.changeCursorStatus.bind(this)
     }
 
     initendPos(attrs:string[],key_attrs:string[]){
@@ -50,6 +53,10 @@ export default class Attributes extends React.Component<Props, State>{
         this.changePosArray(attrs)
         this.setState({show_attrs:key_attrs})
         this.props.changeShowAttrs(key_attrs)
+    }
+
+    changeCursorStatus(e:boolean){
+        this.setState({cursorDown:e})
     }
 
     changeDrafStatus(e:boolean){
@@ -213,35 +220,19 @@ export default class Attributes extends React.Component<Props, State>{
         // draw areas based on axis
         const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
         const areasRej = d3.area<curveData>().x(d => xScale(d.x)).y1(d => yScaleRej(d.z)).y0(height / 2).curve(d3.curveMonotoneX)
-    
+        
+        let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
+        
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
-    
-    
             <g>
                 <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
                 <path d={areasRej(ListNum) || ''} style={{ fill: BAD_COLOR }} />
             </g>
+            <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
         </g>
     
     }
-    /*
-    drawPies = (values: number[], radius: number, color: string, innerRadius: number) => {
-        // convert a list of values to format that can feed into arc generator
-        let pie = d3.pie()
-        // arc path generator
-        let arc = d3.arc()
-            .cornerRadius(1)
-    
-        return pie(values).map((d: any, i) => {
-            let pathData = arc
-                .innerRadius(innerRadius)
-                .outerRadius(radius)(d)
-            // return an arc
-            return <path key={i} d={pathData || ''} fill={color} opacity={0.4 + i * 0.4} />
-        })
-    
-    }
-    */
     /**
      * Function to draw bars
      * Inputs:
@@ -272,26 +263,34 @@ export default class Attributes extends React.Component<Props, State>{
                 :null}
             </g>
         }
+        let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:bar_w - bar_width * 0.1,y:this.height/2,z:0}]
         return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
-            {/* bars */}
+            <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
             {ranges.map((range: string, range_i) => {
                 let accept_num = samples_accept.filter(s => s[attr] === range).length,
                     reject_num = samples_reject.filter(s => s[attr] === range).length,
                     accept_h = height / 2 * accept_num / max_accept,
                     reject_h = height / 2 * reject_num / max_reject
 
-                // change mouseOn bar's color
-                let mouseEnter = (e: React.SyntheticEvent) => {e.stopPropagation(), this.changeColor([attr, range])}
+                // change mouseOn bar's color when the button is not pressed
+                let mouseEnter = (e:any) => {
+                    // e.buttons is used to detect whether the button is pressed
+                    if(e.buttons==0){
+                        this.changeColor([attr, range])
+                    }
+                }
                 // recover bar's color when mouseOut
                 let mouseOut = () => this.changeColor(['', ''])
+                let mouseDown = ()=> {this.changeColor(['', ''])}
                 return <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
                     <g key={`${attr}_${range}`}
                         transform={`translate(${range_i * (bar_width)}, ${height / 2})`}
-                        onMouseEnter={mouseEnter} onMouseOut={mouseOut}>
+                        onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
                         <rect width={bar_width * 0.9} height={accept_h} y={-1 * accept_h} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? '#DE4863' : GOOD_COLOR }} />
                         <rect width={bar_width * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
                         {generalSituation(range_i)}
-                    </g>
+                         </g>
                 </Tooltip>
             })}
         </g>
@@ -306,23 +305,6 @@ export default class Attributes extends React.Component<Props, State>{
         let { selected_bar , show_attrs} = this.state
         // get numerical data
         samples = samples.slice(0, 1000)
-        // protect attribute
-        /*const protect_vals = Object.keys(countItem(samples.map(s => s[protected_attr])))
-
-        //******************** draw overview pie charts
-        let pies = protect_vals.map((protect_val, pie_i) => {
-            let subsamples = samples.filter(d => d[protected_attr] == protect_val)
-            let subsamples_count = Object.values(
-                countItem(subsamples.map(s => s.class))
-            )
-            let radius = subsamples.length / samples.length * this.height / 2
-            // return a pie
-            return <g key={protect_val + '_pie'} transform={`translate(${window.innerWidth * 0.03}, ${pie_i * this.height})`}>
-                {this.drawPies(subsamples_count, radius, getColor(protect_val), 0)}
-                <text>{(100 * subsamples_count[1] / (subsamples_count[0] + subsamples_count[1])).toFixed(2) + '%'}</text>
-                <text y={this.height / 2} textAnchor='middle'>{`${protect_val}:${subsamples.length}`}</text>
-            </g>
-        })*/
 
         //****************** get all attributes
         let attrs = [...Object.keys(samples[0])]
@@ -387,7 +369,6 @@ export default class Attributes extends React.Component<Props, State>{
                     endNum = Math.min(attrs.length,endNum)
                 }
                 this.onStop(attr,startNum,endNum,endReal)
-                console.log(endNum,startNum)
             }
             let showFlag = (this.state.show_attrs.indexOf(attr)>-1),
 
@@ -416,11 +397,19 @@ export default class Attributes extends React.Component<Props, State>{
             // label postition
             let labelX = showFlag?0:-1.5*this.height, labelY = showFlag?3*this.height: 1.5*this.height
             const changeShowAttr = (e:React.SyntheticEvent)=>this.changeShowAttr(attr, showFlag)
+            /*
+            let mouseDown =()=>{this.changeCursorStatus(true)}
+            let mouseUp =()=>{this.changeCursorStatus(false)}
+            let changeCursor=(e:boolean)=>{
+                console.log(e)
+                if(e){return "pointer"}
+                else{return "e-resize"}
+            }*/
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
                 position={draggablePos}
                 onStop={stopPos}>
-                    <g className="attr" cursor="pointer" >
+                    <g className="attr" cursor='pointer'>
                     <g transform={`translate(${0}, ${0})`}>
                         {show_attrs.includes(attr)?
                             <g className='attrChart'>
@@ -464,10 +453,9 @@ export default class Attributes extends React.Component<Props, State>{
                             </text>
                         </g>
                     </g>
-            </Draggable>
-            
+            </Draggable>   
         })
-
+        
         let boarder = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let keyAttrBoarder:curveData[] = [{x:(key_attrs.length - 0.2) * step,y:60,z:0},
             {x:(key_attrs.length - 0.2)* step,y:0,z:0}]

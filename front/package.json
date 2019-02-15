@@ -8,6 +8,7 @@
     "color-interpolate": "^1.0.4",
     "d3": "^5.7.0",
     "draggable": "^4.2.0",
+    "jquery": "^3.3.1",
     "just-animate": "^2.5.1",
     "react": "^16.7.0",
     "react-axis": "^0.2.5",

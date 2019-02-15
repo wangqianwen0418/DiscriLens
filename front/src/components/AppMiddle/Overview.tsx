@@ -3,31 +3,44 @@ import "./Overview.css"
 import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
-import Draggable from 'react-draggable';
-import {Icon} from 'antd'
 
 export interface Props{
     rules: Rule[],
     key_attrs:string[],
     thr_rules: number[],
+    drag_status: boolean,
     onChange : (thr_rules:[number, number])=>void
 }
 export interface State{
-
+    transformXLeft: number,
+    transformXRight: number,
+    zeroAxis: number,
+    xScaleReverse: d3.ScaleLinear<number, number>
 }
 export interface rules{
     rule: string[],
     risk_dif: number
 }
 export default class Overview extends React.Component<Props,State>{
+    // left start position of svg elements
+    public leftStart = 20 ; rightEnd = window.innerWidth * 0.1; xLeft = this.leftStart; xRight = this.rightEnd
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
         this.ref = React.createRef()
         this.state={
+            transformXLeft: null,
+            transformXRight: null,
+            zeroAxis:null,
+            xScaleReverse:null,
         }
-        this.stopLeft = this.stopLeft.bind(this)
-        this.stopRight = this.stopRight.bind(this)
+        this.mouseDownLeft = this.mouseDownLeft.bind(this)
+        this.mouseMoveLeft = this.mouseMoveLeft.bind(this)
+        this.mouseUpLeft = this.mouseUpLeft.bind(this)
+        this.mouseDownRight = this.mouseDownRight.bind(this)
+        this.mouseMoveRight = this.mouseMoveRight.bind(this)
+        this.mouseUpRight = this.mouseUpRight.bind(this)
+        this.initTransformX = this.initTransformX.bind(this)
     }
     public componentDidMount() { 
         this.renderAxis();
@@ -37,17 +50,72 @@ export default class Overview extends React.Component<Props,State>{
         this.renderAxis();
     }
 
-    stopRight(x:any){
-        this.props.onChange([this.props.thr_rules[0],x])
+    initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScaleReverse:d3.ScaleLinear<number, number>){
+        this.setState({transformXLeft})
+        this.setState({transformXRight})
+        this.setState({zeroAxis})
+        this.setState({xScaleReverse})
     }
 
-    stopLeft(x:any){
-        this.props.onChange([x,this.props.thr_rules[1]])
+    // update state
+    update(xScaleReverse:d3.ScaleLinear<number, number>,zeroAxis:number){
+        this.setState({xScaleReverse})
+        this.setState({zeroAxis})
     }
 
+    // left dragging
+    mouseDownLeft(e: React.MouseEvent){
+        e.preventDefault()
+        e.stopPropagation()
+        window.addEventListener('mousemove', this.mouseMoveLeft)
+    }
+    mouseMoveLeft(e: any){
+        let { transformXLeft,zeroAxis,xScaleReverse } = this.state
+        // the dragging range is restricted to [leftend,0] (in risk_dif space)
+        transformXLeft += (Math.min(Math.max(e.clientX,this.leftStart),zeroAxis) - this.xLeft)
+        this.xLeft = Math.min(Math.max(e.clientX,this.leftStart),zeroAxis)
+        this.setState({ transformXLeft })
+        this.props.onChange([xScaleReverse(transformXLeft),this.props.thr_rules[1]])
+        // if button is up
+        if(e.buttons==0){
+            this.mouseUpLeft(e)
+        }
+    }
+    mouseUpLeft(e: React.MouseEvent){
+        e.preventDefault()
+        e.stopPropagation()
+        window.removeEventListener('mousemove', this.mouseMoveLeft)
+    }
+
+    // right dragging
+    mouseDownRight(e: React.MouseEvent){
+        e.preventDefault()
+        e.stopPropagation()
+        window.addEventListener('mousemove', this.mouseMoveRight)
+    }
+    mouseMoveRight(e: any){
+        let {transformXRight,zeroAxis,xScaleReverse } = this.state
+         // the dragging range is restricted to [0,rightend] (in risk_dif space)
+        transformXRight += (Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis) - this.xRight)
+        this.xRight = Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis)
+        this.setState({ transformXRight })
+        this.props.onChange([this.props.thr_rules[0],xScaleReverse(transformXRight)])
+        // if button is up
+        if(e.buttons==0){
+            this.mouseUpRight(e)
+        }
+    }
+    mouseUpRight(e: React.MouseEvent){
+        e.preventDefault()
+        e.stopPropagation()
+        window.removeEventListener('mousemove', this.mouseMoveRight)
+    }
     ruleProcessing(){
-        let {rules,key_attrs} = this.props
-        // process rules
+        let {rules,key_attrs,drag_status} = this.props
+        //let {thr_rules} = this.state
+        /**
+         * Processing rules by key attrs
+         *  */ 
         let rules_new:Rule[] = []
         rules.forEach((rule)=>{
                 let rule_ante = rule.antecedent 
@@ -99,64 +167,74 @@ export default class Overview extends React.Component<Props,State>{
             }
         })
 
-        // draw area
-        let xScale = d3.scaleLinear().domain([Math.min(...curveX),Math.max(...curveX)]).range([10,window.innerWidth*0.1])
-        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,100])
-        let curveAllAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>120).y0(d=>120-yScale(d.y)).curve(d3.curveMonotoneX)
+        /**
+         * Draw area
+         * */ 
+        // some parameters for drawing
+        // bottom end position
+        let bottomEnd = 120;
+        // left start postition
+        let leftStart = this.leftStart;
+        // right end position
+        let rightEnd = this.rightEnd
+        // a standard reference length
+        let markSize = 14;
+
+        // define scales
+        // xScale maps risk_dif to actual svg pixel length along x-axis
+        let xScale = d3.scaleLinear().domain([Math.min(...curveX),Math.max(...curveX)]).range([leftStart,window.innerWidth*0.1])
+        // yScale maps risk_dif to actual svg pixel length along x-axis
+        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-20])
+        // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
+        let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([Math.min(...curveX),Math.max(...curveX)])
+        // area of rules filtered by key_attrs
+        let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
+        // curve
+        let curve = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+
         
+        // initialization state
+        if(this.state.transformXLeft==null){this.initTransformX(leftStart,rightEnd,xScale(0),xScaleReverse)}
+
+        // update xScaleReverse when dragging is going
+        if(drag_status){this.update(xScaleReverse,xScale(0))}
+
         // select rule filtering thresholds
         let selectThr = () =>{
-            let rangeX:number[] = curveX
-            let xMin = xScale(Math.min(...rangeX))
-            let xMax = xScale(Math.max(...rangeX))
-            let curveBound = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-            let bounderLeft:curveData[] = [{x:6.5,y:12,z:0},{x:6.5,y:115,z:0}]
-            let bounderRight:curveData[] = [{x:6.5,y:12,z:0},{x:6.5,y:115,z:0}]
 
-            let xScaleThr = d3.scaleLinear().domain([10 + 6.5,window.innerWidth*0.1 + 6.5]).range([Math.min(...curveX),Math.max(...curveX)])
-            // the size of the arrow 
-            let markSize = 14
+            //let xMin = xScale(Math.min(...rangeX))
+            //let xMax = xScale(Math.max(...rangeX))
+            
+            let bounderLeft:curveData[] = [{x:0,y:markSize,z:0},{x:0,y:bottomEnd,z:0}]
+            let bounderRight:curveData[] = [{x:0,y:markSize,z:0},{x:0,y:bottomEnd,z:0}]
+            let triangleData:curveData[]=[{x:-markSize/2,y:markSize/2,z:0},{x:0,y:markSize,z:0},{x:markSize/2,y:markSize/2,z:0}]
+            let selectMask:curveData[] = [{x:0,y:markSize/2,z:0},{x:0,y:bottomEnd,z:0}]
 
-            let stopRight = (e:any) =>{
-                this.stopRight(xScaleThr(e.x))
-            }
-
-            let stopLeft = (e:any) =>{
-                this.stopLeft(xScaleThr(e.x))
-            }
-            return <g transform={`translate(-6.5,0)`} cursor='pointer'>
-                    <Draggable axis='x' key={'cursorLeft'}
-                    bounds={{left:xMin,right:xMax,top:0,bottom:0}}
-                    defaultPosition={{x:xMin,y:5}} 
-                    grid={[0.1,0]}
-                    onDrag={stopLeft}>
-                    <g>
-                        <foreignObject width={'1em'} height={'1em'}>
-                            <Icon type='caret-down'/>
-                        </foreignObject>
-                        <path d={curveBound(bounderLeft)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
+            return <g  cursor='e-resize'>
+                 <g id={'triangleLeft'} onMouseDown={this.mouseDownLeft}
+                 transform={`translate(${this.state.transformXLeft}, 0)`}>
+                        <path d={curve(triangleData)} style={{fill:'#bbb'}} />
+                        <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
+                        <path d={curve(bounderLeft)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
                     </g>
-                </Draggable>
                 
-                <Draggable axis='x' key={'cursorRight'}
-                    bounds={{left:xMin,right:xMax,top:0,bottom:0}}
-                    defaultPosition={{x:xMax,y:5}} 
-                    grid={[0.1,0]}
-                    onDrag={stopRight}>
-                    <g>
-                        <foreignObject width={'1em'} height={'1em'} >
-                            <Icon type='caret-down' style={{fontSize:markSize}} className={'curseRightIcon'}/>
-                        </foreignObject>
-                        <path d={curveBound(bounderRight)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
+                <g id={'triangleRight'} onMouseDown={this.mouseDownRight}
+                 transform={`translate(${this.state.transformXRight}, 0)`}>
+                        <path d={curve(triangleData)} style={{fill:'#bbb'}}/>
+                        <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
+                        <path d={curve(bounderRight)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
                     </g>
                     
-                </Draggable>
                 </g>
         }
-        
         return {path:<g>
+                <clipPath id={'overview_path'}>
+                    <path d={curveKeyAttrs(dataAllAttr_new)} style={{fill:'#bbb'}} className='overview'/>
+                </clipPath>
+                <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-markSize} x={this.state.transformXLeft} y={markSize} fill='#bbb' clipPath={'url(#overview_path)'}/>
+                <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-markSize} x={this.state.transformXRight} y={markSize} fill='pink' clipPath={'url(#overview_path)'}/>
+                <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-markSize} x={leftStart} y={markSize} fill='pink' clipPath={'url(#overview_path)'}/>
                 {selectThr()}
-                <path d={curveAllAttrs(dataAllAttr_new)} style={{fill:'#bbb'}}/>
             </g>,
             scale:xScale,
             dataAllAttr:dataAllAttr_new,curveX:curveX}
@@ -172,7 +250,7 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     private renderAxis=()=>{
-        let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.0'))
+        let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.2f'))
         .tickValues(this.ruleProcessing().scale.ticks(1).concat(this.ruleProcessing().scale.domain()))
         d3.selectAll('.axis').remove()
         d3.select(this.ref.current).append('g').attr('class','axis').attr('transform','translate(0,120)').call(axis)

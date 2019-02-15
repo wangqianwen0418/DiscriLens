@@ -8,6 +8,7 @@ export function mapStateToProps(state:StoreState) {
         rules: state.rules,
         key_attrs:state.key_attrs,
         thr_rules: state.thr_rules,
+        drag_status: state.drag_status,
     };
 }
 
