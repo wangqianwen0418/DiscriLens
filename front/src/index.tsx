@@ -18,15 +18,15 @@ const TEST = true
 
 let initState:StoreState
 if (TEST){
-    let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
+    let {key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
     jsonSamples = require('./testdata/academic_lr_samples.json'),
     jsonRule = require('./testdata/academic_lr_rules.json')
     initState = {
-      key_attrs,
+      key_attrs: ['StudentAbsenceDays', 'raisedhands', 'Discussion'],
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,
-      protected_attr: 'sex',
+      protected_attr: 'gender',
       fetch_samples_status: Status.COMPLETE,
       fetch_groups_status: Status.COMPLETE,
       thr_rules:[-0.1,0.1],

@@ -5,3 +5,7 @@
     border-radius: 50%;
     height: 12px !important;
   }
+
+text.icon{
+  transition: transform 0.2s linear;
+}

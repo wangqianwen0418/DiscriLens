@@ -3,6 +3,7 @@ export interface DataItem{
 }
 
 export interface Rule{
+    id: number|string,
     antecedent:  string[],
     cls: string,
     conf_pd: number,

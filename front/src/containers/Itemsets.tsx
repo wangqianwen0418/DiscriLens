@@ -1,4 +1,4 @@
-import Itemsets from 'components/AppMiddle/Itemsets';
+import Itemsets from 'components/AppMiddle/Itemsets2';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
 import { ChangeRuleThresholds , ChangeDragStatus } from 'actions';

@@ -31,7 +31,7 @@ export default class SetCover extends React.Component<Props, State>{
     }
     changeRule(id: number){
         this.setState({selectRuleID: id})
-        console.info(this.props.rules[id])
+        // console.info(this.props.rules[id])
     }
     draw(){
         /*

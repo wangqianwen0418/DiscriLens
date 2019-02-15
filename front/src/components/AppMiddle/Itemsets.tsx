@@ -120,6 +120,7 @@ export default class Itemsets extends React.Component<Props, State>{
         let risk_dif: number = ruleIn.risk_dif
         // rule_out is m*n*2 array. m is the number of rules, n is the number of attrs, 
         //for each row of a rule is [attr,attr's value]
+        console.info(ruleIn)
         let rules_out: any = ruleIn.rule
     
         // record attrbutes' position and corresponding value interval position

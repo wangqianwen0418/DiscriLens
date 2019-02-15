@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, KeyGroup } from 'types';
 import { Icon, Tooltip } from 'antd';
-import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt, getAttrRanges } from 'Helpers';
+import { countItem, getColor, GOOD_COLOR, BAD_COLOR, cutTxt, getAttrRanges} from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 
@@ -14,6 +14,8 @@ export interface Props {
     protected_attr: string,
     fetch_groups_status: Status,
     drag_status: boolean,
+    step:number,
+    bar_w: number,
     onChangeKeyAttr: (key_attrs:string[])=>void,
     changePosArray: (drag_array: string[]) => void,
     ChangeDragStatus: (drag_status: boolean)=>void,
@@ -29,7 +31,8 @@ export interface curveData {
 }
 
 export default class Attributes extends React.Component<Props, State>{
-    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 50;
+    public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 50;
+    height = this.props.step*Math.tan(this.rotate/180*Math.PI)/2
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -123,11 +126,9 @@ export default class Attributes extends React.Component<Props, State>{
 
     drawCurves = (attr: string, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
         // get ranges of this attr
-        // let ranges = samples.map(d => d[attr])
-        //     .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
-        //     .sort((a: number, b: number) => a - b)
-        let ranges = getAttrRanges(samples, attr)
-        console.info(ranges)
+        let ranges = samples.map(d => d[attr])
+            .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+            .sort((a: number, b: number) => a - b)
     
         // step length to merge data, to smooth curve
         function getStep() {
@@ -255,7 +256,7 @@ export default class Attributes extends React.Component<Props, State>{
      * main function to draw 
      ******************/
     draw() {
-        let { samples, key_attrs, protected_attr } = this.props
+        let { samples, key_attrs, protected_attr, bar_w, step } = this.props
         let { selected_bar } = this.state
         // get numerical data
         samples = samples.slice(0, 1000)
@@ -280,7 +281,7 @@ export default class Attributes extends React.Component<Props, State>{
         //****************** get all attributes
         let attrs = [...Object.keys(samples[0])]
         // remove the attribute 'id' and 'class'
-        //attrs.splice(attrs.indexOf('id'), 1)
+        attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
         attrs.splice(attrs.indexOf(protected_attr), 1)
         
@@ -298,7 +299,6 @@ export default class Attributes extends React.Component<Props, State>{
         //if(this.state.attrs_init!=null){attrs=this.state.attrs_init}
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
-
         attrs.forEach(attr => {
             let count = Object.values(
                 countItem(samples.filter(s => s.class == '0').map(s => s[attr]))
@@ -323,8 +323,7 @@ export default class Attributes extends React.Component<Props, State>{
         //******************** draw bars
         // the overall length of all bars of each attribute
         // let step = window.innerWidth * 0.4/  key_attrs.length
-        let step = 2*this.height/Math.sin(this.rotate/180*Math.PI)
-        let bar_w = step * 0.8
+        
         // loop all attributes and draw bars for each one
         let bars = attrs.map((attr: string, attr_i) => {
             // check whether numerical or categorical attribute
@@ -370,7 +369,7 @@ export default class Attributes extends React.Component<Props, State>{
 
 
             // label postition
-            let labelX = keyFlag?0:-1.5*this.height, labelY = keyFlag?3*this.height: 1.5*this.height
+            let labelX = keyFlag?0:-1*this.height, labelY = keyFlag?1.5*this.height: 1*this.height
             const changeKeyAttr = (e:React.SyntheticEvent)=>this.changeKeyAttr(attr, keyFlag)
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
@@ -458,10 +457,7 @@ export default class Attributes extends React.Component<Props, State>{
 
         }
 
-        return (<g
-            className='Attributes'
-            transform={`translate(${window.innerWidth * 0.01}, ${0})`}
-        >
+        return (<g className='Attributes'>
             {content}
         </g>
 

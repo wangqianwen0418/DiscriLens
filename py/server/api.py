@@ -59,8 +59,8 @@ def get_samples():
     # here model_samples are non-catogorized data for output while storeData is categorized data for storing
     
     # add the ID col 
-    #storeData.insert(loc=0, column='id', value=model_samples.index)
-    #store.insert(loc=0, column='id', value=store.index)
+    storeData.insert(loc=0, column='id', value=model_samples.index)
+    model_samples.insert(loc=0, column='id', value=model_samples.index)
     # save mdeol & samples to cache
     samples_path = os.path.join(cache_path, '{}_samples.json'.format(model_name))
     storeData.to_json(samples_path, orient='records')
