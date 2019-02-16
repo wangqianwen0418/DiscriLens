@@ -8,4 +8,19 @@
 
 text.icon{
   transition: transform 0.2s linear;
+  fill:#c3c3c3;
+}
+
+g.rules g.rule{
+  transition: transform 0.2s linear;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
 }

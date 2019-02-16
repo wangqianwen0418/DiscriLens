@@ -112,14 +112,14 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
     for (let ruleNode of positiveRuleNodes){
         let {antecedent} = ruleNode.rule
         var isContain: boolean = false 
-        loop: for (let ruleAgg of positiveRuleAgg){
+        loop1: for (let ruleAgg of positiveRuleAgg){
             isContain = isSubArray(ruleAgg.antecedent, antecedent) 
             if(isContain){
                 ruleAgg.nodes.push(ruleNode)
                 ruleAgg.items = Array.from(
                     new Set( ruleAgg.items.concat(...ruleNode.rule.items) )
                 ) 
-                break loop
+                break loop1
             }
         }
         if (!isContain){
@@ -139,7 +139,7 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
     for (let ruleNode of negativeRuleNodes){
         let {antecedent} = ruleNode.rule
         let isContain: boolean = false 
-        for (let ruleAgg of negativeRuleAgg){
+        loop2: for (let ruleAgg of negativeRuleAgg){
             isContain = isSubArray(ruleAgg.antecedent, antecedent) 
             if(isContain){
                 ruleAgg.nodes.push(ruleNode)
@@ -147,7 +147,7 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
                     new Set( ruleAgg.items.concat(...ruleNode.rule.items) )
                 ) 
             }
-            break
+            break loop2
         }
         if (!isContain){
             negativeRuleAgg.push({

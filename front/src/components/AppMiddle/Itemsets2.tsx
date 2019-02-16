@@ -36,6 +36,7 @@ export interface rules{
 export default class Itemset extends React.Component<Props, State>{
 public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1; line_interval = 15;
         margin=10; offsetX = window.innerWidth*0.1; indent: 5;
+        headWidth = 30;
 constructor(props:Props){
     super(props)
     this.state={
@@ -68,8 +69,31 @@ drawRuleNode(ruleNode: RuleNode,attrs: string[], offsetY:number, favorPD: boolea
     let isExpand = this.state.expandRules.includes(id)
 
     
-    let parent = <g key={ruleNode.rule.id} id={ruleNode.rule.id.toString()} 
+    let parent = <g className={`${ruleNode.rule.id.toString()} rule` }
         transform={`translate(${this.offsetX}, ${offsetY})`}>
+        <text fontSize={10} y={this.line_interval} textAnchor="end" x={-30}>
+                    {items.length }
+                    -
+                    { ruleNode.rule.risk_dif.toFixed(2)}
+        </text>
+        <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}> 
+            <line className="ruleBoundary" 
+                x1="0" y1={this.line_interval*0.3} 
+                x2={window.innerWidth} y2={this.line_interval*0.3} 
+                stroke="#f0f0f0" 
+            />
+            <g className="icon" transform={`translate(${0}, ${-this.line_interval/4})`}>
+            {ruleNode.child.length==0?
+            <text className="icon" > 
+                o 
+            </text> :
+            <text className="icon" 
+            transform={`rotate(${isExpand?90:0} ${this.line_interval/4} ${-this.line_interval/4})`}>
+                > 
+            </text> 
+            }
+            </g>
+        </g>
     {
         antecedent.map((attrVal)=>{
         let [attr, val] = attrVal.split('=')
@@ -81,26 +105,7 @@ drawRuleNode(ruleNode: RuleNode,attrs: string[], offsetY:number, favorPD: boolea
             strokeWidth='1px'
             x={-20} y={-0.25*this.line_interval}
             height={this.line_interval*1.5} width={step*key_attrs.length + 20}/> */}
-            <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}> 
-                <line className="ruleBoundary" 
-                    x1="0" y1={this.line_interval*0.3} 
-                    x2={window.innerWidth} y2={this.line_interval*0.3} 
-                    stroke="#f0f0f0" 
-                />
-                {ruleNode.child.length==0?
-                <text className="icon" > 
-                    o 
-                </text> :
-                <text className="icon" transform={`translate(${0}, ${isExpand?-this.line_interval: -this.line_interval/2}) rotate(${isExpand?90:0})`}> 
-                    > 
-                </text> 
-                }
-            </g>
-                <text fontSize={10} y={this.line_interval} textAnchor="end" x={-30}>
-                    {items.length }
-                    -
-                    { ruleNode.rule.risk_dif.toFixed(2)}
-                </text>
+                
                 <rect className='background' 
                     width={bar_w} height = {this.line_interval}
                     x={step*attrs.indexOf(attr)}
@@ -138,7 +143,11 @@ drawRuleAgg(ruleAgg: RuleAgg,attrs: string[], favorPD: boolean){
     let {bar_w, step, key_attrs } = this.props
     let toggleExpand = (e: React.SyntheticEvent)=>this.toggleExpand(id)
     let isExpand = this.state.expandRules.includes(id)
-    return antecedent.map((attrVal=>{
+    let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.line_interval} textAnchor="end" x={-30}>
+                {items.length}
+            </text>
+ 
+    let attrValContent = antecedent.map((attrVal=>{
         let [attr, val] = attrVal.split('=')
         let ranges = getAttrRanges(this.props.samples, attr).filter(r=>typeof(r)=='string'),
             rangeIdx = ranges.indexOf(val)
@@ -147,19 +156,15 @@ drawRuleAgg(ruleAgg: RuleAgg,attrs: string[], favorPD: boolean){
             stroke='#c3c3c3' fill='none' 
             strokeWidth='1px'
             rx={2} ry={2}
-            x={-20} y={-0.25*this.line_interval}
-            height={this.line_interval*1.5} width={step*key_attrs.length + 20}/>
-            <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}> 
+            x={-this.headWidth} y={-0.25*this.line_interval}
+            height={this.line_interval*1.5} width={step*key_attrs.length + this.headWidth}/>
+            <g className="icon"  transform={`translate(${-15}, ${this.line_interval*0.75})`} cursor='pointer' onClick={toggleExpand}> 
                 <text className="icon" 
-                transform={`translate(${0}, ${isExpand?-this.line_interval:0}) rotate(${isExpand?90:0})`}
-                fill='#c3c3c3'
+                transform={`rotate(${isExpand?90:0} ${this.line_interval/4} ${-this.line_interval/4})`}
                 > 
                     > 
                 </text> 
             </g>
-            <text fontSize={10} y={this.line_interval} textAnchor="end" x={-30}>
-                {items.length}
-            </text>
             <rect className='background' 
                 width={bar_w} height = {this.line_interval}
                 x={step*attrs.indexOf(attr)}
@@ -175,6 +180,8 @@ drawRuleAgg(ruleAgg: RuleAgg,attrs: string[], favorPD: boolean){
             />
             </g>
     }))
+    attrValContent.unshift(itemSizeLabel)
+    return attrValContent
 }
 draw(){
     let {rules, samples, thr_rules, key_attrs, protected_attr} = this.props
@@ -222,7 +229,7 @@ draw(){
     let posRules:JSX.Element[] = []
     for (let ruleAgg of positiveRuleAgg){
         posRules.push(
-            <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.offsetX}, ${offsetY})`}>    
+            <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.offsetX}, ${offsetY})`} className="rule">    
             {
                 this.drawRuleAgg(ruleAgg, attrs, true)
             }
