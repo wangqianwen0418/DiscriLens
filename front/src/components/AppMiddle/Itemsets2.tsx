@@ -36,7 +36,7 @@ export interface rules{
 export default class Itemset extends React.Component<Props, State>{
 public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1; line_interval = 15;
         margin=10; offsetX = window.innerWidth*0.1; indent: 5;
-        headWidth = 30;
+        headWidth = 50;
 constructor(props:Props){
     super(props)
     this.state={
@@ -62,23 +62,35 @@ toggleExpand(id: Rule['id']){
     }
     this.setState({expandRules})
 }
-drawRuleNode(ruleNode: RuleNode,attrs: string[], offsetY:number, favorPD: boolean):{content: JSX.Element[], offsetY:number}{
+drawRuleNode(ruleNode: RuleNode,attrs: string[], offsetX:number, offsetY:number, favorPD: boolean):{content: JSX.Element[], offsetY:number}{
     let {antecedent, items, id} = ruleNode.rule
     let {bar_w, step } = this.props
     let toggleExpand = (e: React.SyntheticEvent)=>this.toggleExpand(id)
     let isExpand = this.state.expandRules.includes(id)
 
-    
+    let indent = -this.headWidth + this.headWidth*0.15*offsetX
     let parent = <g className={`${ruleNode.rule.id.toString()} rule` }
         transform={`translate(${this.offsetX}, ${offsetY})`}>
-        <text fontSize={10} y={this.line_interval} textAnchor="end" x={-30}>
+        <text fontSize={10} y={this.line_interval} textAnchor="end" x={-this.headWidth}>
                     {items.length }
                     -
                     { ruleNode.rule.risk_dif.toFixed(2)}
         </text>
+        <g className="tree">
+            <line 
+            x1={indent} y1={-this.line_interval*0.7} 
+            x2={indent} y2={this.line_interval*1.3} 
+            stroke="#444" 
+            />
+             {/* <line 
+            x1={-this.headWidth} y1={0} 
+            x2={0} y2={0} 
+            stroke="#444" 
+            /> */}
+        </g>
         <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}> 
             <line className="ruleBoundary" 
-                x1="0" y1={this.line_interval*0.3} 
+                x1={indent} y1={this.line_interval*0.3} 
                 x2={window.innerWidth} y2={this.line_interval*0.3} 
                 stroke="#f0f0f0" 
             />
@@ -124,12 +136,13 @@ drawRuleNode(ruleNode: RuleNode,attrs: string[], offsetY:number, favorPD: boolea
     )}
     </g>
     offsetY = offsetY + 2* this.line_interval
+    offsetX += 1
     
     let content = [parent]
     if(isExpand){
         let children: JSX.Element[] = []
         for (let childNode of ruleNode.child){
-            let {content:child, offsetY:newY} = this.drawRuleNode(childNode, attrs, offsetY, favorPD)
+            let {content:child, offsetY:newY} = this.drawRuleNode(childNode, attrs, offsetX, offsetY, favorPD)
             children = children.concat(child)
             offsetY = newY
         }
@@ -143,7 +156,7 @@ drawRuleAgg(ruleAgg: RuleAgg,attrs: string[], favorPD: boolean){
     let {bar_w, step, key_attrs } = this.props
     let toggleExpand = (e: React.SyntheticEvent)=>this.toggleExpand(id)
     let isExpand = this.state.expandRules.includes(id)
-    let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.line_interval} textAnchor="end" x={-30}>
+    let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.line_interval} textAnchor="end" x={-this.headWidth-5}>
                 {items.length}
             </text>
  
@@ -238,7 +251,7 @@ draw(){
         offsetY = offsetY + 2*this.line_interval
         if (expandRules.includes(ruleAgg.id)){
             for (let ruleNode of ruleAgg.nodes){
-                let {content, offsetY: newY} = this.drawRuleNode(ruleNode, attrs, offsetY, true)
+                let {content, offsetY: newY} = this.drawRuleNode(ruleNode, attrs, 1, offsetY, true)
                 offsetY = newY
                 posRules = posRules.concat(content)
             }
