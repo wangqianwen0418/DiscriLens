@@ -24,3 +24,7 @@ g.rules g.rule{
       opacity: 1;
   }
 }
+
+g.score circle{
+  transform: rotate(-90deg)
+}
