@@ -23,7 +23,8 @@ export interface rules{
 }
 export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
-    public leftStart = 20 ; rightEnd = window.innerWidth * 0.1; xLeft = this.leftStart; xRight = this.rightEnd
+    public leftStart = 20 ; rightEnd = window.innerWidth * 0.1; bottomEnd = 100; markSize = 14;
+            xLeft = this.leftStart; xRight = this.rightEnd
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -140,28 +141,28 @@ export default class Overview extends React.Component<Props,State>{
         })
         rules = rules_new
         let curveX:number[] = []
-        let dataAllAttr: curveData[] = []
+        let dataKeyAttr: curveData[] = []
         //let dataKeyAttr: curveData[] = []
         rules.forEach((rule,rule_i)=>{
             if(!curveX.includes(rule['risk_dif'])){
                 curveX.push(rule['risk_dif'])
-                dataAllAttr.push({x:rule['risk_dif'],y:rule['sup_pnd'],z:0})
+                dataKeyAttr.push({x:rule['risk_dif'],y:rule['sup_pnd'],z:0})
             }else{
-                dataAllAttr[curveX.indexOf(rule['risk_dif'])].y += rule['sup_pnd']
+                dataKeyAttr[curveX.indexOf(rule['risk_dif'])].y += rule['sup_pnd']
             }
         })
 
         let curveY:number[] = []
         curveX = []
-        let step = Math.ceil(dataAllAttr.length / 5)
+        let step = Math.ceil(dataKeyAttr.length / 5)
         let stepCount = 0
-        let dataAllAttr_new:curveData[] = []
-        dataAllAttr.forEach((data,i)=>{
+        let dataKeyAttr_new:curveData[] = []
+        dataKeyAttr.forEach((data,i)=>{
             stepCount += data.y
-            if(((i%step==0))||(i==dataAllAttr.length-1)){
+            if(((i%step==0))||(i==dataKeyAttr.length-1)){
                 data.y = stepCount
                 stepCount = 0
-                dataAllAttr_new.push(data)
+                dataKeyAttr_new.push(data)
                 curveY.push(data.y)
                 curveX.push(data.x)
             }
@@ -172,21 +173,22 @@ export default class Overview extends React.Component<Props,State>{
          * */ 
         // some parameters for drawing
         // bottom end position
-        let bottomEnd = 120;
+        let bottomEnd = this.bottomEnd;
         // left start postition
         let leftStart = this.leftStart;
         // right end position
         let rightEnd = this.rightEnd
         // a standard reference length
-        let markSize = 14;
+        let markSize = this.markSize;
 
         // define scales
+        let maxAbsoluteX = Math.max.apply(null,curveX.map(Math.abs))
         // xScale maps risk_dif to actual svg pixel length along x-axis
-        let xScale = d3.scaleLinear().domain([Math.min(...curveX),Math.max(...curveX)]).range([leftStart,window.innerWidth*0.1])
+        let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
         // yScale maps risk_dif to actual svg pixel length along x-axis
         let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-20])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
-        let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([Math.min(...curveX),Math.max(...curveX)])
+        let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
         let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
         // curve
@@ -229,7 +231,7 @@ export default class Overview extends React.Component<Props,State>{
         }
         return {path:<g>
                 <clipPath id={'overview_path'}>
-                    <path d={curveKeyAttrs(dataAllAttr_new)} style={{fill:'#bbb'}} className='overview'/>
+                    <path d={curveKeyAttrs(dataKeyAttr_new)} style={{fill:'#bbb'}} className='overview'/>
                 </clipPath>
                 <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-markSize} x={this.state.transformXLeft} y={markSize} fill='#bbb' clipPath={'url(#overview_path)'}/>
                 <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-markSize} x={this.state.transformXRight} y={markSize} fill='pink' clipPath={'url(#overview_path)'}/>
@@ -237,15 +239,15 @@ export default class Overview extends React.Component<Props,State>{
                 {selectThr()}
             </g>,
             scale:xScale,
-            dataAllAttr:dataAllAttr_new,curveX:curveX}
+            dataKeyAttr:dataKeyAttr_new}
     
     }
     render(){
         //let curveKeyAttrs = d3.line<curveData>().x(d=>d.x).y(d=>d.z)
         return <g>
-            {this.ruleProcessing().dataAllAttr.length>1?<g ref={this.ref}>
+            {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
                 {this.ruleProcessing().path}
-            </g>:<text transform={'translate(0,120)'} font-size={12}>Try different itemsets!</text>}
+            </g>:<text transform={`translate(0,${this.bottomEnd})`} fontSize={12}>Try different itemsets!</text>}
         </g>
     }
 
@@ -253,6 +255,6 @@ export default class Overview extends React.Component<Props,State>{
         let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.2f'))
         .tickValues(this.ruleProcessing().scale.ticks(1).concat(this.ruleProcessing().scale.domain()))
         d3.selectAll('.axis').remove()
-        d3.select(this.ref.current).append('g').attr('class','axis').attr('transform','translate(0,120)').call(axis)
+        d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`).call(axis)
     }
 }

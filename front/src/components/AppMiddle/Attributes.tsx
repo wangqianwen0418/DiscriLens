@@ -121,13 +121,9 @@ export default class Attributes extends React.Component<Props, State>{
                 else{drag_array.push(d)}
             })
             // add a new key_attr
-            if((startNum>=boarder.length)&&(endNum<boarder.length)){
-                boarder.push(attr)
-            }
             if((endReal<0)&&(startNum>=boarder.length)){
                 boarder.push(attr)
-            }
-            if((endReal<0)&&(startNum>=boarder.length)){
+            }else if((startNum>=boarder.length)&&(endNum<boarder.length)){
                 boarder.push(attr)
             }
         }
@@ -141,12 +137,11 @@ export default class Attributes extends React.Component<Props, State>{
                 else{drag_array.push(d)}
             })
             // remove a key_attr
-            if((startNum<boarder.length)&&(endNum>=boarder.length)){
+            if((endReal!=endNum)&&(startNum<boarder.length)){
+                boarder.splice(boarder.indexOf(attr),1)
+            }else if((startNum<boarder.length)&&(endNum>=boarder.length)){
                 boarder.splice(boarder.indexOf(attr),1)
             } 
-            if((endReal>=this.state.show_attrs.length)&&(startNum<boarder.length)){
-                boarder.splice(boarder.indexOf(attr),1)
-            }
         }
         else{
             if(startNum!=endReal){
@@ -349,8 +344,9 @@ export default class Attributes extends React.Component<Props, State>{
 
         //******************** draw bars
         // the overall length of all bars of each attribute
-        let step = window.innerWidth * 0.4/ show_attrs.length
+        let step =  window.innerWidth * 0.4/ Math.max(show_attrs.length,1)
         let bar_w = step * 0.8
+        
         // loop all attributes and draw bars for each one
         let bars = attrs.map((attr: string, attr_i) => {
             // check whether numerical or categorical attribute
