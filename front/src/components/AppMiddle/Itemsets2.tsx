@@ -4,7 +4,7 @@ import { Icon } from 'antd';
 import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
 
 // import Euler from 'components/AppMiddle/Euler';
-import Bubble from 'components/AppMiddle/Bubble';
+// import Bubble from 'components/AppMiddle/Bubble';
 
 import "./Itemsets.css"
 
@@ -320,9 +320,9 @@ export default class Itemset extends React.Component<Props, State>{
         // })
         return <g key='rules'>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
-            <g transform={`translate(100, 300)`}>
+            {/* <g transform={`translate(100, 300)`}>
                 <Bubble ruleAgg={positiveRuleAgg[1]}/>
-            </g>
+            </g> */}
             {posRules}
             {/* {negaRules} */}
         </g>
