@@ -16,6 +16,7 @@ export interface Props {
     drag_status: boolean,
     step:number,
     bar_w: number,
+    offsetX:number,
     onChangeKeyAttr: (key_attrs:string[])=>void,
     changePosArray: (drag_array: string[]) => void,
     changeDragStatus: (drag_status: boolean)=>void,
@@ -461,7 +462,7 @@ export default class Attributes extends React.Component<Props, State>{
         let keyAttrBoarder:curveData[] = [{x:(key_attrs.length - 0.2) * step,y:60,z:0},
             {x:(key_attrs.length - 0.2)* step,y:0,z:0}]
         return <g>
-            <g className='attrs' transform={`translate(${window.innerWidth * 0.05/  show_attrs.length}, ${this.attr_margin * 2})`}>
+            <g className='attrs' transform={`translate(${this.props.offsetX}, ${this.attr_margin * 2})`}>
                 {bars}
                 {<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />}
             </g>

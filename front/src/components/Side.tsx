@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select,Row, Col, InputNumber} from 'antd';
+import {Select,Row, Col} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
@@ -61,16 +61,17 @@ export default class Side extends React.Component<Props, State>{
   }
 
   public render(){
-    let {thr_rules} = this.props
+    // let {thr_rules} = this.props
 
       return <div onSubmit={this.onStart} className='Side'>
-      <Col span={12}>
         <Row>
-          <Col span={12}>
+          <Col span={6}>
             <h1 className='tool-title'>Data set</h1>
+            <h2 className='tool-title'>Model</h2>
+            <h3 className='tool-title'>Prot Attr</h3>
           </Col>
-          <Col span={12}>
-            <Select size={'small'} defaultValue='academic' style={{ width: '100%', height: '50%'}} onChange={this.selectDataset}>
+          <Col span={18}>
+            <Select size={'small'} defaultValue='academic' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                 <Option value="credit">credit</Option>
                 <Option value="academic">academic</Option>
                 <Option value="give_me_credit">give_me_credit</Option>
@@ -78,63 +79,23 @@ export default class Side extends React.Component<Props, State>{
                 <Option value="adult">adult</Option>
                 <Option value="frisk">frisk</Option>
                 <Option value="dataTest">dataTest</Option>
-              </Select>
-          </Col>
-            
-        </Row>
-        <Row>
-          <Col span={12}> 
-            <h2 className='tool-title'>Model</h2>
-          </Col>
-          <Col span={12}>
-            <Select size={'small'} defaultValue='knn' style={{ width: '100%', height: '50%' }} onChange={this.selectModel}>
+            </Select>
+
+            <Select size={'small'} defaultValue='knn' style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>
               <Option value="knn">knn</Option>
               <Option value="rf">rf</Option>
               <Option value='xgb'>xgb</Option>
             </Select>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <h3 className='tool-title'>Prot Attr</h3>
-          </Col>
-          <Col span={12}>
-            <Select size={'small'} defaultValue='gender' style={{ width: '100%', height: '50%' }} onChange={this.selectProtectAttr}>
+
+            <Select size={'small'} defaultValue='gender' style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>
               <Option value="sex">sex</Option>
               <Option value="gender">gender</Option>
             </Select>
-          </Col>
-        </Row>
-      </Col>
 
-      <Col span={12}>
-          <h4 className='tool-title'>
-            Threshold: <br/>
-            {String.fromCharCode(60, 160)} 
-            <InputNumber
-              min={-0.5}
-              max={0}
-              step={0.05}
-              style={{width: "60px"}}
-              size="small"
-              value={thr_rules[0]}  
-              onChange={this.onChangeLeft}
-            />
+          </Col>
             
-            or 
-            {String.fromCharCode(160, 62, 160)} 
-            {/* {thr_rules[1]}  */}
-            <InputNumber
-              min={0}
-              max={0.5}
-              step={0.05}
-              style={{width: "60px"}}
-              size="small"
-              value={thr_rules[1]}  
-              onChange={this.onChangeRight}
-            />
-          </h4>
-      </Col>       
+        </Row>
+        
     </div>
   }
 }

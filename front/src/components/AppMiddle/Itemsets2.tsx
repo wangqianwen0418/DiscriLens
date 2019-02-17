@@ -4,7 +4,7 @@ import { Icon } from 'antd';
 import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
 
 // import Euler from 'components/AppMiddle/Euler';
-// import Bubble from 'components/AppMiddle/Bubble';
+import Bubble from 'components/AppMiddle/Bubble';
 
 import "./Itemsets.css"
 
@@ -19,6 +19,7 @@ export interface Props {
     fetch_groups_status: Status,
     step: number,
     bar_w: number,
+    offsetX:number,
     changeDragStatus: (drag_status: boolean) => void,
 }
 export interface State {
@@ -38,8 +39,9 @@ export interface rules {
 
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; line_interval = 15;
-    margin = 10; offsetX = window.innerWidth * 0.1; indent: 5;
-    headWidth = 50;
+    margin = 25; 
+    headWidth = this.props.offsetX-this.margin; 
+    indent: 5;
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -68,16 +70,16 @@ export default class Itemset extends React.Component<Props, State>{
     drawRuleNode(ruleNode: RuleNode, attrs: string[], offsetX: number, offsetY: number, favorPD: boolean): { content: JSX.Element[], offsetY: number } {
         let { rule } = ruleNode
         let { antecedent, items, id } = rule
-        let { bar_w, step } = this.props
+        let { bar_w, step} = this.props
         let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id)
         let isExpand = this.state.expandRules.includes(id)
 
-        let indent = -this.headWidth + this.headWidth * 0.15 * offsetX
+        let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
         let outCircleRadius = this.line_interval * 0.8
         let progressBarWidth = 3
         let inCircleRadius = this.line_interval * 0.8 - progressBarWidth*1.5
         let parent = <g className={`${ruleNode.rule.id.toString()} rule`}
-            transform={`translate(${this.offsetX}, ${offsetY})`}>
+            transform={`translate(${this.props.offsetX}, ${offsetY})`}>
             <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.line_interval*0.3})`}>
                 <g className='conf_pnd' >
                     <circle
@@ -291,7 +293,7 @@ export default class Itemset extends React.Component<Props, State>{
         let posRules: JSX.Element[] = []
         for (let ruleAgg of positiveRuleAgg) {
             posRules.push(
-                <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.offsetX}, ${offsetY})`} className="rule">
+                <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, attrs, true)
                     }
@@ -319,7 +321,7 @@ export default class Itemset extends React.Component<Props, State>{
         return <g key='rules'>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             <g transform={`translate(100, 300)`}>
-                {/* <Bubble ruleAgg={positiveRuleAgg[1]}/> */}
+                <Bubble ruleAgg={positiveRuleAgg[1]}/>
             </g>
             {posRules}
             {/* {negaRules} */}

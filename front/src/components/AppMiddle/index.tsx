@@ -6,7 +6,8 @@
 
  export default class AppMiddel extends React.Component{
      public step = 120;
-     bar_w = this.step * 0.9
+     bar_w = this.step * 0.9;
+     offsetX=80;
      render(){
 
          return <div className='App-middle'> 
@@ -18,11 +19,11 @@
           </div>
 
           <div className='App-right'>
-          <svg className='attribute' style={{width:"100%", height: "40%"}}>
-                <Attributes step={this.step} bar_w={this.bar_w}/>
+          <svg className='attribute' style={{width:"100%", height: "25%"}}>
+                <Attributes step={this.step} bar_w={this.bar_w} offsetX={this.offsetX}/>
             </svg>
-            <div className='itemset' style={{width: "100%", height: "50%", overflowY: "scroll"}}>
-                <Itemsets step={this.step} bar_w={this.bar_w}/>
+            <div className='itemset' style={{width: "100%", height: "75%", overflowY: "scroll"}}>
+                <Itemsets step={this.step} bar_w={this.bar_w} offsetX={this.offsetX}/>
             </div>
         </div>
         </div>
