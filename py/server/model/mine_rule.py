@@ -21,6 +21,7 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=
         elift_th ([float, float])
     Return:
         pd_rules (pandas DataFrame): columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'risk_dif', 'elift', 'sup_pd', 'sup_pnd']
+            id (number)
             antecedent (list of string, e.g., [VisITedResources=x>74, NationalITy=Jordan])
             pd (string): e.g., gender=F
             cls (string): e.g., class=M
@@ -73,6 +74,7 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=
                     pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, risk_dif, elift, float(pd_cls.sup), float(pnd_cls.sup)]
     
     pd_rules = pd_rules.sort_values(by=['risk_dif'])
+    pd_rules.insert(loc=0, column='id', value=pd_rules.index)
 
     return pd_rules
 
