@@ -103,7 +103,7 @@ export default class Bubble extends React.Component<Props, State>{
         //     }
         
         var bubbles = new BubbleSet(),
-            padding = 0
+            padding = 2
         var outlines = rules.map(rule=>{
             let itemIn = itemPos.filter(itemP=>rule.items.includes(itemP.id))
             let itemOut = itemPos.filter(itemP=>!rule.items.includes(itemP.id))

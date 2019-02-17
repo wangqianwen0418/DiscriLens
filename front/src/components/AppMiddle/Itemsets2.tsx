@@ -113,7 +113,9 @@ export default class Itemset extends React.Component<Props, State>{
                         r={inCircleRadius} 
                         fill="transparent"
                         stroke-dasharray={inCircleRadius * 2 * Math.PI}
-                        stroke-dashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} />
+                        // stroke-dashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
+                        stroke-dashoffset={inCircleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
+                        />
                 </g>
             </g>
             <text fontSize={10} y={this.line_interval} textAnchor="end" x={-this.headWidth-2*outCircleRadius}>
@@ -125,7 +127,8 @@ export default class Itemset extends React.Component<Props, State>{
                 <line
                     x1={indent} y1={-this.line_interval * 0.7}
                     x2={indent} y2={this.line_interval * 1.3}
-                    stroke="#444"
+                    stroke="#c3c3c3"
+                    strokeWidth='2'
                 />
                 {/* <line 
             x1={-this.headWidth} y1={0} 
