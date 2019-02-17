@@ -12,6 +12,7 @@ export interface Props{
     thr_rules:number[],
     key_attrs: string[],
     drag_array: string[],
+    show_attrs: string[],
     drag_status: boolean,
     protected_attr: string,
     fetch_groups_status: Status,
