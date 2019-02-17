@@ -178,7 +178,6 @@ export default class Glyph extends React.Component<Props, State>{
                </g>
                 
                 let rect_width = width_base * 0.4 / attr_pos[rule_i][2] / Math.sqrt(2)
-                console.log(rect_width)
                 let cat_output = <g transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
                 {Array.apply(null, Array(attr_pos[rule_i][2])).map((_:any, i:any)=>{
                     if(i==attr_pos[rule_i][1]){

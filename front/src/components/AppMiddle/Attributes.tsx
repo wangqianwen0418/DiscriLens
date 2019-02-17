@@ -194,7 +194,6 @@ export default class Attributes extends React.Component<Props, State>{
         ranges.map((range: number, range_i) => {
             accept_num += samples_accept.filter(s => s[attr] === range).length
             reject_num += samples_reject.filter(s => s[attr] === range).length
-            //console.log(range,samples_accept,samples_reject,range_i,step)
             if (((range_i % step == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
     
                 ListNum.push(dataPush(range, accept_num, reject_num))
