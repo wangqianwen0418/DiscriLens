@@ -38,5 +38,5 @@ export interface StoreState{
     thr_rules: [number, number],    // slider bar interaction, select threshold of rule filtering
     protected_attr: string, // record protected attr
     drag_array: string[],   // array to record each attr's location, used for dragging function
-    drag_status: boolean, // when a dragging happens, this falg is set to true, then reset to false after function receives the movement
+    drag_status: boolean, // // drag status is used to detect dragging movements in attribute.tsx. 
 }

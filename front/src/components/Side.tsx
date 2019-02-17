@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select, Button, Slider, Row, Col, InputNumber} from 'antd';
+import {Select,Row, Col, InputNumber} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
@@ -134,8 +134,6 @@ export default class Side extends React.Component<Props, State>{
               onChange={this.onChangeRight}
             />
           </h4>
-          <Slider min={-0.5} max={0.5} step={0.01} range={true} defaultValue={[-0.1,0.1]} onChange={this.onChange} value={thr_rules}/>
-          <Button type="primary" shape="circle" icon="caret-right" onClick={this.onStart}/>
       </Col>       
     </div>
   }

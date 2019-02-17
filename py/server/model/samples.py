@@ -79,7 +79,7 @@ def get_numAttrs(data):
         #output.append(var)
     return output
 
-def generate_model_samples(data, sample_num, model, encoder):
+def generate_model_samples(samplesInit, model, encoder):
     """
     models behavior on generated sample data:
     Args:
@@ -91,7 +91,7 @@ def generate_model_samples(data, sample_num, model, encoder):
         model_samples(pandas DataFrame): generated samples(not-categorized) for front-end
         storeData(pandas DataFrame): generated samples(categorized) for storing (saving as file)
     """
-    samplesInit = generate_samples(data, sample_num)
+    #samplesInit = generate_samples(data, sample_num)
     samples = num2cate(samplesInit)
     # model predict
     x_samples, _ = encoder.transform(samples)

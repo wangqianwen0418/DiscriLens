@@ -1,0 +1,7 @@
+.axis .domain{
+    stroke: #bbb !important;
+}
+
+.axis .tick line{
+    stroke: #bbb !important;
+}
