@@ -32,6 +32,7 @@ if (TEST){
       thr_rules:[-0.1,0.1],
       drag_array: [],
       drag_status: false,
+      show_attrs: [],
   }
 }else{
   initState = {
@@ -45,6 +46,7 @@ if (TEST){
     thr_rules:[-0.1,0.1],
     drag_array: [],
     drag_status: false,
+    show_attrs: [],
 }
 }
 
@@ -62,4 +64,3 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
-

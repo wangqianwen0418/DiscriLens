@@ -47,30 +47,52 @@ def get_samples():
     """
     
     dataset_name = request.args.get('dataset', None, type=str)
-    model_name = request.args.get('model', None, type=str)
-    model_name = dataset_name+"_"+model_name
+    #model_name = request.args.get('model', None, type=str)
+    
     sample_num = 1000 # number of generated data 
     dataset_path = '../data/{}.csv'.format(dataset_name)
     data = pd.read_csv(dataset_path)
     # generate samples
-    model_gene = ModelGene(model_name)
-    model, encoder, score = model_gene.fit_model(num2cate(data))
-    model_samples, storeData = generate_model_samples(data, sample_num, model, encoder) 
-    # here model_samples are non-catogorized data for output while storeData is categorized data for storing
-    
-    # add the ID col 
-    storeData.insert(loc=0, column='id', value=model_samples.index)
-    model_samples.insert(loc=0, column='id', value=model_samples.index)
-    # save mdeol & samples to cache
-    samples_path = os.path.join(cache_path, '{}_samples.json'.format(model_name))
-    storeData.to_json(samples_path, orient='records')
-    # storeData.to_json('./test.json', orient='records')
-    model_path = os.path.join(cache_path, '{}.joblib'.format(model_name))
-    dump(model, model_path) 
-    model_samples.to_json('../../{}_samples.csv'.format(model_name) , orient='records')
+    samplesInit = generate_samples(data, sample_num)
+
+    model=['knn','xgb','lr']
+
+    scoreOut = []
+
+    for var in model:
+        model_name = dataset_name+"_"+var
+        model_gene = ModelGene(model_name)
+        model, encoder, score = model_gene.fit_model(num2cate(data))
+        scoreOut.append([model_name,score])
+        model_samples, storeData = generate_model_samples(samplesInit, model, encoder) 
+        # here model_samples are non-catogorized data for output while storeData is categorized data for storing
+        
+        # add the ID col 
+        storeData.insert(loc=0, column='id', value=storeData.index)
+        model_samples.insert(loc=0, column='id', value= model_samples.index)
+        # save mdeol & samples to cache
+        dataOut = pd.concat([model_samples,storeData])
+
+        samples_path = os.path.join(cache_path, '{}_samples.json'.format(model_name))
+        storeData.to_json(samples_path, orient='records')
+
+        samples_path = os.path.join(cache_path, '{}_samples.csv'.format(model_name))
+        storeData.to_csv(samples_path, index=False)
+
+        samples_path = os.path.join(cache_path, '{}_samples_concat.json'.format(model_name))
+        dataOut.to_json(samples_path, orient='records')
+
+        samples_path = os.path.join(cache_path, '{}_samples_concat.csv'.format(model_name))
+        dataOut.to_csv(samples_path, index=False)
+        
+        model_path = os.path.join(cache_path, '{}.joblib'.format(model_name))
+        dump(model, model_path) 
+        model_samples.to_json('../../{}_samples.csv'.format(model_name) , orient='records')
+
+
     jsonfile = model_samples.to_json(orient='records')
     
-    return jsonfile
+    return pd.DataFrame(scoreOut).to_json()
     
     # dataset_path = './cache/test/dataTest_knn_samples.csv'
     # data1 = pd.read_csv(dataset_path)
