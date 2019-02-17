@@ -78,7 +78,7 @@ export default class Itemset extends React.Component<Props, State>{
         let inCircleRadius = this.line_interval * 0.8 - progressBarWidth*1.5
         let parent = <g className={`${ruleNode.rule.id.toString()} rule`}
             transform={`translate(${this.offsetX}, ${offsetY})`}>
-            <g className="score" transform={`translate(${-outCircleRadius - this.headWidth}, ${this.line_interval*0.3})`}>
+            <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.line_interval*0.3})`}>
                 <g className='conf_pnd' >
                     <circle
                         className="background"
