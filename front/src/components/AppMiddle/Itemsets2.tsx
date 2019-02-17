@@ -4,7 +4,7 @@ import { Icon } from 'antd';
 import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
 
 // import Euler from 'components/AppMiddle/Euler';
-import Bubble from 'components/AppMiddle/Bubble';
+// import Bubble from 'components/AppMiddle/Bubble';
 
 import "./Itemsets.css"
 
@@ -83,7 +83,7 @@ export default class Itemset extends React.Component<Props, State>{
                     <circle
                         className="background"
                         r={outCircleRadius} 
-                        fill="transparent"
+                        fill='none'
                         stroke="#ccc"
                         strokeWidth={progressBarWidth}
                         stroke-dasharray={outCircleRadius * 2 * Math.PI}
@@ -93,7 +93,7 @@ export default class Itemset extends React.Component<Props, State>{
                         stroke="#FF9F1E"
                         strokeWidth={progressBarWidth}
                         r={outCircleRadius} 
-                        fill="transparent"
+                        fill='none'
                         stroke-dasharray={outCircleRadius * 2 * Math.PI}
                         stroke-dashoffset={outCircleRadius * 2 * Math.PI * (1-rule.conf_pnd)} />
                 </g>
@@ -101,7 +101,7 @@ export default class Itemset extends React.Component<Props, State>{
                     <circle
                         className="background"
                         r={inCircleRadius} 
-                        fill="transparent"
+                        fill='none'
                         stroke="#ccc"
                         strokeWidth={progressBarWidth}
                         stroke-dasharray={inCircleRadius * 2 * Math.PI}
@@ -111,7 +111,7 @@ export default class Itemset extends React.Component<Props, State>{
                         stroke="#FF9F1E"
                         strokeWidth={progressBarWidth}
                         r={inCircleRadius} 
-                        fill="transparent"
+                        fill='none'
                         stroke-dasharray={inCircleRadius * 2 * Math.PI}
                         // stroke-dashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
                         stroke-dashoffset={inCircleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
@@ -170,7 +170,7 @@ export default class Itemset extends React.Component<Props, State>{
                             width={bar_w} height={this.line_interval}
                             x={step * attrs.indexOf(attr)}
                             // fill='#eee'
-                            fill="transparent"
+                            fill='none'
                             stroke={favorPD ? "#98E090" : "#FF772D"}
                             strokeWidth={2}
                         />
@@ -231,7 +231,7 @@ export default class Itemset extends React.Component<Props, State>{
                     width={bar_w} height={this.line_interval}
                     x={step * attrs.indexOf(attr)}
                     // fill='#eee'
-                    fill="transparent"
+                    fill='none'
                     stroke={favorPD ? "#98E090" : "#FF772D"}
                     strokeWidth={2}
                 />
@@ -319,7 +319,7 @@ export default class Itemset extends React.Component<Props, State>{
         return <g key='rules'>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             <g transform={`translate(100, 300)`}>
-                <Bubble ruleAgg={positiveRuleAgg[1]}/>
+                {/* <Bubble ruleAgg={positiveRuleAgg[1]}/> */}
             </g>
             {posRules}
             {/* {negaRules} */}

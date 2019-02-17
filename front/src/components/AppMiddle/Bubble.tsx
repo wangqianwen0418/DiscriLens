@@ -122,7 +122,7 @@ export default class Bubble extends React.Component<Props, State>{
               className='outline'
               onMouseEnter={onMouseEnter}
               onMouseLeave={this.onMouseLeave}
-              fill='transparent' stroke='gray'/>
+              fill='none' stroke='gray'/>
         })
 
         return <g className='bubbleSet' id={`bubble_${ruleAgg.id}`}>
