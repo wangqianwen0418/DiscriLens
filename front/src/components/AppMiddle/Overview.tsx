@@ -3,6 +3,7 @@ import "./Overview.css"
 import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
+import {BAD_COLOR} from 'Helpers'
 
 export interface Props{
     rules: Rule[],
@@ -21,10 +22,24 @@ export interface rules{
     rule: string[],
     risk_dif: number
 }
+
 export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
-    public leftStart = 20 ; rightEnd = window.innerWidth * 0.1; bottomEnd = 100; markSize = 14;
-            xLeft = this.leftStart; xRight = this.rightEnd
+    public leftStart = 20 ; 
+    // right end position
+    rightEnd = window.innerWidth * 0.1; 
+    // bottom end position
+    bottomEnd = 120; 
+    // top start position 
+    topStart = 40 ;
+    // a standard reference length
+    markSize = 14; 
+    // line's color
+    lineColor = 'rgb(204, 204, 204)';
+    // color of unselected area (BAD_COLOR is the color of selected area)
+    areaColor = 'rgb(232, 232, 232)'
+    // counters for dragging
+    xLeft = this.leftStart; xRight = this.rightEnd
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -69,6 +84,14 @@ export default class Overview extends React.Component<Props,State>{
         e.preventDefault()
         e.stopPropagation()
         window.addEventListener('mousemove', this.mouseMoveLeft)
+        // put the selected left dragging bar to the most front layer
+        d3.selectAll('.selectThr').sort(()=>{
+            console.log(d3.selectAll('.selectThr')['_groups'][0][0].id)
+            if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectLeft'){
+                return 1
+            }
+            return -1
+        })
     }
     mouseMoveLeft(e: any){
         let { transformXLeft,zeroAxis,xScaleReverse } = this.state
@@ -93,6 +116,15 @@ export default class Overview extends React.Component<Props,State>{
         e.preventDefault()
         e.stopPropagation()
         window.addEventListener('mousemove', this.mouseMoveRight)
+
+        // put the selected right dragging bar to the most front layer
+        d3.selectAll('.selectThr').sort(()=>{
+            console.log(d3.selectAll('.selectThr')['_groups'][0][0].id)
+            if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectRight'){
+                return 1
+            }
+            return -1
+        })
     }
     mouseMoveRight(e: any){
         let {transformXRight,zeroAxis,xScaleReverse } = this.state
@@ -180,13 +212,20 @@ export default class Overview extends React.Component<Props,State>{
         let rightEnd = this.rightEnd
         // a standard reference length
         let markSize = this.markSize;
+        // top start position 
+        let topStart = this.topStart
+        // line's color
+        let lineColor = this.lineColor;
+        // color of unselected area (BAD_COLOR is the color of selected area)
+        let areaColor = this.areaColor
+
 
         // define scales
         let maxAbsoluteX = Math.max.apply(null,curveX.map(Math.abs))
         // xScale maps risk_dif to actual svg pixel length along x-axis
         let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
         // yScale maps risk_dif to actual svg pixel length along x-axis
-        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-20])
+        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-topStart])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
         let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
@@ -207,35 +246,39 @@ export default class Overview extends React.Component<Props,State>{
             //let xMin = xScale(Math.min(...rangeX))
             //let xMax = xScale(Math.max(...rangeX))
             
-            let bounderLeft:curveData[] = [{x:0,y:markSize,z:0},{x:0,y:bottomEnd,z:0}]
-            let bounderRight:curveData[] = [{x:0,y:markSize,z:0},{x:0,y:bottomEnd,z:0}]
-            let triangleData:curveData[]=[{x:-markSize/2,y:markSize/2,z:0},{x:0,y:markSize,z:0},{x:markSize/2,y:markSize/2,z:0}]
-            let selectMask:curveData[] = [{x:0,y:markSize/2,z:0},{x:0,y:bottomEnd,z:0}]
-
-            return <g  cursor='e-resize'>
-                 <g id={'triangleLeft'} onMouseDown={this.mouseDownLeft}
+            let bounderLeft:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
+            let bounderRight:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
+            let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
+            return <g  cursor='e-resize' >
+                 <g id={'rectLeft'} className={'selectThr'} onMouseDown={this.mouseDownLeft}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
-                        <path d={curve(triangleData)} style={{fill:'#bbb'}} />
+                        <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                        <text x={-10} y={0.9*topStart - 3} fontSize={9}>
+                            {xScaleReverse(this.state.transformXLeft).toFixed(2)}
+                        </text>
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
-                        <path d={curve(bounderLeft)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
+                        <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                     </g>
                 
-                <g id={'triangleRight'} onMouseDown={this.mouseDownRight}
-                 transform={`translate(${this.state.transformXRight}, 0)`}>
-                        <path d={curve(triangleData)} style={{fill:'#bbb'}}/>
+                <g id={'rectRight'} className={'selectThr'} onMouseDown={this.mouseDownRight}
+                 transform={`translate(${this.state.transformXRight}, 0)`} >
+                        <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/>
+                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9}>
+                            {xScaleReverse(this.state.transformXRight).toFixed(2)}
+                        </text>
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
-                        <path d={curve(bounderRight)} style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}}/>
+                        <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                     </g>
                     
                 </g>
         }
         return {path:<g>
                 <clipPath id={'overview_path'}>
-                    <path d={curveKeyAttrs(dataKeyAttr_new)} style={{fill:'#bbb'}} className='overview'/>
+                    <path d={curveKeyAttrs(dataKeyAttr_new)} style={{fill:lineColor}} className='overview'/>
                 </clipPath>
-                <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-markSize} x={this.state.transformXLeft} y={markSize} fill='#bbb' clipPath={'url(#overview_path)'}/>
-                <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-markSize} x={this.state.transformXRight} y={markSize} fill='pink' clipPath={'url(#overview_path)'}/>
-                <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-markSize} x={leftStart} y={markSize} fill='pink' clipPath={'url(#overview_path)'}/>
+                <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={areaColor} clipPath={'url(#overview_path)'}/>
+                <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
+                <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 {selectThr()}
             </g>,
             scale:xScale,
@@ -255,6 +298,7 @@ export default class Overview extends React.Component<Props,State>{
         let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.2f'))
         .tickValues(this.ruleProcessing().scale.ticks(1).concat(this.ruleProcessing().scale.domain()))
         d3.selectAll('.axis').remove()
-        d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`).call(axis)
+        d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`)
+        .attr('stroke-width','1.5px').call(axis)
     }
 }
