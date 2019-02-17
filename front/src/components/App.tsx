@@ -58,10 +58,10 @@ class App extends React.Component {
         </header>
         <AppMiddle />
         <Row className='App-bottom'>
-          <Col span={3}>
+          <Col span={6}>
             <Side/>
           </Col>
-          <Col span={21}>
+          <Col span={18}>
             <Samples />
           </Col>
         </Row>

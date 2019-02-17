@@ -16,24 +16,39 @@ import 'antd/dist/antd.css';
 
 const TEST = true
 
-let initState:StoreState = {
-  key_attrs: [],
-  key_groups: [],
-  samples: [],
-  fetch_samples_status: Status.INACTIVE,
-  fetch_groups_status: Status.INACTIVE
-}
-
- if (TEST){
-  let testJSON = require('./testdata/test.json'), testJSON2 = require('./testdata/test2.json');
-  initState = {
-    key_attrs: testJSON2.key_attrs,
-    key_groups: testJSON2.key_groups,
-    samples: testJSON,
-    fetch_samples_status: Status.COMPLETE,
-    fetch_groups_status: Status.COMPLETE
+let initState:StoreState
+if (TEST){
+    let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
+    jsonSamples = require('./testdata/academic_lr_samples.json'),
+    jsonRule = require('./testdata/academic_lr_rules.json')
+    initState = {
+      key_attrs,
+      key_groups: jsonGroups,
+      samples: jsonSamples,
+      rules: jsonRule,
+      protected_attr: 'sex',
+      fetch_samples_status: Status.COMPLETE,
+      fetch_groups_status: Status.COMPLETE,
+      thr_rules:[-0.1,0.1],
+      drag_array: [],
+      drag_status: false,
+      show_attrs: [],
   }
- }
+}else{
+  initState = {
+    key_attrs: [],
+    key_groups: [],
+    samples: [],
+    rules: [],
+    protected_attr: '',
+    fetch_samples_status: Status.COMPLETE,
+    fetch_groups_status: Status.COMPLETE,
+    thr_rules:[-0.1,0.1],
+    drag_array: [],
+    drag_status: false,
+    show_attrs: [],
+}
+}
 
 const store = createStore(
   rootReducer,

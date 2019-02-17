@@ -1,0 +1,20 @@
+.axis .domain{
+    stroke: rgb(204, 204, 204) !important;
+}
+
+.axis .tick line{
+    stroke: rgb(204, 204, 204) !important;
+}
+
+.selectThrLeft{
+    position: relative !important;
+    overflow: visible;
+}
+
+.selectThrRight{
+    position: relative !important;
+}
+
+.selectThr{
+    position: absolute;
+}
