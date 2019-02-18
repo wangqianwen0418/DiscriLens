@@ -129,6 +129,10 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
                         .filter(attrVal=>{
                             let attr = attrVal.split('=')[0]
                             return key_attrs.includes(attr)
+                        })
+                        .sort((a,b)=>{
+                            let attrA = a.split('=')[0], attrB = b.split('=')[0]
+                            return key_attrs.indexOf(attrA)-key_attrs.indexOf(attrB)
                         }),
                 nodes: [ruleNode],
                 items: ruleNode.rule.items

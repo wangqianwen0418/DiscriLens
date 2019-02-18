@@ -9,6 +9,8 @@ import {getAttrRanges} from "Helpers";
 import "./Attributes.css";
 export interface Props {
     key_attrs: string[],
+    show_attrs: string[],
+    drag_array: string[],
     samples: DataItem[],
     key_groups: KeyGroup[],
     protected_attr: string,
@@ -18,14 +20,11 @@ export interface Props {
     bar_w: number,
     offsetX:number,
     onChangeKeyAttr: (key_attrs:string[])=>void,
-    changePosArray: (drag_array: string[]) => void,
-    changeDragStatus: (drag_status: boolean)=>void,
+    onChangeDragArray: (drag_array: string[]) => void,
     changeShowAttrs: (show_attrs: string[])=>void,
 }
 export interface State {
     selected_bar: string[],
-    drag_array: string[],
-    show_attrs: string[],
     cursorDown: boolean,
 }
 export interface curveData {
@@ -41,45 +40,26 @@ export default class Attributes extends React.Component<Props, State>{
         super(props)
         this.state = {
             selected_bar: ['', ''],
-            drag_array: null,
-            show_attrs: [],
+            // show_attrs: [],
             cursorDown: false,
         }
         this.changeColor = this.changeColor.bind(this)
         this.onStop = this.onStop.bind(this)
-        this.initendPos = this.initendPos.bind(this)
         this.changeShowAttr = this.changeShowAttr.bind(this)
-        this.changeDrafStatus = this.changeDrafStatus.bind(this)
         this.changeCursorStatus = this.changeCursorStatus.bind(this)
     }
-    initendPos(attrs:string[],key_attrs:string[]){
-        this.setState({drag_array:attrs})
-        this.changePosArray(attrs)
-        this.setState({show_attrs:key_attrs})
-        this.props.changeShowAttrs(key_attrs)
+
+    changeCursorStatus(cursorDown:boolean){
+        this.setState({cursorDown})
     }
 
-    changeCursorStatus(e:boolean){
-        this.setState({cursorDown:e})
-    }
-
-    changeDrafStatus(e:boolean){
-        this.props.changeDragStatus(e)
-    }
-
-    changeColor(e: string[]) {
-        this.setState({ selected_bar: e })
-    }
-
-    changePosArray(e: any) {
-        this.props.changePosArray(e)
+    changeColor(selected_bar: string[]) {
+        this.setState({ selected_bar })
     }
 
 
     changeShowAttr(attr:string, showFlag:boolean){
-        let show_attrs = this.state.show_attrs.slice()
-        let key_attrs = this.props.key_attrs.slice()
-        let new_dragArray: any[] = this.state.drag_array.slice()
+        let {show_attrs, key_attrs, drag_array: new_dragArray} = this.props
         if(showFlag){
             
             let removed_attr = new_dragArray.indexOf(attr)
@@ -104,17 +84,15 @@ export default class Attributes extends React.Component<Props, State>{
             show_attrs.push(attr)
         }
         this.props.changeShowAttrs(show_attrs)
-        this.setState({show_attrs:show_attrs})
-        this.changePosArray(new_dragArray)
-        this.setState({drag_array:new_dragArray}) 
+        this.props.onChangeDragArray(new_dragArray)
         this.props.onChangeKeyAttr(key_attrs)
-        this.changeDrafStatus(true)
+        // this.props.changeDragStatus(true)
     }
 
     // stop dragging
     onStop(attr:string,startNum:number,endNum:number,endReal:number){
         let drag_array:string[] = []
-        let new_array = this.state.drag_array.slice()
+        let new_array = this.props.drag_array.slice()
         let boarder = this.props.key_attrs.slice()
         // dragging left
         if(startNum>endNum){
@@ -149,7 +127,7 @@ export default class Attributes extends React.Component<Props, State>{
         }
         else{
             if(startNum!=endReal){
-                if((endReal>=this.state.show_attrs.length)&&(startNum<boarder.length)){
+                if((endReal>=this.props.show_attrs.length)&&(startNum<boarder.length)){
                     boarder.splice(boarder.indexOf(attr),1)
                 }
                 if((endReal<0)&&(startNum>=boarder.length)){
@@ -159,9 +137,7 @@ export default class Attributes extends React.Component<Props, State>{
             drag_array = new_array
         }
         this.props.onChangeKeyAttr(boarder)
-        this.setState({drag_array:drag_array})
-        this.changePosArray(drag_array)
-        this.changeDrafStatus(true)
+        this.props.onChangeDragArray(drag_array)
     }
 
     drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
@@ -302,10 +278,9 @@ export default class Attributes extends React.Component<Props, State>{
      * main function to draw 
      ******************/
     draw() {
-        let { samples, key_attrs, protected_attr, bar_w, step } = this.props
-        let { selected_bar , show_attrs} = this.state
+        let { samples, key_attrs, protected_attr, bar_w, step, show_attrs, drag_array } = this.props
+        let { selected_bar } = this.state
         // get numerical data
-        console.log(samples)
         samples = samples.slice(0, 1000)
 
         //****************** get all attributes
@@ -316,16 +291,7 @@ export default class Attributes extends React.Component<Props, State>{
         attrs.splice(attrs.indexOf(protected_attr), 1)
         
         // move key attributes to the front
-        
-        attrs.sort((a, b) => {
-            if (key_attrs.indexOf(a) != -1) {
-                return -1
-            } else if (key_attrs.indexOf(b) != -1) {
-                return 1
-            } else {
-                return a < b? -1: 1
-            }
-        })
+        attrs = key_attrs.concat(attrs.filter(attr=>!key_attrs.includes(attr)))
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
         attrs.forEach(attr => {
@@ -347,14 +313,16 @@ export default class Attributes extends React.Component<Props, State>{
         let max_accept = Math.max(...counts)
         
         
-        if(this.state.drag_array==null){this.initendPos(attrs,key_attrs)}
+        if(this.props.drag_array.length==0){
+            this.props.onChangeDragArray(attrs)
+        }
 
         //******************** draw bars
         // the overall length of all bars of each attribute
         // let step = window.innerWidth * 0.4/  key_attrs.length
         
         // loop all attributes and draw bars for each one
-        let bars = attrs.map((attr: string, attr_i) => {
+        let attrCharts = drag_array.map((attr: string, attr_i) => {
             // check whether numerical or categorical attribute
             let dataType = typeof samples.map(d => d[attr])
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
@@ -362,7 +330,7 @@ export default class Attributes extends React.Component<Props, State>{
             let stopPos = (e:any) =>{
                 let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
                 let endReal = endNum
-                let startNum = this.state.drag_array.indexOf(attr)
+                let startNum = this.props.drag_array.indexOf(attr)
                 if(showFlag){
                     endNum = Math.max(0,endNum)
                     endNum = Math.min(show_attrs.length - 1,endNum)}
@@ -384,11 +352,11 @@ export default class Attributes extends React.Component<Props, State>{
             let draggablePos: ControlPosition = { x: 0, y: 0 }
             // let textColor = 'black'
             // whether key attributes or non-key attributes 
-            if (this.state.drag_array == null) {
+            if (this.props.drag_array.length == 0) {
                 // textColor = attr_i < key_attrs.length ? 'red' : 'black'
                 draggablePos = null
             } else {
-                let current_i = this.state.drag_array.indexOf(attr)
+                let current_i = this.props.drag_array.indexOf(attr)
                 let x = showFlag?step*current_i: step*show_attrs.length + (current_i-show_attrs.length)*this.fontSize*2
                 let y = 0
                 // textColor = this.state.drag_array[attr_i][1] == 1 ? 'red' : 'black'
@@ -464,7 +432,7 @@ export default class Attributes extends React.Component<Props, State>{
             {x:(key_attrs.length - 0.2)* step,y:0,z:0}] */
         return <g>
             <g className='attrs' transform={`translate(${this.props.offsetX}, ${this.attr_margin * 2})`}>
-                {bars}
+                {attrCharts}
                 {//<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />
                 }
             </g>

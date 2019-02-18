@@ -22,8 +22,8 @@ export interface Props {
     bar_w: number,
     offsetX:number,
     show_attrs: string[],
-    changeDragStatus: (drag_status: boolean) => void,
-    onChangeShowAttrs: (show_attrs: string[]) => void
+    onChangeShowAttrs: (show_attrs: string[]) => void,
+    onChangeDragArray: (dray_array:string[]) => void
 }
 export interface State {
     // used to record buttons record and corresponding attr. string[]
@@ -52,19 +52,13 @@ export default class Itemset extends React.Component<Props, State>{
             attrs_button: null,
             expandRules: []
         }
-        // this.changeRule = this.changeRule.bind(this)
-        // this.initAttrs = this.initAttrs.bind(this)
-        this.changeDragStatus = this.changeDragStatus.bind(this)
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
     }
-    changeDragStatus(e: boolean) {
-        this.props.changeDragStatus(e)
-    }
     toggleExpand(id: Rule['id'], newAttrs: string[]) {
         let { expandRules } = this.state
-        let {show_attrs} = this.props
+        let {show_attrs, drag_array} = this.props
 
         // // update show attributes
         // let newAttrs = antecedent
@@ -72,6 +66,10 @@ export default class Itemset extends React.Component<Props, State>{
         //     .filter(attr=>!show_attrs.includes(attr))
         show_attrs = show_attrs.concat(newAttrs)
         this.props.onChangeShowAttrs(show_attrs)
+        
+        // move show attrs to the front of the drag_array
+        drag_array = show_attrs.concat(drag_array.filter(attr=>!show_attrs.includes(attr)))
+        this.props.onChangeDragArray(drag_array)
         
         //
         let idx = expandRules.indexOf(id)
@@ -232,9 +230,9 @@ export default class Itemset extends React.Component<Props, State>{
 
         return { content, offsetY }
     }
-    drawRuleAgg(ruleAgg: RuleAgg, attrs: string[], favorPD: boolean) {
+    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         let { antecedent, items, id, nodes } = ruleAgg
-        let { bar_w, step, key_attrs, show_attrs } = this.props
+        let { bar_w, step, key_attrs, show_attrs, drag_array } = this.props
 
         let newAttrs: string[] = []
         for (var node of nodes){
@@ -275,7 +273,7 @@ export default class Itemset extends React.Component<Props, State>{
                 </g>
                 <rect className='background'
                     width={bar_w} height={this.line_interval}
-                    x={step * attrs.indexOf(attr)}
+                    x={step * drag_array.indexOf(attr)}
                     // fill='#eee'
                     fill='none'
                     stroke={favorPD ? "#98E090" : "#FF772D"}
@@ -283,7 +281,7 @@ export default class Itemset extends React.Component<Props, State>{
                 />
                 <rect className='font'
                     width={bar_w / ranges.length} height={this.line_interval}
-                    x={step * attrs.indexOf(attr) + bar_w / ranges.length * rangeIdx}
+                    x={step * drag_array.indexOf(attr) + bar_w / ranges.length * rangeIdx}
                     fill={favorPD ? "#98E090" : "#FF772D"}
                 />
             </g>
@@ -292,7 +290,7 @@ export default class Itemset extends React.Component<Props, State>{
         return attrValContent
     }
     draw() {
-        let { rules, samples, thr_rules, key_attrs, protected_attr } = this.props
+        let { rules, samples, thr_rules, key_attrs, drag_array } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(1000, 2000)
@@ -308,27 +306,27 @@ export default class Itemset extends React.Component<Props, State>{
             .filter(rule => containsAttr(rule.antecedent, key_attrs).length >= key_attrs.length)
 
         // aggregate based on key attributes
-        let results = ruleAggregate(rules, key_attrs, samples)
+        let results = ruleAggregate(rules, drag_array.filter(attr=>key_attrs.includes(attr)), samples)
         //console.info(results)
-        let attrs = [...Object.keys(samples[0])]
-        // remove the attribute 'id' and 'class'
-        if (attrs.includes('id')) {
-            attrs.splice(attrs.indexOf('id'), 1)
-        }
-        if (attrs.includes(protected_attr)) {
-            attrs.splice(attrs.indexOf(protected_attr), 1)
-        }
+        // let attrs = [...Object.keys(samples[0])]
+        // // remove the attribute 'id' and 'class'
+        // if (attrs.includes('id')) {
+        //     attrs.splice(attrs.indexOf('id'), 1)
+        // }
+        // if (attrs.includes(protected_attr)) {
+        //     attrs.splice(attrs.indexOf(protected_attr), 1)
+        // }
 
-        attrs.splice(attrs.indexOf('class'), 1)
+        // attrs.splice(attrs.indexOf('class'), 1)
 
-        attrs.sort((a, b) => {
-            if (key_attrs.indexOf(a) != -1) {
-                return -1
-            } else if (key_attrs.indexOf(b) != -1) {
-                return 1
-            }
-            return 0
-        })
+        // attrs.sort((a, b) => {
+        //     if (key_attrs.indexOf(a) != -1) {
+        //         return -1
+        //     } else if (key_attrs.indexOf(b) != -1) {
+        //         return 1
+        //     }
+        //     return 0
+        // })
 
 
         let { positiveRuleAgg } = results
@@ -338,7 +336,7 @@ export default class Itemset extends React.Component<Props, State>{
             posRules.push(
                 <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
-                        this.drawRuleAgg(ruleAgg, key_attrs, true)
+                        this.drawRuleAgg(ruleAgg, true)
                     }
                 </g>
             )
@@ -399,7 +397,6 @@ export default class Itemset extends React.Component<Props, State>{
                 break
             case Status.COMPLETE:
                 content = this.draw()
-                if (this.props.drag_status) { this.changeDragStatus(false); }
                 break
             default:
                 break

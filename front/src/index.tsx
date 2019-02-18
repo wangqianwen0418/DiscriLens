@@ -22,11 +22,11 @@ let dataSet:string = 'academic',
 
 let initState:StoreState
 if (TEST){
-    let {key_attrs,jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json'), 
+    let {jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json'), 
     jsonSamples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
     jsonRule = require('./testdata/'+ dataSet + '_' + model + '_rules.json')
     initState = {
-      key_attrs: key_attrs,
+      key_attrs: ['StudentAbsenceDays', 'raisedhands', 'Discussion'],
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,
@@ -36,7 +36,7 @@ if (TEST){
       thr_rules:[-0.1,0.1],
       drag_array: [],
       drag_status: false,
-      show_attrs: [],
+      show_attrs: ['StudentAbsenceDays', 'raisedhands', 'Discussion']
   }
 }else{
   initState = {

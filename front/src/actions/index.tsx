@@ -1,7 +1,7 @@
-import {BAR_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, 
+import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, 
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, 
-    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,DRAG_STATUS,SHOW_ATTRS} from 'Const';
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,SHOW_ATTRS} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, KeyGroup, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -191,30 +191,15 @@ export const ChangeProtectedAttr = (protected_attr:string):ChangeProtectedAttr =
 /*****************
 all about bars array
 *****************/ 
-export interface BarArray{
-    type:BAR_ARRAY,
+export interface ChangeDragArray{
+    type:CHANGE_DRAG_ARRAY,
     drag_array:string[]
 }
 
-export const ChangeBarArray = (drag_array:string[]):BarArray =>{
+export const ChangeDragArray = (drag_array:string[]):ChangeDragArray =>{
     return ({
-        type: BAR_ARRAY,
+        type: CHANGE_DRAG_ARRAY,
         drag_array
-    });
-}
-
-/*****************
-all about changing drag_status
-*****************/ 
-export interface DragStatus{
-    type:DRAG_STATUS,
-    drag_status:boolean
-}
-
-export const ChangeDragStatus = (drag_status:boolean):DragStatus =>{
-    return ({
-        type: DRAG_STATUS,
-        drag_status
     });
 }
 
@@ -277,4 +262,4 @@ export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
 
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-BarArray|ChangeKeyAttr|DragStatus|ShowAttrs
+ChangeDragArray|ChangeKeyAttr|ShowAttrs
