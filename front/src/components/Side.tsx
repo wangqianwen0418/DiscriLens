@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select,Row, Col, Button} from 'antd';
+import {Select,Row, Col} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
@@ -20,9 +20,9 @@ export default class Side extends React.Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      dataset_name: 'academic',
-      model_name: 'lr',
-      protect_attr: 'gender',
+      dataset_name: 'dataTest',
+      model_name: 'knn',
+      protect_attr: 'sex',
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
@@ -62,7 +62,7 @@ export default class Side extends React.Component<Props, State>{
 
   public render(){
     // let {thr_rules} = this.props
-      let defaultDataSet = 'academic', defaultModel = 'lr', defaultProAttr = 'gender'
+
       return <div onSubmit={this.onStart} className='Side'>
         <Row>
           <Col span={6}>
@@ -71,10 +71,7 @@ export default class Side extends React.Component<Props, State>{
             <h3 className='tool-title'>Prot Attr</h3>
           </Col>
           <Col span={18}>
-            <Select size={'small'} defaultValue={defaultDataSet} style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
-                {
-                  
-                }
+            <Select size={'small'} defaultValue='academic' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                 <Option value="credit">credit</Option>
                 <Option value="academic">academic</Option>
                 <Option value="give_me_credit">give_me_credit</Option>
@@ -84,13 +81,13 @@ export default class Side extends React.Component<Props, State>{
                 <Option value="dataTest">dataTest</Option>
             </Select>
 
-            <Select size={'small'} defaultValue={defaultModel} style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>
+            <Select size={'small'} defaultValue='knn' style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>
               <Option value="knn">knn</Option>
               <Option value="rf">rf</Option>
               <Option value='xgb'>xgb</Option>
             </Select>
 
-            <Select size={'small'} defaultValue={defaultProAttr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>
+            <Select size={'small'} defaultValue='gender' style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>
               <Option value="sex">sex</Option>
               <Option value="gender">gender</Option>
             </Select>
@@ -98,7 +95,7 @@ export default class Side extends React.Component<Props, State>{
           </Col>
             
         </Row>
-        <Button type='primary' icon='right' onClick={this.onStart}></Button>
+        
     </div>
   }
 }

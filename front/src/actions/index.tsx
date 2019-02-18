@@ -273,20 +273,7 @@ export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
     }
 }
 
-export const StartTest = (dataSet: string, model: string, protect_attr: string) => {
-    let {key_attrs, jsonGroups} = require('../testdata/'+ dataSet + '_' + model + '_key.json'), 
-    jsonSamples = require('../testdata/'+ dataSet + '_' + model + '_samples.json'),
-    jsonRule = require('../testdata/'+ dataSet + '_' + model + '_rules.json'),
-    key_groups= jsonGroups,
-    samples= jsonSamples,
-    rules= jsonRule
-    
-    return (dispatch: any)=>{
-        dispatch(FindGroups(key_attrs, key_groups))
-        dispatch(GenerateSamples(samples))
-        dispatch(GenerateRules(rules))
-    }
-}
+
 
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|

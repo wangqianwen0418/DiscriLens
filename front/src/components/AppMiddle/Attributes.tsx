@@ -305,6 +305,7 @@ export default class Attributes extends React.Component<Props, State>{
         let { samples, key_attrs, protected_attr, bar_w, step } = this.props
         let { selected_bar , show_attrs} = this.state
         // get numerical data
+        console.log(samples)
         samples = samples.slice(0, 1000)
 
         //****************** get all attributes

@@ -266,7 +266,6 @@ export default class Itemset extends React.Component<Props, State>{
 
         let results = ruleAggregate(rules, key_attrs, samples)
         //console.info(results)
-
         let attrs = [...Object.keys(samples[0])]
         // remove the attribute 'id' and 'class'
         if (attrs.includes('id')) {
