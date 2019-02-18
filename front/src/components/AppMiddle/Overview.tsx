@@ -67,10 +67,8 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScaleReverse:d3.ScaleLinear<number, number>){
-        this.setState({transformXLeft})
-        this.setState({transformXRight})
-        this.setState({zeroAxis})
-        this.setState({xScaleReverse})
+        this.setState({transformXLeft,transformXRight,zeroAxis,xScaleReverse})
+        this.props.onChange([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
     }
 
     // update state
@@ -86,7 +84,6 @@ export default class Overview extends React.Component<Props,State>{
         window.addEventListener('mousemove', this.mouseMoveLeft)
         // put the selected left dragging bar to the most front layer
         d3.selectAll('.selectThr').sort(()=>{
-            console.log(d3.selectAll('.selectThr')['_groups'][0][0].id)
             if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectLeft'){
                 return 1
             }
@@ -119,7 +116,6 @@ export default class Overview extends React.Component<Props,State>{
 
         // put the selected right dragging bar to the most front layer
         d3.selectAll('.selectThr').sort(()=>{
-            console.log(d3.selectAll('.selectThr')['_groups'][0][0].id)
             if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectRight'){
                 return 1
             }
@@ -233,7 +229,7 @@ export default class Overview extends React.Component<Props,State>{
         // curve
         let curve = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
 
-        
+
         // initialization state
         if(this.state.transformXLeft==null){this.initTransformX(leftStart,rightEnd,xScale(0),xScaleReverse)}
 

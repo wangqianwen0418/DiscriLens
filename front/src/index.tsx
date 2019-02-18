@@ -16,17 +16,28 @@ import 'antd/dist/antd.css';
 
 const TEST = true
 
+let dataSet:string = 'academic',
+    model:string = 'lr', 
+    protected_attr:string = 'gender'
+
+export const fileChoose = (dataSetIn:string,modelIn:string,protected_attrIn:string) =>{
+    dataSet = dataSetIn
+    model = modelIn
+    protected_attrIn =protected_attrIn
+    console.log(233)
+}
+
 let initState:StoreState
 if (TEST){
-    let {key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
-    jsonSamples = require('./testdata/academic_lr_samples.json'),
-    jsonRule = require('./testdata/academic_lr_rules.json')
+    let {key_groups:jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json'), 
+    jsonSamples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
+    jsonRule = require('./testdata/'+ dataSet + '_' + model + '_rules.json')
     initState = {
       key_attrs: ['StudentAbsenceDays', 'raisedhands', 'Discussion'],
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,
-      protected_attr: 'gender',
+      protected_attr: protected_attr,
       fetch_samples_status: Status.COMPLETE,
       fetch_groups_status: Status.COMPLETE,
       thr_rules:[-0.1,0.1],

@@ -54,7 +54,6 @@ export default class Attributes extends React.Component<Props, State>{
     }
     initendPos(attrs:string[],key_attrs:string[]){
         this.setState({drag_array:attrs})
-        this.props.onChangeKeyAttr(key_attrs)
         this.changePosArray(attrs)
         this.setState({show_attrs:key_attrs})
         this.props.changeShowAttrs(key_attrs)
@@ -85,8 +84,8 @@ export default class Attributes extends React.Component<Props, State>{
             
             let removed_attr = new_dragArray.indexOf(attr)
             new_dragArray = new_dragArray.map((d,i)=>{
-                if((i<key_attrs.length-1)&&(i>=removed_attr)){return new_dragArray[i+1]}
-                else if(i==key_attrs.length-1){return attr}
+                if((i<show_attrs.length-1)&&(i>=removed_attr)){return new_dragArray[i+1]}
+                else if(i==show_attrs.length-1){return attr}
                 else{return d}
             })
             //remove show attr
@@ -97,12 +96,12 @@ export default class Attributes extends React.Component<Props, State>{
             
             let added_attr = new_dragArray.indexOf(attr)
             new_dragArray = new_dragArray.map((d,i)=>{
-                if((i>key_attrs.length)&&(i<=added_attr)){return new_dragArray[i-1]}
-                else if(i==key_attrs.length){return attr}
+                if((i>show_attrs.length)&&(i<=added_attr)){return new_dragArray[i-1]}
+                else if(i==show_attrs.length){return attr}
                 else{return d}
             })
-            // add key attr
-            key_attrs.push(attr)
+            // add show attr
+            show_attrs.push(attr)
         }
         this.props.changeShowAttrs(show_attrs)
         this.setState({show_attrs:show_attrs})
@@ -176,7 +175,7 @@ export default class Attributes extends React.Component<Props, State>{
             if (ranges.length < 20) { return 2 }
             else { return 4 }
         }
-        let step = getStep()
+        let stepMerge = getStep()
     
         // array recording curve nodes after merging
         let ListNum: curveData[] = []
@@ -199,7 +198,8 @@ export default class Attributes extends React.Component<Props, State>{
         ranges.map((range: number, range_i) => {
             accept_num += samples_accept.filter(s => s[attr] === range).length
             reject_num += samples_reject.filter(s => s[attr] === range).length
-            if (((range_i % step == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
+            if (((range_i % stepMerge
+                 == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
     
                 ListNum.push(dataPush(range, accept_num, reject_num))
                 xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
@@ -253,7 +253,7 @@ export default class Attributes extends React.Component<Props, State>{
         // a single bar's width
         let bar_width = bar_w / ranges.length
         
-        // draw general situation
+        /* // draw general situation
         let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let generalSituation=(range_i:number)=>{
             let splitLineData:curveData[] = [{x:bar_width*0.95,y:height / 2,z:0},{x:bar_width*0.95,y:80,z:0}] 
@@ -262,7 +262,7 @@ export default class Attributes extends React.Component<Props, State>{
                 <path d={splitLine(splitLineData)} style={{fill:'none',stroke:'#bbb',strokeWidth:'0.5px'}}/>
                 :null}
             </g>
-        }
+        } */
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:bar_w - bar_width * 0.1,y:this.height/2,z:0}]
         return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
@@ -289,7 +289,8 @@ export default class Attributes extends React.Component<Props, State>{
                         onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
                         <rect width={bar_width * 0.9} height={accept_h} y={-1 * accept_h} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? '#DE4863' : GOOD_COLOR }} />
                         <rect width={bar_width * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
-                        {generalSituation(range_i)}
+                        {//generalSituation(range_i)
+                        }
                          </g>
                 </Tooltip>
             })}
@@ -358,7 +359,7 @@ export default class Attributes extends React.Component<Props, State>{
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
             let stopPos = (e:any) =>{
-                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ (window.innerWidth*0.4 / show_attrs.length)) 
+                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
                 let endReal = endNum
                 let startNum = this.state.drag_array.indexOf(attr)
                 if(showFlag){
@@ -370,7 +371,7 @@ export default class Attributes extends React.Component<Props, State>{
                 }
                 this.onStop(attr,startNum,endNum,endReal)
             }
-            let showFlag = (key_attrs.indexOf(attr)>-1),
+            let showFlag = (show_attrs.indexOf(attr)>-1),
 
                 offsetX =  showFlag?
                     step* attr_i // key attribute
@@ -403,7 +404,6 @@ export default class Attributes extends React.Component<Props, State>{
             let mouseDown =()=>{this.changeCursorStatus(true)}
             let mouseUp =()=>{this.changeCursorStatus(false)}
             let changeCursor=(e:boolean)=>{
-                console.log(e)
                 if(e){return "pointer"}
                 else{return "e-resize"}
             }*/
@@ -458,13 +458,14 @@ export default class Attributes extends React.Component<Props, State>{
             </Draggable>   
         })
         
-        let boarder = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        /* let boarder = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let keyAttrBoarder:curveData[] = [{x:(key_attrs.length - 0.2) * step,y:60,z:0},
-            {x:(key_attrs.length - 0.2)* step,y:0,z:0}]
+            {x:(key_attrs.length - 0.2)* step,y:0,z:0}] */
         return <g>
             <g className='attrs' transform={`translate(${this.props.offsetX}, ${this.attr_margin * 2})`}>
                 {bars}
-                {<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />}
+                {//<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />
+                }
             </g>
         </g>
     }
