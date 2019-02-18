@@ -7,13 +7,13 @@
  export default class AppMiddel extends React.Component{
      public step = 120;
      bar_w = this.step * 0.9;
-     offsetX=80;
+     offsetX=110;
      render(){
 
          return <div className='App-middle'> 
 
           <div className='App-left' id='App-left'>
-            <svg>
+            <svg className='overview'>
               <Overview/>
             </svg>
           </div>

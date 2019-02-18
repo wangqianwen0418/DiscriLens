@@ -39,7 +39,7 @@ export interface rules {
 
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; line_interval = 15;
-    margin = 25; 
+    margin = 65; 
     headWidth = this.props.offsetX-this.margin; 
     indent: 5;
     constructor(props: Props) {
