@@ -17,6 +17,7 @@ export interface Props {
     step:number,
     bar_w: number,
     offsetX:number,
+    show_attrs: string[],
     onChangeKeyAttr: (key_attrs:string[])=>void,
     changePosArray: (drag_array: string[]) => void,
     changeDragStatus: (drag_status: boolean)=>void,
@@ -305,11 +306,10 @@ export default class Attributes extends React.Component<Props, State>{
         let { samples, key_attrs, protected_attr, bar_w, step } = this.props
         let { selected_bar , show_attrs} = this.state
         // get numerical data
-        console.log(samples)
         samples = samples.slice(0, 1000)
-
         //****************** get all attributes
         let attrs = [...Object.keys(samples[0])]
+        
         // remove the attribute 'id' and 'class'
         attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
@@ -326,6 +326,7 @@ export default class Attributes extends React.Component<Props, State>{
                 return a < b? -1: 1
             }
         })
+        
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
         attrs.forEach(attr => {
@@ -347,8 +348,7 @@ export default class Attributes extends React.Component<Props, State>{
         let max_accept = Math.max(...counts)
         
         
-        if(this.state.drag_array==null){this.initendPos(attrs,key_attrs)}
-
+        if(this.props.show_attrs.length==0){this.initendPos(attrs,key_attrs)}
         //******************** draw bars
         // the overall length of all bars of each attribute
         // let step = window.innerWidth * 0.4/  key_attrs.length
@@ -408,6 +408,7 @@ export default class Attributes extends React.Component<Props, State>{
                 if(e){return "pointer"}
                 else{return "e-resize"}
             }*/
+
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
                 position={draggablePos}

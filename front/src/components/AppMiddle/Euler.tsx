@@ -90,7 +90,7 @@ export default class Eular extends React.Component<Props, State>{
             }
         })
         setDatum = addEmptySet(setDatum)
-        console.info(setDatum)
+        //console.info(setDatum)
 
         // let setDatum = [
         //     {sets:["Audio"], label: "Audio", size: 8.91},

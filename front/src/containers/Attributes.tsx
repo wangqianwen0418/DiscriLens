@@ -12,6 +12,7 @@ export function mapStateToProps(state:StoreState) {
         key_groups: state.key_groups,
         protected_attr: state.protected_attr,
         drag_status: state.drag_status,
+        show_attrs: state.show_attrs,
         fetch_groups_status: state.fetch_groups_status,
     };
 }

@@ -18,3 +18,7 @@
 .selectThr{
     position: absolute;
 }
+
+.inputBox{
+    -webkit-appearance: none;
+}

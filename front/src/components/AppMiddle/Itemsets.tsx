@@ -129,7 +129,7 @@ export default class Itemsets extends React.Component<Props, State>{
         let risk_dif: number = ruleIn.risk_dif
         // rule_out is m*n*2 array. m is the number of rules, n is the number of attrs, 
         //for each row of a rule is [attr,attr's value]
-        console.info(ruleIn)
+        //console.info(ruleIn)
         let rules_out: any = ruleIn.rule
     
         // record attrbutes' position and corresponding value interval position
@@ -246,7 +246,7 @@ export default class Itemsets extends React.Component<Props, State>{
         })
 
         // record the first version of attrs for reference
-        if(this.state.attrs_button.length==0){this.initAttrs(attrs,key_attrs)}
+        if(this.props.drag_array.length==0){this.initAttrs(attrs,key_attrs)}
         // process rules
         let rules_processed:rules[] = []
         rules.map((rule)=>{
@@ -286,7 +286,6 @@ export default class Itemsets extends React.Component<Props, State>{
         })
 
 
-
         let line_interval = window.innerHeight * 0.5 / (rules_processed.length + 1)
         let width_base = window.innerWidth * 0.4/  show_attrs.length
         let rule_lines = rules_processed.map((rule,rule_i)=>{
@@ -298,7 +297,7 @@ export default class Itemsets extends React.Component<Props, State>{
             </g>         
 
         })
-        return <g key='rule'>
+        return <g key='rule_new'>
             {rule_lines}
             {
                 Array.apply(null, Array(show_attrs.length)).map((_:any, i:any)=>{

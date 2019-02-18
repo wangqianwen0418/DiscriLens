@@ -18,15 +18,15 @@ def get_rules(dataset_name, protect_attr='',model_name=None):
     
     rules.to_json('./py/server/cache/new_data_diff_models/rules/{}_rules.json'.format(model_name),orient='records')
 
-""" get_rules('dataTest','sex= Female', 'knn')
+# get_rules('dataTest','sex= Female', 'knn')
 get_rules('dataTest','sex= Fema le', 'lr')
-get_rules('dataTest','sex= Female', 'xgb')  """
+# get_rules('dataTest','sex= Female', 'xgb') 
 '''
 get_rules('give_credit','age=0<x<25','knn')
 get_rules('give_credit','age=0<x<25','xgb')
 get_rules('give_credit','age=0<x<25')
 '''
-get_rules('bank','marital=divorced','knn') 
+""" get_rules('bank','marital=divorced','knn') 
 get_rules('bank','marital=divorced','xgb')
 get_rules('bank','marital=divorced','lr')
-os.system('shutdown -s')
+os.system('shutdown -s') """

@@ -33,7 +33,7 @@ if (TEST){
       protected_attr: protected_attr,
       fetch_samples_status: Status.COMPLETE,
       fetch_groups_status: Status.COMPLETE,
-      thr_rules:[-0.1,0.1],
+      thr_rules:[-0.1,0.01],
       drag_array: [],
       drag_status: false,
       show_attrs: [],

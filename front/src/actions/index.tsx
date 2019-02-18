@@ -273,6 +273,20 @@ export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
     }
 }
 
+export const ChangeDataSet = (dataset:string, model:string, protect_attr:string) =>{
+    let {key_attrs,key_groups} = require('../testdata/'+ dataset + '_' + model + '_key.json'), 
+    jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
+    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json')
+    
+    return (dispatch: any) =>{
+        dispatch(dispatch(GenerateRules(jsonRule)))
+        dispatch(GenerateSamples(jsonSamples))
+        dispatch(FindGroups(key_attrs,key_groups))
+        dispatch(ChangeProtectedAttr(protect_attr))
+        dispatch(ChangeShowAttrs([]))
+        dispatch(ChangeBarArray([]))
+    }
+}
 
 
 export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
