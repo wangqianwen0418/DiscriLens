@@ -2,9 +2,10 @@ import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
 import { Icon } from 'antd';
 import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
+import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
-// import Bubble from 'components/AppMiddle/Bubble';
+import Bubble from 'components/AppMiddle/Bubble';
 
 import "./Itemsets.css";
 
@@ -361,13 +362,22 @@ export default class Itemset extends React.Component<Props, State>{
         //     </g>         
 
         // })
+        let scoreDomain = d3.extent( rules.map(rule=>rule.risk_dif) )
         return <g key='rules'>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
-            {/* <g transform={`translate(100, 300)`}>
-                <Bubble ruleAgg={positiveRuleAgg[1]}/>
-            </g> */}
             {posRules}
             {/* {negaRules} */}
+            <g className='bubbles'>
+            {
+                positiveRuleAgg
+                .map((ruleAgg, i)=>
+                    <g key={'bubble_'+ruleAgg.id} transform={`translate(${100+200*i}, 300)`} >
+                    <Bubble  ruleAgg={ruleAgg} scoreDomain={scoreDomain}/>
+                    </g>
+                )
+                
+            }  
+            </g>
         </g>
     }
     render() {
