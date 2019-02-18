@@ -20,20 +20,13 @@ let dataSet:string = 'academic',
     model:string = 'lr', 
     protected_attr:string = 'gender'
 
-export const fileChoose = (dataSetIn:string,modelIn:string,protected_attrIn:string) =>{
-    dataSet = dataSetIn
-    model = modelIn
-    protected_attrIn =protected_attrIn
-    console.log(233)
-}
-
 let initState:StoreState
 if (TEST){
-    let {key_groups:jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json'), 
+    let {key_attrs,jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json'), 
     jsonSamples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
     jsonRule = require('./testdata/'+ dataSet + '_' + model + '_rules.json')
     initState = {
-      key_attrs: ['StudentAbsenceDays', 'raisedhands', 'Discussion'],
+      key_attrs: key_attrs,
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select,Row, Col} from 'antd';
+import {Select,Row, Col, Button} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
@@ -98,7 +98,7 @@ export default class Side extends React.Component<Props, State>{
           </Col>
             
         </Row>
-        
+        <Button type='primary' icon='right' onClick={this.onStart}></Button>
     </div>
   }
 }

@@ -1,8 +1,7 @@
 import Side from 'components/Side';
-import {ChangeRuleThresholds } from 'actions';
+import {ChangeRuleThresholds, StartTest } from 'actions';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import {fileChoose} from 'index'
 //import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -14,7 +13,7 @@ export function mapStateToProps(state:StoreState) {
 export function mapDispatchToProps(dispatch: any) {
     return {
         //onStart:(dataset_name: string, model_name:string, protect_attr:string)=>{dispatch(Start(dataset_name, model_name, protect_attr))},
-        onStart:(dataset_name: string, model_name:string, protect_attr:string)=>{fileChoose(dataset_name, model_name, protect_attr)},
+        onStart:(dataset_name: string, model_name:string, protect_attr:string)=>{dispatch(StartTest(dataset_name, model_name, protect_attr))},
         onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))}
     }
 }
