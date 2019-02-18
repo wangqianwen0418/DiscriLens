@@ -17,16 +17,25 @@ import 'antd/dist/antd.css';
 const TEST = true
 
 let initState:StoreState
+
+let dataSet = ['dataTest', 'academic', 'bank'],
+    model = ['xgb', 'knn', 'lr'],
+    protected_attr = ['sex', 'marital'],
+    dataSelect = 2,
+    modelSelect = 0,
+    protected_attrSelect = 1
+
 if (TEST){
-    let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
-    jsonSamples = require('./testdata/academic_lr_samples.json'),
-    jsonRule = require('./testdata/academic_lr_rules.json')
+    let filename = dataSet[dataSelect] + '_' + model[modelSelect]
+    let {key_attrs, key_groups:jsonGroups} = require('./testdata/'+filename+'_key.json'), 
+    jsonSamples = require('./testdata/'+filename+'_samples.json'),
+    jsonRule = require('./testdata/'+filename+'_rules.json')
     initState = {
       key_attrs,
       key_groups: jsonGroups,
       samples: jsonSamples,
       rules: jsonRule,
-      protected_attr: 'sex',
+      protected_attr: protected_attr[protected_attrSelect],
       fetch_samples_status: Status.COMPLETE,
       fetch_groups_status: Status.COMPLETE,
       thr_rules:[-0.1,0.1],

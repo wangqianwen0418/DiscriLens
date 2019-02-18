@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataItem, Status, KeyGroup } from 'types';
+import { DataItem, Status} from 'types';
 import { Icon, Tooltip } from 'antd';
 import { countItem, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
@@ -9,7 +9,6 @@ import "./Attributes.css";
 export interface Props {
     key_attrs: string[],
     samples: DataItem[],
-    key_groups: KeyGroup[],
     protected_attr: string,
     fetch_groups_status: Status,
     drag_status: boolean,
@@ -248,15 +247,15 @@ export default class Attributes extends React.Component<Props, State>{
         let bar_width = bar_w / ranges.length
         
         // draw general situation
-        let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-        let generalSituation=(range_i:number)=>{
+        /*let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+         let generalSituation=(range_i:number)=>{
             let splitLineData:curveData[] = [{x:bar_width*0.95,y:height / 2,z:0},{x:bar_width*0.95,y:80,z:0}] 
             return <g>
                 {ranges.length-1!=range_i?
                 <path d={splitLine(splitLineData)} style={{fill:'none',stroke:'#bbb',strokeWidth:'0.5px'}}/>
                 :null}
             </g>
-        }
+        } */
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:bar_w - bar_width * 0.1,y:this.height/2,z:0}]
         return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
@@ -283,7 +282,8 @@ export default class Attributes extends React.Component<Props, State>{
                         onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
                         <rect width={bar_width * 0.9} height={accept_h} y={-1 * accept_h} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? '#DE4863' : GOOD_COLOR }} />
                         <rect width={bar_width * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
-                        {generalSituation(range_i)}
+                        {//generalSituation(range_i)
+                        }
                          </g>
                 </Tooltip>
             })}
