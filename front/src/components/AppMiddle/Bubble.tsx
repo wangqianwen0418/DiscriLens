@@ -9,7 +9,8 @@ import {Rule} from 'types';
 import * as d3 from 'd3';
 
 export interface Props{
-    ruleAgg: RuleAgg
+    ruleAgg: RuleAgg,
+    scoreDomain: [number, number]|[undefined, undefined]
 }
 export interface State{
 
@@ -69,12 +70,12 @@ export default class Bubble extends React.Component<Props, State>{
             .style('stroke-width', 1)
     }
     render(){
-        let {ruleAgg} = this.props
+        let {ruleAgg, scoreDomain} = this.props
         let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules)
         let opacityScale = d3
                         .scaleLinear()
-                        .domain(d3.extent(items.map(item=>item.score)))
+                        .domain(scoreDomain)
                         .range([0.2, 1])
         // store the position of circles
         let width = Math.floor( Math.sqrt(items.length) ), //number of items of each row

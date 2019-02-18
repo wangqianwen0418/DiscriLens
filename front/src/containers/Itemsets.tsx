@@ -1,7 +1,7 @@
 import Itemsets from 'components/AppMiddle/Itemsets2';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeRuleThresholds , ChangeDragStatus } from 'actions';
+import { ChangeShowAttrs, ChangeDragStatus } from 'actions';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -21,8 +21,9 @@ export function mapStateToProps(state:StoreState) {
 
 export function mapDispatchToProps(dispatch: any) {
     return {
-        onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
+        // onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
         changeDragStatus: (drag_status: boolean)=>{dispatch(ChangeDragStatus(drag_status))},
+        onChangeShowAttrs: (show_attrs: string[])=>dispatch(ChangeShowAttrs(show_attrs))
     }
 }
 
