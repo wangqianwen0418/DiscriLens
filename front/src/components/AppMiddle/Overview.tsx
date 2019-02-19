@@ -41,7 +41,8 @@ export default class Overview extends React.Component<Props,State>{
     // color of unselected area (BAD_COLOR is the color of selected area)
     areaColor = 'rgb(232, 232, 232)'
     // counters for dragging
-    xLeft = this.leftStart; xRight = this.rightEnd
+    xLeft = 0; 
+    xRight = 0;
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -76,6 +77,8 @@ export default class Overview extends React.Component<Props,State>{
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
         this.setState({transformXLeft,transformXRight,zeroAxis,xScale,xScaleReverse})
         this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
+        this.xLeft = transformXLeft; 
+        this.xRight = transformXRight;
     }
 
     // update state

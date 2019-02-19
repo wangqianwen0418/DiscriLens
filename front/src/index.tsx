@@ -16,9 +16,9 @@ import 'antd/dist/antd.css';
 
 const TEST = true
 
-let dataSet:string = 'dataTest',
-    model:string = 'xgb', 
-    protectedAttr:string = 'sex'
+let dataSet:string = 'academic',
+    model:string = 'lr', 
+    protectedAttr:string = 'gender'
 
 let initState:StoreState
 if (TEST){
