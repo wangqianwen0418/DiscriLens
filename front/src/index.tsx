@@ -26,8 +26,9 @@ if (TEST){
     let samples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
     rules = require('./testdata/'+ dataSet + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(samples[0])],
-    keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    {key_attrs} = require('./testdata/'+ dataSet + '_' + model + '_key.json')
 
+    let keyAttrs = key_attrs
 
     // remove the attribute 'id' and 'class'
     dragArray.splice(dragArray.indexOf('id'), 1)
