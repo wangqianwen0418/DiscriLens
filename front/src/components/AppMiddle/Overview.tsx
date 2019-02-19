@@ -7,11 +7,9 @@ import {BAD_COLOR} from 'Helpers'
 
 export interface Props{
     rules: Rule[],
-    key_attrs:string[],
-    thr_rules: number[],
-    drag_status: boolean,
-    onChange : (thr_rules:[number, number])=>void
-    changeDrag: (drag_status: boolean) =>void
+    keyAttrs: string[],
+    ruleThreshold: number[],
+    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
     transformXLeft: number,
@@ -77,9 +75,7 @@ export default class Overview extends React.Component<Props,State>{
 
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
         this.setState({transformXLeft,transformXRight,zeroAxis,xScale,xScaleReverse})
-        this.xLeft = transformXLeft
-        this.xRight = transformXRight
-        this.props.onChange([xScaleReverse(this.leftStart),xScaleReverse(this.rightEnd)])
+        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
     }
 
     // update state
@@ -109,7 +105,7 @@ export default class Overview extends React.Component<Props,State>{
         transformXLeft += (Math.min(Math.max(e.clientX,this.leftStart),zeroAxis) - this.xLeft)
         this.xLeft = Math.min(Math.max(e.clientX,this.leftStart),zeroAxis)
         this.setState({ transformXLeft })
-        this.props.onChange([xScaleReverse(transformXLeft),this.props.thr_rules[1]])
+        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),this.props.ruleThreshold[1]])
         // if button is up
         if(e.buttons==0){
             this.mouseUpLeft(e)
@@ -120,9 +116,10 @@ export default class Overview extends React.Component<Props,State>{
         e.stopPropagation()
         window.removeEventListener('mousemove', this.mouseMoveLeft)
     }
+    
     inputLeft(e:any){
         let {inputLeft,xScale} = this.state
-        let {thr_rules} = this.props
+        let {ruleThreshold} = this.props
 
         if(inputLeft==false){
             this.setState({inputLeft:true})
@@ -130,7 +127,7 @@ export default class Overview extends React.Component<Props,State>{
         }else{
             if(e.key=='Enter'){
                 this.setState({inputLeft:false})
-                this.props.onChange([parseFloat(e.target.value),thr_rules[1]])
+                this.props.onChangeRuleThreshold([parseFloat(e.target.value),ruleThreshold[1]])
                 this.xLeft = xScale(parseFloat(e.target.value))
                 this.setState({transformXLeft:this.xLeft})
                 this.mouseDownLeft
@@ -164,7 +161,7 @@ export default class Overview extends React.Component<Props,State>{
         transformXRight += (Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis) - this.xRight)
         this.xRight = Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis)
         this.setState({ transformXRight })
-        this.props.onChange([this.props.thr_rules[0],xScaleReverse(transformXRight)])
+        this.props.onChangeRuleThreshold([this.props.ruleThreshold[0],xScaleReverse(transformXRight)])
         // if button is up
         if(e.buttons==0){
             this.mouseUpRight(e)
@@ -177,14 +174,14 @@ export default class Overview extends React.Component<Props,State>{
     }
     inputRight(e:any){
         let {inputRight,xScale} = this.state
-        let {thr_rules} = this.props
+        let {ruleThreshold} = this.props
         if(inputRight==false){
             this.setState({inputRight:true})
             this.mouseUpRight
         }else{
             if(e.key=='Enter'){
                 this.setState({inputRight:false})
-                this.props.onChange([parseFloat(e.target.value),thr_rules[1]])
+                this.props.onChangeRuleThreshold([parseFloat(e.target.value),ruleThreshold[1]])
                 this.xRight = xScale(parseFloat(e.target.value))
                 this.setState({transformXRight:this.xRight})
                 this.mouseDownRight
@@ -194,9 +191,8 @@ export default class Overview extends React.Component<Props,State>{
         }
     }
     ruleProcessing(){
-        let {rules,key_attrs,drag_status} = this.props
-        let {inputRight, inputLeft} = this.state
-        //let {thr_rules} = this.state
+        let {ruleThreshold, rules,keyAttrs} = this.props
+        let {inputLeft, inputRight} = this.state
         /**
          * Processing rules by key attrs
          *  */ 
@@ -213,12 +209,12 @@ export default class Overview extends React.Component<Props,State>{
                 
                 let rule_counter = 0
                 rule_attrs.forEach((rule_attr,i)=>{
-                    if(key_attrs.includes(rule_attr)){
+                    if(keyAttrs.includes(rule_attr)){
                         rule_counter += 1
                     }
                 })
                 // remove rules containing non-key attrs
-                if((rule_counter>=key_attrs.length)&&(key_attrs.length>0)){
+                if((rule_counter>=keyAttrs.length)&&(keyAttrs.length>0)){
                     rules_new.push(rule)
                 }
         })
@@ -286,12 +282,9 @@ export default class Overview extends React.Component<Props,State>{
 
 
         // initialization state
-        let leftInit = Math.max(xScale(this.props.thr_rules[0]),leftStart)
-        let rightInit = Math.min(xScale(this.props.thr_rules[1]),rightEnd)
+        let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
+        let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
         if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
-
-        // update xScaleReverse when dragging is going
-        if(drag_status){this.update(xScaleReverse,xScale(0))}
 
         // select rule filtering thresholds
         let selectThr = () =>{
@@ -358,8 +351,6 @@ export default class Overview extends React.Component<Props,State>{
     
     }
     render(){
-        //let curveKeyAttrs = d3.line<curveData>().x(d=>d.x).y(d=>d.z)
-        if(this.props.drag_status){this.props.changeDrag(false)}
         return <g key={'overviewOut'}>
             {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
                 {this.ruleProcessing().path}

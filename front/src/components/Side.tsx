@@ -5,9 +5,9 @@ import {Select,Row, Col, Button} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
-  thr_rules:[number, number],
+  ruleThreshold:[number, number],
   onStart: (dataset_name:string, model_name:string, protect_attr: string) => void,
-  onChange: (thr_rules: number[])=> void,
+  onChange: (ruleThreshold: number[])=> void,
 }
 
 export interface State{
@@ -57,11 +57,11 @@ export default class Side extends React.Component<Props, State>{
     this.setState({}) // force update
   }
   onChangeLeft(min:number){
-    this.props.onChange([min, this.props.thr_rules[1]])
+    this.props.onChange([min, this.props.ruleThreshold[1]])
     this.setState({}) // force update
   }
   onChangeRight(max:number){
-    this.props.onChange([this.props.thr_rules[0], max])
+    this.props.onChange([this.props.ruleThreshold[0], max])
     this.setState({}) // force update
   }
 

@@ -5,7 +5,7 @@ import { connect} from 'react-redux';
 
 let rules = require('../testdata/academic_rules.json')
 
-const filterRule = (rules:any[], rulesRange:[number, number], key_attrs: string[])=>{
+const filterRule = (rules:any[], rulesRange:[number, number], keyAttrs: string[])=>{
     const outside = (val:number, range: [number, number]):boolean=>{
         return val<=range[0] || val>=range[1]
     }
@@ -20,19 +20,20 @@ const filterRule = (rules:any[], rulesRange:[number, number], key_attrs: string[
     }
     return rules
             .filter(rule=>outside(rule.risk_dif, rulesRange))
-            .filter(rule=>overlap(rule.antecedent, key_attrs))
+            .filter(rule=>overlap(rule.antecedent, keyAttrs))
 }
 
 export function mapStateToProps(state:StoreState) {
     // console.info(state.SetCover)
+    let keyAttrs = state.dragArray.slice(0, state.keyAttrNum)
     return {
         // rules: state.rules,
         // range: state.rulesRange
-        rules: filterRule(rules, [-0.1, 0.1], state.key_attrs),
+        rules: filterRule(rules, [-0.1, 0.1], keyAttrs),
         benefitCls: 'H',
         // attrs: Object.keys(state.samples[0])
         ranges: Object.keys(state.samples[0])
-            .sort((a,b)=>state.key_attrs.indexOf(b)-state.key_attrs.indexOf(a)) // put key attribute at the front
+            .sort((a,b)=>keyAttrs.indexOf(b)-keyAttrs.indexOf(a)) // put key attribute at the front
             .map((attr)=>{
                 return {
                     attr,

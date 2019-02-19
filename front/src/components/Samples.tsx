@@ -5,7 +5,7 @@ import './Samples.css';
 
 export interface IProps{
  samples: DataItem[],
- featch_samples_status: Status
+ featchSampleStatus: Status
 }
 
 export interface IState{
@@ -13,10 +13,10 @@ export interface IState{
 }
 export default class Samples extends React.Component<IProps, IState>{
     public render(){
-        let {samples, featch_samples_status} = this.props
+        let {samples, featchSampleStatus} = this.props
         samples = samples.slice(0,1000)
-        // console.info(featch_samples_status)
-        if (featch_samples_status==Status.PENDING){
+        // console.info(featchSampleStatus)
+        if (featchSampleStatus==Status.PENDING){
             return <div className='samples' >
             <Icon 
                 type="sync" 
