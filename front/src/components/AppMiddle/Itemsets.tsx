@@ -299,10 +299,10 @@ export default class Itemset extends React.Component<Props, State>{
         rules = rules
             // risk threshold
             .filter(rule => rule.risk_dif >= ruleThreshold[1] || rule.risk_dif <= ruleThreshold[0])
-            .filter(rule => rule.cls == 'class=H')
+            .filter(rule => rule.cls == 'class=1')
             // normalize risk diff => favor PD
             .map(rule => {
-                return { ...rule, favorPD: rule.cls == 'class=H' ? rule.risk_dif : -1 * rule.risk_dif }
+                return { ...rule, favorPD: rule.cls == 'class=1' ? rule.risk_dif : -1 * rule.risk_dif }
             })
             .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 

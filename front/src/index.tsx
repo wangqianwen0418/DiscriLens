@@ -46,7 +46,7 @@ if (TEST){
       protectedAttr: protectedAttr,
       fetchSampleStatus: Status.COMPLETE,
       fetchKeyStatus: Status.COMPLETE,
-      ruleThreshold:[-0.1,0.1],
+      ruleThreshold:[-0.05,0.01],
       dragArray,
       showAttrNum: keyAttrs.length
   }
