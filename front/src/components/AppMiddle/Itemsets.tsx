@@ -285,7 +285,6 @@ export default class Itemsets extends React.Component<Props, State>{
             }
         })
 
-
         let line_interval = window.innerHeight * 0.5 / (rules_processed.length + 1)
         let width_base = window.innerWidth * 0.4/  show_attrs.length
         let rule_lines = rules_processed.map((rule,rule_i)=>{

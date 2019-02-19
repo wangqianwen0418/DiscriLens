@@ -20,9 +20,9 @@ export default class Side extends React.Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      dataset_name: 'academic',
-      model_name: 'lr',
-      protect_attr: 'gender',
+      dataset_name: 'dataTest',
+      model_name: 'xgb',
+      protect_attr: 'sex',
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
@@ -75,7 +75,7 @@ export default class Side extends React.Component<Props, State>{
             <h3 className='tool-title'>Prot Attr</h3>
           </Col>
           <Col span={18}>
-            <Select size={'small'} defaultValue='academic' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
+            <Select size={'small'} defaultValue='dataTest' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                 <Option value="academic">academic</Option>
                 <Option value="bank">bank</Option>
                 <Option value="dataTest">dataTest</Option>
@@ -94,7 +94,7 @@ export default class Side extends React.Component<Props, State>{
           </Col>
             
         </Row>
-        <Button type='primary' shape='circle' icon='caret-right' padding-top={5} onClick={this.changeDataSet}></Button>
+        <Button type='primary' shape='circle' icon='caret-right' padding-top={5} onClick={this.changeDataSet}/>
         
     </div>
   }

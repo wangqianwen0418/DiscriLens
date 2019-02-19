@@ -1,7 +1,7 @@
 import Overview from 'components/AppMiddle/Overview';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeRuleThresholds} from 'actions';
+import { ChangeRuleThresholds, ChangeDragStatus} from 'actions';
 
 export function mapStateToProps(state:StoreState) {
     return {
@@ -15,6 +15,7 @@ export function mapStateToProps(state:StoreState) {
 export function mapDispatchToProps(dispatch:any) {
     return {
         onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
+        changeDrag:(drag_status:boolean,)=>dispatch(ChangeDragStatus(drag_status)),
     }
 }
 

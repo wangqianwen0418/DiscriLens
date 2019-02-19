@@ -11,6 +11,7 @@ export interface Props{
     thr_rules: number[],
     drag_status: boolean,
     onChange : (thr_rules:[number, number])=>void
+    changeDrag: (drag_status: boolean) =>void
 }
 export interface State{
     transformXLeft: number,
@@ -358,6 +359,7 @@ export default class Overview extends React.Component<Props,State>{
     }
     render(){
         //let curveKeyAttrs = d3.line<curveData>().x(d=>d.x).y(d=>d.z)
+        if(this.props.drag_status){this.props.changeDrag(false)}
         return <g key={'overviewOut'}>
             {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
                 {this.ruleProcessing().path}

@@ -16,9 +16,9 @@ import 'antd/dist/antd.css';
 
 const TEST = true
 
-let dataSet:string = 'academic',
-    model:string = 'lr', 
-    protected_attr:string = 'gender'
+let dataSet:string = 'dataTest',
+    model:string = 'xgb', 
+    protected_attr:string = 'sex'
 
 let initState:StoreState
 if (TEST){
@@ -33,10 +33,10 @@ if (TEST){
       protected_attr: protected_attr,
       fetch_samples_status: Status.COMPLETE,
       fetch_groups_status: Status.COMPLETE,
-      thr_rules:[-0.1,0.01],
+      thr_rules:[-0.1,0.5],
       drag_array: [],
-      drag_status: false,
       show_attrs: [],
+      drag_status: false,
   }
 }else{
   initState = {
@@ -49,8 +49,8 @@ if (TEST){
     fetch_groups_status: Status.COMPLETE,
     thr_rules:[-0.1,0.1],
     drag_array: [],
-    drag_status: false,
     show_attrs: [],
+    drag_status: false,
 }
 }
 

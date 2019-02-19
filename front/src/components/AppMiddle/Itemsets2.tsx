@@ -15,14 +15,12 @@ export interface Props {
     thr_rules: number[],
     key_attrs: string[],
     drag_array: string[],
-    drag_status: boolean,
     protected_attr: string,
     fetch_groups_status: Status,
     step: number,
     bar_w: number,
     offsetX:number,
     show_attrs: string[],
-    changeDragStatus: (drag_status: boolean) => void,
     onChangeShowAttrs: (show_attrs: string[]) => void
 }
 export interface State {
@@ -54,13 +52,9 @@ export default class Itemset extends React.Component<Props, State>{
         }
         // this.changeRule = this.changeRule.bind(this)
         // this.initAttrs = this.initAttrs.bind(this)
-        this.changeDragStatus = this.changeDragStatus.bind(this)
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
-    }
-    changeDragStatus(e: boolean) {
-        this.props.changeDragStatus(e)
     }
     toggleExpand(id: Rule['id'], newAttrs: string[]) {
         let { expandRules } = this.state
@@ -300,10 +294,10 @@ export default class Itemset extends React.Component<Props, State>{
         rules = rules
             // risk threshold
             .filter(rule => rule.risk_dif >= thr_rules[1] || rule.risk_dif <= thr_rules[0])
-            .filter(rule => rule.cls == 'class=H')
+            .filter(rule => rule.cls == 'class=1')
             // normalize risk diff => favor PD
             .map(rule => {
-                return { ...rule, favorPD: rule.cls == 'class=H' ? rule.risk_dif : -1 * rule.risk_dif }
+                return { ...rule, favorPD: rule.cls == 'class=1' ? rule.risk_dif : -1 * rule.risk_dif }
             })
             .filter(rule => containsAttr(rule.antecedent, key_attrs).length >= key_attrs.length)
 
@@ -382,6 +376,7 @@ export default class Itemset extends React.Component<Props, State>{
     render() {
         let { fetch_groups_status } = this.props
         let content: JSX.Element = <g />
+        
         switch (fetch_groups_status) {
             case Status.INACTIVE:
                 content = <text>no data</text>
@@ -399,7 +394,6 @@ export default class Itemset extends React.Component<Props, State>{
                 break
             case Status.COMPLETE:
                 content = this.draw()
-                if (this.props.drag_status) { this.changeDragStatus(false); }
                 break
             default:
                 break
