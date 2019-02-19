@@ -1,11 +1,10 @@
-import Itemsets from 'components/AppMiddle/Itemsets2';
+import Itemsets from 'components/AppMiddle/Itemsets';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeShowAttr, ChangeDragArray } from 'actions';
+import { ChangeShowAttr} from 'actions';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
-    // console.info(state.samples)
     return {
         rules: state.rules,
         samples: state.samples,
@@ -21,7 +20,7 @@ export function mapStateToProps(state:StoreState) {
 export function mapDispatchToProps(dispatch: any) {
     return {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
-        onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
+        // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
     }
 }
 

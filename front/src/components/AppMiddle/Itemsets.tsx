@@ -1,365 +1,393 @@
 import * as React from 'react';
-import {DataItem, Status, Rule} from 'types';
-import {Icon, Tooltip,Button} from 'antd';
+import { DataItem, Status, Rule } from 'types';
+import { Icon } from 'antd';
+import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
 import * as d3 from 'd3';
 
-import "./Itemsets.css"
+// import Euler from 'components/AppMiddle/Euler';
+import Bubble from 'components/AppMiddle/Bubble';
 
-export interface Props{
-    // any query about these attributes plz refer to DataItem's comments
+import "./Itemsets.css";
+
+export interface Props {
     rules: Rule[],
     samples: DataItem[],
-    thr_rules:number[],
-    key_attrs: string[],
+    ruleThreshold: [number, number],
+    keyAttrNum: number,
+    showAttrNum: number,
     dragArray: string[],
-    show_attrs: string[],
-    drag_status: boolean,
     protectedAttr: string,
-    fetch_groups_status: Status,
-    changeDragStatus: (drag_status: boolean)=>void,
-} 
-export interface State{
-    // used to record buttons record and corresponding attr. string[]
-    // element: [attr,boolean]. Boolean=false means shown rules don't contain this attr; similarly boolean=true 
-    attrs_button: [string,boolean][],
-} 
-export interface curveData{
+    fetchKeyStatus: Status,
+    step: number,
+    barWidth: number,
+    offsetX:number,
+    onChangeShowAttr: (showAttrs: string[]) => void
+}
+export interface State {
+    expandRules: {[id:string]: string[]} // store the new show attributes of the rules that have been expaned
+}
+export interface curveData {
     x: number,
     y: number
 }
-export interface rules{
+export interface rules {
     rule: string[],
     risk_dif: number
 }
 
+export default class Itemset extends React.Component<Props, State>{
+    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; line_interval = 15;
+    margin = 65; 
+    headWidth = this.props.offsetX-this.margin; 
+    indent: 5;
 
-const extract_range = (highlightRange:string)=>{
-    let xRange = 0
-    if((highlightRange.includes('>'))||(highlightRange.includes('<'))){
-        let numbers: number[] = highlightRange.match(/\d+/g).map(Number)
-        if(numbers.length==2){xRange = numbers[0]}
-        else if(highlightRange.includes('>')){xRange = numbers[0]}
-        else{xRange = 0}
-        return xRange
-    }else{
-        return -1
-    }
-    
-}
-
-export default class Itemsets extends React.Component<Props, State>{
-    public height= 40; bar_margin=1;attr_margin=8;viewSwitch=-1;
-    constructor(props:Props){
+    constructor(props: Props) {
         super(props)
-        this.state={
-            attrs_button: [],
+        this.state = {
+            expandRules: {}
         }
-        this.changeRule = this.changeRule.bind(this)
-        this.initAttrs = this.initAttrs.bind(this)
-        this.changeDragStatus = this.changeDragStatus.bind(this)
+        this.toggleExpand = this.toggleExpand.bind(this)
+        this.drawRuleAgg = this.drawRuleAgg.bind(this)
+        this.drawRuleNode = this.drawRuleNode.bind(this)
     }
+    toggleExpand(id: string, newAttrs: string[]) {
+        let { expandRules } = this.state
+        let {showAttrNum, dragArray, keyAttrNum} = this.props
 
-    /**
-     * Initialize state
-     */
-    initAttrs = (attrs_init:any,show_attrs:any) =>{
-        // attrs_button records all button status for each key attr. All buttons are set to false initially
-        let attrs_button:[string,boolean][] = []
-        for(var i =0;i<show_attrs.length;i++){attrs_button.push([attrs_init[i],true])}
-        this.setState({attrs_button:attrs_button})
-    }
-    
-    // after a whole circle, reset the drag_status and wait for new dragging movement
-    changeDragStatus = (e:boolean) =>{
-        this.props.changeDragStatus(e)
-    }
+        let showAttrs = dragArray.slice(0, showAttrNum)
 
-    /**
-     *  Change state when button is clicked (status reverse) 
-     */
-    changeRule = (num:number)=>{
-        let ruleState:[string,boolean][] = this.state.attrs_button
-        // button is click, status reverses
-        ruleState[num][1] = !ruleState[num][1]
-        this.setState({attrs_button:ruleState})
-    }
-
-    /**
-     * Change state when dragging happens (which means drag_status=true)
-     */
-    updateButton = (show_attrs:string[])=>{
-        let button_attrs:string[] = []
-        let new_attrButton:any[] = []
-        this.state.attrs_button.forEach((attr,i)=>{
-            // get all attrs stored in button_attrs
-            button_attrs.push(attr[0])
-        })
-        show_attrs.forEach((show_attr,i)=>{
-            // if a show_attr is in button_attrs, modify it's position in array to keep consistance with show_attrs
-            if(button_attrs.includes(show_attr)){
-                new_attrButton.push(this.state.attrs_button[button_attrs.indexOf(show_attr)])
-
-            }
-            // if a show_attr is not in button_attrs, add new item into button_attrs with false default status
-            else{new_attrButton.push([show_attr,false])}
-        })
-        this.setState({attrs_button:new_attrButton})
-
-    }
-
-    get_color = (risk_dif:number )=>{
-
-        // get color interval
-        let min_color = Math.min.apply(Math,this.props.rules.map((v)=>{return v['risk_dif']}))
-        let max_color = Math.max.apply(Math,this.props.rules.map((v)=>{return v['risk_dif']}))
-        //const interpolate = require('color-interpolate')
-        let colormap = d3.interpolate('#6baed6','#DE4863')
-        let colorscale = d3.scaleLinear().domain([min_color,max_color]).range([0,1])
-        return colormap(colorscale(risk_dif))
-    }
-
-    drawLines = (ruleIn: rules, attrs: string[], samples: DataItem[],show_attrs:string[],attrs_num:string[])=>{
-
-        /**?
-         * Input is one rule, with seceral attributes and corresponding values
-         * Output is lines and glyph
-         */
-        const dataPush = (x:number,y:number):curveData => {return {x,y}}
-        
-        let risk_dif: number = ruleIn.risk_dif
-        // rule_out is m*n*2 array. m is the number of rules, n is the number of attrs, 
-        //for each row of a rule is [attr,attr's value]
-        console.info(ruleIn)
-        let rules_out: any = ruleIn.rule
-    
-        // record attrbutes' position and corresponding value interval position
-        // attr_pos = [attr's position, value's position, number of values, value]
-        let attr_pos: number[][] = [] 
-        // loop over rules
-        for (var rule in rules_out){ 
-            for (var i=0;i<attrs.length;i++){ 
-                // for each rule, loop to find its attribute position in attrs
-                if(attrs[i]==rules_out[rule][0]){ 
-                    let ranges = samples.map(d=>d[attrs[i]])
-                     .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)
-                    for (var j=0;j<ranges.length;j++){
-                        if(ranges[j]==rules_out[rule][1]){
-                            if(extract_range(rules_out[rule][1])!=-1){
-                                let attr_range: number[] = []
-                                ranges.map((d)=>{
-                                    let d_in: string = d as string
-                                    attr_range.push(extract_range(d_in))})
-                                attr_range = attr_range.sort((a,b)=>a-b)
-                                attr_pos.push([i,attr_range.indexOf(extract_range(rules_out[rule][1])),ranges.length,rules_out[rule][1]])
-                            }else{attr_pos.push([i,j,ranges.length,rules_out[rule][1]])}
-                        }
-                    }
+        if(expandRules[id]){
+            // collapse a rule
+            delete expandRules[id]
+            
+            let remainShowAttrs = [].concat.apply([], Object.values(expandRules))
+            showAttrs = showAttrs
+            .filter(
+                (attr, i)=>{
+                    // is key attribute or is in other expanded rules
+                    return i<keyAttrNum||remainShowAttrs.includes(attr)
                 }
-            }
+            )
+        }else{
+            // expand a rule
+            expandRules[id] = newAttrs
+            showAttrs = showAttrs
+                .concat(
+                    newAttrs
+                    .filter(attr=>!showAttrs.includes(attr))
+                )
         }
-        return <g key={'rules'}>
-            {rules_out.map((rule:any,rule_i:any)=>{
-                let width_base = window.innerWidth * 0.4/  show_attrs.length
-                let ListNum: curveData[] = []
-                let ListNumBase: curveData[] = []
-                ListNum.push(dataPush(0,0))
-                ListNum.push(dataPush(width_base * 0.8 , 0))
-                ListNumBase.push(dataPush(0,0))
-                ListNumBase.push(dataPush(width_base * attrs.length , 0))
-                
-                const line = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        this.props.onChangeShowAttr(showAttrs)
+        this.setState({ expandRules })
+    }
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean): { content: JSX.Element[], offsetY: number } {
+        let { rule, child } = ruleNode
+        let { antecedent, items, id } = rule
+        let { barWidth, step, keyAttrNum, showAttrNum, dragArray} = this.props
 
-                let output:any
-                let num_output = <g transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
-                <path d={line(ListNum)} style={{fill:'none',stroke:'#bbb',strokeWidth:'8px'}} />
-                <Tooltip title={attr_pos[rule_i][3]}> 
-                    <rect rx={2} width={width_base * 0.8 / attr_pos[rule_i][2]} height={8} style={{fill:this.get_color(risk_dif)}}
-                    transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * attr_pos[rule_i][1]}, ${-4})`}/>
-                </Tooltip>
-               </g>
-                
-                let rect_width = width_base * 0.4 / attr_pos[rule_i][2] / Math.sqrt(2)
-                let cat_output = <g transform={`translate(${width_base * attr_pos[rule_i][0]}, ${0})`}>
-                {Array.apply(null, Array(attr_pos[rule_i][2])).map((_:any, i:any)=>{
-                    if(i==attr_pos[rule_i][1]){
-                        return <Tooltip title={attr_pos[rule_i][3]}> 
-                            <rect width={rect_width} height={rect_width}
-                            style={{fill:this.get_color(risk_dif)}} transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * i}
-                                , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
-                        </Tooltip>
-                    }else{
-                        return <rect width={rect_width} height={rect_width}
-                        style={{fill:"#bbb"}} transform={`translate(${width_base * 0.8 / attr_pos[rule_i][2] * i}
-                        , ${-rect_width/2}) rotate(45,${rect_width/2},${rect_width/2})`} />
-                    }
-                })}
-                
-               </g>
+        let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
 
-                if(attrs_num.includes(rule[0])){
-                    output = num_output
-                }else{
-                    output = cat_output
-                }
-                if(rule_i==0){
-                    return <g key={rule_i}> 
-                    <g className={`baseline`}>
-                       <path d={line(ListNumBase)} style={{fill:'none',stroke:'#f0f0f0',strokeWidth:'1px'}}/>
-                    </g>
-                    {output}
+
+        let newAttrs: string[] = []
+        for (var node of child){
+            newAttrs = newAttrs.concat(
+                node.rule.antecedent
+                    .map(attrVal=>attrVal.split('=')[0])
+                    .filter(attr=>
+                        (!keyAttrs.includes(attr))
+                        &&(!newAttrs.includes(attr))
+                        )
+            )
+        }
+
+        let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs)
+        let isExpand = this.state.expandRules.hasOwnProperty(id)
+
+        let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
+        let outCircleRadius = this.line_interval * 0.8
+        let progressBarWidth = 3
+        let inCircleRadius = this.line_interval * 0.8 - progressBarWidth*1.5
+        let parent = <g className={`${ruleNode.rule.id.toString()} rule`}
+            transform={`translate(${this.props.offsetX}, ${offsetY})`}>
+            <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.line_interval*0.3})`}>
+                <g className='conf_pnd' >
+                    <circle
+                        className="background"
+                        r={outCircleRadius} 
+                        fill='none'
+                        stroke="#ccc"
+                        strokeWidth={progressBarWidth}
+                        strokeDasharray={outCircleRadius * 2 * Math.PI}
+                        strokeDashoffset="0" />
+                    <circle 
+                        className="bar"
+                        stroke="#FF9F1E"
+                        strokeWidth={progressBarWidth}
+                        r={outCircleRadius} 
+                        fill='none'
+                        strokeDasharray={outCircleRadius * 2 * Math.PI}
+                        strokeDashoffset={outCircleRadius * 2 * Math.PI * (1-rule.conf_pnd)} />
                 </g>
-                }else{
-                    return <g key={rule_i}>
-                    {output}
+                <g className='conf_pd'>
+                    <circle
+                        className="background"
+                        r={inCircleRadius} 
+                        fill='none'
+                        stroke="#ccc"
+                        strokeWidth={progressBarWidth}
+                        strokeDasharray={inCircleRadius * 2 * Math.PI}
+                        strokeDashoffset="0" />
+                    <circle 
+                        className="bar"
+                        stroke="#FF9F1E"
+                        strokeWidth={progressBarWidth}
+                        r={inCircleRadius} 
+                        fill='none'
+                        strokeDasharray={inCircleRadius * 2 * Math.PI}
+                        // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
+                        strokeDashoffset={inCircleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
+                        />
+                </g>
+            </g>
+            <text fontSize={10} y={this.line_interval} textAnchor="end" x={-this.headWidth-2*outCircleRadius}>
+                {items.length}
+                -
+                    {rule.risk_dif.toFixed(2)}
+            </text>
+            <g className="tree">
+                <line
+                    x1={indent} y1={-this.line_interval * 0.7}
+                    x2={indent} y2={this.line_interval * 1.3}
+                    stroke="#c3c3c3"
+                    strokeWidth='2'
+                />
+                {/* <line 
+            x1={-this.headWidth} y1={0} 
+            x2={0} y2={0} 
+            stroke="#444" 
+            /> */}
+            </g>
+            <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}>
+                <line className="ruleBoundary"
+                    x1={indent} y1={this.line_interval * 0.3}
+                    x2={window.innerWidth} y2={this.line_interval * 0.3}
+                    stroke="#f0f0f0"
+                />
+                <g className="icon" transform={`translate(${0}, ${-this.line_interval / 4})`}>
+                    {ruleNode.child.length == 0 ?
+                        <text className="icon" >
+                            o
+            </text> :
+                        <text className="icon"
+                            transform={`rotate(${isExpand ? 90 : 0} ${this.line_interval / 4} ${-this.line_interval / 4})`}>
+                            >
+            </text>
+                    }
+                </g>
+            </g>
+            {
+                antecedent.map((attrVal) => {
+                    let [attr, val] = attrVal.split('=')
+                    let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
+                        rangeIdx = ranges.indexOf(val)
+                    return <g key={attrVal}>
+                        {/* <rect className='ruleBox' 
+            stroke='#666' fill='none' 
+            strokeWidth='1px'
+            x={-20} y={-0.25*this.line_interval}
+            height={this.line_interval*1.5} width={step*showAttrs.length + 20}/> */}
+
+                        <rect className='background'
+                            width={barWidth} height={this.line_interval}
+                            x={step * showAttrs.indexOf(attr)}
+                            // fill='#eee'
+                            fill='none'
+                            stroke={favorPD ? "#98E090" : "#FF772D"}
+                            strokeWidth={2}
+                        />
+                        <rect className='font'
+                            width={barWidth / ranges.length} height={this.line_interval}
+                            x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                            fill={favorPD ? "#98E090" : "#FF772D"}
+                        />
                     </g>
                 }
-            }
-        )}
+                )}
         </g>
+        offsetY = offsetY + 2 * this.line_interval
+        offsetX += 1
+
+        let content = [parent]
+        if (isExpand) {
+            let children: JSX.Element[] = []
+            for (let childNode of ruleNode.child) {
+                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD)
+                children = children.concat(child)
+                offsetY = newY
+            }
+            content = content.concat(children)
+        }
+
+        return { content, offsetY }
     }
+    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
+        let { antecedent, items, id, nodes } = ruleAgg
+        let { barWidth, step, keyAttrNum, dragArray} = this.props
+        let keyAttrs = dragArray.slice(0, keyAttrNum)
+        let newAttrs: string[] = []
+        for (var node of nodes){
+            newAttrs = newAttrs.concat(
+                node.rule.antecedent
+                    .map(attrVal=>attrVal.split('=')[0])
+                    .filter(attr=>
+                        (!keyAttrs.includes(attr))
+                        &&(!newAttrs.includes(attr))
+                    )
+            )
+        }
+        let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs)
+        let isExpand = this.state.expandRules.hasOwnProperty(id)
+        let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.line_interval} textAnchor="end" x={-this.headWidth - 5}>
+            {items.length}
+        </text>
 
-    draw(){
-        let {rules, samples, thr_rules, key_attrs, dragArray,protectedAttr,show_attrs} = this.props
-        let samples_numerical = samples.slice(0,1000)
-        samples = samples.slice(1000,2000)
-        
-        // extract numerical attrs
-        let attrs_num = [...Object.keys(samples[0])]
-        // remove the attribute 'id' and 'class'
-        //attrs.splice(attrs.indexOf('id'), 1)
-        attrs_num.splice(attrs_num.indexOf('class'), 1)
-        attrs_num.splice(attrs_num.indexOf(protectedAttr), 1)
-        attrs_num = attrs_num.filter((attr)=>typeof(samples_numerical[1][attr])=='number')
+        let attrValContent = antecedent.map((attrVal => {
+            let [attr, val] = attrVal.split('=')
+            let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
+                rangeIdx = ranges.indexOf(val)
+            return <g key={attrVal}>
+                {/* <Bubble ruleAgg={ruleAgg}/> */}
+                <rect className='ruleBox'
+                    stroke='#c3c3c3' fill='none'
+                    strokeWidth='1px'
+                    rx={2} ry={2}
+                    x={-this.headWidth} y={-0.25 * this.line_interval}
+                    height={this.line_interval * 1.5} width={step * keyAttrNum + this.headWidth} />
+                <g className="icon" transform={`translate(${-15}, ${this.line_interval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
+                    <text className="icon"
+                        transform={`rotate(${isExpand ? 90 : 0} ${this.line_interval / 4} ${-this.line_interval / 4})`}
+                    >
+                        >
+                </text>
+                </g>
+                <rect className='background'
+                    width={barWidth} height={this.line_interval}
+                    x={step * dragArray.indexOf(attr)}
+                    // fill='#eee'
+                    fill='none'
+                    stroke={favorPD ? "#98E090" : "#FF772D"}
+                    strokeWidth={2}
+                />
+                <rect className='font'
+                    width={barWidth / ranges.length} height={this.line_interval}
+                    x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                    fill={favorPD ? "#98E090" : "#FF772D"}
+                />
+            </g>
+        }))
+        attrValContent.unshift(itemSizeLabel)
+        return attrValContent
+    }
+    draw() {
+        let { rules, samples, ruleThreshold, keyAttrNum, dragArray } = this.props
+        let { expandRules } = this.state
+        // let samples_numerical = samples.slice(0,1000)
+        samples = samples.slice(1000, 2000)
 
-        let attrs = [...Object.keys(samples[0])]
-        // remove the attribute 'id' and 'class'
-        //attrs.splice(attrs.indexOf('id'), 1)
-        attrs.splice(attrs.indexOf('class'), 1)
-        attrs.splice(attrs.indexOf(protectedAttr), 1)
-        attrs.sort((a,b)=>{
-            if(key_attrs.indexOf(a)!=-1){
-                return -1
-            }else if(key_attrs.indexOf(b)!=-1){
-                return 1
-            }
-            return 0
-        })
+        let keyAttrs = dragArray.slice(0, keyAttrNum)
 
-        // record the first version of attrs for reference
-        if(this.state.attrs_button.length==0){this.initAttrs(attrs,key_attrs)}
-        // process rules
-        let rules_processed:rules[] = []
-        rules.map((rule)=>{
-            if((rule['risk_dif']<thr_rules[0])||(rule['risk_dif']>thr_rules[1])){
-        
-                let risk_dif: number = rule.risk_dif as number
-                let rule_ante = rule.antecedent 
-                
-                //rules in array format. [[attribute, value],[attr2,value2],....]
-                let rules_out: any = [] 
-                let rule_attrs: string[] = []
-                for (var rule_attr in rule_ante){ 
-                    let rule_out = rule_ante[rule_attr].split("=")
-                    rules_out.push(rule_out)
-                    rule_attrs.push(rule_out[0])
-                }
-                
-                let rule_counter = 0
-                rule_attrs.map((rule_attr:string)=>{
-                    // if any attrs in this rule are not in key attrs, rule_counter++
-                    if(show_attrs.includes(rule_attr)==false){rule_counter += 1}
-                    // check whether this attr is folded
-                })
+        rules = rules
+            // risk threshold
+            .filter(rule => rule.risk_dif >= ruleThreshold[1] || rule.risk_dif <= ruleThreshold[0])
+            .filter(rule => rule.cls == 'class=H')
+            // normalize risk diff => favor PD
+            .map(rule => {
+                return { ...rule, favorPD: rule.cls == 'class=H' ? rule.risk_dif : -1 * rule.risk_dif }
+            })
+            .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
-                if(dragArray.length>0){
-                    this.state.attrs_button.map((button)=>{
-                        if((button[1]!=rule_attrs.includes(button[0]))&&(key_attrs.includes(button[0]))){
-                            rule_counter += 1
-                        }
-                    })
-                }
-                // remove rules containing non-key attrs
-                if(rule_counter==0){
-                    rules_processed.push({rule:rules_out,risk_dif:risk_dif})
-                }   
-            }
-        })
+        // aggregate based on key attributes
+        let results = ruleAggregate(rules, dragArray.filter(attr=>keyAttrs.includes(attr)), samples)
 
 
-
-        let line_interval = window.innerHeight * 0.5 / (rules_processed.length + 1)
-        let width_base = window.innerWidth * 0.4/  show_attrs.length
-        let rule_lines = rules_processed.map((rule,rule_i)=>{
-                return <g key={rule_i+'rules'} transform={`translate(${window.innerWidth * 0.05/  show_attrs.length}, ${5 + line_interval*rule_i})`}>
-                {
-                    this.drawLines(rule,dragArray,samples,show_attrs,attrs_num)
-                }
-                
-            </g>         
-
-        })
-        return <g key='rule'>
-            {rule_lines}
-            {
-                Array.apply(null, Array(show_attrs.length)).map((_:any, i:any)=>{
-                    if(this.state.attrs_button!=null){
-                        let button_click = () =>{
-                            this.changeRule(i)
-                        }
-                        if(this.props.drag_status){this.updateButton(dragArray.slice(0,show_attrs.length))}
-                        if(i<this.state.attrs_button.length){
-                            return <g>
-                            {key_attrs.includes(this.state.attrs_button[i][0])?
-                            <foreignObject key={'button' + i} width = '15px' height = '15px' transform={`translate(${width_base * (i)}, ${-3})`}>
-                                <Button shape="circle" icon={this.state.attrs_button[i][1]?"down":"right"} size='small' onClick={button_click} />
-                            </foreignObject>
-                            :null}
-                        </g>
-                            
-                        }else{return null}
-                        
-                    }else{
-                        
-                        return null
+        let { positiveRuleAgg } = results
+        let offsetY = 5
+        let posRules: JSX.Element[] = []
+        for (let ruleAgg of positiveRuleAgg) {
+            posRules.push(
+                <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
+                    {
+                        this.drawRuleAgg(ruleAgg, true)
                     }
-                })
+                </g>
+            )
+            offsetY = offsetY + 2 * this.line_interval
+            if (expandRules.hasOwnProperty(ruleAgg.id)) {
+                for (let ruleNode of ruleAgg.nodes) {
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true)
+                    offsetY = newY
+                    posRules = posRules.concat(content)
+                }
             }
+        }
+
+        // let negaRules = negativeRuleAgg.map((ruleAgg,rule_i)=>{
+        //     return <g key={rule_i+'rules'} 
+        //         transform={`translate(${window.innerWidth*0.1}, ${5 + 2*this.line_interval* rule_i+ offsetY})`}>
+        //         {
+        //             this.drawRuleAggs(ruleAgg.antecedent, ruleAgg.items, attrs, false)
+        //         }
+        //     </g>         
+
+        // })
+        let scoreDomain = d3.extent( rules.map(rule=>rule.risk_dif) )
+        return <g key='rules'>
+            {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
+            {posRules}
+            {/* {negaRules} */}
+            <g className='bubbles'>
+            {
+                positiveRuleAgg
+                .map((ruleAgg, i)=>
+                    <g key={'bubble_'+ruleAgg.id} transform={`translate(${100+200*i}, 300)`} >
+                    <Bubble  ruleAgg={ruleAgg} scoreDomain={scoreDomain}/>
+                    </g>
+                )
+                
+            }  
+            </g>
         </g>
     }
-    
-    render(){
-        
-        let {fetch_groups_status} = this.props
-        let content:JSX.Element = <g/>
-        switch(fetch_groups_status){
+    render() {
+        let { fetchKeyStatus } = this.props
+        let content: JSX.Element = <g />
+        switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
                 break
             case Status.PENDING:
-            content = <g transform={`translate(${window.innerWidth*.5}, ${100})`}>
-                        <foreignObject>
-                        <Icon 
-                            type="sync" 
-                            spin={true} 
-                            style={{fontSize: '40px', margin: '10px'}}
+                content = <g transform={`translate(${window.innerWidth * .5}, ${100})`}>
+                    <foreignObject>
+                        <Icon
+                            type="sync"
+                            spin={true}
+                            style={{ fontSize: '40px', margin: '10px' }}
                         />
-                        </foreignObject>
-                    </g>
+                    </foreignObject>
+                </g>
                 break
             case Status.COMPLETE:
                 content = this.draw()
-                if(this.props.drag_status){this.changeDragStatus(false);}
                 break
             default:
                 break
 
         }
-
-        return(<g 
-            className='glyph' 
-            transform={`translate(${window.innerWidth*0.01}, ${5})`}
-        >
-            {content}
-        </g>        
-    )}
+        return (<svg className='itemset' style={{ width: "100%", height: "800px" }}>
+            <g className='rules' >
+                {content}
+            </g>
+        </svg>
+        )
+    }
 }

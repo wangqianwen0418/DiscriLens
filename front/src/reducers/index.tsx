@@ -6,8 +6,8 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS} from 'Const';
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
-  console.info('action',action)
-  console.info('state', state)
+  // console.info('action',action)
+  // console.info('state', state)
     switch (action.type) {
       case GENERATE_SAMPLES:
         return { ...state, samples:action.samples}
