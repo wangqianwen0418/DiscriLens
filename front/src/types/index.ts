@@ -32,15 +32,16 @@ export enum Status {
 }
 
 export interface StoreState{
-    key_attrs: string[], // record key attrs
+    // key_attrs: string[], // record key attrs
+    keyAttrNum: number,
     samples: DataItem[],    // record all samples 
     rules: Rule[],  // record all rules
-    key_groups: KeyGroup[], // record all data of key attrs
-    fetch_samples_status: Status,   // loading status
-    fetch_groups_status: Status,    // loadinf status
-    thr_rules: [number, number],    // slider bar interaction, select threshold of rule filtering
-    protected_attr: string, // record protected attr
-    show_attrs: string[], // record all the attrs that are shown
-    drag_array: string[],   // array to record each attr's location, used for dragging function
-    drag_status: boolean, // // drag status is used to detect dragging movements in attribute.tsx. 
+    // key_groups: KeyGroup[], // record all data of key attrs
+    fetchSampleStatus: Status,   // loading status
+    fetchKeyStatus: Status,    // loadinf status
+    ruleThreshold: [number, number],    // slider bar interaction, select threshold of rule filtering
+    protectedAttr: string, // record protected attr
+    // show_attrs: string[], // record all the attrs that are shown
+    showAttrNum: number,
+    dragArray: string[],   // array to record each attr's location, used for dragging function
 }

@@ -95,7 +95,7 @@ export function oragnizeRules (ruleCollection: RuleNode[], rule: Rule): RuleNode
 //     return result
 // }
 
-export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataItem[])=>{
+export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataItem[])=>{
     rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)
     let positiveRuleNodes: RuleNode[] = [] 
     let negativeRuleNodes: RuleNode[] = [] 
@@ -128,11 +128,11 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
                 antecedent: ruleNode.rule.antecedent
                         .filter(attrVal=>{
                             let attr = attrVal.split('=')[0]
-                            return key_attrs.includes(attr)
+                            return keyAttrs.includes(attr)
                         })
                         .sort((a,b)=>{
                             let attrA = a.split('=')[0], attrB = b.split('=')[0]
-                            return key_attrs.indexOf(attrA)-key_attrs.indexOf(attrB)
+                            return keyAttrs.indexOf(attrA)-keyAttrs.indexOf(attrB)
                         }),
                 nodes: [ruleNode],
                 items: ruleNode.rule.items
@@ -159,7 +159,7 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
                 antecedent: ruleNode.rule.antecedent
                         .filter(attrVal=>{
                             let attr = attrVal.split('=')[0]
-                            return key_attrs.includes(attr)
+                            return keyAttrs.includes(attr)
                         }),
                 nodes: [ruleNode],
                 items: ruleNode.rule.items
@@ -172,19 +172,19 @@ export const ruleAggregate = (rules:Rule[], key_attrs: string[], samples: DataIt
 // /****
 // * Test 
 // ******/
-// let {key_attrs} = require('../testdata/academic_lr_key.json'), 
+// let {keyAttrs} = require('../testdata/academic_lr_key.json'), 
 //     samples:DataItem[] = require('../testdata/academic_lr_samples.json'),
 //     rules:Rule[] = require('../testdata/academic_lr_rules.json')
 
-// key_attrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+// keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
 // samples = samples.slice(1000, 2000)
 // rules = rules.filter(rule=>Math.abs(rule.risk_dif)>0.01 )
 //         .filter(rule=>rule.cls=='class=L')
-//         .filter(rule=>containsAttr(rule.antecedent, key_attrs).length>=key_attrs.length)
+//         .filter(rule=>containsAttr(rule.antecedent, keyAttrs).length>=keyAttrs.length)
         
 // rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)
 // console.info(rules.map(rule=>{let a = rule["Unnamed: 0"]; if(a=='1983'){console.info(rule)}}))
 // console.info('rules number', rules.length)
-// // let results = ruleAggregate(rules, key_attrs, samples)
-// let results = ruleAggregate2(rules, key_attrs, samples)
+// // let results = ruleAggregate(rules, keyAttrs, samples)
+// let results = ruleAggregate2(rules, keyAttrs, samples)
 // console.info(results)

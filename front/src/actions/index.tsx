@@ -1,9 +1,9 @@
-import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES, FIND_GROUPS, 
+import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES, 
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
-    CHANGE_SAMPLES_FETCH_STATUS, CHANGE_GROUPS_FETCH_STATUS, 
-    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,SHOW_ATTRS} from 'Const';
+    CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS} from 'Const';
 import axios, { AxiosResponse } from 'axios';
-import {DataItem, KeyGroup, Status, Rule} from 'types';
+import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
 
 const axiosInstance = axios.create({
@@ -23,48 +23,48 @@ export interface Dispatch<S> {
   <A>(action:A &{type:any}): A &{type:any};
 }
 
-/*****************
-all about groups
+/*****************g
+ *get key attributes which used to define groups
 *****************/ 
-export interface FindGroups{
-    type:FIND_GROUPS,
-    key_attrs: string[],
-    key_groups: KeyGroup[],
-}
-export const FindGroups = (key_attrs: string[], key_groups: KeyGroup[]):FindGroups => {
-    return {
-        type:FIND_GROUPS,
-        key_attrs, 
-        key_groups
-    }
-}
+// export interface FindKeys{
+//     type:FIND_KEYS,
+//     keyAttrs: string[],
+//     // key_groups: KeyGroup[],
+// }
+// export const FindKeys = (keyAttrs: string[]):FindKeys => {
+//     return {
+//         type:FIND_KEYS,
+//         keyAttrs, 
+//         // key_groups
+//     }
+// }
 
-export interface ChangeGroupsFetchStatus{
-    type:CHANGE_GROUPS_FETCH_STATUS,
+export interface ChangeKeyFetchStatus{
+    type:CHANGE_KEY_FETCH_STATUS,
     status: Status
 }
-export const ChangeGroupsFetchStatus = (status: Status):ChangeGroupsFetchStatus => {
+export const ChangeKeyFetchStatus = (status: Status):ChangeKeyFetchStatus => {
     return {
-        type:CHANGE_GROUPS_FETCH_STATUS,
+        type:CHANGE_KEY_FETCH_STATUS,
         status
     }
 }
 
 
-export const FetchGroups = (dataset_name:string, model_name: string, protect_attr: string)=>{
+export const FetchKeys = (dataset_name:string, model_name: string, protect_attr: string)=>{
     return (dispatch:any) => {
-        dispatch( ChangeGroupsFetchStatus(Status.PENDING) )
+        dispatch( ChangeKeyFetchStatus(Status.PENDING) )
         const url = `/groups?dataset=${dataset_name}&model=${dataset_name}_${model_name}&protectAttr=${protect_attr}`
         axiosInstance.get(url)
         .then((response: AxiosResponse) => {
             if (response.status !=200) {
                 throw Error(response.statusText);
             }else{
-                let {key_attrs, key_groups} = response.data
-                dispatch(FindGroups(key_attrs, key_groups))
+                let {keyAttrs} = response.data
+                dispatch(ChangeKeyAttr(keyAttrs))
             }
         }).then(()=>{
-            dispatch( ChangeGroupsFetchStatus(Status.COMPLETE) )
+            dispatch( ChangeKeyFetchStatus(Status.COMPLETE) )
         })
     };
 }
@@ -158,64 +158,64 @@ export const FetchRules = (dataset_name:string, model_name: string)=>{
 }
 
 /*****************
-all about CHANGING rules
+all about CHANGING rule threshold
 *****************/ 
 export interface ChangeRuleThresholds{
     type:CHANGE_RULE_THRESHOLD,
-    thr_rules:[number, number]
+    ruleThreshold:[number, number]
 }
 
-export const ChangeRuleThresholds = (thr_rules:[number, number]):ChangeRuleThresholds =>{
+export const ChangeRuleThresholds = (ruleThreshold:[number, number]):ChangeRuleThresholds =>{
     return ({
         type: CHANGE_RULE_THRESHOLD,
-        thr_rules
+        ruleThreshold
     });
 }
 
 
 /*****************
-all about protected_attr
+all about protectedAttr
 *****************/ 
 export interface ChangeProtectedAttr{
     type:CHANGE_PROTECTED_ATTR,
-    protected_attr:string
+    protectedAttr:string
 }
 
-export const ChangeProtectedAttr = (protected_attr:string):ChangeProtectedAttr =>{
+export const ChangeProtectedAttr = (protectedAttr:string):ChangeProtectedAttr =>{
     return ({
         type: CHANGE_PROTECTED_ATTR,
-        protected_attr
+        protectedAttr
     });
 }
 
 /*****************
-all about bars array
+the array that store the order of attributes
 *****************/ 
 export interface ChangeDragArray{
     type:CHANGE_DRAG_ARRAY,
-    drag_array:string[]
+    dragArray:string[]
 }
 
-export const ChangeDragArray = (drag_array:string[]):ChangeDragArray =>{
+export const ChangeDragArray = (dragArray:string[]):ChangeDragArray =>{
     return ({
         type: CHANGE_DRAG_ARRAY,
-        drag_array
+        dragArray
     });
 }
 
 
 /*****************
-all about chaging show_attrs
+all about chaging showAttrs
 *****************/ 
-export interface ShowAttrs{
-    type:SHOW_ATTRS,
-    show_attrs: string[]
+export interface ChangeShowAttr{
+    type:CHANGE_SHOW_ATTRS,
+    showAttrs: string[]
 }
 
-export const ChangeShowAttrs = (show_attrs:string[]):ShowAttrs =>{
+export const ChangeShowAttr = (showAttrs:string[]):ChangeShowAttr =>{
     return ({
-        type: SHOW_ATTRS,
-        show_attrs
+        type: CHANGE_SHOW_ATTRS,
+        showAttrs
     });
 }
 
@@ -224,14 +224,14 @@ export const ChangeShowAttrs = (show_attrs:string[]):ShowAttrs =>{
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
     return (dispatch: any)=>{
         dispatch(ChangeSamplesFetchStatus(Status.PENDING))
-        dispatch(ChangeGroupsFetchStatus(Status.PENDING))
+        dispatch(ChangeKeyFetchStatus(Status.PENDING))
         dispatch(ChangeRulesFetchStatus(Status.PENDING))
         dispatch(FetchRules(dataset_name, model_name))
         dispatch(ChangeProtectedAttr(protect_attr))
         FetchSamples(dataset_name, model_name)(dispatch)
         .then(
             () =>{ 
-                dispatch (FetchGroups(dataset_name, model_name, protect_attr))}
+                dispatch (FetchKeys(dataset_name, model_name, protect_attr))}
         )
     }
 }
@@ -242,24 +242,24 @@ change key attrs
 
 export interface ChangeKeyAttr{
     type: CHANGE_KEY_ATTR,
-    key_attrs: string[]
+    keyAttrs: string[]
 }
 
-export const ChangeKeyAttr = (key_attrs: string[])=>{
+export const ChangeKeyAttr = (keyAttrs: string[])=>{
     return {
         type: CHANGE_KEY_ATTR,
-        key_attrs
+        keyAttrs
     }
 }
 
-export const KeyAttr = (key_attrs: string[], key_groups:KeyGroup[])=>{
-    return (dispatch: any)=>{
-        dispatch(FindGroups(key_attrs, key_groups))
-    }
-}
+// export const KeyAttr = (keyAttrs: string[], key_groups:KeyGroup[])=>{
+//     return (dispatch: any)=>{
+//         dispatch(FindKeys(keyAttrs, key_groups))
+//     }
+// }
 
 
 
-export type AllActions = FindGroups|GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
-|ChangeRulesFetchStatus|ChangeGroupsFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-ChangeDragArray|ChangeKeyAttr|ShowAttrs
+export type AllActions = GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
+|ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr

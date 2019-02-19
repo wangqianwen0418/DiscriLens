@@ -7,7 +7,7 @@ export function mapStateToProps(state:StoreState) {
     // console.info(state.samples)
     return {
         samples: state.samples,
-        featch_samples_status: state.fetch_samples_status
+        featchSampleStatus: state.fetchSampleStatus
     };
 }
 

@@ -11,10 +11,10 @@ export interface Props{
     samples: DataItem[],
     thr_rules:number[],
     key_attrs: string[],
-    drag_array: string[],
+    dragArray: string[],
     show_attrs: string[],
     drag_status: boolean,
-    protected_attr: string,
+    protectedAttr: string,
     fetch_groups_status: Status,
     changeDragStatus: (drag_status: boolean)=>void,
 } 
@@ -219,7 +219,7 @@ export default class Itemsets extends React.Component<Props, State>{
     }
 
     draw(){
-        let {rules, samples, thr_rules, key_attrs, drag_array,protected_attr,show_attrs} = this.props
+        let {rules, samples, thr_rules, key_attrs, dragArray,protectedAttr,show_attrs} = this.props
         let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(1000,2000)
         
@@ -228,14 +228,14 @@ export default class Itemsets extends React.Component<Props, State>{
         // remove the attribute 'id' and 'class'
         //attrs.splice(attrs.indexOf('id'), 1)
         attrs_num.splice(attrs_num.indexOf('class'), 1)
-        attrs_num.splice(attrs_num.indexOf(protected_attr), 1)
+        attrs_num.splice(attrs_num.indexOf(protectedAttr), 1)
         attrs_num = attrs_num.filter((attr)=>typeof(samples_numerical[1][attr])=='number')
 
         let attrs = [...Object.keys(samples[0])]
         // remove the attribute 'id' and 'class'
         //attrs.splice(attrs.indexOf('id'), 1)
         attrs.splice(attrs.indexOf('class'), 1)
-        attrs.splice(attrs.indexOf(protected_attr), 1)
+        attrs.splice(attrs.indexOf(protectedAttr), 1)
         attrs.sort((a,b)=>{
             if(key_attrs.indexOf(a)!=-1){
                 return -1
@@ -271,7 +271,7 @@ export default class Itemsets extends React.Component<Props, State>{
                     // check whether this attr is folded
                 })
 
-                if(drag_array.length>0){
+                if(dragArray.length>0){
                     this.state.attrs_button.map((button)=>{
                         if((button[1]!=rule_attrs.includes(button[0]))&&(key_attrs.includes(button[0]))){
                             rule_counter += 1
@@ -292,7 +292,7 @@ export default class Itemsets extends React.Component<Props, State>{
         let rule_lines = rules_processed.map((rule,rule_i)=>{
                 return <g key={rule_i+'rules'} transform={`translate(${window.innerWidth * 0.05/  show_attrs.length}, ${5 + line_interval*rule_i})`}>
                 {
-                    this.drawLines(rule,drag_array,samples,show_attrs,attrs_num)
+                    this.drawLines(rule,dragArray,samples,show_attrs,attrs_num)
                 }
                 
             </g>         
@@ -306,7 +306,7 @@ export default class Itemsets extends React.Component<Props, State>{
                         let button_click = () =>{
                             this.changeRule(i)
                         }
-                        if(this.props.drag_status){this.updateButton(drag_array.slice(0,show_attrs.length))}
+                        if(this.props.drag_status){this.updateButton(dragArray.slice(0,show_attrs.length))}
                         if(i<this.state.attrs_button.length){
                             return <g>
                             {key_attrs.includes(this.state.attrs_button[i][0])?

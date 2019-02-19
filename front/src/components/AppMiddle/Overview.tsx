@@ -7,10 +7,9 @@ import {BAD_COLOR} from 'Helpers'
 
 export interface Props{
     rules: Rule[],
-    key_attrs:string[],
-    thr_rules: number[],
-    drag_status: boolean,
-    onChange : (thr_rules:[number, number])=>void
+    keyAttrs: string[],
+    ruleThreshold: number[],
+    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
     transformXLeft: number,
@@ -68,7 +67,7 @@ export default class Overview extends React.Component<Props,State>{
 
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScaleReverse:d3.ScaleLinear<number, number>){
         this.setState({transformXLeft,transformXRight,zeroAxis,xScaleReverse})
-        this.props.onChange([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
+        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
     }
 
     // update state
@@ -96,7 +95,7 @@ export default class Overview extends React.Component<Props,State>{
         transformXLeft += (Math.min(Math.max(e.clientX,this.leftStart),zeroAxis) - this.xLeft)
         this.xLeft = Math.min(Math.max(e.clientX,this.leftStart),zeroAxis)
         this.setState({ transformXLeft })
-        this.props.onChange([xScaleReverse(transformXLeft),this.props.thr_rules[1]])
+        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),this.props.ruleThreshold[1]])
         // if button is up
         if(e.buttons==0){
             this.mouseUpLeft(e)
@@ -128,7 +127,7 @@ export default class Overview extends React.Component<Props,State>{
         transformXRight += (Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis) - this.xRight)
         this.xRight = Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis)
         this.setState({ transformXRight })
-        this.props.onChange([this.props.thr_rules[0],xScaleReverse(transformXRight)])
+        this.props.onChangeRuleThreshold([this.props.ruleThreshold[0],xScaleReverse(transformXRight)])
         // if button is up
         if(e.buttons==0){
             this.mouseUpRight(e)
@@ -140,8 +139,8 @@ export default class Overview extends React.Component<Props,State>{
         window.removeEventListener('mousemove', this.mouseMoveRight)
     }
     ruleProcessing(){
-        let {rules,key_attrs,drag_status} = this.props
-        //let {thr_rules} = this.state
+        let {rules,keyAttrs} = this.props
+        //let {ruleThreshold} = this.state
         /**
          * Processing rules by key attrs
          *  */ 
@@ -158,12 +157,12 @@ export default class Overview extends React.Component<Props,State>{
                 
                 let rule_counter = 0
                 rule_attrs.forEach((rule_attr,i)=>{
-                    if(key_attrs.includes(rule_attr)){
+                    if(keyAttrs.includes(rule_attr)){
                         rule_counter += 1
                     }
                 })
                 // remove rules containing non-key attrs
-                if((rule_counter>=key_attrs.length)&&(key_attrs.length>0)){
+                if((rule_counter>=keyAttrs.length)&&(keyAttrs.length>0)){
                     rules_new.push(rule)
                 }
         })
@@ -232,9 +231,6 @@ export default class Overview extends React.Component<Props,State>{
 
         // initialization state
         if(this.state.transformXLeft==null){this.initTransformX(leftStart,rightEnd,xScale(0),xScaleReverse)}
-
-        // update xScaleReverse when dragging is going
-        if(drag_status){this.update(xScaleReverse,xScale(0))}
 
         // select rule filtering thresholds
         let selectThr = () =>{

@@ -12,23 +12,19 @@ import "./Itemsets.css";
 export interface Props {
     rules: Rule[],
     samples: DataItem[],
-    thr_rules: number[],
-    key_attrs: string[],
-    drag_array: string[],
-    drag_status: boolean,
-    protected_attr: string,
-    fetch_groups_status: Status,
+    ruleThreshold: [number, number],
+    keyAttrNum: number,
+    showAttrNum: number,
+    dragArray: string[],
+    protectedAttr: string,
+    fetchKeyStatus: Status,
     step: number,
-    bar_w: number,
+    barWidth: number,
     offsetX:number,
-    show_attrs: string[],
-    onChangeShowAttrs: (show_attrs: string[]) => void,
-    onChangeDragArray: (dray_array:string[]) => void
+    onChangeShowAttr: (showAttrs: string[]) => void,
+    onChangeDragArray: (dragArray:string[]) => void
 }
 export interface State {
-    // used to record buttons record and corresponding attr. string[]
-    // element: [attr,boolean]. Boolean=false means shown rules don't contain this attr; similarly boolean=true 
-    attrs_button: [string, boolean][],
     expandRules: Rule['id'][] // store the antecedent of the rules that have been expaned
 }
 export interface curveData {
@@ -49,7 +45,6 @@ export default class Itemset extends React.Component<Props, State>{
     constructor(props: Props) {
         super(props)
         this.state = {
-            attrs_button: null,
             expandRules: []
         }
         this.toggleExpand = this.toggleExpand.bind(this)
@@ -58,18 +53,18 @@ export default class Itemset extends React.Component<Props, State>{
     }
     toggleExpand(id: Rule['id'], newAttrs: string[]) {
         let { expandRules } = this.state
-        let {show_attrs, drag_array} = this.props
+        let {showAttrNum, dragArray} = this.props
 
         // // update show attributes
         // let newAttrs = antecedent
         //     .map(attrVal=>attrVal.split('=')[0])
-        //     .filter(attr=>!show_attrs.includes(attr))
-        show_attrs = show_attrs.concat(newAttrs)
-        this.props.onChangeShowAttrs(show_attrs)
+        //     .filter(attr=>!showAttrs.includes(attr))
+        let showAttrs = dragArray.slice(0, showAttrNum).concat(newAttrs)
+        this.props.onChangeShowAttr(showAttrs)
         
-        // move show attrs to the front of the drag_array
-        drag_array = show_attrs.concat(drag_array.filter(attr=>!show_attrs.includes(attr)))
-        this.props.onChangeDragArray(drag_array)
+        // move show attrs to the front of the dragArray
+        dragArray = showAttrs.concat(dragArray.filter(attr=>!showAttrs.includes(attr)))
+        this.props.onChangeDragArray(dragArray)
         
         //
         let idx = expandRules.indexOf(id)
@@ -84,7 +79,9 @@ export default class Itemset extends React.Component<Props, State>{
     drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean): { content: JSX.Element[], offsetY: number } {
         let { rule, child } = ruleNode
         let { antecedent, items, id } = rule
-        let { bar_w, step, show_attrs, key_attrs} = this.props
+        let { barWidth, step, showAttrNum, dragArray} = this.props
+
+        let showAttrs = dragArray.slice(0, showAttrNum)
 
 
         let newAttrs: string[] = []
@@ -93,9 +90,8 @@ export default class Itemset extends React.Component<Props, State>{
                 node.rule.antecedent
                     .map(attrVal=>attrVal.split('=')[0])
                     .filter(attr=>
-                        (!show_attrs.includes(attr))
+                        (!showAttrs.includes(attr))
                         &&(!newAttrs.includes(attr))
-                        &&(!key_attrs.includes(attr))
                         )
             )
         }
@@ -195,19 +191,19 @@ export default class Itemset extends React.Component<Props, State>{
             stroke='#666' fill='none' 
             strokeWidth='1px'
             x={-20} y={-0.25*this.line_interval}
-            height={this.line_interval*1.5} width={step*show_attrs.length + 20}/> */}
+            height={this.line_interval*1.5} width={step*showAttrs.length + 20}/> */}
 
                         <rect className='background'
-                            width={bar_w} height={this.line_interval}
-                            x={step * show_attrs.indexOf(attr)}
+                            width={barWidth} height={this.line_interval}
+                            x={step * showAttrs.indexOf(attr)}
                             // fill='#eee'
                             fill='none'
                             stroke={favorPD ? "#98E090" : "#FF772D"}
                             strokeWidth={2}
                         />
                         <rect className='font'
-                            width={bar_w / ranges.length} height={this.line_interval}
-                            x={step * show_attrs.indexOf(attr) + bar_w / ranges.length * rangeIdx}
+                            width={barWidth / ranges.length} height={this.line_interval}
+                            x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                             fill={favorPD ? "#98E090" : "#FF772D"}
                         />
                     </g>
@@ -232,18 +228,17 @@ export default class Itemset extends React.Component<Props, State>{
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         let { antecedent, items, id, nodes } = ruleAgg
-        let { bar_w, step, key_attrs, show_attrs, drag_array } = this.props
-
+        let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
+        let showAttrs = dragArray.slice(0, showAttrNum)
         let newAttrs: string[] = []
         for (var node of nodes){
             newAttrs = newAttrs.concat(
                 node.rule.antecedent
                     .map(attrVal=>attrVal.split('=')[0])
                     .filter(attr=>
-                        (!show_attrs.includes(attr))
+                        (!showAttrs.includes(attr))
                         &&(!newAttrs.includes(attr))
-                        &&(!key_attrs.includes(attr))
-                        )
+                    )
             )
         }
         let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id, newAttrs)
@@ -263,7 +258,7 @@ export default class Itemset extends React.Component<Props, State>{
                     strokeWidth='1px'
                     rx={2} ry={2}
                     x={-this.headWidth} y={-0.25 * this.line_interval}
-                    height={this.line_interval * 1.5} width={step * key_attrs.length + this.headWidth} />
+                    height={this.line_interval * 1.5} width={step * keyAttrNum + this.headWidth} />
                 <g className="icon" transform={`translate(${-15}, ${this.line_interval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
                     <text className="icon"
                         transform={`rotate(${isExpand ? 90 : 0} ${this.line_interval / 4} ${-this.line_interval / 4})`}
@@ -272,16 +267,16 @@ export default class Itemset extends React.Component<Props, State>{
                 </text>
                 </g>
                 <rect className='background'
-                    width={bar_w} height={this.line_interval}
-                    x={step * drag_array.indexOf(attr)}
+                    width={barWidth} height={this.line_interval}
+                    x={step * dragArray.indexOf(attr)}
                     // fill='#eee'
                     fill='none'
                     stroke={favorPD ? "#98E090" : "#FF772D"}
                     strokeWidth={2}
                 />
                 <rect className='font'
-                    width={bar_w / ranges.length} height={this.line_interval}
-                    x={step * drag_array.indexOf(attr) + bar_w / ranges.length * rangeIdx}
+                    width={barWidth / ranges.length} height={this.line_interval}
+                    x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                     fill={favorPD ? "#98E090" : "#FF772D"}
                 />
             </g>
@@ -290,31 +285,33 @@ export default class Itemset extends React.Component<Props, State>{
         return attrValContent
     }
     draw() {
-        let { rules, samples, thr_rules, key_attrs, drag_array } = this.props
+        let { rules, samples, ruleThreshold, keyAttrNum, dragArray } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(1000, 2000)
 
+        let keyAttrs = dragArray.slice(0, keyAttrNum)
+
         rules = rules
             // risk threshold
-            .filter(rule => rule.risk_dif >= thr_rules[1] || rule.risk_dif <= thr_rules[0])
+            .filter(rule => rule.risk_dif >= ruleThreshold[1] || rule.risk_dif <= ruleThreshold[0])
             .filter(rule => rule.cls == 'class=H')
             // normalize risk diff => favor PD
             .map(rule => {
                 return { ...rule, favorPD: rule.cls == 'class=H' ? rule.risk_dif : -1 * rule.risk_dif }
             })
-            .filter(rule => containsAttr(rule.antecedent, key_attrs).length >= key_attrs.length)
+            .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
         // aggregate based on key attributes
-        let results = ruleAggregate(rules, drag_array.filter(attr=>key_attrs.includes(attr)), samples)
+        let results = ruleAggregate(rules, dragArray.filter(attr=>keyAttrs.includes(attr)), samples)
         //console.info(results)
         // let attrs = [...Object.keys(samples[0])]
         // // remove the attribute 'id' and 'class'
         // if (attrs.includes('id')) {
         //     attrs.splice(attrs.indexOf('id'), 1)
         // }
-        // if (attrs.includes(protected_attr)) {
-        //     attrs.splice(attrs.indexOf(protected_attr), 1)
+        // if (attrs.includes(protectedAttr)) {
+        //     attrs.splice(attrs.indexOf(protectedAttr), 1)
         // }
 
         // attrs.splice(attrs.indexOf('class'), 1)
@@ -378,9 +375,9 @@ export default class Itemset extends React.Component<Props, State>{
         </g>
     }
     render() {
-        let { fetch_groups_status } = this.props
+        let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
-        switch (fetch_groups_status) {
+        switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
                 break

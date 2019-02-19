@@ -1,7 +1,7 @@
 import Itemsets from 'components/AppMiddle/Itemsets2';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeShowAttrs, ChangeDragArray } from 'actions';
+import { ChangeShowAttr, ChangeDragArray } from 'actions';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -9,20 +9,19 @@ export function mapStateToProps(state:StoreState) {
     return {
         rules: state.rules,
         samples: state.samples,
-        thr_rules: state.thr_rules,
-        key_attrs:state.key_attrs,
-        drag_array: state.drag_array, 
-        protected_attr: state.protected_attr,
-        drag_status: state.drag_status,
-        show_attrs: state.show_attrs,
-        fetch_groups_status: state.fetch_groups_status
+        ruleThreshold: state.ruleThreshold,
+        keyAttrNum:state.keyAttrNum,
+        dragArray: state.dragArray, 
+        protectedAttr: state.protectedAttr,
+        showAttrNum: state.showAttrNum,
+        fetchKeyStatus: state.fetchKeyStatus
     };
 }
 
 export function mapDispatchToProps(dispatch: any) {
     return {
-        onChangeShowAttrs: (show_attrs: string[])=>dispatch(ChangeShowAttrs(show_attrs)),
-        onChangeDragArray: (dray_array: string[])=>(dispatch(ChangeDragArray(dray_array)))
+        onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
+        onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
     }
 }
 
