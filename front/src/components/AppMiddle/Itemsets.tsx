@@ -36,7 +36,7 @@ export interface rules {
 }
 
 export default class Itemset extends React.Component<Props, State>{
-    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; line_interval = 15;
+    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15;
     margin = 65; 
     headWidth = this.props.offsetX-this.margin; 
     indent: 5;
@@ -80,7 +80,7 @@ export default class Itemset extends React.Component<Props, State>{
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean): { content: JSX.Element[], offsetY: number } {
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax:number): { content: JSX.Element[], offsetY: number } {
         let { rule, child } = ruleNode
         let { antecedent, items, id } = rule
         let { barWidth, step, keyAttrNum, showAttrNum, dragArray} = this.props
@@ -104,12 +104,46 @@ export default class Itemset extends React.Component<Props, State>{
         let isExpand = this.state.expandRules.hasOwnProperty(id)
 
         let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
-        let outCircleRadius = this.line_interval * 0.8
-        let progressBarWidth = 3
-        let inCircleRadius = this.line_interval * 0.8 - progressBarWidth*1.5
+        // let outCircleRadius = this.lineInterval * 0.8
+        // let progressBarWidth = 5
+        // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
+        let outRadius = this.lineInterval*0.8*items.length/itemMax
+        let inRadius = this.lineInterval*0.8*(items.length - rule.sup_pd/rule.conf_pd)/itemMax
+        let circleRadius = (outRadius+inRadius)/2, progressBarWidth = outRadius - inRadius
         let parent = <g className={`${ruleNode.rule.id.toString()} rule`}
             transform={`translate(${this.props.offsetX}, ${offsetY})`}>
-            <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.line_interval*0.3})`}>
+            <g className="score" transform={`translate(${-circleRadius + indent - this.headWidth*0.1}, ${this.lineInterval*0.5})`}>
+                <circle
+                    className="background"
+                    r={circleRadius} 
+                    fill='none'
+                    stroke="#ccc"
+                    strokeWidth={progressBarWidth}
+                    strokeDasharray={circleRadius * 2 * Math.PI}
+                    strokeDashoffset="0" />
+                <circle 
+                    className="conf_pnd bar"
+                    stroke="#FF9F1E"
+                    strokeWidth={progressBarWidth}
+                    r={circleRadius} 
+                    fill='none'
+                    strokeDasharray={circleRadius * 2 * Math.PI}
+                    strokeDashoffset={circleRadius * 2 * Math.PI * (1-rule.conf_pnd)} />
+                 <circle 
+                    className="conf_pd bar"
+                    stroke="#98E090"
+                    strokeWidth={progressBarWidth}
+                    r={circleRadius} 
+                    fill='none'
+                    strokeDasharray={circleRadius * 2 * Math.PI}
+                    // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
+                    strokeDashoffset={circleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
+                    />
+                {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
+                    {rule.risk_dif.toFixed(2).replace('0.', '.')}
+                </text> */}
+            </g>
+            {/* <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.lineInterval*0.3})`}>
                 <g className='conf_pnd' >
                     <circle
                         className="background"
@@ -148,16 +182,16 @@ export default class Itemset extends React.Component<Props, State>{
                         strokeDashoffset={inCircleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
                         />
                 </g>
-            </g>
-            <text fontSize={10} y={this.line_interval} textAnchor="end" x={-this.headWidth-2*outCircleRadius}>
-                {items.length}
-                -
-                    {rule.risk_dif.toFixed(2)}
+            </g> */}
+            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth-2*circleRadius}>
+                {/* {items.length} */}
+                {/* -
+                    {rule.risk_dif.toFixed(2)} */}
             </text>
             <g className="tree">
                 <line
-                    x1={indent} y1={-this.line_interval * 0.7}
-                    x2={indent} y2={this.line_interval * 1.3}
+                    x1={indent} y1={-this.lineInterval * 0.5}
+                    x2={indent} y2={this.lineInterval * 1.5}
                     stroke="#c3c3c3"
                     strokeWidth='2'
                 />
@@ -167,19 +201,19 @@ export default class Itemset extends React.Component<Props, State>{
             stroke="#444" 
             /> */}
             </g>
-            <g transform={`translate(${-15}, ${this.line_interval})`} cursor='pointer' onClick={toggleExpand}>
+            <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' onClick={toggleExpand}>
                 <line className="ruleBoundary"
-                    x1={indent} y1={this.line_interval * 0.3}
-                    x2={window.innerWidth} y2={this.line_interval * 0.3}
+                    x1={indent} y1={this.lineInterval * 0.5}
+                    x2={window.innerWidth} y2={this.lineInterval * 0.5}
                     stroke="#f0f0f0"
                 />
-                <g className="icon" transform={`translate(${0}, ${-this.line_interval / 4})`}>
+                <g className="icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
                     {ruleNode.child.length == 0 ?
                         <text className="icon" >
                             o
             </text> :
                         <text className="icon"
-                            transform={`rotate(${isExpand ? 90 : 0} ${this.line_interval / 4} ${-this.line_interval / 4})`}>
+                            transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}>
                             >
             </text>
                     }
@@ -194,11 +228,11 @@ export default class Itemset extends React.Component<Props, State>{
                         {/* <rect className='ruleBox' 
             stroke='#666' fill='none' 
             strokeWidth='1px'
-            x={-20} y={-0.25*this.line_interval}
-            height={this.line_interval*1.5} width={step*showAttrs.length + 20}/> */}
+            x={-20} y={-0.25*this.lineInterval}
+            height={this.lineInterval*1.5} width={step*showAttrs.length + 20}/> */}
 
                         <rect className='background'
-                            width={barWidth} height={this.line_interval}
+                            width={barWidth} height={this.lineInterval}
                             x={step * showAttrs.indexOf(attr)}
                             // fill='#eee'
                             fill='none'
@@ -206,7 +240,7 @@ export default class Itemset extends React.Component<Props, State>{
                             strokeWidth={2}
                         />
                         <rect className='font'
-                            width={barWidth / ranges.length} height={this.line_interval}
+                            width={barWidth / ranges.length} height={this.lineInterval}
                             x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                             fill={favorPD ? "#98E090" : "#FF772D"}
                         />
@@ -214,14 +248,14 @@ export default class Itemset extends React.Component<Props, State>{
                 }
                 )}
         </g>
-        offsetY = offsetY + 2 * this.line_interval
+        offsetY = offsetY + 2 * this.lineInterval
         offsetX += 1
 
         let content = [parent]
         if (isExpand) {
             let children: JSX.Element[] = []
             for (let childNode of ruleNode.child) {
-                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD)
+                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemMax)
                 children = children.concat(child)
                 offsetY = newY
             }
@@ -247,7 +281,7 @@ export default class Itemset extends React.Component<Props, State>{
         }
         let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs)
         let isExpand = this.state.expandRules.hasOwnProperty(id)
-        let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.line_interval} textAnchor="end" x={-this.headWidth - 5}>
+        let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth - 5}>
             {items.length}
         </text>
 
@@ -261,17 +295,17 @@ export default class Itemset extends React.Component<Props, State>{
                     stroke='#c3c3c3' fill='none'
                     strokeWidth='1px'
                     rx={2} ry={2}
-                    x={-this.headWidth} y={-0.25 * this.line_interval}
-                    height={this.line_interval * 1.5} width={step * keyAttrNum + this.headWidth} />
-                <g className="icon" transform={`translate(${-15}, ${this.line_interval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
+                    x={-this.headWidth} y={-0.5 * this.lineInterval}
+                    height={this.lineInterval * 2} width={step * keyAttrNum + this.headWidth} />
+                <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
                     <text className="icon"
-                        transform={`rotate(${isExpand ? 90 : 0} ${this.line_interval / 4} ${-this.line_interval / 4})`}
+                        transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
                     >
                         >
                 </text>
                 </g>
                 <rect className='background'
-                    width={barWidth} height={this.line_interval}
+                    width={barWidth} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr)}
                     // fill='#eee'
                     fill='none'
@@ -279,7 +313,7 @@ export default class Itemset extends React.Component<Props, State>{
                     strokeWidth={2}
                 />
                 <rect className='font'
-                    width={barWidth / ranges.length} height={this.line_interval}
+                    width={barWidth / ranges.length} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                     fill={favorPD ? "#98E090" : "#FF772D"}
                 />
@@ -306,14 +340,17 @@ export default class Itemset extends React.Component<Props, State>{
             })
             .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
+        let itemMax = Math.max(...rules.map(d=>d.items.length))
+
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr=>keyAttrs.includes(attr)), samples)
 
 
         let { positiveRuleAgg } = results
-        let offsetY = 5
+        let offsetY = 0
         let posRules: JSX.Element[] = []
         for (let ruleAgg of positiveRuleAgg) {
+            offsetY += 0.3*this.lineInterval
             posRules.push(
                 <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
@@ -321,10 +358,10 @@ export default class Itemset extends React.Component<Props, State>{
                     }
                 </g>
             )
-            offsetY = offsetY + 2 * this.line_interval
+            offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemMax)
                     offsetY = newY
                     posRules = posRules.concat(content)
                 }
@@ -333,7 +370,7 @@ export default class Itemset extends React.Component<Props, State>{
 
         // let negaRules = negativeRuleAgg.map((ruleAgg,rule_i)=>{
         //     return <g key={rule_i+'rules'} 
-        //         transform={`translate(${window.innerWidth*0.1}, ${5 + 2*this.line_interval* rule_i+ offsetY})`}>
+        //         transform={`translate(${window.innerWidth*0.1}, ${5 + 2*this.lineInterval* rule_i+ offsetY})`}>
         //         {
         //             this.drawRuleAggs(ruleAgg.antecedent, ruleAgg.items, attrs, false)
         //         }
@@ -341,7 +378,7 @@ export default class Itemset extends React.Component<Props, State>{
 
         // })
         let scoreDomain = d3.extent( rules.map(rule=>rule.risk_dif) )
-        return <g key='rules'>
+        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             {posRules}
             {/* {negaRules} */}

@@ -361,7 +361,6 @@ export default class Attributes extends React.Component<Props, State>{
                 position={draggablePos}
                 onStop={dragEnd}>
                     <g className="attr" cursor='pointer'>
-                    <g transform={`translate(${0}, ${0})`}>
                         {showAttrs.includes(attr)?
                             <g className='attrChart'>
                                 {dataType == 'string'? 
@@ -373,7 +372,6 @@ export default class Attributes extends React.Component<Props, State>{
                             :
                             <g className='attrChart non-key'/>
                         }
-                    </g>
                         <g 
                             className='attrLabel' 
                             transform={`rotate(${showFlag?0:-1*this.rotate}) translate(${labelX}, ${labelY})`} 
