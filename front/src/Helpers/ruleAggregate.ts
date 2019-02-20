@@ -124,7 +124,7 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
         }
         if (!isContain){
             positiveRuleAgg.push({
-                id: ruleNode.rule.id+'_agg',
+                id: 'agg'+ruleNode.rule.id,
                 antecedent: ruleNode.rule.antecedent
                         .filter(attrVal=>{
                             let attr = attrVal.split('=')[0]
@@ -155,7 +155,7 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
         }
         if (!isContain){
             negativeRuleAgg.push({
-                id: ruleNode.rule.id+'_agg',
+                id: 'agg'+ruleNode.rule.id,
                 antecedent: ruleNode.rule.antecedent
                         .filter(attrVal=>{
                             let attr = attrVal.split('=')[0]
