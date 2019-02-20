@@ -20,7 +20,7 @@ export default class Side extends React.Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      dataset_name: 'dataTest',
+      dataset_name: 'adult',
       model_name: 'xgb',
       protect_attr: 'sex',
       };
@@ -38,7 +38,7 @@ export default class Side extends React.Component<Props, State>{
     switch(e){
       case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'lr'});break}
       case 'bank': {this.setState({protect_attr:'maritary'});this.setState({model_name:'xgb'});break}
-      case 'dataTest': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
+      case 'adult': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
     }
   }
   selectModel(e:string){
@@ -75,10 +75,10 @@ export default class Side extends React.Component<Props, State>{
             <h3 className='tool-title'>Prot Attr</h3>
           </Col>
           <Col span={18}>
-            <Select size={'small'} defaultValue='dataTest' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
+            <Select size={'small'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                 <Option value="academic">academic</Option>
                 <Option value="bank">bank</Option>
-                <Option value="dataTest">dataTest</Option>
+                <Option value="adult">adult</Option>
             </Select>
 
             <Select size={'small'} value={model_name} style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>

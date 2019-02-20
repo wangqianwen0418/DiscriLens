@@ -121,17 +121,18 @@ export default class Overview extends React.Component<Props,State>{
     }
     
     inputLeft(e:any){
-        let {inputLeft,xScale} = this.state
+        let {inputLeft,xScale,zeroAxis,xScaleReverse} = this.state
         let {ruleThreshold} = this.props
-
+        
         if(inputLeft==false){
             this.setState({inputLeft:true})
             this.mouseUpLeft
         }else{
             if(e.key=='Enter'){
+                let leftValue = Math.max(Math.min(xScale(parseFloat(e.target.value)),zeroAxis),this.leftStart)
                 this.setState({inputLeft:false})
-                this.props.onChangeRuleThreshold([parseFloat(e.target.value),ruleThreshold[1]])
-                this.xLeft = xScale(parseFloat(e.target.value))
+                this.props.onChangeRuleThreshold([xScaleReverse(leftValue),ruleThreshold[1]])
+                this.xLeft = leftValue
                 this.setState({transformXLeft:this.xLeft})
                 this.mouseDownLeft
             }else if(e.key=='q'){
@@ -176,16 +177,17 @@ export default class Overview extends React.Component<Props,State>{
         window.removeEventListener('mousemove', this.mouseMoveRight)
     }
     inputRight(e:any){
-        let {inputRight,xScale} = this.state
+        let {inputRight,xScale,zeroAxis,xScaleReverse} = this.state
         let {ruleThreshold} = this.props
         if(inputRight==false){
             this.setState({inputRight:true})
             this.mouseUpRight
         }else{
             if(e.key=='Enter'){
+                let rightValue = Math.min(Math.max(xScale(parseFloat(e.target.value)),zeroAxis),this.rightEnd)
                 this.setState({inputRight:false})
-                this.props.onChangeRuleThreshold([parseFloat(e.target.value),ruleThreshold[1]])
-                this.xRight = xScale(parseFloat(e.target.value))
+                this.props.onChangeRuleThreshold([ruleThreshold[0],xScaleReverse(rightValue)])
+                this.xRight = rightValue
                 this.setState({transformXRight:this.xRight})
                 this.mouseDownRight
             }else if(e.key=='q'){
@@ -237,7 +239,6 @@ export default class Overview extends React.Component<Props,State>{
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
-        console.log(dataKeyAttr.length)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{
@@ -307,9 +308,9 @@ export default class Overview extends React.Component<Props,State>{
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         {inputLeft?
-                        <foreignObject width={'2em'} height={'1.3em'} fontSize={9} x={-10} y={0.9*topStart - 10}>
+                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inoutBoxLeft'>
                             <input type='number' 
-                            autoComplete="off" onKeyPress={this.inputLeft} className='inputBox'/>
+                            autoFocus onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
                         <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
@@ -324,9 +325,9 @@ export default class Overview extends React.Component<Props,State>{
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         {inputRight?
-                        <foreignObject width={'2em'} height={'1.3em'} fontSize={9} x={-10} y={0.9*topStart - 10}>
+                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inputBoxRight'>
                             <input type='number' 
-                            autoComplete="off" onKeyPress={this.inputRight} className='inputBox'/>
+                            autoFocus onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
                         <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
