@@ -19,10 +19,10 @@ export interface State {
 
 }
 
-export interface ItemHierarchy{
+export interface ItemHierarchy {
     id: string,
     children: ItemHierarchy[],
-    score: number|null
+    score: number | null
 }
 // export interface SetData {
 //     sets: string[],
@@ -34,9 +34,16 @@ export interface ItemHierarchy{
 const flatten = (nodes: RuleNode[]): Rule[] => {
     let rules: Rule[] = []
     for (let node of nodes) {
-        rules.push(node.rule)
+        if(!rules.map(rule=>rule.id).includes(node.rule.id)){
+            rules.push(node.rule)
+        }
         if (node.children.length > 0) {
-            rules = rules.concat(flatten(node.children))
+            rules = rules.concat(
+                flatten(node.children)
+                .filter(
+                    rule=>!rules.map(rule=>rule.id).includes(rule.id)
+                )
+            )
         }
     }
     return rules
@@ -73,7 +80,6 @@ export default class Bubble extends React.Component<Props, State>{
         d3.select(`path#outline_${id}`)
             .style('stroke-width', 7)
             .style('stroke', 'pink')
-            .style('z-index', 5)
     }
     onMouseLeave() {
         d3.selectAll('path.outline')
@@ -82,8 +88,9 @@ export default class Bubble extends React.Component<Props, State>{
     }
     render() {
         let { ruleAgg, scoreDomain, showIDs } = this.props
-        let rules = flatten(ruleAgg.nodes),
+        let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules)
+        
         let opacityScale = d3
             .scaleLinear()
             .domain([0, scoreDomain[1]])
@@ -93,40 +100,40 @@ export default class Bubble extends React.Component<Props, State>{
             radius = 2 //radius of the item
 
         let root: ItemHierarchy = {
-                id: 'root', 
-                children:[],
-                score: null
-            }, 
+            id: 'root',
+            children: [],
+            score: null
+        },
             childID = 0
 
-        items.forEach((item, itemIdx)=>{
+        items.forEach((item, itemIdx) => {
             let currentScore = item.score
-            
-            if(itemIdx==0){
+
+            if (itemIdx == 0) {
                 root.children.push({
-                    id: 'score_'+currentScore,
+                    id: 'score_' + currentScore,
                     score: currentScore,
-                    children:[{
+                    children: [{
                         id: item.id,
                         children: [],
                         score: currentScore,
                     }]
                 })
             }
-            else{
-                let prevItem= items[itemIdx-1], prevScore = prevItem.score
-                if (currentScore!=prevScore){
+            else {
+                let prevItem = items[itemIdx - 1], prevScore = prevItem.score
+                if (currentScore != prevScore) {
                     root.children.push({
-                        id: 'score_'+currentScore,
+                        id: 'score_' + currentScore,
                         score: currentScore,
-                        children:[{
+                        children: [{
                             id: item.id,
                             score: currentScore,
                             children: [],
                         }]
                     })
                     childID += 1
-                }else{
+                } else {
                     root.children[childID].children.push({
                         id: item.id,
                         score: currentScore,
@@ -138,17 +145,17 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         const pack = d3.pack()
-            .size([width*15*radius, Math.ceil(items.length/width)*15*radius])
+            .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
             d3.hierarchy(root)
-            .sum(d => 1) // same radius for each item
+                .sum(d => 1) // same radius for each item
         )
 
         let itemCircles: JSX.Element[] = []
         let itemsPos: any[] = []
 
-        datum.children.forEach(set=>{
-            set.children.forEach((item:any)=>{
+        datum.children.forEach(set => {
+            set.children.forEach((item: any) => {
                 itemsPos.push({
                     x: item.x,
                     y: item.y,
@@ -156,10 +163,10 @@ export default class Bubble extends React.Component<Props, State>{
                     ...item.data
                 })
                 itemCircles.push(
-                    <circle 
-                    key={item.data.id} cx={item.x} cy={item.y} r={item.r/3}
-                    fill="#FF9F1E"
-                    opacity={opacityScale(item.data.score)}
+                    <circle
+                        key={item.data.id} cx={item.x} cy={item.y} r={item.r / 3}
+                        fill="#FF9F1E"
+                        opacity={opacityScale(item.data.score)}
                     />
                 )
             })
@@ -167,29 +174,30 @@ export default class Bubble extends React.Component<Props, State>{
 
         var bubbles = new BubbleSet(),
             padding = 2
+
         var outlines = rules
             .filter(rule => showIDs.includes(rule.id.toString()))
             .map(rule => {
                 let itemIn = itemsPos
-                        .filter(itemP => rule.items.includes(itemP.id))
-                        .map(item=>{
-                            return {
-                                x:item.x,
-                                y:item.y,
-                                width: item.r*2/3,
-                                height: item.r*2/3
-                            }
-                        })
+                    .filter(itemP => rule.items.includes(itemP.id))
+                    .map(item => {
+                        return {
+                            x: item.x,
+                            y: item.y,
+                            width: item.r * 2 / 3,
+                            height: item.r * 2 / 3
+                        }
+                    })
                 let itemOut = itemsPos
-                        .filter(itemP => !rule.items.includes(itemP.id))
-                        .map(item=>{
-                            return {
-                                x:item.x,
-                                y:item.y,
-                                width: item.r*2,
-                                height: item.r*2
-                            }
-                        })
+                    .filter(itemP => !rule.items.includes(itemP.id))
+                    .map(item => {
+                        return {
+                            x: item.x,
+                            y: item.y,
+                            width: item.r * 2,
+                            height: item.r * 2
+                        }
+                    })
                 var list = bubbles.createOutline(
                     BubbleSet.addPadding(itemIn, padding),
                     BubbleSet.addPadding(itemOut, padding),

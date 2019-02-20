@@ -56,18 +56,27 @@ export default class Itemset extends React.Component<Props, State>{
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
     }
+
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
         let { expandRules } = this.state
         let { showAttrNum, dragArray, keyAttrNum } = this.props
 
         let showAttrs = dragArray.slice(0, showAttrNum)
 
+        const collapseRule = (id: string) => {
+            for (let childID of expandRules[id].children) {
+                if (expandRules[childID]) {
+                    collapseRule(childID)
+                }
+            }
+            delete expandRules[id]
+        }
+
         if (expandRules[id]) {
             // collapse a rule
-            delete expandRules[id]
+            collapseRule(id)
 
-            let remainShowAttrs = [].concat.apply([], Object.values(expandRules).map(d=>d.newAttrs))
-            console.info('remain', remainShowAttrs)
+            let remainShowAttrs = [].concat.apply([], Object.values(expandRules).map(d => d.newAttrs))
             showAttrs = showAttrs
                 .filter(
                     (attr, i) => {
@@ -75,13 +84,12 @@ export default class Itemset extends React.Component<Props, State>{
                         return i < keyAttrNum || remainShowAttrs.includes(attr)
                     }
                 )
-            console.info('new show', showAttrs)
         } else {
             // expand a rule
             expandRules[id] = {
                 id,
                 newAttrs,
-                children 
+                children
             }
             showAttrs = showAttrs
                 .concat(
@@ -91,7 +99,6 @@ export default class Itemset extends React.Component<Props, State>{
         }
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
-        console.info(showAttrs, expandRules)
     }
     drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax: number): { content: JSX.Element[], offsetY: number } {
         let { rule, children } = ruleNode
@@ -115,10 +122,10 @@ export default class Itemset extends React.Component<Props, State>{
 
         let toggleExpand =
             (e: React.SyntheticEvent) => this.toggleExpand(
-                    id.toString(),
-                    newAttrs,
-                    children.map(child => child.rule.id.toString())
-                )
+                id.toString(),
+                newAttrs,
+                children.map(child => child.rule.id.toString())
+            )
         let isExpand = this.state.expandRules.hasOwnProperty(id)
 
         let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
@@ -299,7 +306,7 @@ export default class Itemset extends React.Component<Props, State>{
         }
 
         let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
-        
+
         let isExpand = this.state.expandRules.hasOwnProperty(id)
         let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth - 5}>
             {items.length}
@@ -342,34 +349,31 @@ export default class Itemset extends React.Component<Props, State>{
         attrValContent.unshift(itemSizeLabel)
         return attrValContent
     }
-    drawBubbles(ruleAggs: RuleAgg[], scoreDomain:[number, number]){
-        let {showAttrNum, step} = this.props
-        let {expandRules} = this.state
+    drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number]) {
+        let { showAttrNum, step } = this.props
+        let { expandRules } = this.state
         // rules that are showing
-        let ids:string[] = []
-        for (var expandRule of Object.values(expandRules)){
-            let {id, children} = expandRule
-            if (!ids.includes(id)){
-                ids.push(id)
-                for (var childID of children){
-                    if(!ids.includes(childID)){
-                        ids.push(childID)
-                    }
-                }
+        let showIDs: string[] = Array.from(
+            new Set(
+                [].concat.apply([], Object.values(expandRules).map(d => d.children))
+            )
+        )
+        showIDs = showIDs.concat(
+            Object.keys(expandRules)
+                .filter(id => !showIDs.includes(id))
+        )
+        showIDs = showIDs.filter(id=>!id.includes('agg'))
+        return <g className='bubbles' transform={`translate(${showAttrNum * step + this.margin}, ${0})`}>
+            {
+                ruleAggs
+                    .map((ruleAgg, i) =>
+                        <g key={'bubble_' + ruleAgg.id} transform={`translate(${100 + 200 * i}, 0)`} >
+                            <Bubble ruleAgg={ruleAgg} scoreDomain={scoreDomain} showIDs={showIDs} />
+                        </g>
+                    )
 
             }
-        } 
-        return <g className='bubbles' transform={`translate(${showAttrNum*step+this.margin}, ${0})`}>
-        {
-            ruleAggs
-                .map((ruleAgg, i) =>
-                    <g key={'bubble_' + ruleAgg.id} transform={`translate(${100 + 200 * i}, 0)`} >
-                        <Bubble ruleAgg={ruleAgg} scoreDomain={scoreDomain} showIDs={ids}/>
-                    </g>
-                )
-
-        }
-    </g>
+        </g>
     }
     draw() {
         let { rules, samples, ruleThreshold, keyAttrNum, dragArray } = this.props
@@ -395,7 +399,7 @@ export default class Itemset extends React.Component<Props, State>{
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
 
 
-        let { positiveRuleAgg } = results
+        let { positiveRuleAgg, negativeRuleAgg } = results
         let offsetY = 0
         let posRules: JSX.Element[] = []
         for (let ruleAgg of positiveRuleAgg) {
@@ -416,6 +420,25 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
         }
+        let negaRules: JSX.Element[] = []
+        for (let ruleAgg of negativeRuleAgg) {
+            offsetY += 0.3 * this.lineInterval
+            negaRules.push(
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
+                    {
+                        this.drawRuleAgg(ruleAgg, true)
+                    }
+                </g>
+            )
+            offsetY = offsetY + 2 * this.lineInterval
+            if (expandRules.hasOwnProperty(ruleAgg.id)) {
+                for (let ruleNode of ruleAgg.nodes) {
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemMax)
+                    offsetY = newY
+                    negaRules = negaRules.concat(content)
+                }
+            }
+        }
 
         // let negaRules = negativeRuleAgg.map((ruleAgg,rule_i)=>{
         //     return <g key={rule_i+'rules'} 
@@ -428,22 +451,22 @@ export default class Itemset extends React.Component<Props, State>{
         // })
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = this.drawBubbles(positiveRuleAgg, scoreDomain)
-        
+
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             {posRules}
-            {/* {negaRules} */}
+            {negaRules}
             {bubbles}
         </g>
     }
-    componentDidUpdate(prevProp: Props){
+    componentDidUpdate(prevProp: Props) {
         if (
-            prevProp.ruleThreshold[0]!=this.props.ruleThreshold[0]
-            || prevProp.ruleThreshold[1]!=this.props.ruleThreshold[1]
+            prevProp.ruleThreshold[0] != this.props.ruleThreshold[0]
+            || prevProp.ruleThreshold[1] != this.props.ruleThreshold[1]
             || prevProp.rules[0].pd != this.props.rules[0].pd
-            ){
-                this.setState({expandRules: {}})
-            }
+        ) {
+            this.setState({ expandRules: {} })
+        }
     }
     render() {
         let { fetchKeyStatus } = this.props
