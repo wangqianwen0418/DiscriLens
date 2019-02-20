@@ -30,7 +30,7 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return { 
           ...state, 
           keyAttrNum: keyAttrs.length, 
-          dragArray: keyAttrs.concat(state.dragArray.filter(attr=>!keyAttrs.includes(attr)))
+          dragArray:  keyAttrs.concat(state.dragArray.filter(attr=>!keyAttrs.includes(attr)))
         } 
       case CHANGE_SHOW_ATTRS:
         let {showAttrs} = action

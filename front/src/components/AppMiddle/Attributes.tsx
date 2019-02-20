@@ -66,7 +66,6 @@ export default class Attributes extends React.Component<Props, State>{
             if (attrIdx<keyAttrNum){
                 // a key attribute
                 keyAttrs.splice(attrIdx, 1)
-                this.props.onChangeKeyAttr(keyAttrs)
             }
             showAttrs.splice(attrIdx, 1)
             dragArray = showAttrs.concat(dragArray.filter(attr=>!showAttrs.includes(attr)))
@@ -77,6 +76,7 @@ export default class Attributes extends React.Component<Props, State>{
             
         }
         this.props.onChangeShowAttr(showAttrs)
+        this.props.onChangeKeyAttr(keyAttrs)
         this.setState({}) // force update
     }
 
@@ -189,7 +189,6 @@ export default class Attributes extends React.Component<Props, State>{
         
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
-        
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
             <g>
                 <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
@@ -274,8 +273,6 @@ export default class Attributes extends React.Component<Props, State>{
         let { selected_bar } = this.state
         // get numerical data
         samples = samples.slice(0, 1000)
-
-        
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
         dragArray.forEach(attr => {
@@ -307,7 +304,7 @@ export default class Attributes extends React.Component<Props, State>{
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
             let dragEnd = (e:any) =>{
-                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
+                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step - 1)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -343,7 +340,6 @@ export default class Attributes extends React.Component<Props, State>{
                 draggablePos.x = x
                 draggablePos.y = y
             }
-
 
             // label postition
             let labelX = showFlag?0:-1*this.height,  labelY = showFlag?1.5*this.height: 1*this.height
@@ -401,7 +397,7 @@ export default class Attributes extends React.Component<Props, State>{
                                 cursor="pointer"
                                 onClick={toggleShowAttr}>
                                 {showFlag?"-":"+"}
-                            </text>
+                            </text> 
                         </g>
                     </g>
             </Draggable>   

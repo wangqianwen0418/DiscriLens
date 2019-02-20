@@ -205,7 +205,7 @@ export const ChangeDragArray = (dragArray:string[]):ChangeDragArray =>{
 
 
 /*****************
-all about chaging showAttrs
+all about changing showAttrs
 *****************/ 
 export interface ChangeShowAttr{
     type:CHANGE_SHOW_ATTRS,
@@ -258,16 +258,28 @@ export const ChangeKeyAttr = (keyAttrs: string[])=>{
 //     }
 // }
 
-export const ChangeDataSet = (dataset:string, model:string, protect_attr:string) =>{
+export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
     let {key_attrs} = require('../testdata/'+ dataset + '_' + model + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
-    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json')
-    
+    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
+    dragArray = [...Object.keys(jsonSamples[0])]
+
+    // remove the attribute 'id' and 'class'
+    dragArray.splice(dragArray.indexOf('id'), 1)
+    dragArray.splice(dragArray.indexOf('class'), 1)
+    if (dragArray.includes(protectedAttr)){
+      dragArray.splice(dragArray.indexOf(protectedAttr), 1)
+    }  
+    // move key attributes to the front
+    dragArray = key_attrs.concat(dragArray.filter(attr=>!key_attrs.includes(attr)))
+
     return (dispatch: any) =>{
         dispatch(dispatch(GenerateRules(jsonRule)))
         dispatch(GenerateSamples(jsonSamples))
         dispatch(ChangeKeyAttr(key_attrs))
-        dispatch(ChangeProtectedAttr(protect_attr))
+        dispatch(ChangeProtectedAttr(protectedAttr))
+        dispatch(ChangeShowAttr(key_attrs))
+        dispatch(ChangeDragArray(dragArray))
     }
 }
 

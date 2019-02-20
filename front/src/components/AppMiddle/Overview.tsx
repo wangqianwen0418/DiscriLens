@@ -237,6 +237,7 @@ export default class Overview extends React.Component<Props,State>{
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
+        console.log(dataKeyAttr.length)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{
