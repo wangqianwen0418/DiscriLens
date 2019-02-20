@@ -20,11 +20,16 @@ export interface Props {
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
-    offsetX:number,
+    offsetX: number,
     onChangeShowAttr: (showAttrs: string[]) => void
 }
 export interface State {
-    expandRules: {[id:string]: string[]} // store the new show attributes of the rules that have been expaned
+    expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
+}
+export interface ExpandRule {
+    id: string,
+    newAttrs: string[] // not include key attributes
+    children: string[] // id of the child rule
 }
 export interface curveData {
     x: number,
@@ -37,8 +42,8 @@ export interface rules {
 
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15;
-    margin = 65; 
-    headWidth = this.props.offsetX-this.margin; 
+    margin = 65;
+    headWidth = this.props.offsetX - this.margin;
     indent: 5;
 
     constructor(props: Props) {
@@ -50,95 +55,104 @@ export default class Itemset extends React.Component<Props, State>{
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
     }
-    toggleExpand(id: string, newAttrs: string[]) {
+    toggleExpand(id: string, newAttrs: string[], children: string[]) {
         let { expandRules } = this.state
-        let {showAttrNum, dragArray, keyAttrNum} = this.props
+        let { showAttrNum, dragArray, keyAttrNum } = this.props
 
         let showAttrs = dragArray.slice(0, showAttrNum)
 
-        if(expandRules[id]){
+        if (expandRules[id]) {
             // collapse a rule
             delete expandRules[id]
-            
+
             let remainShowAttrs = [].concat.apply([], Object.values(expandRules))
             showAttrs = showAttrs
-            .filter(
-                (attr, i)=>{
-                    // is key attribute or is in other expanded rules
-                    return i<keyAttrNum||remainShowAttrs.includes(attr)
-                }
-            )
-        }else{
+                .filter(
+                    (attr, i) => {
+                        // is key attribute or is in other expanded rules
+                        return i < keyAttrNum || remainShowAttrs.includes(attr)
+                    }
+                )
+        } else {
             // expand a rule
-            expandRules[id] = newAttrs
+            expandRules[id] = {
+                id,
+                newAttrs,
+                children 
+            }
             showAttrs = showAttrs
                 .concat(
                     newAttrs
-                    .filter(attr=>!showAttrs.includes(attr))
+                        .filter(attr => !showAttrs.includes(attr))
                 )
         }
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax:number): { content: JSX.Element[], offsetY: number } {
-        let { rule, child } = ruleNode
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax: number): { content: JSX.Element[], offsetY: number } {
+        let { rule, children } = ruleNode
         let { antecedent, items, id } = rule
-        let { barWidth, step, keyAttrNum, showAttrNum, dragArray} = this.props
+        let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
 
         let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
 
 
         let newAttrs: string[] = []
-        for (var node of child){
+        for (var node of children) {
             newAttrs = newAttrs.concat(
                 node.rule.antecedent
-                    .map(attrVal=>attrVal.split('=')[0])
-                    .filter(attr=>
+                    .map(attrVal => attrVal.split('=')[0])
+                    .filter(attr =>
                         (!keyAttrs.includes(attr))
-                        &&(!newAttrs.includes(attr))
-                        )
+                        && (!newAttrs.includes(attr))
+                    )
             )
         }
 
-        let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs)
+        let toggleExpand =
+            (e: React.SyntheticEvent) => this.toggleExpand(
+                    id.toString(),
+                    newAttrs,
+                    children.map(child => child.rule.id.toString())
+                )
         let isExpand = this.state.expandRules.hasOwnProperty(id)
 
         let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
         // let outCircleRadius = this.lineInterval * 0.8
         // let progressBarWidth = 5
         // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
-        let outRadius = this.lineInterval*0.8*items.length/itemMax
-        let inRadius = this.lineInterval*0.8*(items.length - rule.sup_pd/rule.conf_pd)/itemMax
-        let circleRadius = (outRadius+inRadius)/2, progressBarWidth = outRadius - inRadius
+        let outRadius = this.lineInterval * 0.9 * items.length / itemMax
+        let inRadius = this.lineInterval * 0.9 * (items.length - rule.sup_pd / rule.conf_pd) / itemMax
+        let circleRadius = (outRadius + inRadius) / 2, progressBarWidth = outRadius - inRadius
         let parent = <g className={`${ruleNode.rule.id.toString()} rule`}
             transform={`translate(${this.props.offsetX}, ${offsetY})`}>
-            <g className="score" transform={`translate(${-circleRadius + indent - this.headWidth*0.1}, ${this.lineInterval*0.5})`}>
+            <g className="score" transform={`translate(${-circleRadius + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}>
                 <circle
                     className="background"
-                    r={circleRadius} 
+                    r={circleRadius}
                     fill='none'
                     stroke="#ccc"
                     strokeWidth={progressBarWidth}
                     strokeDasharray={circleRadius * 2 * Math.PI}
                     strokeDashoffset="0" />
-                <circle 
+                <circle
                     className="conf_pnd bar"
                     stroke="#FF9F1E"
                     strokeWidth={progressBarWidth}
-                    r={circleRadius} 
+                    r={circleRadius}
                     fill='none'
                     strokeDasharray={circleRadius * 2 * Math.PI}
-                    strokeDashoffset={circleRadius * 2 * Math.PI * (1-rule.conf_pnd)} />
-                 <circle 
+                    strokeDashoffset={circleRadius * 2 * Math.PI * (1 - rule.conf_pnd)} />
+                <circle
                     className="conf_pd bar"
                     stroke="#98E090"
                     strokeWidth={progressBarWidth}
-                    r={circleRadius} 
+                    r={circleRadius}
                     fill='none'
                     strokeDasharray={circleRadius * 2 * Math.PI}
                     // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
-                    strokeDashoffset={circleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
-                    />
+                    strokeDashoffset={circleRadius * 2 * Math.PI * (1 - (rule.sup_pnd - rule.sup_pd) / (rule.sup_pnd / rule.conf_pnd - rule.sup_pd / rule.conf_pd))}
+                />
                 {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
                     {rule.risk_dif.toFixed(2).replace('0.', '.')}
                 </text> */}
@@ -183,7 +197,7 @@ export default class Itemset extends React.Component<Props, State>{
                         />
                 </g>
             </g> */}
-            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth-2*circleRadius}>
+            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * circleRadius}>
                 {/* {items.length} */}
                 {/* -
                     {rule.risk_dif.toFixed(2)} */}
@@ -208,7 +222,7 @@ export default class Itemset extends React.Component<Props, State>{
                     stroke="#f0f0f0"
                 />
                 <g className="icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
-                    {ruleNode.child.length == 0 ?
+                    {ruleNode.children.length == 0 ?
                         <text className="icon" >
                             o
             </text> :
@@ -254,7 +268,7 @@ export default class Itemset extends React.Component<Props, State>{
         let content = [parent]
         if (isExpand) {
             let children: JSX.Element[] = []
-            for (let childNode of ruleNode.child) {
+            for (let childNode of ruleNode.children) {
                 let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemMax)
                 children = children.concat(child)
                 offsetY = newY
@@ -266,20 +280,20 @@ export default class Itemset extends React.Component<Props, State>{
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         let { antecedent, items, id, nodes } = ruleAgg
-        let { barWidth, step, keyAttrNum, dragArray} = this.props
+        let { barWidth, step, keyAttrNum, dragArray } = this.props
         let keyAttrs = dragArray.slice(0, keyAttrNum)
         let newAttrs: string[] = []
-        for (var node of nodes){
+        for (var node of nodes) {
             newAttrs = newAttrs.concat(
                 node.rule.antecedent
-                    .map(attrVal=>attrVal.split('=')[0])
-                    .filter(attr=>
+                    .map(attrVal => attrVal.split('=')[0])
+                    .filter(attr =>
                         (!keyAttrs.includes(attr))
-                        &&(!newAttrs.includes(attr))
+                        && (!newAttrs.includes(attr))
                     )
             )
         }
-        let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs)
+        let toggleExpand = (e: React.SyntheticEvent) => this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         let isExpand = this.state.expandRules.hasOwnProperty(id)
         let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth - 5}>
             {items.length}
@@ -340,17 +354,17 @@ export default class Itemset extends React.Component<Props, State>{
             })
             .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
-        let itemMax = Math.max(...rules.map(d=>d.items.length))
+        let itemMax = Math.max(...rules.map(d => d.items.length))
 
         // aggregate based on key attributes
-        let results = ruleAggregate(rules, dragArray.filter(attr=>keyAttrs.includes(attr)), samples)
+        let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
 
 
         let { positiveRuleAgg } = results
         let offsetY = 0
         let posRules: JSX.Element[] = []
         for (let ruleAgg of positiveRuleAgg) {
-            offsetY += 0.3*this.lineInterval
+            offsetY += 0.3 * this.lineInterval
             posRules.push(
                 <g key={ruleAgg.id} id={ruleAgg.id.toString()} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
@@ -377,21 +391,21 @@ export default class Itemset extends React.Component<Props, State>{
         //     </g>         
 
         // })
-        let scoreDomain = d3.extent( rules.map(rule=>rule.risk_dif) )
+        let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             {posRules}
             {/* {negaRules} */}
             <g className='bubbles'>
-            {
-                positiveRuleAgg
-                .map((ruleAgg, i)=>
-                    <g key={'bubble_'+ruleAgg.id} transform={`translate(${100+200*i}, 300)`} >
-                    <Bubble  ruleAgg={ruleAgg} scoreDomain={scoreDomain}/>
-                    </g>
-                )
-                
-            }  
+                {
+                    positiveRuleAgg
+                        .map((ruleAgg, i) =>
+                            <g key={'bubble_' + ruleAgg.id} transform={`translate(${100 + 200 * i}, 300)`} >
+                                <Bubble ruleAgg={ruleAgg} scoreDomain={scoreDomain} />
+                            </g>
+                        )
+
+                }
             </g>
         </g>
     }

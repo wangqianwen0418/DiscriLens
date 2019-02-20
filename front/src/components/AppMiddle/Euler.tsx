@@ -22,8 +22,8 @@ const flatten = (nodes: RuleNode[]):Rule[]=>{
     let rules:Rule[] = []
     for (let node of nodes){
         rules.push(node.rule)
-        if (node.child.length>0){
-            rules = rules.concat( flatten(node.child) )
+        if (node.children.length>0){
+            rules = rules.concat( flatten(node.children) )
         }
     }
     return rules

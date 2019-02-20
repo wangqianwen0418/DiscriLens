@@ -1,8 +1,8 @@
  import * as React from 'react';
- import './index.css';
  import Attributes from 'containers/Attributes';
  import Itemsets from 'containers/Itemsets';
  import Overview from 'containers/Overview';
+ import {Col, Row} from 'antd';
 
  export default class AppMiddel extends React.Component{
      public step = 120;
@@ -10,22 +10,22 @@
      offsetX=110;
      render(){
 
-         return <div className='App-middle'> 
+         return <Row className='App-middle'>
 
-          <div className='App-left' id='App-left'>
-            <svg className='overview'>
+          <Col span={3} className='App-left' id='App-left' style={{height:"100%"}}>
+            <svg className='overview' style={{width:"100%", height:"100%"}}>
               <Overview/>
             </svg>
-          </div>
+          </Col>
 
-          <div className='App-right'>
+          <Col span={21} className='App-right' style={{height:"100%"}}>
           <svg className='attribute' style={{width:"100%", height: "25%"}}>
                 <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
             </svg>
             <div className='itemset' style={{width: "100%", height: "75%", overflowY: "scroll"}}>
                 <Itemsets step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
             </div>
-        </div>
-        </div>
+        </Col>
+        </Row>
      }
  }

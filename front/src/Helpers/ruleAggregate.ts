@@ -4,7 +4,7 @@ import {Rule, DataItem} from 'types';
 
 export interface RuleNode{
     rule: Rule,
-    child: RuleNode[]
+    children: RuleNode[]
 }
 
 export interface RuleAgg{
@@ -52,14 +52,14 @@ export const isSubArray = (shortArray:string[], longArray:string[]):boolean=>{
 export function oragnizeRules (ruleCollection: RuleNode[], rule: Rule): RuleNode[]{
     for (let ruleAgg of ruleCollection){
         if (isSubArray(ruleAgg.rule.antecedent, rule.antecedent)){
-            oragnizeRules(ruleAgg.child, rule)
+            oragnizeRules(ruleAgg.children, rule)
         }
     }
     let isSibling = (ruleCollection
         .filter(ruleAgg=>isSubArray(ruleAgg.rule.antecedent, rule.antecedent))
         .length==0)
     if (isSibling) {
-        ruleCollection.push({rule, child: []})
+        ruleCollection.push({rule, children: []})
     }
     return ruleCollection
 }
