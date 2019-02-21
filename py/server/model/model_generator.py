@@ -59,9 +59,9 @@ class ModelGene(object):
             "academic_lr": lr,
             "academic_knn": knn,
             
-            "dataTest_knn": knn,
-            "dataTest_xgb": xgb,
-            "dataTest_lr": lr,
+            "adult_knn": knn,
+            "adult_xgb": xgb,
+            "adult_lr": lr,
 
             "give_credit_xgb": xgb,
             "give_credit_knn":  knn,
