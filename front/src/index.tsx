@@ -23,8 +23,8 @@ let initState:StoreState
 let dataSets = ['dataTest', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
     protectedAttrs = ['sex', 'marital'],
-    dataSelect = 1,
-    modelSelect = 2,
+    dataSelect = 2,
+    modelSelect = 0,
     protectedSelect = 1,
 
     dataSet = dataSets[dataSelect],
@@ -46,7 +46,8 @@ if (TEST){
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
     // move key attributes to the front
-    keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    // keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    keyAttrs=['poutcome', 'education', 'previous']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
     
 

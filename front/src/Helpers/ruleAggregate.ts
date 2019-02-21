@@ -97,7 +97,7 @@ export function oragnizeRules (ruleCollection: RuleNode[], rule: Rule): RuleNode
 
 export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataItem[])=>{
     rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)
-    console.info('rules', rules)
+    // console.info('rules', rules)
     let positiveRuleNodes: RuleNode[] = [] 
     let negativeRuleNodes: RuleNode[] = [] 
     rules.forEach(rule=>{

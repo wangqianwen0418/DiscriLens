@@ -1,11 +1,11 @@
-import {
-    BubbleSet,
-    PointPath,
-    ShapeSimplifier,
-    BSplineShapeGenerator
-} from 'lib/bubble.js';
+// import {
+//     BubbleSet,
+//     PointPath,
+//     ShapeSimplifier,
+//     BSplineShapeGenerator
+// } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode } from 'Helpers/ruleAggregate';
+import { RuleAgg, RuleNode, groupByKey } from 'Helpers';
 import { Rule } from 'types';
 
 import * as d3 from 'd3';
@@ -58,11 +58,11 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
                 .map(d => d.id)
                 .indexOf(item)
             if (idx > -1) {
-                itemSet[idx] = {
-                    id: item,
-                    score: Math.max(itemSet[idx].score, rule.risk_dif),
-                    groups: itemSet[idx].groups.concat([rule.id.toString()])
+                itemSet[idx].score = Math.max(itemSet[idx].score, rule.risk_dif)
+                if(!itemSet[idx].groups.includes(rule.id.toString())){
+                    itemSet[idx].groups.push(rule.id.toString())
                 }
+
             } else {
                 itemSet.push({
                     id: item,
@@ -72,7 +72,13 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
             }
         }
     }
+    
     itemSet.sort((a, b) => a.score - b.score)
+    // console.info('sort score', itemSet)
+    itemSet.sort(
+            (a,b) => b.groups.length - a.groups.length
+            )
+    // console.info('sort group', itemSet)
     return itemSet
 }
 
@@ -88,9 +94,14 @@ export default class Bubble extends React.Component<Props, State>{
             .style('stroke-width', 1)
     }
     render() {
-        let { ruleAgg, scoreDomain, showIDs } = this.props
+        let { ruleAgg, scoreDomain, highlightRule } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules)
+
+        console.info(highlightRule)
+
+        // cluster item circles to a big circle
+        let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
         
         let opacityScale = d3
             .scaleLinear()
@@ -145,6 +156,21 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
+        root.children = clusteredItems.map(cluster=>{
+            return {
+                id: cluster[0].groups.sort().join(','),
+                score: null,
+                children: cluster.map((item:any)=>{
+                    let children:ItemHierarchy[]= []
+                    return {
+                        id: item.id,
+                        score: item.score,
+                        children
+                    }
+                })
+            }
+        })
+
         const pack = d3.pack()
             .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
@@ -155,7 +181,17 @@ export default class Bubble extends React.Component<Props, State>{
         let itemCircles: JSX.Element[] = []
         let itemsPos: any[] = []
 
-        datum.children.forEach(set => {
+        datum.children.forEach((set:any) => {
+            itemCircles.push(<circle
+                key={set.data.id}
+                id={set.data.id}
+                cx={set.x}
+                cy={set.y}
+                r={set.r}
+                fill="transparent"
+                stroke={set.data.id.includes(highlightRule)?"gray":"#FF9F1E"}
+                strokeWidth={set.data.id.includes(highlightRule)?4:1}
+            />)
             set.children.forEach((item: any) => {
                 itemsPos.push({
                     x: item.x,
@@ -165,7 +201,7 @@ export default class Bubble extends React.Component<Props, State>{
                 })
                 itemCircles.push(
                     <circle
-                        key={item.data.id} cx={item.x} cy={item.y} r={item.r / 3}
+                        key={item.data.id} cx={item.x} cy={item.y} r={item.r*0.8 }
                         fill="#FF9F1E"
                         opacity={opacityScale(item.data.score)}
                     />
@@ -173,53 +209,76 @@ export default class Bubble extends React.Component<Props, State>{
             })
         })
 
-        var bubbles = new BubbleSet(),
-            padding = 2
-
-        var outlines = rules
-            .filter(rule => showIDs.includes(rule.id.toString()))
-            .map(rule => {
-                let itemIn = itemsPos
-                    .filter(itemP => rule.items.includes(itemP.id))
-                    .map(item => {
-                        return {
-                            x: item.x,
-                            y: item.y,
-                            width: item.r * 2 / 3,
-                            height: item.r * 2 / 3
-                        }
-                    })
-                let itemOut = itemsPos
-                    .filter(itemP => !rule.items.includes(itemP.id))
-                    .map(item => {
-                        return {
-                            x: item.x,
-                            y: item.y,
-                            width: item.r * 2,
-                            height: item.r * 2
-                        }
-                    })
-                var list = bubbles.createOutline(
-                    BubbleSet.addPadding(itemIn, padding),
-                    BubbleSet.addPadding(itemOut, padding),
-                    null
-                );
-                var outline = new PointPath(list).transform([
-                    new ShapeSimplifier(0.0),
-                    new BSplineShapeGenerator(),
-                    new ShapeSimplifier(0.0),
-                ]);
-                const onMouseEnter = () => this.highlightPath(rule.id.toString())
-                return <path key={rule.id} d={outline.toString()} id={`outline_${rule.id}`}
-                    className='outline'
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={this.onMouseLeave}
-                    fill='none' stroke='gray' />
-            })
+        // var bubbles = new BubbleSet(),
+        //     padding = 2
+            
+        //     console.info('datum', datum)
+        // var outlines = rules
+        //     .filter(rule => showIDs.includes(rule.id.toString()))
+        //     .map(rule => {
+        //         // let itemIn = datum.children
+        //         //     .filter((set:any) => set.data.id.split(',').includes(rule.id.toString()))
+        //         //     .map(set => {
+        //         //         return {
+        //         //             x: set.x-set.r,
+        //         //             y: set.y-set.r,
+        //         //             width: set.r * 2,
+        //         //             height: set.r * 2
+        //         //         }
+        //         //     })
+        //         // let itemOut = datum.children
+        //         //     .filter((set:any) => !set.data.id.split(',').includes(rule.id.toString()))
+        //         //     .map(set => {
+        //         //         return {
+        //         //             x: set.x-set.r,
+        //         //             y: set.y-set.r,
+        //         //             width: set.r * 2,
+        //         //             height: set.r * 2
+        //         //         }
+        //         //     })
+        //         let itemIn = itemsPos
+        //             .filter(itemP => rule.items.includes(itemP.id))
+        //             .map(item => {
+        //                 return {
+        //                     x: item.x,
+        //                     y: item.y,
+        //                     width: item.r * 2/3,
+        //                     height: item.r * 2/3
+        //                 }
+        //             })
+        //         let itemOut = itemsPos
+        //             .filter(itemP => !rule.items.includes(itemP.id))
+        //             .map(item => {
+        //                 return {
+        //                     x: item.x,
+        //                     y: item.y,
+        //                     width: item.r * 2,
+        //                     height: item.r * 2
+        //                 }
+        //             })
+        //         var list = bubbles.createOutline(
+        //             BubbleSet.addPadding(itemIn, padding),
+        //             BubbleSet.addPadding(itemOut, padding),
+        //             null
+        //         );
+        //         var outline = new PointPath(list).transform([
+        //             new ShapeSimplifier(0.0),
+        //             new BSplineShapeGenerator(),
+        //             new ShapeSimplifier(0.1),
+        //         ]);
+        //         const onMouseEnter = () => this.highlightPath(rule.id.toString())
+        //         return <path key={rule.id} d={outline.toString()} id={`outline_${rule.id}`}
+        //             className='outline'
+        //             onMouseEnter={onMouseEnter}
+        //             onMouseLeave={this.onMouseLeave}
+        //             fill='none' stroke={rule.id==highlightRule?'pink':'gray'} 
+        //             strokeWidth={rule.id==highlightRule?4:1} 
+        //             />
+        //     })
 
         return <g className='bubbleSet' id={`bubble_${ruleAgg.id}`}>
             {itemCircles}
-            {outlines}
+            {/* {outlines} */}
         </g>
     }
 }

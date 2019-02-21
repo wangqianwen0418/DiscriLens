@@ -5,8 +5,8 @@ import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'H
 import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
-import Bubble from 'components/AppMiddle/Bubble';
-// import Bubble from 'components/AppMiddle/BubblePack';
+// import Bubble from 'components/AppMiddle/Bubble';
+import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
 
@@ -140,14 +140,19 @@ export default class Itemset extends React.Component<Props, State>{
         let inRadius = this.lineInterval * 0.9 * (items.length - rule.sup_pd / rule.conf_pd) / itemMax
         let circleRadius = (outRadius + inRadius) / 2, progressBarWidth = outRadius - inRadius
         let parent = <g className={`${ruleNode.rule} rule`}
-            transform={`translate(${this.props.offsetX}, ${offsetY})`}>
+            transform={`translate(${this.props.offsetX}, ${offsetY})`}
+            // tslint:disable-next-line:jsx-no-lambda
+            onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
+            // tslint:disable-next-line:jsx-no-lambda
+            onMouseLeave={()=> this.setState({highlightRule:undefined})}
+            >
             <g 
                 className="score" 
                 transform={`translate(${-circleRadius + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
-                // tslint:disable-next-line:jsx-no-lambda
-                onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
-                // tslint:disable-next-line:jsx-no-lambda
-                onMouseLeave={()=> this.setState({highlightRule:''})}
+                // //tslint:disable-next-line:jsx-no-lambda
+                // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
+                // // tslint:disable-next-line:jsx-no-lambda
+                // onMouseLeave={()=> this.setState({highlightRule:''})}
             >
                 <circle
                     className="background"
@@ -510,7 +515,7 @@ export default class Itemset extends React.Component<Props, State>{
                 break
 
         }
-        return (<svg className='itemset' style={{ width: "100%", height: "800px" }}>
+        return (<svg className='itemset' style={{ width: "4000px", height: "800px" }}>
             <g className='rules' >
                 {content}
             </g>

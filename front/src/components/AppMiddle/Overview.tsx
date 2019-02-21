@@ -288,7 +288,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputLeft?
                         <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inoutBoxLeft'>
                             <input type='number' 
-                            autoFocus onKeyPress={this.inputLeft} id='inputBoxLeft'/>
+                            autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
                         <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
@@ -305,7 +305,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputRight?
                         <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inputBoxRight'>
                             <input type='number' 
-                            autoFocus onKeyPress={this.inputRight} id='inputBoxRight'/>
+                            autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
                         <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
