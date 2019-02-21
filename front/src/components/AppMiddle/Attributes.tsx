@@ -304,7 +304,7 @@ export default class Attributes extends React.Component<Props, State>{
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
             let dragEnd = (e:any) =>{
-                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step - 1)
+                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step - 0.2)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -354,6 +354,7 @@ export default class Attributes extends React.Component<Props, State>{
 
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
+                handle = '.attrChart'
                 position={draggablePos}
                 onStop={dragEnd}>
                     <g className="attr" cursor='pointer'>
