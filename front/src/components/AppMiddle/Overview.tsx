@@ -212,7 +212,6 @@ export default class Overview extends React.Component<Props,State>{
                 dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
             }
         })
-
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
@@ -251,7 +250,7 @@ export default class Overview extends React.Component<Props,State>{
 
 
         // define scales
-        let maxAbsoluteX = Math.max.apply(null,curveX.map(Math.abs))
+        let maxAbsoluteX = rules.length>0?Math.max.apply(null,curveX.map(Math.abs)):0.5
         // xScale maps risk_dif to actual svg pixel length along x-axis
         let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
         // yScale maps risk_dif to actual svg pixel length along x-axis
@@ -325,19 +324,13 @@ export default class Overview extends React.Component<Props,State>{
                 <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 {selectThr()}
             </g>,
-            emptyPath:<g>
-                {//selectThr()
-                }
-            </g>,
             scale:xScale,
             dataKeyAttr:dataKeyAttr_new}
     
     }
     render(){
-        return <g key={'overviewOut'}>
-            {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
+        return <g key={'overviewOut'}ref={this.ref}>
                 {this.ruleProcessing().path}
-            </g>:<g>{this.ruleProcessing().emptyPath}</g>}
         </g>
         // return <g>
         //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
