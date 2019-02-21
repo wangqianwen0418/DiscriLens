@@ -313,7 +313,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
+                let endNum = Math.floor((e.x - window.innerWidth * 0.1)/ step - 1.2)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
