@@ -5,7 +5,8 @@ import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'H
 import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
-import Bubble from 'components/AppMiddle/BubblePack';
+import Bubble from 'components/AppMiddle/Bubble';
+// import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
 
@@ -25,6 +26,7 @@ export interface Props {
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
+    highlightRule: string;
 }
 export interface ExpandRule {
     id: string,
@@ -49,7 +51,8 @@ export default class Itemset extends React.Component<Props, State>{
     constructor(props: Props) {
         super(props)
         this.state = {
-            expandRules: {}
+            expandRules: {},
+            highlightRule: undefined
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
@@ -99,6 +102,7 @@ export default class Itemset extends React.Component<Props, State>{
         }
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
+        // console.info(showAttrs, expandRules)
     }
     drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax: number): { content: JSX.Element[], offsetY: number } {
         let { rule, children } = ruleNode
@@ -137,7 +141,14 @@ export default class Itemset extends React.Component<Props, State>{
         let circleRadius = (outRadius + inRadius) / 2, progressBarWidth = outRadius - inRadius
         let parent = <g className={`${ruleNode.rule} rule`}
             transform={`translate(${this.props.offsetX}, ${offsetY})`}>
-            <g className="score" transform={`translate(${-circleRadius + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}>
+            <g 
+                className="score" 
+                transform={`translate(${-circleRadius + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
+                // tslint:disable-next-line:jsx-no-lambda
+                onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
+                // tslint:disable-next-line:jsx-no-lambda
+                onMouseLeave={()=> this.setState({highlightRule:''})}
+            >
                 <circle
                     className="background"
                     r={circleRadius}
@@ -363,12 +374,18 @@ export default class Itemset extends React.Component<Props, State>{
                 .filter(id => !showIDs.includes(id))
         )
         showIDs = showIDs.filter(id=>!id.includes('agg'))
+        // console.info('show ids', showIDs)
         return <g className='bubbles' transform={`translate(${showAttrNum * step + this.margin}, ${0})`}>
             {
                 ruleAggs
                     .map((ruleAgg, i) =>
                         <g key={'bubble_' + ruleAgg.id} transform={`translate(${100 + 200 * i}, 0)`} >
-                            <Bubble ruleAgg={ruleAgg} scoreDomain={scoreDomain} showIDs={showIDs} />
+                            <Bubble 
+                                ruleAgg={ruleAgg} 
+                                scoreDomain={scoreDomain} 
+                                showIDs={showIDs} 
+                                highlightRule={this.state.highlightRule}
+                            />
                         </g>
                     )
 

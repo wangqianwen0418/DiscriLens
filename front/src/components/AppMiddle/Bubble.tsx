@@ -5,7 +5,7 @@ import {
     BSplineShapeGenerator
 } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode } from 'Helpers/ruleAggregate';
+import { RuleAgg, RuleNode, groupByKey } from 'Helpers';
 import { Rule } from 'types';
 
 import * as d3 from 'd3';
@@ -13,7 +13,8 @@ import * as d3 from 'd3';
 export interface Props {
     ruleAgg: RuleAgg,
     scoreDomain: [number, number] | [undefined, undefined],
-    showIDs: string[]
+    showIDs: string[],
+    highlightRule: string
 }
 export interface State {
 
@@ -30,33 +31,46 @@ const flatten = (nodes: RuleNode[]): Rule[] => {
     for (let node of nodes) {
         rules.push(node.rule)
         if (node.children.length > 0) {
-            rules = rules.concat(flatten(node.children))
+            rules = rules.concat(
+                flatten(node.children)
+                .filter(
+                    rule=>!rules.map(rule=>rule.id).includes(rule.id)
+                )
+            )
         }
     }
     return rules
 }
 
-const extractItems = (rules: Rule[]): { id: any, score: number }[] => {
-    let itemSet: { id: any, score: number }[] = []
+const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[] }[] => {
+    let itemSet: { id: any, score: number, groups: string[] }[] = []
     for (let rule of rules) {
         for (let item of rule.items) {
             let idx = itemSet
                 .map(d => d.id)
                 .indexOf(item)
             if (idx > -1) {
-                itemSet[idx] = {
-                    id: item,
-                    score: Math.max(itemSet[idx].score, rule.risk_dif)
+                itemSet[idx].score = Math.max(itemSet[idx].score, rule.risk_dif)
+                if(!itemSet[idx].groups.includes(rule.id.toString())){
+                    itemSet[idx].groups.push(rule.id.toString())
                 }
+
             } else {
                 itemSet.push({
                     id: item,
-                    score: rule.risk_dif
+                    score: rule.risk_dif,
+                    groups: [rule.id.toString()]
                 })
             }
         }
     }
+    
     itemSet.sort((a, b) => a.score - b.score)
+    // console.info('sort score', itemSet)
+    itemSet.sort(
+            (a,b) => b.groups.length - a.groups.length
+            )
+    // console.info('sort group', itemSet)
     return itemSet
 }
 
@@ -73,31 +87,43 @@ export default class Bubble extends React.Component<Props, State>{
             .style('stroke-width', 1)
     }
     render() {
-        let { ruleAgg, scoreDomain, showIDs } = this.props
+        let { ruleAgg, scoreDomain, showIDs, highlightRule } = this.props
         let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules)
+
+        // cluster item circles to a big circle
+        let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
+        // console.info(clusteredItems)
+
         let opacityScale = d3
             .scaleLinear()
             .domain([0, scoreDomain[1]])
             .range([0.2, 1])
         // store the position of circles
-        let width = Math.floor(Math.sqrt(items.length)), //number of items of each row
+        let width = Math.floor(Math.sqrt(clusteredItems.length)), //number of items of each row
             radius = 2 //radius of the item
-        let itemPos = items.map((item, idx) => {
+        let circlePos = clusteredItems.map((clusteredItem, idx) => {
             let posY = Math.floor(idx / width),
                 posX = (idx - posY * width)
-            return { x: posX * 16 * radius, y: posY * 16 * radius, width: 2 * radius, height: 2 * radius, ...item }
+            return { 
+                x: posX * 16 * radius, 
+                y: posY * 16 * radius, 
+                width: clusteredItem.length * radius, 
+                height: clusteredItem.length * radius, 
+                clusteredItem 
+            }
         })
         // draw items
-        let itemCircles = itemPos.map(item => {
-            return <circle
-                r={3 * radius}
-                key={item.id}
-                cx={item.x}
-                cy={item.y}
+        let itemCircles = circlePos.map((circle,circleIdx) => {
+            let score = circle.clusteredItem[0].score
+            return <g key={circleIdx} transform={`translate(${circle.x}, ${circle.y})`}>
+            <circle
+                r={ radius * circle.clusteredItem.length}  
                 fill="#FF9F1E"
-                opacity={opacityScale(item.score)}
+                opacity={opacityScale(score)}
             />
+            <text>{score.toFixed(2)}</text>
+            </g>
         })
         // draw set boundaries
         // const onMouseLeave = ()=>{
@@ -111,8 +137,8 @@ export default class Bubble extends React.Component<Props, State>{
         var outlines = rules
             .filter(rule => showIDs.includes(rule.id.toString()))
             .map(rule => {
-                let itemIn = itemPos.filter(itemP => rule.items.includes(itemP.id))
-                let itemOut = itemPos.filter(itemP => !rule.items.includes(itemP.id))
+                let itemIn = circlePos.filter(circle => circle.clusteredItem[0].groups.includes(rule.id.toString()))
+                let itemOut = circlePos.filter(circle => !circle.clusteredItem[0].groups.includes(rule.id.toString()))
                 var list = bubbles.createOutline(
                     BubbleSet.addPadding(itemIn, padding),
                     BubbleSet.addPadding(itemOut, padding),
@@ -128,8 +154,12 @@ export default class Bubble extends React.Component<Props, State>{
                     className='outline'
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={this.onMouseLeave}
-                    fill='none' stroke='gray' />
+                    fill='none' 
+                    stroke={rule.id==highlightRule?'pink':'gray'} 
+                    strokeWidth={rule.id==highlightRule?4:1} 
+                    />
             })
+        console.info('show ids', showIDs, 'outline', outlines)
 
         return <g className='bubbleSet' id={`bubble_${ruleAgg.id}`}>
             {itemCircles}

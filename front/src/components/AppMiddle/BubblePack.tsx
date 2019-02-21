@@ -13,7 +13,8 @@ import * as d3 from 'd3';
 export interface Props {
     ruleAgg: RuleAgg,
     scoreDomain: [number, number] | [undefined, undefined],
-    showIDs: string[]
+    showIDs: string[],
+    highlightRule: string
 }
 export interface State {
 
@@ -49,7 +50,7 @@ const flatten = (nodes: RuleNode[]): Rule[] => {
     return rules
 }
 
-const extractItems = (rules: Rule[]): { id: any, score: number }[] => {
+const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[] }[] => {
     let itemSet: { id: any, score: number, groups: string[] }[] = []
     for (let rule of rules) {
         for (let item of rule.items) {
@@ -103,32 +104,32 @@ export default class Bubble extends React.Component<Props, State>{
             id: 'root',
             children: [],
             score: null
-        },
-            childID = 0
+        }
+        let  childID = 0
 
         items.forEach((item, itemIdx) => {
-            let currentScore = item.score
-
+            let currentGroup = item.groups.sort().join(',')
             if (itemIdx == 0) {
                 root.children.push({
-                    id: 'score_' + currentScore,
-                    score: currentScore,
+                    id: 'group_' + currentGroup,
+                    score: item.score,
                     children: [{
                         id: item.id,
                         children: [],
-                        score: currentScore,
+                        score: item.score,
                     }]
                 })
             }
             else {
-                let prevItem = items[itemIdx - 1], prevScore = prevItem.score
-                if (currentScore != prevScore) {
+                
+                let prevItem = items[itemIdx - 1], prevGroup = prevItem.groups.sort().join(',')
+                if (currentGroup!= prevGroup) {
                     root.children.push({
-                        id: 'score_' + currentScore,
-                        score: currentScore,
+                        id: 'group_' + currentGroup,
+                        score: item.score,
                         children: [{
                             id: item.id,
-                            score: currentScore,
+                            score: item.score,
                             children: [],
                         }]
                     })
@@ -136,7 +137,7 @@ export default class Bubble extends React.Component<Props, State>{
                 } else {
                     root.children[childID].children.push({
                         id: item.id,
-                        score: currentScore,
+                        score: item.score,
                         children: []
                     })
                 }
