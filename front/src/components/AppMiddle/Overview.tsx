@@ -16,10 +16,13 @@ export interface State{
     transformXRight: number,
     zeroAxis: number,
     xScaleReverse: d3.ScaleLinear<number, number>
+    xScale: d3.ScaleLinear<number, number>
+    inputLeft: boolean,
+    inputRight: boolean,
 }
 export interface rules{
     rule: string[],
-    risk_dif: number
+    risk_dif: number,
 }
 
 export default class Overview extends React.Component<Props,State>{
@@ -38,7 +41,8 @@ export default class Overview extends React.Component<Props,State>{
     // color of unselected area (BAD_COLOR is the color of selected area)
     areaColor = 'rgb(232, 232, 232)'
     // counters for dragging
-    xLeft = this.leftStart; xRight = this.rightEnd
+    xLeft = 0; 
+    xRight = 0;
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -48,6 +52,9 @@ export default class Overview extends React.Component<Props,State>{
             transformXRight: null,
             zeroAxis:null,
             xScaleReverse:null,
+            xScale:null,
+            inputLeft: false,
+            inputRight: false,
         }
         this.mouseDownLeft = this.mouseDownLeft.bind(this)
         this.mouseMoveLeft = this.mouseMoveLeft.bind(this)
@@ -56,6 +63,8 @@ export default class Overview extends React.Component<Props,State>{
         this.mouseMoveRight = this.mouseMoveRight.bind(this)
         this.mouseUpRight = this.mouseUpRight.bind(this)
         this.initTransformX = this.initTransformX.bind(this)
+        this.inputLeft = this.inputLeft.bind(this)
+        this.inputRight = this.inputRight.bind(this)
     }
     public componentDidMount() { 
         this.renderAxis();
@@ -65,8 +74,11 @@ export default class Overview extends React.Component<Props,State>{
         this.renderAxis();
     }
 
-    initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScaleReverse:d3.ScaleLinear<number, number>){
-        this.setState({transformXLeft,transformXRight,zeroAxis,xScaleReverse})
+    initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
+        this.setState({transformXLeft,transformXRight,zeroAxis,xScale,xScaleReverse})
+        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
+        this.xLeft = transformXLeft; 
+        this.xRight = transformXRight;
     }
 
     // update state
@@ -77,16 +89,18 @@ export default class Overview extends React.Component<Props,State>{
 
     // left dragging
     mouseDownLeft(e: React.MouseEvent){
-        e.preventDefault()
-        e.stopPropagation()
-        window.addEventListener('mousemove', this.mouseMoveLeft)
-        // put the selected left dragging bar to the most front layer
-        d3.selectAll('.selectThr').sort(()=>{
-            if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectLeft'){
-                return 1
-            }
-            return -1
-        })
+        if(!this.state.inputLeft){
+            e.preventDefault()
+            e.stopPropagation()
+            window.addEventListener('mousemove', this.mouseMoveLeft)
+            // put the selected left dragging bar to the most front layer
+            d3.selectAll('.selectThr').sort(()=>{
+                if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectLeft'){
+                    return 1
+                }
+                return -1
+            })
+        }
     }
     mouseMoveLeft(e: any){
         let { transformXLeft,zeroAxis,xScaleReverse } = this.state
@@ -105,20 +119,45 @@ export default class Overview extends React.Component<Props,State>{
         e.stopPropagation()
         window.removeEventListener('mousemove', this.mouseMoveLeft)
     }
+    
+    inputLeft(e:any){
+        let {inputLeft,xScale,zeroAxis,xScaleReverse} = this.state
+        let {ruleThreshold} = this.props
+        
+        if(inputLeft==false){
+            this.setState({inputLeft:true})
+            this.mouseUpLeft
+        }else{
+            if(e.key=='Enter'){
+                let leftValue = Math.max(Math.min(xScale(parseFloat(e.target.value)),zeroAxis),this.leftStart)
+                this.setState({inputLeft:false})
+                this.props.onChangeRuleThreshold([xScaleReverse(leftValue),ruleThreshold[1]])
+                this.xLeft = leftValue
+                this.setState({transformXLeft:this.xLeft})
+                this.mouseDownLeft
+            }else if(e.key=='q'){
+                this.setState({inputLeft:false})
+            }
+        }
+    }
+
 
     // right dragging
     mouseDownRight(e: React.MouseEvent){
-        e.preventDefault()
-        e.stopPropagation()
-        window.addEventListener('mousemove', this.mouseMoveRight)
+        if(!this.state.inputRight){
+            e.preventDefault()
+            e.stopPropagation()
+            window.addEventListener('mousemove', this.mouseMoveRight)
 
-        // put the selected right dragging bar to the most front layer
-        d3.selectAll('.selectThr').sort(()=>{
-            if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectRight'){
-                return 1
-            }
-            return -1
-        })
+            // put the selected right dragging bar to the most front layer
+            d3.selectAll('.selectThr').sort(()=>{
+                if(d3.selectAll('.selectThr')['_groups'][0][0].id!='rectRight'){
+                    return 1
+                }
+                return -1
+            })
+        }
+        
     }
     mouseMoveRight(e: any){
         let {transformXRight,zeroAxis,xScaleReverse } = this.state
@@ -137,13 +176,34 @@ export default class Overview extends React.Component<Props,State>{
         e.stopPropagation()
         window.removeEventListener('mousemove', this.mouseMoveRight)
     }
+    inputRight(e:any){
+        let {inputRight,xScale,zeroAxis,xScaleReverse} = this.state
+        let {ruleThreshold} = this.props
+        if(inputRight==false){
+            this.setState({inputRight:true})
+            this.mouseUpRight
+        }else{
+            if(e.key=='Enter'){
+                let rightValue = Math.min(Math.max(xScale(parseFloat(e.target.value)),zeroAxis),this.rightEnd)
+                this.setState({inputRight:false})
+                this.props.onChangeRuleThreshold([ruleThreshold[0],xScaleReverse(rightValue)])
+                this.xRight = rightValue
+                this.setState({transformXRight:this.xRight})
+                this.mouseDownRight
+            }else if(e.key=='q'){
+                this.setState({inputRight:false})
+            }
+        }
+    }
     ruleProcessing(){
-        let {allRules,keyAttrs} = this.props
-        
+        let {ruleThreshold, allRules,keyAttrs} = this.props
+        let {inputLeft, inputRight} = this.state
+        /**
+         * Processing rules by key attrs
+         *  */ 
+        let rules = filterRulesNoThreshold(allRules, keyAttrs)
         let curveX:number[] = []
         let dataKeyAttr: curveData[] = []
-        //let dataKeyAttr: curveData[] = []
-        let rules = filterRulesNoThreshold(allRules, keyAttrs)
         rules.forEach((rule,rule_i)=>{
             if(!curveX.includes(rule['favorPD'])){
                 curveX.push(rule['favorPD'])
@@ -152,7 +212,6 @@ export default class Overview extends React.Component<Props,State>{
                 dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
             }
         })
-        console.info(allRules, keyAttrs, rules, dataKeyAttr)
 
         let curveY:number[] = []
         curveX = []
@@ -206,7 +265,9 @@ export default class Overview extends React.Component<Props,State>{
 
 
         // initialization state
-        if(this.state.transformXLeft==null){this.initTransformX(leftStart,rightEnd,xScale(0),xScaleReverse)}
+        let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
+        let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
+        if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
 
         // select rule filtering thresholds
         let selectThr = () =>{
@@ -217,25 +278,40 @@ export default class Overview extends React.Component<Props,State>{
             let bounderLeft:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
             let bounderRight:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
             let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
-            return <g  cursor='e-resize' >
+
+            return <g  cursor='e-resize'>
                  <g id={'rectLeft'} className={'selectThr'} onMouseDown={this.mouseDownLeft}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
                         <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
-                        <text x={-10} y={0.9*topStart - 3} fontSize={9}>
-                            {xScaleReverse(this.state.transformXLeft).toFixed(2)}
-                        </text>
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        {inputLeft?
+                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inoutBoxLeft'>
+                            <input type='number' 
+                            autoFocus onKeyPress={this.inputLeft} id='inputBoxLeft'/>
+                        </foreignObject>
+                        :
+                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
+                            {xScaleReverse(this.state.transformXLeft).toFixed(2)}
+                        </text>
+                        }
                     </g>
                 
                 <g id={'rectRight'} className={'selectThr'} onMouseDown={this.mouseDownRight}
                  transform={`translate(${this.state.transformXRight}, 0)`} >
                         <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/>
-                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9}>
-                            {xScaleReverse(this.state.transformXRight).toFixed(2)}
-                        </text>
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        {inputRight?
+                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inputBoxRight'>
+                            <input type='number' 
+                            autoFocus onKeyPress={this.inputRight} id='inputBoxRight'/>
+                        </foreignObject>
+                        :
+                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
+                            {xScaleReverse(this.state.transformXRight).toFixed(2)}
+                        </text>
+                        }
                     </g>
                     
                 </g>
@@ -249,14 +325,19 @@ export default class Overview extends React.Component<Props,State>{
                 <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 {selectThr()}
             </g>,
+            emptyPath:<g>
+                {//selectThr()
+                }
+            </g>,
             scale:xScale,
             dataKeyAttr:dataKeyAttr_new}
     
     }
     render(){
-        //let curveKeyAttrs = d3.line<curveData>().x(d=>d.x).y(d=>d.z)
-        return <g ref={this.ref}>
-            {this.ruleProcessing().path}
+        return <g key={'overviewOut'}>
+            {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
+                {this.ruleProcessing().path}
+            </g>:<g>{this.ruleProcessing().emptyPath}</g>}
         </g>
         // return <g>
         //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>

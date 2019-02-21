@@ -18,3 +18,17 @@
 .selectThr{
     position: absolute;
 }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+#inputBoxRight, #inputBoxLeft{
+    text-align: center;
+    border-width: 0.1px;
+    margin: 0; 
+    width:24px;
+    height:12px;
+}

@@ -192,7 +192,6 @@ export default class Attributes extends React.Component<Props, State>{
         
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
-        
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
             <g>
                 <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
@@ -281,8 +280,6 @@ export default class Attributes extends React.Component<Props, State>{
         let { selected_bar } = this.state
         // get numerical data
         samples = samples.slice(0, 1000)
-
-        
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
         dragArray.forEach(attr => {
@@ -303,7 +300,6 @@ export default class Attributes extends React.Component<Props, State>{
         })
         let max_accept = Math.max(...counts)
         
-
         //******************** draw bars
         // the overall length of all bars of each attribute
         // let step = window.innerWidth * 0.4/  keyAttrs.length
@@ -354,7 +350,6 @@ export default class Attributes extends React.Component<Props, State>{
                 draggablePos.y = y
             }
 
-
             // label postition
             let labelX = showFlag?0:-1*this.height,  labelY = showFlag?1.5*this.height: 1*this.height
             const toggleShowAttr = (e:React.SyntheticEvent)=>{
@@ -367,6 +362,7 @@ export default class Attributes extends React.Component<Props, State>{
                 if(e){return "pointer"}
                 else{return "e-resize"}
             }*/
+
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
                 handle='.attrChart'
@@ -419,8 +415,7 @@ export default class Attributes extends React.Component<Props, State>{
                                 onClick={toggleShowAttr}
                                 >
                                 {showFlag?"-":"+"}
-                            </text>
-                    
+                            </text> 
                         </g>
                     </g>
             </Draggable>   
