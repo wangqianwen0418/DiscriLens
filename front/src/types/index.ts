@@ -35,7 +35,8 @@ export interface StoreState{
     // key_attrs: string[], // record key attrs
     keyAttrNum: number,
     samples: DataItem[],    // record all samples 
-    rules: Rule[],  // record all rules
+    allRules: Rule[], // all rules
+    rules: Rule[],  // filtered rules
     // key_groups: KeyGroup[], // record all data of key attrs
     fetchSampleStatus: Status,   // loading status
     fetchKeyStatus: Status,    // loadinf status

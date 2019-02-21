@@ -98,7 +98,7 @@ export default class Bubble extends React.Component<Props, State>{
         let opacityScale = d3
             .scaleLinear()
             .domain([0, scoreDomain[1]])
-            .range([0.2, 1])
+            .range([0.005, 1])
         // store the position of circles
         let width = Math.floor(Math.sqrt(clusteredItems.length)), //number of items of each row
             radius = 2 //radius of the item
@@ -122,7 +122,7 @@ export default class Bubble extends React.Component<Props, State>{
                 fill="#FF9F1E"
                 opacity={opacityScale(score)}
             />
-            <text>{score.toFixed(2)}</text>
+            {/* <text>{score.toFixed(2)}</text> */}
             </g>
         })
         // draw set boundaries
@@ -133,7 +133,7 @@ export default class Bubble extends React.Component<Props, State>{
         //     }
 
         var bubbles = new BubbleSet(),
-            padding = 2
+            padding = 6
         var outlines = rules
             .filter(rule => showIDs.includes(rule.id.toString()))
             .map(rule => {

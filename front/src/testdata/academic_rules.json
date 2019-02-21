@@ -5,7 +5,7 @@
             "Discussion=1<x<25",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.8421052632,
         "elift": 0.7125,
@@ -20,7 +20,7 @@
             "NationalITy=Jordan",
             "raisedhands=x>75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.2,
         "conf_pnd": 0.4347826087,
         "elift": 0.46,
@@ -36,7 +36,7 @@
             "SectionID=B",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.7333333333,
         "elift": 0.6818181818,
@@ -52,7 +52,7 @@
             "SectionID=B",
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4166666667,
         "conf_pnd": 0.65,
         "elift": 0.641025641,
@@ -67,7 +67,7 @@
             "NationalITy=Jordan",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4705882353,
         "conf_pnd": 0.6976744186,
         "elift": 0.6745098039,
@@ -82,7 +82,7 @@
             "NationalITy=Jordan",
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.52,
         "conf_pnd": 0.7454545455,
         "elift": 0.6975609756,
@@ -97,7 +97,7 @@
             "Discussion=25<x<50",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.8148148148,
         "elift": 0.7363636364,
@@ -112,7 +112,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.3571428571,
         "conf_pnd": 0.5675675676,
         "elift": 0.6292517007,
@@ -129,7 +129,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.7647058824,
         "elift": 0.7264957265,
@@ -145,7 +145,7 @@
             "SectionID=B",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.7647058824,
         "elift": 0.7264957265,
@@ -160,7 +160,7 @@
             "NationalITy=Jordan",
             "SectionID=B"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4583333333,
         "conf_pnd": 0.6666666667,
         "elift": 0.6875,
@@ -174,7 +174,7 @@
         "antecedent": [
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4782608696,
         "conf_pnd": 0.6862745098,
         "elift": 0.6968944099,
@@ -188,7 +188,7 @@
         "antecedent": [
             "Topic=English"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4210526316,
         "conf_pnd": 0.6222222222,
         "elift": 0.6766917293,
@@ -203,7 +203,7 @@
             "raisedhands=0<x<25",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6363636364,
         "conf_pnd": 0.8333333333,
         "elift": 0.7636363636,
@@ -219,7 +219,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6363636364,
         "conf_pnd": 0.8333333333,
         "elift": 0.7636363636,
@@ -235,7 +235,7 @@
             "SectionID=B",
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.9090909091,
         "elift": 0.7857142857,
@@ -249,7 +249,7 @@
         "antecedent": [
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.2173913043,
         "conf_pnd": 0.4117647059,
         "elift": 0.5279503106,
@@ -265,7 +265,7 @@
             "raisedhands=0<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.8571428571,
         "elift": 0.7777777778,
@@ -279,7 +279,7 @@
         "antecedent": [
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.3902439024,
         "conf_pnd": 0.5784313725,
         "elift": 0.67465895,
@@ -294,7 +294,7 @@
             "Discussion=1<x<25",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.6818181818,
         "elift": 0.7333333333,
@@ -308,7 +308,7 @@
         "antecedent": [
             "Discussion=50<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4411764706,
         "conf_pnd": 0.6172839506,
         "elift": 0.7147058824,
@@ -322,7 +322,7 @@
         "antecedent": [
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6538461538,
         "conf_pnd": 0.8280254777,
         "elift": 0.7896449704,
@@ -338,7 +338,7 @@
             "SectionID=B",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7333333333,
         "conf_pnd": 0.9069767442,
         "elift": 0.8085470085,
@@ -354,7 +354,7 @@
             "raisedhands=0<x<25",
             "SectionID=B"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6363636364,
         "conf_pnd": 0.8095238095,
         "elift": 0.7860962567,
@@ -369,7 +369,7 @@
             "SectionID=B",
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.6727272727,
         "elift": 0.7432432432,
@@ -384,7 +384,7 @@
             "SectionID=B",
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5833333333,
         "conf_pnd": 0.75,
         "elift": 0.7777777778,
@@ -399,7 +399,7 @@
             "raisedhands=0<x<25",
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7727272727,
         "conf_pnd": 0.9358974359,
         "elift": 0.8256537983,
@@ -414,7 +414,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4666666667,
         "conf_pnd": 0.6296296296,
         "elift": 0.7411764706,
@@ -428,7 +428,7 @@
         "antecedent": [
             "GradeID=G-06"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4,
         "conf_pnd": 0.5625,
         "elift": 0.7111111111,
@@ -442,7 +442,7 @@
         "antecedent": [
             "NationalITy=Jordan"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5316455696,
         "conf_pnd": 0.6918604651,
         "elift": 0.7684288905,
@@ -456,7 +456,7 @@
         "antecedent": [
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.7155172414,
         "elift": 0.7764390897,
@@ -470,7 +470,7 @@
         "antecedent": [
             "GradeID=G-04"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.55,
         "conf_pnd": 0.7083333333,
         "elift": 0.7764705882,
@@ -486,7 +486,7 @@
             "Discussion=1<x<25",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.625,
         "conf_pnd": 0.7777777778,
         "elift": 0.8035714286,
@@ -501,7 +501,7 @@
             "GradeID=G-02",
             "SectionID=C"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.8666666667,
         "elift": 0.8241758242,
@@ -517,7 +517,7 @@
             "Topic=IT",
             "SectionID=C"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.8666666667,
         "elift": 0.8241758242,
@@ -532,7 +532,7 @@
             "Topic=IT",
             "SectionID=C"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.8666666667,
         "elift": 0.8241758242,
@@ -547,7 +547,7 @@
             "raisedhands=0<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.76,
         "conf_pnd": 0.9104477612,
         "elift": 0.8347540984,
@@ -562,7 +562,7 @@
             "GradeID=G-08",
             "Topic=Geology"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.75,
         "elift": 0.8,
@@ -577,7 +577,7 @@
             "AnnouncementsView=24<x<49",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.75,
         "elift": 0.8,
@@ -591,7 +591,7 @@
         "antecedent": [
             "Topic=Geology"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.75,
         "elift": 0.8,
@@ -606,7 +606,7 @@
             "SectionID=B",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5428571429,
         "conf_pnd": 0.6914893617,
         "elift": 0.7850549451,
@@ -621,7 +621,7 @@
             "Discussion=1<x<25",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7,
         "conf_pnd": 0.8484848485,
         "elift": 0.825,
@@ -637,7 +637,7 @@
             "raisedhands=0<x<25",
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6923076923,
         "conf_pnd": 0.84,
         "elift": 0.8241758242,
@@ -652,7 +652,7 @@
             "NationalITy=Jordan",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6363636364,
         "conf_pnd": 0.7818181818,
         "elift": 0.8139534884,
@@ -668,7 +668,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4736842105,
         "conf_pnd": 0.619047619,
         "elift": 0.7651821862,
@@ -683,7 +683,7 @@
             "Discussion=1<x<25",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6428571429,
         "conf_pnd": 0.7837837838,
         "elift": 0.8201970443,
@@ -697,7 +697,7 @@
         "antecedent": [
             "raisedhands=x>75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.26,
         "conf_pnd": 0.3965517241,
         "elift": 0.6556521739,
@@ -712,7 +712,7 @@
             "SectionID=B",
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5714285714,
         "conf_pnd": 0.7058823529,
         "elift": 0.8095238095,
@@ -726,7 +726,7 @@
         "antecedent": [
             "StageID=HighSchool"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5333333333,
         "conf_pnd": 0.6666666667,
         "elift": 0.8,
@@ -742,7 +742,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7692307692,
         "conf_pnd": 0.9,
         "elift": 0.8547008547,
@@ -757,7 +757,7 @@
             "Discussion=25<x<50",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.84375,
         "elift": 0.8465608466,
@@ -772,7 +772,7 @@
             "NationalITy=Jordan",
             "raisedhands=0<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7391304348,
         "conf_pnd": 0.8679245283,
         "elift": 0.8516068053,
@@ -787,7 +787,7 @@
             "SectionID=B",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.6279069767,
         "elift": 0.7962962963,
@@ -801,7 +801,7 @@
         "antecedent": [
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5357142857,
         "conf_pnd": 0.6626506024,
         "elift": 0.8084415584,
@@ -816,7 +816,7 @@
             "Discussion=25<x<50",
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.875,
         "elift": 0.8571428571,
@@ -831,7 +831,7 @@
             "NationalITy=Jordan",
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.625,
         "elift": 0.8,
@@ -846,7 +846,7 @@
             "NationalITy=Jordan",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.679245283,
         "elift": 0.8179012346,
@@ -860,7 +860,7 @@
         "antecedent": [
             "SectionID=B"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5593220339,
         "conf_pnd": 0.6826347305,
         "elift": 0.8193577163,
@@ -876,7 +876,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8,
         "conf_pnd": 0.9230769231,
         "elift": 0.8666666667,
@@ -893,7 +893,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.9,
         "elift": 0.8641975309,
@@ -907,7 +907,7 @@
         "antecedent": [
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6086956522,
         "conf_pnd": 0.7297297297,
         "elift": 0.8341384863,
@@ -923,7 +923,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.7209302326,
         "elift": 0.8322580645,
@@ -938,7 +938,7 @@
             "Discussion=25<x<50",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.62,
         "elift": 0.8064516129,
@@ -956,7 +956,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.8333333333,
         "elift": 0.8571428571,
@@ -973,7 +973,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.8333333333,
         "elift": 0.8571428571,
@@ -988,7 +988,7 @@
             "raisedhands=0<x<25",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8965517241,
         "elift": 0.8675213675,
@@ -1002,7 +1002,7 @@
         "antecedent": [
             "Topic=Arabic"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5625,
         "conf_pnd": 0.6779661017,
         "elift": 0.8296875,
@@ -1017,7 +1017,7 @@
             "NationalITy=Jordan",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4444444444,
         "conf_pnd": 0.5588235294,
         "elift": 0.7953216374,
@@ -1033,7 +1033,7 @@
             "Discussion=25<x<50",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.7142857143,
         "elift": 0.84,
@@ -1048,7 +1048,7 @@
             "raisedhands=0<x<25",
             "VisITedResources=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.9473684211,
         "elift": 0.8796296296,
@@ -1062,7 +1062,7 @@
         "antecedent": [
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6071428571,
         "conf_pnd": 0.7210884354,
         "elift": 0.8419811321,
@@ -1077,7 +1077,7 @@
             "NationalITy=Jordan",
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.7796610169,
         "elift": 0.8550724638,
@@ -1094,7 +1094,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8888888889,
         "elift": 0.875,
@@ -1110,7 +1110,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8888888889,
         "elift": 0.875,
@@ -1125,7 +1125,7 @@
             "raisedhands=0<x<25",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8461538462,
         "conf_pnd": 0.9555555556,
         "elift": 0.885509839,
@@ -1141,7 +1141,7 @@
             "Discussion=25<x<50",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8,
         "conf_pnd": 0.9090909091,
         "elift": 0.88,
@@ -1156,7 +1156,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6842105263,
         "conf_pnd": 0.7924528302,
         "elift": 0.8634085213,
@@ -1172,7 +1172,7 @@
             "SectionID=B",
             "Discussion=1<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8181818182,
         "conf_pnd": 0.9259259259,
         "elift": 0.8836363636,
@@ -1187,7 +1187,7 @@
             "raisedhands=0<x<25",
             "SectionID=B"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8181818182,
         "conf_pnd": 0.9230769231,
         "elift": 0.8863636364,
@@ -1201,7 +1201,7 @@
         "antecedent": [
             "raisedhands=0<x<25"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.82,
         "conf_pnd": 0.9226190476,
         "elift": 0.8887741935,
@@ -1216,7 +1216,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5862068966,
         "conf_pnd": 0.6875,
         "elift": 0.8526645768,
@@ -1231,7 +1231,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6451612903,
         "conf_pnd": 0.7462686567,
         "elift": 0.864516129,
@@ -1246,7 +1246,7 @@
             "NationalITy=Jordan",
             "GradeID=G-04"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.6,
         "elift": 0.8333333333,
@@ -1262,7 +1262,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.6,
         "elift": 0.8333333333,
@@ -1278,7 +1278,7 @@
             "GradeID=G-08",
             "Topic=Geology"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.7,
         "elift": 0.8571428571,
@@ -1293,7 +1293,7 @@
             "NationalITy=Jordan",
             "Topic=Geology"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.7,
         "elift": 0.8571428571,
@@ -1309,7 +1309,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5833333333,
         "conf_pnd": 0.6818181818,
         "elift": 0.8555555556,
@@ -1326,7 +1326,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5833333333,
         "conf_pnd": 0.6818181818,
         "elift": 0.8555555556,
@@ -1341,7 +1341,7 @@
             "GradeID=G-02",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.875,
         "elift": 0.8888888889,
@@ -1355,7 +1355,7 @@
         "antecedent": [
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.6923076923,
         "elift": 0.8666666667,
@@ -1370,7 +1370,7 @@
             "AnnouncementsView=24<x<49",
             "VisITedResources=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8695652174,
         "elift": 0.8944444444,
@@ -1385,7 +1385,7 @@
             "AnnouncementsView=24<x<49",
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.9230769231,
         "elift": 0.9027777778,
@@ -1400,7 +1400,7 @@
             "Discussion=1<x<25",
             "raisedhands=x>75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6153846154,
         "conf_pnd": 0.7037037037,
         "elift": 0.8744939271,
@@ -1414,7 +1414,7 @@
         "antecedent": [
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.625,
         "conf_pnd": 0.7128712871,
         "elift": 0.8767361111,
@@ -1429,7 +1429,7 @@
             "SectionID=B",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.35,
         "conf_pnd": 0.4375,
         "elift": 0.8,
@@ -1444,7 +1444,7 @@
             "GradeID=G-08",
             "Discussion=50<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.5862068966,
         "elift": 0.8529411765,
@@ -1458,7 +1458,7 @@
         "antecedent": [
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4893617021,
         "conf_pnd": 0.5727272727,
         "elift": 0.8544410672,
@@ -1472,7 +1472,7 @@
         "antecedent": [
             "SectionID=C"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.8333333333,
         "elift": 0.9,
@@ -1488,7 +1488,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.75,
         "elift": 0.8888888889,
@@ -1504,7 +1504,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7,
         "conf_pnd": 0.7826086957,
         "elift": 0.8944444444,
@@ -1520,7 +1520,7 @@
             "Discussion=1<x<25",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.9375,
         "elift": 0.9142857143,
@@ -1536,7 +1536,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.68,
         "elift": 0.8823529412,
@@ -1551,7 +1551,7 @@
             "GradeID=G-02",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.5789473684,
         "elift": 0.8636363636,
@@ -1566,7 +1566,7 @@
             "NationalITy=Jordan",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5882352941,
         "conf_pnd": 0.6666666667,
         "elift": 0.8823529412,
@@ -1582,7 +1582,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5882352941,
         "conf_pnd": 0.6666666667,
         "elift": 0.8823529412,
@@ -1597,7 +1597,7 @@
             "raisedhands=0<x<25",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8461538462,
         "conf_pnd": 0.9210526316,
         "elift": 0.9186813187,
@@ -1612,7 +1612,7 @@
             "Discussion=25<x<50",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.9310344828,
         "elift": 0.9206349206,
@@ -1627,7 +1627,7 @@
             "SectionID=B",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5454545455,
         "conf_pnd": 0.6176470588,
         "elift": 0.8831168831,
@@ -1642,7 +1642,7 @@
             "NationalITy=Jordan",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7727272727,
         "conf_pnd": 0.8444444444,
         "elift": 0.9150717703,
@@ -1657,7 +1657,7 @@
             "Topic=IT",
             "Discussion=50<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.9285714286,
         "elift": 0.9230769231,
@@ -1671,7 +1671,7 @@
         "antecedent": [
             "PlaceofBirth=USA"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.625,
         "elift": 0.8888888889,
@@ -1687,7 +1687,7 @@
             "GradeID=G-02",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.9,
         "elift": 0.9259259259,
@@ -1703,7 +1703,7 @@
             "Discussion=1<x<25",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.7777777778,
         "elift": 0.9183673469,
@@ -1719,7 +1719,7 @@
             "raisedhands=0<x<25",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.7777777778,
         "elift": 0.9183673469,
@@ -1735,7 +1735,7 @@
             "SectionID=B",
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.5625,
         "elift": 0.8888888889,
@@ -1749,7 +1749,7 @@
         "antecedent": [
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.78125,
         "conf_pnd": 0.8421052632,
         "elift": 0.927734375,
@@ -1765,7 +1765,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.65,
         "conf_pnd": 0.7105263158,
         "elift": 0.9148148148,
@@ -1780,7 +1780,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.65,
         "conf_pnd": 0.7105263158,
         "elift": 0.9148148148,
@@ -1796,7 +1796,7 @@
             "GradeID=G-02",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.6153846154,
         "elift": 0.9027777778,
@@ -1811,7 +1811,7 @@
             "AnnouncementsView=24<x<49",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3333333333,
         "conf_pnd": 0.3928571429,
         "elift": 0.8484848485,
@@ -1826,7 +1826,7 @@
             "NationalITy=Jordan",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4545454545,
         "conf_pnd": 0.5135135135,
         "elift": 0.8851674641,
@@ -1840,7 +1840,7 @@
         "antecedent": [
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6875,
         "conf_pnd": 0.7457627119,
         "elift": 0.921875,
@@ -1855,7 +1855,7 @@
             "raisedhands=25<x<50",
             "Topic=Science"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.8888888889,
         "elift": 0.9375,
@@ -1870,7 +1870,7 @@
             "Topic=IT",
             "VisITedResources=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8888888889,
         "conf_pnd": 0.9444444444,
         "elift": 0.9411764706,
@@ -1885,7 +1885,7 @@
             "raisedhands=0<x<25",
             "Discussion=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.9122807018,
         "elift": 0.9395604396,
@@ -1900,7 +1900,7 @@
             "GradeID=G-08",
             "Topic=Arabic"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.625,
         "conf_pnd": 0.6785714286,
         "elift": 0.9210526316,
@@ -1917,7 +1917,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.7647058824,
         "elift": 0.9340659341,
@@ -1932,7 +1932,7 @@
             "raisedhands=50<x<75",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4166666667,
         "conf_pnd": 0.4666666667,
         "elift": 0.8928571429,
@@ -1946,7 +1946,7 @@
         "antecedent": [
             "VisITedResources=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8888888889,
         "conf_pnd": 0.9375,
         "elift": 0.9481481481,
@@ -1961,7 +1961,7 @@
             "Discussion=50<x<74",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.875,
         "conf_pnd": 0.9230769231,
         "elift": 0.9479166667,
@@ -1977,7 +1977,7 @@
             "Discussion=25<x<50",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.875,
         "conf_pnd": 0.9230769231,
         "elift": 0.9479166667,
@@ -1992,7 +1992,7 @@
             "raisedhands=0<x<25",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8235294118,
         "elift": 0.9444444444,
@@ -2007,7 +2007,7 @@
             "SectionID=B",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6470588235,
         "conf_pnd": 0.6904761905,
         "elift": 0.9371196755,
@@ -2024,7 +2024,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.9,
         "elift": 0.9523809524,
@@ -2040,7 +2040,7 @@
             "GradeID=G-02",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.625,
         "conf_pnd": 0.6666666667,
         "elift": 0.9375,
@@ -2055,7 +2055,7 @@
             "VisITedResources=0<x<24",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.875,
         "elift": 0.9523809524,
@@ -2071,7 +2071,7 @@
             "AnnouncementsView=24<x<49",
             "GradeID=G-08"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.875,
         "elift": 0.9523809524,
@@ -2086,7 +2086,7 @@
             "SectionID=B",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.75,
         "elift": 0.9523809524,
@@ -2101,7 +2101,7 @@
             "AnnouncementsView=49<x<73",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.75,
         "elift": 0.9523809524,
@@ -2116,7 +2116,7 @@
             "VisITedResources=0<x<24",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8888888889,
         "conf_pnd": 0.9230769231,
         "elift": 0.962962963,
@@ -2131,7 +2131,7 @@
             "SectionID=B",
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.7,
         "elift": 0.9523809524,
@@ -2146,7 +2146,7 @@
             "AnnouncementsView=24<x<49",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7692307692,
         "conf_pnd": 0.8,
         "elift": 0.9615384615,
@@ -2160,7 +2160,7 @@
         "antecedent": [
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8148148148,
         "conf_pnd": 0.8441558442,
         "elift": 0.9652421652,
@@ -2175,7 +2175,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.5277777778,
         "elift": 0.9473684211,
@@ -2192,7 +2192,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.8571428571,
         "elift": 0.9722222222,
@@ -2207,7 +2207,7 @@
             "GradeID=G-08",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.8,
         "elift": 0.9722222222,
@@ -2222,7 +2222,7 @@
             "Topic=IT",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.875,
         "elift": 0.9795918367,
@@ -2238,7 +2238,7 @@
             "raisedhands=50<x<75",
             "Topic=French"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4545454545,
         "conf_pnd": 0.4705882353,
         "elift": 0.9659090909,
@@ -2253,7 +2253,7 @@
             "GradeID=G-02",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6,
         "conf_pnd": 0.6129032258,
         "elift": 0.9789473684,
@@ -2269,7 +2269,7 @@
             "AnnouncementsView=24<x<49",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.875,
         "conf_pnd": 0.8823529412,
         "elift": 0.9916666667,
@@ -2283,7 +2283,7 @@
         "antecedent": [
             "Discussion=x>74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4761904762,
         "conf_pnd": 0.4835164835,
         "elift": 0.9848484848,
@@ -2299,7 +2299,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7272727273,
         "conf_pnd": 0.7333333333,
         "elift": 0.9917355372,
@@ -2314,7 +2314,7 @@
             "Discussion=25<x<50",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.7551020408,
         "elift": 0.9932432432,
@@ -2329,7 +2329,7 @@
             "GradeID=G-02",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5625,
         "conf_pnd": 0.5666666667,
         "elift": 0.9926470588,
@@ -2344,7 +2344,7 @@
             "GradeID=G-02",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.4375,
         "conf_pnd": 0.4333333333,
         "elift": 1.0096153846,
@@ -2359,7 +2359,7 @@
             "Discussion=25<x<50",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.7435897436,
         "elift": 1.0086206897,
@@ -2373,7 +2373,7 @@
         "antecedent": [
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5238095238,
         "conf_pnd": 0.5164835165,
         "elift": 1.0141843972,
@@ -2389,7 +2389,7 @@
             "Discussion=x>74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.7391304348,
         "elift": 1.0147058824,
@@ -2403,7 +2403,7 @@
         "antecedent": [
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.9677419355,
         "conf_pnd": 0.954887218,
         "elift": 1.0134620269,
@@ -2418,7 +2418,7 @@
             "NationalITy=Jordan",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.7647058824,
         "elift": 1.0170940171,
@@ -2434,7 +2434,7 @@
             "raisedhands=50<x<75",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5454545455,
         "conf_pnd": 0.5294117647,
         "elift": 1.0303030303,
@@ -2449,7 +2449,7 @@
             "GradeID=G-02",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.98,
         "elift": 1.0204081633,
@@ -2464,7 +2464,7 @@
             "SectionID=B",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9782608696,
         "elift": 1.0222222222,
@@ -2479,7 +2479,7 @@
             "VisITedResources=0<x<24",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9756097561,
         "elift": 1.025,
@@ -2494,7 +2494,7 @@
             "NationalITy=Jordan",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.972972973,
         "elift": 1.0277777778,
@@ -2509,7 +2509,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.4722222222,
         "elift": 1.0588235294,
@@ -2523,7 +2523,7 @@
         "antecedent": [
             "raisedhands=25<x<50"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.1851851852,
         "conf_pnd": 0.1558441558,
         "elift": 1.1882716049,
@@ -2538,7 +2538,7 @@
             "raisedhands=0<x<25",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9693877551,
         "elift": 1.0315789474,
@@ -2553,7 +2553,7 @@
             "AnnouncementsView=24<x<49",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.6315789474,
         "elift": 1.0555555556,
@@ -2569,7 +2569,7 @@
             "GradeID=G-02",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9642857143,
         "elift": 1.037037037,
@@ -2584,7 +2584,7 @@
             "AnnouncementsView=24<x<49",
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.9,
         "conf_pnd": 0.8636363636,
         "elift": 1.0421052632,
@@ -2599,7 +2599,7 @@
             "raisedhands=0<x<25",
             "Topic=Arabic"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9615384615,
         "elift": 1.04,
@@ -2615,7 +2615,7 @@
             "raisedhands=0<x<25",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9583333333,
         "elift": 1.0434782609,
@@ -2630,7 +2630,7 @@
             "SectionID=B",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3529411765,
         "conf_pnd": 0.3095238095,
         "elift": 1.1402714932,
@@ -2646,7 +2646,7 @@
             "VisITedResources=0<x<24",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9565217391,
         "elift": 1.0454545455,
@@ -2661,7 +2661,7 @@
             "Discussion=x>74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.7058823529,
         "elift": 1.0625,
@@ -2676,7 +2676,7 @@
             "raisedhands=50<x<75",
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.619047619,
         "elift": 1.0769230769,
@@ -2691,7 +2691,7 @@
             "raisedhands=x>75",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8,
         "conf_pnd": 0.75,
         "elift": 1.0666666667,
@@ -2706,7 +2706,7 @@
             "raisedhands=50<x<75",
             "Discussion=x>74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5833333333,
         "conf_pnd": 0.5333333333,
         "elift": 1.09375,
@@ -2721,7 +2721,7 @@
             "NationalITy=Jordan",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.9230769231,
         "conf_pnd": 0.8717948718,
         "elift": 1.0588235294,
@@ -2737,7 +2737,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.7777777778,
         "elift": 1.0714285714,
@@ -2752,7 +2752,7 @@
             "Discussion=x>74",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.8,
         "elift": 1.0714285714,
@@ -2766,7 +2766,7 @@
         "antecedent": [
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3125,
         "conf_pnd": 0.2542372881,
         "elift": 1.2291666667,
@@ -2781,7 +2781,7 @@
             "NationalITy=Jordan",
             "Discussion=x>74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5454545455,
         "conf_pnd": 0.4864864865,
         "elift": 1.1212121212,
@@ -2796,7 +2796,7 @@
             "AnnouncementsView=24<x<49",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.6071428571,
         "elift": 1.0980392157,
@@ -2812,7 +2812,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.35,
         "conf_pnd": 0.2894736842,
         "elift": 1.2090909091,
@@ -2827,7 +2827,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.35,
         "conf_pnd": 0.2894736842,
         "elift": 1.2090909091,
@@ -2842,7 +2842,7 @@
             "SectionID=B",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7272727273,
         "conf_pnd": 0.6666666667,
         "elift": 1.0909090909,
@@ -2856,7 +2856,7 @@
         "antecedent": [
             "Topic=IT"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.21875,
         "conf_pnd": 0.1578947368,
         "elift": 1.3854166667,
@@ -2872,7 +2872,7 @@
             "SectionID=B",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.4375,
         "elift": 1.1428571429,
@@ -2888,7 +2888,7 @@
             "GradeID=G-02",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7,
         "conf_pnd": 0.6363636364,
         "elift": 1.1,
@@ -2902,7 +2902,7 @@
         "antecedent": [
             "Topic=Biology"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6,
         "conf_pnd": 0.5333333333,
         "elift": 1.125,
@@ -2917,7 +2917,7 @@
             "GradeID=G-07",
             "Topic=Biology"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6,
         "conf_pnd": 0.5333333333,
         "elift": 1.125,
@@ -2932,7 +2932,7 @@
             "Discussion=x>74",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.5555555556,
         "elift": 1.125,
@@ -2948,7 +2948,7 @@
             "Discussion=1<x<25",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.7857142857,
         "elift": 1.0909090909,
@@ -2963,7 +2963,7 @@
             "NationalITy=Jordan",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.2272727273,
         "conf_pnd": 0.1555555556,
         "elift": 1.461038961,
@@ -2978,7 +2978,7 @@
             "SectionID=B",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4545454545,
         "conf_pnd": 0.3823529412,
         "elift": 1.1888111888,
@@ -2993,7 +2993,7 @@
             "raisedhands=x>75",
             "Discussion=x>74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7692307692,
         "conf_pnd": 0.696969697,
         "elift": 1.1036789298,
@@ -3008,7 +3008,7 @@
             "AnnouncementsView=24<x<49",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8,
         "conf_pnd": 0.7272727273,
         "elift": 1.1,
@@ -3024,7 +3024,7 @@
             "Topic=English",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.875,
         "conf_pnd": 0.8,
         "elift": 1.09375,
@@ -3039,7 +3039,7 @@
             "raisedhands=x>75",
             "Topic=English"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.875,
         "conf_pnd": 0.8,
         "elift": 1.09375,
@@ -3054,7 +3054,7 @@
             "AnnouncementsView=24<x<49",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7272727273,
         "conf_pnd": 0.65,
         "elift": 1.1188811189,
@@ -3069,7 +3069,7 @@
             "raisedhands=x>75",
             "GradeID=G-07"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8181818182,
         "conf_pnd": 0.7407407407,
         "elift": 1.1045454545,
@@ -3085,7 +3085,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.7,
         "elift": 1.1111111111,
@@ -3101,7 +3101,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.6363636364,
         "elift": 1.1224489796,
@@ -3117,7 +3117,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4117647059,
         "conf_pnd": 0.3333333333,
         "elift": 1.2352941176,
@@ -3132,7 +3132,7 @@
             "NationalITy=Jordan",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4117647059,
         "conf_pnd": 0.3333333333,
         "elift": 1.2352941176,
@@ -3147,7 +3147,7 @@
             "GradeID=G-02",
             "raisedhands=x>75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.5,
         "conf_pnd": 0.4210526316,
         "elift": 1.1875,
@@ -3163,7 +3163,7 @@
             "raisedhands=50<x<75",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.6666666667,
         "elift": 1.125,
@@ -3179,7 +3179,7 @@
             "AnnouncementsView=49<x<73",
             "GradeID=G-07"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.6666666667,
         "elift": 1.125,
@@ -3193,7 +3193,7 @@
         "antecedent": [
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5106382979,
         "conf_pnd": 0.4272727273,
         "elift": 1.1951109099,
@@ -3207,7 +3207,7 @@
         "antecedent": [
             "Topic=History"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.875,
         "conf_pnd": 0.7894736842,
         "elift": 1.1083333333,
@@ -3222,7 +3222,7 @@
             "GradeID=G-08",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.4137931034,
         "elift": 1.2083333333,
@@ -3237,7 +3237,7 @@
             "Discussion=x>74",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.5384615385,
         "elift": 1.1607142857,
@@ -3252,7 +3252,7 @@
             "SectionID=B",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.65,
         "conf_pnd": 0.5625,
         "elift": 1.1555555556,
@@ -3266,7 +3266,7 @@
         "antecedent": [
             "GradeID=G-07"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.375,
         "conf_pnd": 0.2871287129,
         "elift": 1.3060344828,
@@ -3281,7 +3281,7 @@
             "Discussion=1<x<25",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3846153846,
         "conf_pnd": 0.2962962963,
         "elift": 1.2980769231,
@@ -3296,7 +3296,7 @@
             "Discussion=25<x<50",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.9,
         "conf_pnd": 0.8095238095,
         "elift": 1.1117647059,
@@ -3310,7 +3310,7 @@
         "antecedent": [
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4,
         "conf_pnd": 0.3076923077,
         "elift": 1.3,
@@ -3325,7 +3325,7 @@
             "AnnouncementsView=24<x<49",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.90625,
         "elift": 1.1034482759,
@@ -3341,7 +3341,7 @@
             "Discussion=25<x<50",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.90625,
         "elift": 1.1034482759,
@@ -3356,7 +3356,7 @@
             "GradeID=G-07",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.9047619048,
         "elift": 1.1052631579,
@@ -3371,7 +3371,7 @@
             "raisedhands=50<x<75",
             "Topic=IT"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.625,
         "conf_pnd": 0.5294117647,
         "elift": 1.1805555556,
@@ -3386,7 +3386,7 @@
             "Discussion=x>74",
             "Topic=English"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.875,
         "conf_pnd": 0.7777777778,
         "elift": 1.125,
@@ -3403,7 +3403,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4166666667,
         "conf_pnd": 0.3181818182,
         "elift": 1.3095238095,
@@ -3419,7 +3419,7 @@
             "Discussion=1<x<25",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4166666667,
         "conf_pnd": 0.3181818182,
         "elift": 1.3095238095,
@@ -3436,7 +3436,7 @@
             "Discussion=x>74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.9,
         "elift": 1.1111111111,
@@ -3452,7 +3452,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.4,
         "elift": 1.25,
@@ -3467,7 +3467,7 @@
             "NationalITy=Jordan",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.4,
         "elift": 1.25,
@@ -3482,7 +3482,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3548387097,
         "conf_pnd": 0.2537313433,
         "elift": 1.3984819734,
@@ -3497,7 +3497,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4137931034,
         "conf_pnd": 0.3125,
         "elift": 1.324137931,
@@ -3511,7 +3511,7 @@
         "antecedent": [
             "raisedhands=0<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.18,
         "conf_pnd": 0.0773809524,
         "elift": 2.3261538462,
@@ -3528,7 +3528,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.75,
         "elift": 1.1428571429,
@@ -3543,7 +3543,7 @@
             "SectionID=B",
             "PlaceofBirth=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.75,
         "elift": 1.1428571429,
@@ -3558,7 +3558,7 @@
             "AnnouncementsView=x>73",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.75,
         "elift": 1.1428571429,
@@ -3573,7 +3573,7 @@
             "GradeID=G-02",
             "Topic=IT"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3157894737,
         "conf_pnd": 0.2075471698,
         "elift": 1.5215311005,
@@ -3588,7 +3588,7 @@
             "NationalITy=Jordan",
             "Discussion=1<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3333333333,
         "conf_pnd": 0.2203389831,
         "elift": 1.5128205128,
@@ -3602,7 +3602,7 @@
         "antecedent": [
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3928571429,
         "conf_pnd": 0.2789115646,
         "elift": 1.4085365854,
@@ -3617,7 +3617,7 @@
             "NationalITy=Jordan",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.4411764706,
         "elift": 1.2592592593,
@@ -3631,7 +3631,7 @@
         "antecedent": [
             "Topic=Arabic"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4375,
         "conf_pnd": 0.3220338983,
         "elift": 1.3585526316,
@@ -3646,7 +3646,7 @@
             "Discussion=25<x<50",
             "VisITedResources=0<x<24"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.880952381,
         "elift": 1.1351351351,
@@ -3661,7 +3661,7 @@
             "Discussion=x>74",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.7142857143,
         "elift": 1.1666666667,
@@ -3676,7 +3676,7 @@
             "Discussion=25<x<50",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.38,
         "elift": 1.3157894737,
@@ -3692,7 +3692,7 @@
             "Discussion=1<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4,
         "conf_pnd": 0.2790697674,
         "elift": 1.4333333333,
@@ -3706,7 +3706,7 @@
         "antecedent": [
             "Discussion=25<x<50"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3913043478,
         "conf_pnd": 0.2702702703,
         "elift": 1.447826087,
@@ -3721,7 +3721,7 @@
             "Discussion=x>74",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7,
         "conf_pnd": 0.5789473684,
         "elift": 1.2090909091,
@@ -3735,7 +3735,7 @@
         "antecedent": [
             "SectionID=B"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4406779661,
         "conf_pnd": 0.3173652695,
         "elift": 1.3885513272,
@@ -3750,7 +3750,7 @@
             "NationalITy=Jordan",
             "GradeID=G-08"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4444444444,
         "conf_pnd": 0.320754717,
         "elift": 1.385620915,
@@ -3766,7 +3766,7 @@
             "GradeID=G-08",
             "raisedhands=25<x<50"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.875,
         "elift": 1.1428571429,
@@ -3781,7 +3781,7 @@
             "NationalITy=Jordan",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.375,
         "elift": 1.3333333333,
@@ -3796,7 +3796,7 @@
             "Topic=IT",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.875,
         "conf_pnd": 0.75,
         "elift": 1.1666666667,
@@ -3812,7 +3812,7 @@
             "AnnouncementsView=24<x<49",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.75,
         "conf_pnd": 0.625,
         "elift": 1.2,
@@ -3826,7 +3826,7 @@
         "antecedent": [
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4642857143,
         "conf_pnd": 0.3373493976,
         "elift": 1.3762755102,
@@ -3841,7 +3841,7 @@
             "SectionID=B",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.3720930233,
         "elift": 1.34375,
@@ -3856,7 +3856,7 @@
             "NationalITy=Jordan",
             "raisedhands=0<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.2608695652,
         "conf_pnd": 0.1320754717,
         "elift": 1.9751552795,
@@ -3872,7 +3872,7 @@
             "raisedhands=50<x<75",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5833333333,
         "elift": 1.2244897959,
@@ -3888,7 +3888,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5833333333,
         "elift": 1.2244897959,
@@ -3904,7 +3904,7 @@
             "Discussion=x>74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.8666666667,
         "elift": 1.1538461538,
@@ -3918,7 +3918,7 @@
         "antecedent": [
             "StageID=HighSchool"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4666666667,
         "conf_pnd": 0.3333333333,
         "elift": 1.4,
@@ -3933,7 +3933,7 @@
             "SectionID=B",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4285714286,
         "conf_pnd": 0.2941176471,
         "elift": 1.4571428571,
@@ -3948,7 +3948,7 @@
             "SectionID=B",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.53125,
         "elift": 1.2549019608,
@@ -3962,7 +3962,7 @@
         "antecedent": [
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.74,
         "conf_pnd": 0.6034482759,
         "elift": 1.2262857143,
@@ -3977,7 +3977,7 @@
             "Discussion=1<x<25",
             "AnnouncementsView=24<x<49"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3571428571,
         "conf_pnd": 0.2162162162,
         "elift": 1.6517857143,
@@ -3993,7 +3993,7 @@
             "raisedhands=50<x<75",
             "GradeID=G-07"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.8571428571,
         "elift": 1.1666666667,
@@ -4008,7 +4008,7 @@
             "AnnouncementsView=49<x<73",
             "VisITedResources=49<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5714285714,
         "elift": 1.25,
@@ -4023,7 +4023,7 @@
             "raisedhands=50<x<75",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5714285714,
         "elift": 1.25,
@@ -4039,7 +4039,7 @@
             "Topic=IT",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 1.0,
         "conf_pnd": 0.8571428571,
         "elift": 1.1666666667,
@@ -4054,7 +4054,7 @@
             "AnnouncementsView=x>73",
             "Topic=English"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.8571428571,
         "elift": 1.1666666667,
@@ -4070,7 +4070,7 @@
             "Topic=English",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.8571428571,
         "elift": 1.1666666667,
@@ -4087,7 +4087,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.4117647059,
         "elift": 1.3492063492,
@@ -4103,7 +4103,7 @@
             "SectionID=B",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.4117647059,
         "elift": 1.3492063492,
@@ -4119,7 +4119,7 @@
             "GradeID=G-02",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5263157895,
         "conf_pnd": 0.380952381,
         "elift": 1.3815789474,
@@ -4134,7 +4134,7 @@
             "NationalITy=Jordan",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3636363636,
         "conf_pnd": 0.2181818182,
         "elift": 1.6666666667,
@@ -4149,7 +4149,7 @@
             "SectionID=B",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4571428571,
         "conf_pnd": 0.3085106383,
         "elift": 1.481773399,
@@ -4165,7 +4165,7 @@
             "raisedhands=x>75",
             "Discussion=x>74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.9,
         "conf_pnd": 0.75,
         "elift": 1.2,
@@ -4180,7 +4180,7 @@
             "AnnouncementsView=24<x<49",
             "GradeID=G-08"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4,
         "conf_pnd": 0.25,
         "elift": 1.6,
@@ -4195,7 +4195,7 @@
             "raisedhands=0<x<25",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.24,
         "conf_pnd": 0.0895522388,
         "elift": 2.68,
@@ -4211,7 +4211,7 @@
             "Discussion=25<x<50",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.7,
         "elift": 1.2244897959,
@@ -4225,7 +4225,7 @@
         "antecedent": [
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.45,
         "conf_pnd": 0.2916666667,
         "elift": 1.5428571429,
@@ -4239,7 +4239,7 @@
         "antecedent": [
             "GradeID=G-08"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4444444444,
         "conf_pnd": 0.2844827586,
         "elift": 1.5622895623,
@@ -4253,7 +4253,7 @@
         "antecedent": [
             "NationalITy=Jordan"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4683544304,
         "conf_pnd": 0.3081395349,
         "elift": 1.5199426797,
@@ -4267,7 +4267,7 @@
         "antecedent": [
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6,
         "conf_pnd": 0.4375,
         "elift": 1.3714285714,
@@ -4282,7 +4282,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5333333333,
         "conf_pnd": 0.3703703704,
         "elift": 1.44,
@@ -4297,7 +4297,7 @@
             "raisedhands=0<x<25",
             "Discussion=1<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.2272727273,
         "conf_pnd": 0.0641025641,
         "elift": 3.5454545455,
@@ -4312,7 +4312,7 @@
             "AnnouncementsView=x>73",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.6923076923,
         "elift": 1.2380952381,
@@ -4327,7 +4327,7 @@
             "AnnouncementsView=49<x<73",
             "GradeID=G-07"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6,
         "conf_pnd": 0.4347826087,
         "elift": 1.38,
@@ -4342,7 +4342,7 @@
             "SectionID=B",
             "Discussion=1<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.4166666667,
         "conf_pnd": 0.25,
         "elift": 1.6666666667,
@@ -4357,7 +4357,7 @@
             "SectionID=B",
             "Discussion=25<x<50"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.3272727273,
         "elift": 1.5277777778,
@@ -4371,7 +4371,7 @@
         "antecedent": [
             "Discussion=1<x<25"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.3461538462,
         "conf_pnd": 0.1719745223,
         "elift": 2.0128205128,
@@ -4385,7 +4385,7 @@
         "antecedent": [
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5588235294,
         "conf_pnd": 0.3827160494,
         "elift": 1.4601518027,
@@ -4401,7 +4401,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.6,
         "elift": 1.2962962963,
@@ -4416,7 +4416,7 @@
             "raisedhands=50<x<75",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.4444444444,
         "elift": 1.40625,
@@ -4431,7 +4431,7 @@
             "raisedhands=50<x<75",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.4444444444,
         "elift": 1.40625,
@@ -4446,7 +4446,7 @@
             "Discussion=1<x<25",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.3181818182,
         "elift": 1.5714285714,
@@ -4461,7 +4461,7 @@
             "AnnouncementsView=49<x<73",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4827586207,
         "elift": 1.380952381,
@@ -4476,7 +4476,7 @@
             "raisedhands=x>75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7777777778,
         "conf_pnd": 0.5897435897,
         "elift": 1.3188405797,
@@ -4490,7 +4490,7 @@
         "antecedent": [
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6097560976,
         "conf_pnd": 0.4215686275,
         "elift": 1.4463981849,
@@ -4506,7 +4506,7 @@
             "AnnouncementsView=49<x<73",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8571428571,
         "conf_pnd": 0.6666666667,
         "elift": 1.2857142857,
@@ -4520,7 +4520,7 @@
         "antecedent": [
             "Topic=Quran"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.3636363636,
         "elift": 1.5277777778,
@@ -4534,7 +4534,7 @@
         "antecedent": [
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7826086957,
         "conf_pnd": 0.5882352941,
         "elift": 1.3304347826,
@@ -4551,7 +4551,7 @@
             "raisedhands=50<x<75",
             "Topic=French"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.6363636364,
         "elift": 1.3095238095,
@@ -4565,7 +4565,7 @@
         "antecedent": [
             "NationalITy=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7272727273,
         "conf_pnd": 0.5294117647,
         "elift": 1.3737373737,
@@ -4579,7 +4579,7 @@
         "antecedent": [
             "Topic=English"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5789473684,
         "conf_pnd": 0.3777777778,
         "elift": 1.5325077399,
@@ -4593,7 +4593,7 @@
         "antecedent": [
             "PlaceofBirth=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7857142857,
         "conf_pnd": 0.5789473684,
         "elift": 1.3571428571,
@@ -4608,7 +4608,7 @@
             "Discussion=1<x<25",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.347826087,
         "elift": 1.5972222222,
@@ -4622,7 +4622,7 @@
         "antecedent": [
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5217391304,
         "conf_pnd": 0.3137254902,
         "elift": 1.6630434783,
@@ -4637,7 +4637,7 @@
             "NationalITy=Jordan",
             "SectionID=B"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5416666667,
         "conf_pnd": 0.3333333333,
         "elift": 1.625,
@@ -4652,7 +4652,7 @@
             "GradeID=G-07",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6,
         "conf_pnd": 0.3913043478,
         "elift": 1.5333333333,
@@ -4667,7 +4667,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6428571429,
         "conf_pnd": 0.4324324324,
         "elift": 1.4866071429,
@@ -4682,7 +4682,7 @@
             "raisedhands=50<x<75",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5,
         "elift": 1.4285714286,
@@ -4697,7 +4697,7 @@
             "AnnouncementsView=x>73",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.5,
         "elift": 1.4285714286,
@@ -4712,7 +4712,7 @@
             "raisedhands=x>75",
             "PlaceofBirth=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.7777777778,
         "elift": 1.2857142857,
@@ -4727,7 +4727,7 @@
             "NationalITy=Jordan",
             "GradeID=G-07"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5555555556,
         "conf_pnd": 0.3333333333,
         "elift": 1.6666666667,
@@ -4742,7 +4742,7 @@
             "Discussion=25<x<50",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4444444444,
         "elift": 1.5,
@@ -4757,7 +4757,7 @@
             "NationalITy=Jordan",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.4,
         "elift": 1.5625,
@@ -4772,7 +4772,7 @@
             "NationalITy=Jordan",
             "Discussion=25<x<50"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.48,
         "conf_pnd": 0.2545454545,
         "elift": 1.8857142857,
@@ -4787,7 +4787,7 @@
             "NationalITy=Jordan",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5294117647,
         "conf_pnd": 0.3023255814,
         "elift": 1.7511312217,
@@ -4802,7 +4802,7 @@
             "PlaceofBirth=lebanon",
             "NationalITy=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7272727273,
         "conf_pnd": 0.5,
         "elift": 1.4545454545,
@@ -4818,7 +4818,7 @@
             "SectionID=B",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.875,
         "conf_pnd": 0.6428571429,
         "elift": 1.3611111111,
@@ -4834,7 +4834,7 @@
             "Topic=Science",
             "GradeID=G-04"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.6,
         "elift": 1.3888888889,
@@ -4850,7 +4850,7 @@
             "SectionID=B",
             "GradeID=G-02"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5,
         "conf_pnd": 0.2666666667,
         "elift": 1.875,
@@ -4866,7 +4866,7 @@
             "SectionID=B",
             "Discussion=25<x<50"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.5833333333,
         "conf_pnd": 0.35,
         "elift": 1.6666666667,
@@ -4881,7 +4881,7 @@
             "SectionID=B",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4333333333,
         "elift": 1.5384615385,
@@ -4896,7 +4896,7 @@
             "NationalITy=Jordan",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8,
         "conf_pnd": 0.5652173913,
         "elift": 1.4153846154,
@@ -4911,7 +4911,7 @@
             "raisedhands=x>75",
             "NationalITy=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.75,
         "elift": 1.3333333333,
@@ -4926,7 +4926,7 @@
             "GradeID=G-08",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4166666667,
         "elift": 1.6,
@@ -4940,7 +4940,7 @@
         "antecedent": [
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4166666667,
         "elift": 1.6,
@@ -4955,7 +4955,7 @@
             "raisedhands=x>75",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8666666667,
         "conf_pnd": 0.6136363636,
         "elift": 1.412345679,
@@ -4970,7 +4970,7 @@
             "NationalITy=Jordan",
             "Topic=English"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4117647059,
         "elift": 1.619047619,
@@ -4986,7 +4986,7 @@
             "raisedhands=x>75",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7,
         "conf_pnd": 0.4444444444,
         "elift": 1.575,
@@ -5001,7 +5001,7 @@
             "GradeID=G-02",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.4074074074,
         "elift": 1.6363636364,
@@ -5016,7 +5016,7 @@
             "NationalITy=Jordan",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.9166666667,
         "conf_pnd": 0.6428571429,
         "elift": 1.4259259259,
@@ -5032,7 +5032,7 @@
             "GradeID=G-02",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.4705882353,
         "elift": 1.59375,
@@ -5047,7 +5047,7 @@
             "GradeID=G-08",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7692307692,
         "conf_pnd": 0.4893617021,
         "elift": 1.5719063545,
@@ -5063,7 +5063,7 @@
             "PlaceofBirth=lebanon",
             "NationalITy=lebanon"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.7142857143,
         "elift": 1.4,
@@ -5078,7 +5078,7 @@
             "GradeID=G-08",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.625,
         "conf_pnd": 0.3333333333,
         "elift": 1.875,
@@ -5094,7 +5094,7 @@
             "Discussion=1<x<25",
             "raisedhands=50<x<75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.4166666667,
         "elift": 1.7142857143,
@@ -5109,7 +5109,7 @@
             "raisedhands=x>75",
             "Topic=Science"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.7,
         "elift": 1.4285714286,
@@ -5124,7 +5124,7 @@
             "Topic=English",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.8,
         "conf_pnd": 0.5,
         "elift": 1.6,
@@ -5139,7 +5139,7 @@
             "raisedhands=x>75",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.9285714286,
         "conf_pnd": 0.6285714286,
         "elift": 1.4772727273,
@@ -5154,7 +5154,7 @@
             "NationalITy=Jordan",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.3636363636,
         "elift": 1.8333333333,
@@ -5170,7 +5170,7 @@
             "GradeID=G-08",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.6666666667,
         "conf_pnd": 0.3636363636,
         "elift": 1.8333333333,
@@ -5186,7 +5186,7 @@
             "Topic=English",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.4375,
         "elift": 1.7142857143,
@@ -5201,7 +5201,7 @@
             "NationalITy=Jordan",
             "GradeID=G-06"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.75,
         "conf_pnd": 0.4375,
         "elift": 1.7142857143,
@@ -5217,7 +5217,7 @@
             "Discussion=25<x<50",
             "AnnouncementsView=49<x<73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.7142857143,
         "conf_pnd": 0.4,
         "elift": 1.7857142857,
@@ -5233,7 +5233,7 @@
             "raisedhands=x>75",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.6470588235,
         "elift": 1.5454545455,
@@ -5249,7 +5249,7 @@
             "GradeID=G-07",
             "Discussion=50<x<74"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.6363636364,
         "elift": 1.5714285714,
@@ -5265,7 +5265,7 @@
             "GradeID=G-08",
             "raisedhands=x>75"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 0.9090909091,
         "conf_pnd": 0.5384615385,
         "elift": 1.6883116883,
@@ -5281,7 +5281,7 @@
             "raisedhands=x>75",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.6153846154,
         "elift": 1.625,
@@ -5296,7 +5296,7 @@
             "raisedhands=x>75",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.6153846154,
         "elift": 1.625,
@@ -5311,7 +5311,7 @@
             "GradeID=G-07",
             "Discussion=x>74"
         ],
-        "cls": "class=L",
+        "cls": "class=0",
         "conf_pd": 0.8333333333,
         "conf_pnd": 0.4347826087,
         "elift": 1.9166666667,
@@ -5327,7 +5327,7 @@
             "raisedhands=x>75",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.5454545455,
         "elift": 1.8333333333,
@@ -5344,7 +5344,7 @@
             "raisedhands=x>75",
             "Topic=Chemistry"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.5454545455,
         "elift": 1.8333333333,
@@ -5360,7 +5360,7 @@
             "Discussion=50<x<74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.5,
         "elift": 2.0,
@@ -5375,7 +5375,7 @@
             "Discussion=50<x<74",
             "AnnouncementsView=x>73"
         ],
-        "cls": "class=H",
+        "cls": "class=1",
         "conf_pd": 1.0,
         "conf_pnd": 0.5,
         "elift": 2.0,

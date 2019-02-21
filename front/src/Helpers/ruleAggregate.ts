@@ -97,6 +97,7 @@ export function oragnizeRules (ruleCollection: RuleNode[], rule: Rule): RuleNode
 
 export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataItem[])=>{
     rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)
+    console.info('rules', rules)
     let positiveRuleNodes: RuleNode[] = [] 
     let negativeRuleNodes: RuleNode[] = [] 
     rules.forEach(rule=>{
@@ -106,9 +107,11 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
             oragnizeRules(negativeRuleNodes, rule)
         }
     })
+    // console.info('nodes', positiveRuleNodes, negativeRuleNodes)
     let positiveRuleAgg: RuleAgg[] = [] 
     let negativeRuleAgg: RuleAgg[] = [] 
-
+    // console.info('pos', positiveRuleNodes)
+    // console.info('neg', negativeRuleNodes)
     for (let ruleNode of positiveRuleNodes){
         let {antecedent} = ruleNode.rule
         var isContain: boolean = false 
@@ -179,7 +182,7 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
 // keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
 // samples = samples.slice(1000, 2000)
 // rules = rules.filter(rule=>Math.abs(rule.risk_dif)>0.01 )
-//         .filter(rule=>rule.cls=='class=L')
+//         .filter(rule=>rule.cls=='class=0')
 //         .filter(rule=>containsAttr(rule.antecedent, keyAttrs).length>=keyAttrs.length)
         
 // rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)

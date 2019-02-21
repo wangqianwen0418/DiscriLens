@@ -3,10 +3,10 @@ import "./Overview.css"
 import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
-import {BAD_COLOR} from 'Helpers'
+import {BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
 
 export interface Props{
-    rules: Rule[],
+    allRules: Rule[],
     keyAttrs: string[],
     ruleThreshold: number[],
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
@@ -138,50 +138,26 @@ export default class Overview extends React.Component<Props,State>{
         window.removeEventListener('mousemove', this.mouseMoveRight)
     }
     ruleProcessing(){
-        let {rules,keyAttrs} = this.props
-        //let {ruleThreshold} = this.state
-        /**
-         * Processing rules by key attrs
-         *  */ 
-        let rules_new:Rule[] = []
-        rules.forEach((rule)=>{
-                let rule_ante = rule.antecedent 
-                
-                //rules in array format. [[attribute, value],[attr2,value2],....]
-                let rule_attrs: string[] = []
-                for (var rule_attr in rule_ante){ 
-                    let rule_out = rule_ante[rule_attr].split("=")
-                    rule_attrs.push(rule_out[0])
-                }
-                
-                let rule_counter = 0
-                rule_attrs.forEach((rule_attr,i)=>{
-                    if(keyAttrs.includes(rule_attr)){
-                        rule_counter += 1
-                    }
-                })
-                // remove rules containing non-key attrs
-                if((rule_counter>=keyAttrs.length)&&(keyAttrs.length>0)){
-                    rules_new.push(rule)
-                }
-        })
-        rules = rules_new
+        let {allRules,keyAttrs} = this.props
+        
         let curveX:number[] = []
         let dataKeyAttr: curveData[] = []
         //let dataKeyAttr: curveData[] = []
+        let rules = filterRulesNoThreshold(allRules, keyAttrs)
         rules.forEach((rule,rule_i)=>{
-            if(!curveX.includes(rule['risk_dif'])){
-                curveX.push(rule['risk_dif'])
-                dataKeyAttr.push({x:rule['risk_dif'],y:rule['sup_pnd'],z:0})
+            if(!curveX.includes(rule['favorPD'])){
+                curveX.push(rule['favorPD'])
+                dataKeyAttr.push({x:rule['favorPD'],y:rule['sup_pnd'],z:0})
             }else{
-                dataKeyAttr[curveX.indexOf(rule['risk_dif'])].y += rule['sup_pnd']
+                dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
             }
         })
+        console.info(allRules, keyAttrs, rules, dataKeyAttr)
 
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
-        console.log(dataKeyAttr.length,step)
+        // console.log(dataKeyAttr.length,step)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{
@@ -279,11 +255,14 @@ export default class Overview extends React.Component<Props,State>{
     }
     render(){
         //let curveKeyAttrs = d3.line<curveData>().x(d=>d.x).y(d=>d.z)
-        return <g>
-            {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
-                {this.ruleProcessing().path}
-            </g>:<text transform={`translate(0,${this.bottomEnd})`} fontSize={12}>Try different itemsets!</text>}
+        return <g ref={this.ref}>
+            {this.ruleProcessing().path}
         </g>
+        // return <g>
+        //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
+        //         {this.ruleProcessing().path}
+        //     </g>:<text transform={`translate(0,${this.bottomEnd})`} fontSize={12}>Try different itemsets!</text>}
+        // </g>
     }
 
     private renderAxis=()=>{

@@ -10,33 +10,35 @@ import { createStore,applyMiddleware } from 'redux';
 import rootReducer from 'reducers';
 import { StoreState, Status} from 'types';
 
+import {filterRules} from "Helpers";
+
 
 
 import 'antd/dist/antd.css';
 
 const TEST = true
 
-let dataSet:string = 'academic',
-    model:string = 'lr', 
-    protectedAttr:string = 'gender'
-
 let initState:StoreState
 
-let dataSet = ['dataTest', 'academic', 'bank'],
-    model = ['xgb', 'knn', 'lr'],
-    protected_attr = ['sex', 'marital'],
-    dataSelect = 2,
-    modelSelect = 0,
-    protected_attrSelect = 1
+let dataSets = ['dataTest', 'academic', 'bank'],
+    models = ['xgb', 'knn', 'lr'],
+    protectedAttrs = ['sex', 'marital'],
+    dataSelect = 1,
+    modelSelect = 2,
+    protectedSelect = 1,
+
+    dataSet = dataSets[dataSelect],
+    model = models[modelSelect],
+    protectedAttr = protectedAttrs[protectedSelect]
 
 if (TEST){
-    // let {jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json')
-    let samples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
-    rules = require('./testdata/'+ dataSet + '_' + model + '_rules.json'),
-    dragArray = [...Object.keys(samples[0])],
-    keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    let filename = dataSet + '_' + model
+    let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
+    let samples = require('./testdata/'+filename+'_samples.json')
+    let rules = require('./testdata/'+filename+'_rules.json')
+    let ruleThreshold: [number, number] = [-0.1, 0.1]
 
-
+    let dragArray = [...Object.keys(samples[0])]
     // remove the attribute 'id' and 'class'
     dragArray.splice(dragArray.indexOf('id'), 1)
     dragArray.splice(dragArray.indexOf('class'), 1)
@@ -44,16 +46,20 @@ if (TEST){
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
     // move key attributes to the front
+    keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
+    
+
 
     initState = {
       keyAttrNum: keyAttrs.length, 
       samples,
-      rules,
-      protectedAttr: protectedAttr,
+      allRules: rules,
+      rules: filterRules(rules, ruleThreshold, keyAttrs),
+      protectedAttr,
       fetchSampleStatus: Status.COMPLETE,
       fetchKeyStatus: Status.COMPLETE,
-      ruleThreshold:[-0.1,0.1],
+      ruleThreshold,
       dragArray,
       showAttrNum: keyAttrs.length
   }
@@ -61,11 +67,12 @@ if (TEST){
   initState = {
     keyAttrNum: 0,
     samples: [],
+    allRules: [],
     rules: [],
     protectedAttr: '',
     fetchSampleStatus: Status.COMPLETE,
     fetchKeyStatus: Status.COMPLETE,
-    ruleThreshold:[-0.1,0.1],
+    ruleThreshold: [-0.05, 0.05],
     dragArray: [],
     showAttrNum: 0
 }

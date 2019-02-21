@@ -42,6 +42,7 @@ export default class Attributes extends React.Component<Props, State>{
             cursorDown: false,
         }
         this.changeColor = this.changeColor.bind(this)
+        this.draw = this.draw.bind(this)
         this.onDragEnd = this.onDragEnd.bind(this)
         this.toggleShowAttr = this.toggleShowAttr.bind(this)
         this.changeCursorStatus = this.changeCursorStatus.bind(this)
@@ -57,6 +58,7 @@ export default class Attributes extends React.Component<Props, State>{
 
 
     toggleShowAttr(attr:string, showFlag:boolean){
+        // console.info('toggle show')
         let {showAttrNum, keyAttrNum, dragArray} = this.props
         let showAttrs = dragArray.slice(0, showAttrNum),
             keyAttrs = dragArray.slice(0, keyAttrNum),
@@ -82,6 +84,7 @@ export default class Attributes extends React.Component<Props, State>{
 
     // stop dragging
     onDragEnd(attr:string,startNum:number,endNum:number,endReal:number){
+        // console.info('drag end')
         let dragArray:string[] = []
         let {dragArray: oldArray, keyAttrNum} = this.props
         let boarder = oldArray.slice(0, keyAttrNum)
@@ -311,7 +314,9 @@ export default class Attributes extends React.Component<Props, State>{
             let dataType = typeof samples.map(d => d[attr])
                 .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)[0]
             // trigger event of stop dragging 
-            let dragEnd = (e:any) =>{
+            let onDragEnd = (e:any) =>{
+                e.preventDefault();
+                // e.stopPropagation();
                 let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
@@ -352,7 +357,9 @@ export default class Attributes extends React.Component<Props, State>{
 
             // label postition
             let labelX = showFlag?0:-1*this.height,  labelY = showFlag?1.5*this.height: 1*this.height
-            const toggleShowAttr = (e:React.SyntheticEvent)=>this.toggleShowAttr(attr, showFlag)
+            const toggleShowAttr = (e:React.SyntheticEvent)=>{
+                this.toggleShowAttr(attr, showFlag)
+            }
             /*
             let mouseDown =()=>{this.changeCursorStatus(true)}
             let mouseUp =()=>{this.changeCursorStatus(false)}
@@ -362,11 +369,13 @@ export default class Attributes extends React.Component<Props, State>{
             }*/
             return <Draggable key={attr} axis="x"
                 defaultPosition={{ x: offsetX, y: offsetY }}
+                handle='.attrChart'
                 position={draggablePos}
-                onStop={dragEnd}>
-                    <g className="attr" cursor='pointer'>
+                onStop={onDragEnd}
+                >
+                    <g className="attr" >
                         {showAttrs.includes(attr)?
-                            <g className='attrChart'>
+                            <g className='attrChart' cursor='pointer'>
                                 {dataType == 'string'? 
                                     this.drawBars(attr, attr_i,samples, barWidth, max_accept, max_reject, this.height, selected_bar)
                                     :
@@ -392,18 +401,26 @@ export default class Attributes extends React.Component<Props, State>{
                             />
                             <text 
                                 textAnchor="start" 
+                                style={{
+                                    MozUserSelect:'none',
+                                    WebkitUserSelect:'none',
+                                    msUserSelect:'none'
+                                }}
                                 fontSize={this.fontSize} 
                                 fill={keyAttrs.includes(attr)?'red':"black"}>
                                 {cutTxt(attr, barWidth*0.7/this.fontSize*2)}
                             </text>
                             <text 
+                                className='toggleShowLabel'
                                 textAnchor="end"
                                 x={barWidth-this.fontSize/2} 
                                 fontSize={this.fontSize} 
                                 cursor="pointer"
-                                onClick={toggleShowAttr}>
+                                onClick={toggleShowAttr}
+                                >
                                 {showFlag?"-":"+"}
                             </text>
+                    
                         </g>
                     </g>
             </Draggable>   

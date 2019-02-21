@@ -10,3 +10,4 @@ export {cutTxt} from './cutTxt';
 export {ruleAggregate, RuleAgg, RuleNode, containsAttr} from "./ruleAggregate";
 export {getAttrRanges} from './getAttrRanges';
 export {groupByKey} from './groupByKey';
+export {filterRules, filterRulesNoThreshold} from './filterRules';

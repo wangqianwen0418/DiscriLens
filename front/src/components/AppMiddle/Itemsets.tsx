@@ -403,10 +403,10 @@ export default class Itemset extends React.Component<Props, State>{
         rules = rules
             // risk threshold
             .filter(rule => rule.risk_dif >= ruleThreshold[1] || rule.risk_dif <= ruleThreshold[0])
-            .filter(rule => rule.cls == 'class=H')
+            .filter(rule => rule.cls == 'class=1')
             // normalize risk diff => favor PD
             .map(rule => {
-                return { ...rule, favorPD: rule.cls == 'class=H' ? rule.risk_dif : -1 * rule.risk_dif }
+                return { ...rule, favorPD: rule.cls == 'class=1' ? rule.risk_dif : -1 * rule.risk_dif }
             })
             .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
@@ -477,13 +477,13 @@ export default class Itemset extends React.Component<Props, State>{
         </g>
     }
     componentDidUpdate(prevProp: Props) {
-        if (
-            prevProp.ruleThreshold[0] != this.props.ruleThreshold[0]
-            || prevProp.ruleThreshold[1] != this.props.ruleThreshold[1]
-            || prevProp.rules[0].pd != this.props.rules[0].pd
-        ) {
-            this.setState({ expandRules: {} })
-        }
+        // if (
+        //     prevProp.ruleThreshold[0] != this.props.ruleThreshold[0]
+        //     || prevProp.ruleThreshold[1] != this.props.ruleThreshold[1]
+        //     || prevProp.rules[0].pd != this.props.rules[0].pd
+        // ) {
+        //     this.setState({ expandRules: {} })
+        // }
     }
     render() {
         let { fetchKeyStatus } = this.props
