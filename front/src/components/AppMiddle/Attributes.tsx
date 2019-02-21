@@ -224,6 +224,10 @@ export default class Attributes extends React.Component<Props, State>{
         let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let generalSituation=(range_i:number)=>{
             let splitLineData:curveData[] = [{x:barWidthidth*0.95,y:height / 2,z:0},{x:barWidthidth*0.95,y:80,z:0}] 
+        // draw general situation
+        /*let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+         let generalSituation=(range_i:number)=>{
+            let splitLineData:curveData[] = [{x:bar_width*0.95,y:height / 2,z:0},{x:bar_width*0.95,y:80,z:0}] 
             return <g>
                 {ranges.length-1!=range_i?
                 <path d={splitLine(splitLineData)} style={{fill:'none',stroke:'#bbb',strokeWidth:'0.5px'}}/>

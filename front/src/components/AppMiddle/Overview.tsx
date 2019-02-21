@@ -67,7 +67,6 @@ export default class Overview extends React.Component<Props,State>{
 
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScaleReverse:d3.ScaleLinear<number, number>){
         this.setState({transformXLeft,transformXRight,zeroAxis,xScaleReverse})
-        this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
     }
 
     // update state
@@ -182,6 +181,7 @@ export default class Overview extends React.Component<Props,State>{
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
+        console.log(dataKeyAttr.length,step)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{

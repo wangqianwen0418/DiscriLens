@@ -21,6 +21,14 @@ let dataSet:string = 'academic',
     protectedAttr:string = 'gender'
 
 let initState:StoreState
+
+let dataSet = ['dataTest', 'academic', 'bank'],
+    model = ['xgb', 'knn', 'lr'],
+    protected_attr = ['sex', 'marital'],
+    dataSelect = 2,
+    modelSelect = 0,
+    protected_attrSelect = 1
+
 if (TEST){
     // let {jsonGroups} = require('./testdata/'+ dataSet + '_' + model + '_key.json')
     let samples = require('./testdata/'+ dataSet + '_' + model + '_samples.json'),
