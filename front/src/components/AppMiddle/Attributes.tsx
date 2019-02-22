@@ -134,12 +134,34 @@ export default class Attributes extends React.Component<Props, State>{
         this.props.onChangeDragArray(dragArray)
     }
 
-    drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, offsetX = 0, offsetY = 0, ) => {
+    findCateBound = (arr:number[]) =>{
+        let n = 4 
+        let maxValue = Math.max(...arr)
+        let minValue = Math.min(...arr)
+        let thresholds = [] 
+        for( var i=0; i < n + 1 ;i++){
+            thresholds.push(Math.floor(i*(maxValue-minValue)/n)+minValue)
+        }
+        return thresholds
+    }
+
+    linearInterpolate = ({x:x1,y:yA1,z:yR1}:curveData,{x:x2,y:yA2,z:yR2}:curveData,x0:number) =>{
+        //let x1 = in1.x,yA1=in1.y,yR1=in1.z,x2 = in2.x,yA2=in2.y,yR2=in2.z
+        return {
+            yA0: (yA2 - yA1) * (x0 - x1) / (x2 - x1) + yA1 ,
+            yR0: (yR2 - yR1) * (x0 - x1) / (x2 - x1) + yA1 
+        }
+    }
+
+    drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, selected_bar: string[], offsetX = 0, offsetY = 0, ) => {
         // get ranges of this attr
         let ranges = samples.map(d => d[attr])
             .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
             .sort((a: number, b: number) => a - b)
-    
+
+        let rangesNum:number[] = []
+        ranges.forEach((range:number,i)=>{rangesNum.push(range)} )
+        let rangesSplit = this.findCateBound(rangesNum)
         // step length to merge data, to smooth curve
         function getStep() {
             if (ranges.length < 20) { return 2 }
@@ -148,7 +170,7 @@ export default class Attributes extends React.Component<Props, State>{
         let stepMerge = getStep()
     
         // array recording curve nodes after merging
-        let ListNum: curveData[] = []
+        let ListNum: curveData[][] = [[]]
         const dataPush = (x: number, y: number, z: number): curveData => { return { x, y, z } }
         // split samples by class
         let samples_reject = samples.filter((s) => s.class == 0)
@@ -158,27 +180,49 @@ export default class Attributes extends React.Component<Props, State>{
         // yRecord is the max values of accept & reject y-axis ([max of acc,max of rej])
         let yRecord = [0, 0]
     
-        // split numerical range into categorical one
-    
         // accept data instances number and reject data instances number 
         let accept_num = 0,
             reject_num = 0
         // range_num records now range interval 
         // loop all values of this attr
-        ranges.map((range: number, range_i) => {
-            accept_num += samples_accept.filter(s => s[attr] === range).length
-            reject_num += samples_reject.filter(s => s[attr] === range).length
-            if (((range_i % stepMerge
-                 == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
-    
-                ListNum.push(dataPush(range, accept_num, reject_num))
-                xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
-                yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
-                accept_num = 0
-                reject_num = 0
+        let rangesCounter = 0
+        ranges.forEach((range: number, range_i) => {
+            if((range>rangesSplit[rangesCounter])&&(rangesCounter!=rangesSplit.length-1)){
+                {rangesCounter ++}
+                ListNum.push([])
+            }else{
+                accept_num += samples_accept.filter(s => s[attr] === range).length
+                reject_num += samples_reject.filter(s => s[attr] === range).length
+                if (((range_i % stepMerge
+                    == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
+        
+                    ListNum[rangesCounter].push(dataPush(range, accept_num, reject_num))
+                    xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
+                    yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
+                    accept_num = 0
+                    reject_num = 0
+                }
             }
         })
-    
+        // re-loop to add interpolation nodes to achieve consistancy
+       // left part
+        rangesCounter = 0
+        // right part
+        let rangesCounter2 = 1
+        // line-interpulate between left & right parts
+        ranges.forEach((range:number,i)=>{
+            if((range>rangesSplit[rangesCounter])&&(rangesCounter2<ListNum.length)){
+                // avoid right part being empty
+                while(ListNum[rangesCounter2].length==0){rangesCounter2++}
+                // calculate interpulation values
+                let y0 = this.linearInterpolate(ListNum[rangesCounter][ListNum[rangesCounter].length-1],ListNum[rangesCounter2][0],rangesSplit[rangesCounter])
+                // push new nodes
+                ListNum[rangesCounter].push({x:range,y:y0.yA0,z:y0.yR0})
+                ListNum[rangesCounter2].unshift({x:range,y:y0.yA0,z:y0.yR0})
+                rangesCounter ++
+                rangesCounter2 ++
+            }
+        })
     
         // curve x-axis
         let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
@@ -193,13 +237,35 @@ export default class Attributes extends React.Component<Props, State>{
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
         return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
-            <g>
-                <path d={areasAcc(ListNum) || ''} style={{ fill: GOOD_COLOR }} />
-                <path d={areasRej(ListNum) || ''} style={{ fill: BAD_COLOR }} />
-            </g>
             <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
+            {ListNum.map((List,i)=>{
+                    let title: string = ''
+                    if(i==0){
+                        title = 'x<=' + rangesSplit[i]
+                    }else if(i==rangesSplit.length - 1){
+                        title = 'x>' + rangesSplit[i - 1]
+                    }else{
+                        title = rangesSplit[i-1] + '<x<=' + rangesSplit[i]
+                    }
+                    // change mouseOn bar's color when the button is not pressed
+                    let mouseEnter = (e:any) => {
+                        // e.buttons is used to detect whether the button is pressed
+                        if(e.buttons==0){
+                            this.changeColor([attr, title])
+                        }
+                    }
+                    // recover bar's color when mouseOut
+                    let mouseOut = () => this.changeColor(['', ''])
+                    let mouseDown = ()=> {this.changeColor(['', ''])}
+                    return <Tooltip title={title} key={`${attr}_${'curve'}_tooltip`}>
+                    <g  onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
+                        <path d={areasAcc(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? '#DE4863' : GOOD_COLOR }}  />
+                        <path d={areasRej(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? 'pink' : BAD_COLOR }}  />
+                    </g>
+                    </Tooltip>
+                })
+            }
         </g>
-    
     }
     /**
      * Function to draw bars
@@ -222,20 +288,6 @@ export default class Attributes extends React.Component<Props, State>{
         // a single bar's width
         let barWidthidth = barWidth / ranges.length
         
-        /* // draw general situation
-        let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-        let generalSituation=(range_i:number)=>{
-            let splitLineData:curveData[] = [{x:barWidthidth*0.95,y:height / 2,z:0},{x:barWidthidth*0.95,y:80,z:0}] 
-        // draw general situation
-        /*let splitLine = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-         let generalSituation=(range_i:number)=>{
-            let splitLineData:curveData[] = [{x:bar_width*0.95,y:height / 2,z:0},{x:bar_width*0.95,y:80,z:0}] 
-            return <g>
-                {ranges.length-1!=range_i?
-                <path d={splitLine(splitLineData)} style={{fill:'none',stroke:'#bbb',strokeWidth:'0.5px'}}/>
-                :null}
-            </g>
-        } */
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:barWidth - barWidthidth * 0.1,y:this.height/2,z:0}]
         return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
@@ -262,8 +314,6 @@ export default class Attributes extends React.Component<Props, State>{
                         onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
                         <rect width={barWidthidth * 0.9} height={accept_h} y={-1 * accept_h} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? '#DE4863' : GOOD_COLOR }} />
                         <rect width={barWidthidth * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
-                        {//generalSituation(range_i)
-                        }
                          </g>
                 </Tooltip>
             })}
@@ -313,7 +363,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - window.innerWidth * 0.15)/ step )
+                let endNum = Math.floor((e.x - window.innerWidth * 0.1)/ step - 1.2)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -375,7 +425,7 @@ export default class Attributes extends React.Component<Props, State>{
                                 {dataType == 'string'? 
                                     this.drawBars(attr, attr_i,samples, barWidth, max_accept, max_reject, this.height, selected_bar)
                                     :
-                                    this.drawCurves(attr, attr_i,samples, this.height, false, barWidth)
+                                    this.drawCurves(attr, attr_i,samples, this.height, false, barWidth, selected_bar)
                                 }
                             </g>
                             :

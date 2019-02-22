@@ -18,9 +18,9 @@ def get_rules(dataset_name, protect_attr='',model_name=None):
     
     rules.to_json(cache_path + '{}_rules.json'.format(model_name),orient='records')
 
-get_rules('adult','sex= Female', 'knn')
-get_rules('adult','sex= Fema le', 'lr')
-get_rules('adult','sex= Female', 'xgb') 
+# get_rules('adult','sex= Female', 'knn')
+get_rules('adult','sex= Female', 'lr')
+# get_rules('adult','sex= Female', 'xgb') 
 '''
 get_rules('give_credit','age=0<x<25','knn')
 get_rules('give_credit','age=0<x<25','xgb')
