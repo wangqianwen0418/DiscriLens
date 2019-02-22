@@ -5,8 +5,9 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode, groupByKey } from 'Helpers';
-import { Rule } from 'types';
+import { RuleAgg, RuleNode, groupByKey, COLORS } from 'Helpers';
+import { Rule, DataItem } from 'types';
+
 
 import * as d3 from 'd3';
 
@@ -14,7 +15,9 @@ export interface Props {
     ruleAgg: RuleAgg,
     scoreDomain: [number, number] | [undefined, undefined],
     showIDs: string[],
-    highlightRule: string
+    highlightRule: string,
+    samples: DataItem[],
+    protectedVal: string
 }
 export interface State {
 
@@ -94,7 +97,7 @@ export default class Bubble extends React.Component<Props, State>{
             .style('stroke-width', 1)
     }
     render() {
-        let { ruleAgg, scoreDomain, highlightRule } = this.props
+        let { ruleAgg, scoreDomain, highlightRule, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules)
 
@@ -103,13 +106,12 @@ export default class Bubble extends React.Component<Props, State>{
         // cluster item circles to a big circle
         let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
         
-        let opacityScale = d3
+        let scoreScale = d3
             .scaleLinear()
             .domain([0, scoreDomain[1]])
-            .range([0.2, 1])
+            .range([0, 0.6])
         // store the position of circles
-        let width = Math.floor(Math.sqrt(items.length)), //number of items of each row
-            radius = 2 //radius of the item
+        let radius = 4, width=200, scaleRatio=1 //radius of the item
 
         let root: ItemHierarchy = {
             id: 'root',
@@ -172,7 +174,8 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         const pack = d3.pack()
-            .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
+            .size([width, width])
+            // .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
@@ -182,28 +185,45 @@ export default class Bubble extends React.Component<Props, State>{
         let itemsPos: any[] = []
 
         datum.children.forEach((set:any) => {
+            let scoreColor = d3.interpolateOranges(scoreScale(set.children[0].data.score))
+            let strokeColor = highlightRule==undefined?scoreColor:(set.data.id.includes(highlightRule)?scoreColor:'#ccc')
+            let opacity = highlightRule==undefined?1:(set.data.id.includes(highlightRule)?1:0.2)
             itemCircles.push(<circle
                 key={set.data.id}
                 id={set.data.id}
                 cx={set.x}
                 cy={set.y}
                 r={set.r}
-                fill="transparent"
-                stroke={set.data.id.includes(highlightRule)?"gray":"#FF9F1E"}
-                strokeWidth={set.data.id.includes(highlightRule)?4:1}
+                // fill={scoreColor}
+                fill="white"
+                // opacity='0.5'
+                stroke={strokeColor}
+                // fill="transparent"
+                // stroke={set.data.id.includes(highlightRule)?"gray":"#FF9F1E"}
+                strokeWidth={set.data.id.includes(highlightRule)?4:4}
             />)
             set.children.forEach((item: any) => {
+                scaleRatio = radius/item.r
                 itemsPos.push({
                     x: item.x,
                     y: item.y,
-                    r: item.r,
+                    r: item.r*0.9,
                     ...item.data
                 })
+                let id = item.data.id
+                let sample = samples[id]
+                let [protectedAttr, protectedVal] = this.props.protectedVal.split('=')
+                let itemColor = sample[protectedAttr]==protectedVal?COLORS[1]: COLORS[0]
                 itemCircles.push(
                     <circle
-                        key={item.data.id} cx={item.x} cy={item.y} r={item.r*0.8 }
-                        fill="#FF9F1E"
-                        opacity={opacityScale(item.data.score)}
+                        key={id} cx={item.x} cy={item.y} r={item.r*0.8 }
+                        fill={sample.class=="1"?itemColor :'white'}
+                        stroke={itemColor}
+                        strokeWidth='4'
+                        opacity={opacity}
+                        // fill={d3.interpolateOranges(scoreScale(item.data.score))}
+                        // fill="#FF9F1E"
+                        // opacity={scoreScale(item.data.score)}
                     />
                 )
             })
@@ -276,7 +296,9 @@ export default class Bubble extends React.Component<Props, State>{
         //             />
         //     })
 
-        return <g className='bubbleSet' id={`bubble_${ruleAgg.id}`}>
+        return <g className='bubbleSet' 
+            id={`bubble_${ruleAgg.id}`} 
+            transform={`scale(${scaleRatio})`}>
             {itemCircles}
             {/* {outlines} */}
         </g>

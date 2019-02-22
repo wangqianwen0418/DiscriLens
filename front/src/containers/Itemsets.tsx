@@ -11,7 +11,7 @@ export function mapStateToProps(state:StoreState) {
         ruleThreshold: state.ruleThreshold,
         keyAttrNum:state.keyAttrNum,
         dragArray: state.dragArray, 
-        protectedAttr: state.protectedAttr,
+        protectedVal: state.protectedVal,
         showAttrNum: state.showAttrNum,
         fetchKeyStatus: state.fetchKeyStatus
     };

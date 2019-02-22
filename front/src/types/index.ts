@@ -42,6 +42,7 @@ export interface StoreState{
     fetchKeyStatus: Status,    // loadinf status
     ruleThreshold: [number, number],    // slider bar interaction, select threshold of rule filtering
     protectedAttr: string, // record protected attr
+    protectedVal: string,
     // show_attrs: string[], // record all the attrs that are shown
     showAttrNum: number,
     dragArray: string[],   // array to record each attr's location, used for dragging function

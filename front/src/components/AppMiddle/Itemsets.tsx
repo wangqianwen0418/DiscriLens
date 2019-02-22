@@ -17,7 +17,7 @@ export interface Props {
     keyAttrNum: number,
     showAttrNum: number,
     dragArray: string[],
-    protectedAttr: string,
+    protectedVal: string,
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
@@ -384,12 +384,14 @@ export default class Itemset extends React.Component<Props, State>{
             {
                 ruleAggs
                     .map((ruleAgg, i) =>
-                        <g key={'bubble_' + ruleAgg.id} transform={`translate(${100 + 200 * i}, 0)`} >
+                        <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
                             <Bubble 
                                 ruleAgg={ruleAgg} 
                                 scoreDomain={scoreDomain} 
                                 showIDs={showIDs} 
                                 highlightRule={this.state.highlightRule}
+                                samples = {this.props.samples}
+                                protectedVal={this.props.protectedVal}
                             />
                         </g>
                     )
@@ -515,7 +517,7 @@ export default class Itemset extends React.Component<Props, State>{
                 break
 
         }
-        return (<svg className='itemset' style={{ width: "4000px", height: "800px" }}>
+        return (<svg className='itemset' style={{ width: "100%", height: "100%" }}>
             <g className='rules' >
                 {content}
             </g>

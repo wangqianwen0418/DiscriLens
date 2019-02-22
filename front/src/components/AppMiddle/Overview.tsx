@@ -9,6 +9,7 @@ export interface Props{
     allRules: Rule[],
     keyAttrs: string[],
     ruleThreshold: number[],
+    protectedVal: string,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -288,6 +289,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputLeft?
                         <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inoutBoxLeft'>
                             <input type='number' 
+                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
@@ -305,6 +307,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputRight?
                         <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inputBoxRight'>
                             <input type='number' 
+                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
@@ -349,8 +352,26 @@ export default class Overview extends React.Component<Props,State>{
     private renderAxis=()=>{
         let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.2f'))
         .tickValues(this.ruleProcessing().scale.ticks(1).concat(this.ruleProcessing().scale.domain()))
+
         d3.selectAll('.axis').remove()
         d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`)
         .attr('stroke-width','1.5px').call(axis)
+
+        let axisLabel = d3.select('.axis')
+            .append('g')
+            .attr('class', 'axisName')
+
+        axisLabel.append('text')
+        .attr('x', window.innerWidth*0.1)
+        .attr('y', 30)
+        .text(`favor to ${this.props.protectedVal}`)
+        .style('fill', 'gray')
+
+        axisLabel.append('text')
+        .attr('x', 0)
+        .attr('y', 30)
+        .text(`against ${this.props.protectedVal}`)
+        .style('fill', 'gray')
+        .style('text-anchor', 'start')
     }
 }

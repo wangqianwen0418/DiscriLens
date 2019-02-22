@@ -22,20 +22,19 @@ let initState:StoreState
 
 let dataSets = ['dataTest', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    protectedAttrs = ['sex', 'marital'],
-    dataSelect = 2,
-    modelSelect = 0,
-    protectedSelect = 1,
+    dataSelect = 1,
+    modelSelect = 2,
 
     dataSet = dataSets[dataSelect],
-    model = models[modelSelect],
-    protectedAttr = protectedAttrs[protectedSelect]
+    model = models[modelSelect]
 
 if (TEST){
     let filename = dataSet + '_' + model
     let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
+    let protectedVal = rules[0].pd
+    let protectedAttr = protectedVal.split('=')[0]
     let ruleThreshold: [number, number] = [-0.1, 0.1]
 
     let dragArray = [...Object.keys(samples[0])]
@@ -46,8 +45,8 @@ if (TEST){
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
     // move key attributes to the front
-    // keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
-    keyAttrs=['poutcome', 'education', 'previous']
+    keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    // keyAttrs=['poutcome', 'education', 'previous']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
     
 
@@ -58,11 +57,12 @@ if (TEST){
       allRules: rules,
       rules: filterRules(rules, ruleThreshold, keyAttrs),
       protectedAttr,
+      protectedVal,
       fetchSampleStatus: Status.COMPLETE,
       fetchKeyStatus: Status.COMPLETE,
       ruleThreshold,
       dragArray,
-      showAttrNum: keyAttrs.length
+      showAttrNum: keyAttrs.length,
   }
 }else{
   initState = {
@@ -71,6 +71,7 @@ if (TEST){
     allRules: [],
     rules: [],
     protectedAttr: '',
+    protectedVal: '',
     fetchSampleStatus: Status.COMPLETE,
     fetchKeyStatus: Status.COMPLETE,
     ruleThreshold: [-0.05, 0.05],
