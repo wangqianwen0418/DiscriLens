@@ -279,7 +279,7 @@ export default class Attributes extends React.Component<Props, State>{
         let showAttrs = dragArray.slice(0, showAttrNum), keyAttrs = dragArray.slice(0, keyAttrNum)
         let { selected_bar } = this.state
         // get numerical data
-        samples = samples.slice(0, 1000)
+        samples = samples.slice(0, Math.floor(samples.length/2) )
         let counts:number[] = [] // the height of each bar
         let attr_counts:number[] = [0] // the number of previous bars when start draw a new attr
         dragArray.forEach(attr => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
 import { Icon } from 'antd';
-import { ruleAggregate, getAttrRanges, containsAttr, RuleAgg, RuleNode } from 'Helpers';
+import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode } from 'Helpers';
 import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
@@ -400,28 +400,18 @@ export default class Itemset extends React.Component<Props, State>{
         </g>
     }
     draw() {
-        let { rules, samples, ruleThreshold, keyAttrNum, dragArray } = this.props
+        let { rules, samples, keyAttrNum, dragArray } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
-        samples = samples.slice(1000, 2000)
+        samples = samples.slice(Math.floor(samples.length/2), samples.length )
 
         let keyAttrs = dragArray.slice(0, keyAttrNum)
-
-        rules = rules
-            // risk threshold
-            .filter(rule => rule.risk_dif >= ruleThreshold[1] || rule.risk_dif <= ruleThreshold[0])
-            .filter(rule => rule.cls == 'class=1')
-            // normalize risk diff => favor PD
-            .map(rule => {
-                return { ...rule, favorPD: rule.cls == 'class=1' ? rule.risk_dif : -1 * rule.risk_dif }
-            })
-            .filter(rule => containsAttr(rule.antecedent, keyAttrs).length >= keyAttrs.length)
 
         let itemMax = Math.max(...rules.map(d => d.items.length))
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
-
+        console.info(results)
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         let offsetY = 0

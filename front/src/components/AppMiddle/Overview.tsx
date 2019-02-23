@@ -203,6 +203,7 @@ export default class Overview extends React.Component<Props,State>{
          * Processing rules by key attrs
          *  */ 
         let rules = filterRulesNoThreshold(allRules, keyAttrs)
+        console.info('filter rules', rules)
         let curveX:number[] = []
         let dataKeyAttr: curveData[] = []
         rules.forEach((rule,rule_i)=>{
@@ -213,6 +214,8 @@ export default class Overview extends React.Component<Props,State>{
                 dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
             }
         })
+
+        console.info(curveX, dataKeyAttr)
 
         let curveY:number[] = []
         curveX = []

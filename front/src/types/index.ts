@@ -33,6 +33,8 @@ export enum Status {
 
 export interface StoreState{
     // key_attrs: string[], // record key attrs
+    dataset: string,
+    model: string,
     keyAttrNum: number,
     samples: DataItem[],    // record all samples 
     allRules: Rule[], // all rules

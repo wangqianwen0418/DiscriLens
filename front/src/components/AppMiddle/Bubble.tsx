@@ -159,7 +159,7 @@ export default class Bubble extends React.Component<Props, State>{
                     strokeWidth={rule.id==highlightRule?4:1} 
                     />
             })
-        console.info('show ids', showIDs, 'outline', outlines)
+        // console.info('show ids', showIDs, 'outline', outlines)
 
         return <g className='bubbleSet' id={`bubble_${ruleAgg.id}`}>
             {itemCircles}

@@ -168,7 +168,7 @@ export interface ChangeRuleThresholds{
 export const ChangeRuleThresholds = (ruleThreshold:[number, number]):ChangeRuleThresholds =>{
     return ({
         type: CHANGE_RULE_THRESHOLD,
-        ruleThreshold
+        ruleThreshold: [ruleThreshold[0]||0, ruleThreshold[1]||0]
     });
 }
 

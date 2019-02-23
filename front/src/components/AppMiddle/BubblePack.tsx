@@ -200,7 +200,7 @@ export default class Bubble extends React.Component<Props, State>{
                 stroke={strokeColor}
                 // fill="transparent"
                 // stroke={set.data.id.includes(highlightRule)?"gray":"#FF9F1E"}
-                strokeWidth={set.data.id.includes(highlightRule)?4:4}
+                strokeWidth={set.data.id.includes(highlightRule)?4:2}
             />)
             set.children.forEach((item: any) => {
                 scaleRatio = radius/item.r
@@ -219,7 +219,7 @@ export default class Bubble extends React.Component<Props, State>{
                         key={id} cx={item.x} cy={item.y} r={item.r*0.8 }
                         fill={sample.class=="1"?itemColor :'white'}
                         stroke={itemColor}
-                        strokeWidth='4'
+                        strokeWidth='2'
                         opacity={opacity}
                         // fill={d3.interpolateOranges(scoreScale(item.data.score))}
                         // fill="#FF9F1E"

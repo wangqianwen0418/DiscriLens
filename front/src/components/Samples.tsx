@@ -14,7 +14,7 @@ export interface IState{
 export default class Samples extends React.Component<IProps, IState>{
     public render(){
         let {samples, featchSampleStatus} = this.props
-        samples = samples.slice(0,1000)
+        samples = samples.slice(0,Math.floor(samples.length/2))
         // console.info(featchSampleStatus)
         if (featchSampleStatus==Status.PENDING){
             return <div className='samples' >
