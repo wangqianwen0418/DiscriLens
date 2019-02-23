@@ -2,6 +2,7 @@
  import Attributes from 'containers/Attributes';
  import Itemsets from 'containers/Itemsets';
  import Overview from 'containers/Overview';
+ import ModelSelection from 'containers/ModelSelection';
  import {Col, Row} from 'antd';
 
  export default class AppMiddel extends React.Component{
@@ -15,6 +16,7 @@
           <Col span={4} className='App-left' id='App-left' style={{height:"100%"}}>
             <svg className='overview' style={{width:"100%", height:"100%"}}>
               <Overview/>
+              <ModelSelection/>
             </svg>
           </Col>
 
