@@ -411,7 +411,7 @@ export default class Itemset extends React.Component<Props, State>{
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
-        console.info(results)
+        // console.info(results)
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         let offsetY = 0

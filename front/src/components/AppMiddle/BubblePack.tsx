@@ -101,7 +101,7 @@ export default class Bubble extends React.Component<Props, State>{
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules)
 
-        console.info(highlightRule)
+        // console.info(highlightRule)
 
         // cluster item circles to a big circle
         let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])

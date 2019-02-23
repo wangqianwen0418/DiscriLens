@@ -203,7 +203,7 @@ export default class Overview extends React.Component<Props,State>{
          * Processing rules by key attrs
          *  */ 
         let rules = filterRulesNoThreshold(allRules, keyAttrs)
-        console.info('filter rules', rules)
+        // console.info('filter rules', rules)
         let curveX:number[] = []
         let dataKeyAttr: curveData[] = []
         rules.forEach((rule,rule_i)=>{
@@ -215,7 +215,7 @@ export default class Overview extends React.Component<Props,State>{
             }
         })
 
-        console.info(curveX, dataKeyAttr)
+        // console.info(curveX, dataKeyAttr)
 
         let curveY:number[] = []
         curveX = []

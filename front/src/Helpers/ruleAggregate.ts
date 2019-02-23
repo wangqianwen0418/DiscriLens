@@ -1,5 +1,5 @@
 import {Rule, DataItem} from 'types';
-// import {getAttrRanges} from './getAttrRanges';
+import {getAttrRanges} from './getAttrRanges';
 
 
 export interface RuleNode{
@@ -171,6 +171,26 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
             })
         }
     }
+    // sort rule agg 
+
+    const sortInf = (ante: string[]):number=>{
+        const reducer = (acc: number, cur:string)=>{
+            let [attr, val] = cur.split('=')
+            let ranges = getAttrRanges(samples, attr)
+            let rangeIdx = ranges.indexOf(val)
+            let unit = Math.pow(10, keyAttrs.length-1 - keyAttrs.indexOf(attr))
+            return acc + rangeIdx*unit
+        }
+        let orderScore = ante.reduce(reducer, 0)
+        return orderScore
+    }
+    positiveRuleAgg.sort((aggA, aggB)=>{
+        return sortInf(aggA.antecedent) - sortInf(aggB.antecedent)
+    })
+    negativeRuleAgg.sort((aggA, aggB)=>{
+        return sortInf(aggA.antecedent) - sortInf(aggB.antecedent)
+    })
+    
     return {positiveRuleAgg, negativeRuleAgg}
 }
 

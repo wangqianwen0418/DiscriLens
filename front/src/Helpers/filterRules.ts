@@ -3,10 +3,10 @@ import {containsAttr} from 'Helpers';
 export const filterRules = (rules: Rule[], ruleThreshold:[number, number], keyAttrs: string[]):Rule[]=>{
     rules = filterRulesNoThreshold( rules, keyAttrs)
             // risk threshold
-    console.info(rules, ruleThreshold)
+    // console.info(rules, ruleThreshold)
     rules = rules.filter(rule => rule.favorPD >=0? (rule.favorPD>=ruleThreshold[1]) : rule.favorPD <= ruleThreshold[0])
            
-    console.info(rules)
+    // console.info(rules)
     return rules
 }
 
