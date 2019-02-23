@@ -2,26 +2,26 @@
 import pandas as pd
 # from random import randint
 # import re
-samples = pd.read_json('./academic_xgb_samples.json')
-# # df.to_json('academic_xgb_samples.json', orient='records') 
-# # samples = pd.read_json('./academic_xgb_samples.json')
-# samples.to_json('academic_xgb_samples2.json', orient='records') 
-# # samples['ID'] = list(range(1000)) + list(range(1000))
-# # samples.to_json('./academic_lr_samples.json', orient='records')
+# samples = pd.read_json('./academic_xgb_samples.json')
+# # # df.to_json('academic_xgb_samples.json', orient='records') 
+# # # samples = pd.read_json('./academic_xgb_samples.json')
+# # samples.to_json('academic_xgb_samples2.json', orient='records') 
+# # # samples['ID'] = list(range(1000)) + list(range(1000))
+# # # samples.to_json('./academic_lr_samples.json', orient='records')
 
-# add item id to rules
-def item_within_rule(item, rule_context):
-    for attr_val in rule_context:
-        attr, val = attr_val.split('=')
-        if not item[attr] == val :
-            return False
-    return True
+# # add item id to rules
+# def item_within_rule(item, rule_context):
+#     for attr_val in rule_context:
+#         attr, val = attr_val.split('=')
+#         if not item[attr] == val :
+#             return False
+#     return True
 
-rules = pd.read_json('./academic_xgb_rules.json')
-rules['items'] = ''
-for idx, rule in rules.iterrows():
-    rules.at[idx, 'items'] = [sample['id'] for i,sample in samples.iterrows() if item_within_rule(sample, rule["antecedent"])] 
-rules.to_json('./academic_xgb_rules.json', orient='records')
+# rules = pd.read_json('./academic_xgb_rules.json')
+# rules['items'] = ''
+# for idx, rule in rules.iterrows():
+#     rules.at[idx, 'items'] = [sample['id'] for i,sample in samples.iterrows() if item_within_rule(sample, rule["antecedent"])] 
+# rules.to_json('./academic_xgb_rules.json', orient='records')
 
 # numerical_samples = samples.copy()
 
@@ -48,8 +48,9 @@ rules.to_json('./academic_xgb_rules.json', orient='records')
 ###################
 # normalized rules
 #################/
-rule_file = './academic_xgb_rules.json'
-rules = pd.read_json(rule_file)
+rule_file = './bank_knn_rules.json'
+old_rules = pd.read_json(rule_file)
+rules = old_rules.copy()
 antecedents = []
 for idx, rule in rules.iterrows():
     ante = rule["antecedent"]
@@ -69,9 +70,9 @@ for idx, rule in rules.iterrows():
                 "risk_dif": -1*rule["risk_dif"] ,
                 "elift": 1/rule["elift"]
             })
-            rules.iloc[idx] = new_row
+            rules.loc[idx] = new_row
     else: 
-        rules = rules.drop([idx])
+        rules = rules.drop(idx)
             
 rules.to_json(rule_file, orient='records') 
 

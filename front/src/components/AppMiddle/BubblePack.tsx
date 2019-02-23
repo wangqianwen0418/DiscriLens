@@ -174,7 +174,7 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         const pack = d3.pack()
-            .size([width, width])
+            .size([width, 3*width])
             // .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
             d3.hierarchy(root)
