@@ -153,7 +153,7 @@ export default class Attributes extends React.Component<Props, State>{
         }
     }
 
-    drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, selected_bar: string[], offsetX = 0, offsetY = 0, ) => {
+    drawCurves = (attr: string, attr_i:number, samples: DataItem[], height: number, curveFlag: boolean, curve_Width: number, selected_bar: string[]) => {
         // get ranges of this attr
         let ranges = samples.map(d => d[attr])
             .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
@@ -236,7 +236,7 @@ export default class Attributes extends React.Component<Props, State>{
         
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
-        return <g key={attr + 'curve'} transform={`translate(${offsetX}, ${offsetY})`}>
+        return <g key={attr + 'curve'}>
             <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
             {ListNum.map((List,i)=>{
                     let title: string = ''
@@ -278,8 +278,7 @@ export default class Attributes extends React.Component<Props, State>{
      * 
      * */
     drawBars = (attr: string, attr_i:number, samples: DataItem[],
-        barWidth: number, max_accept: number, max_reject: number, height: number, color: string[],
-        offsetX = 0, offsetY = 0): JSX.Element => {
+        barWidth: number, max_accept: number, max_reject: number, height: number, color: string[]): JSX.Element => {
         // let ranges = samples.map(d => d[attr])
         //     .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
         let ranges = getAttrRanges(samples, attr) 
@@ -290,7 +289,7 @@ export default class Attributes extends React.Component<Props, State>{
         
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:barWidth - barWidthidth * 0.1,y:this.height/2,z:0}]
-        return <g key={attr} transform={`translate(${offsetX}, ${offsetY})`}>
+        return <g key={attr}>
             <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
             {ranges.map((range: string, range_i) => {
                 let accept_num = samples_accept.filter(s => s[attr] === range).length,
@@ -363,7 +362,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - window.innerWidth * 0.1)/ step - 1.2)
+                let endNum = Math.floor((e.x - window.innerWidth / 6 - this.props.offsetX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){

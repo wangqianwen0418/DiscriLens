@@ -33,7 +33,7 @@ let dataSets = ['dataTest', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataSet + '_' + model
-    let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
+    let {key_attrs: keyAttrs} = require('./testdata/'+dataSet+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
     let ruleThreshold: [number, number] = [-0.1, 0.1]
@@ -62,7 +62,8 @@ if (TEST){
       fetchKeyStatus: Status.COMPLETE,
       ruleThreshold,
       dragArray,
-      showAttrNum: keyAttrs.length
+      showAttrNum: keyAttrs.length,
+      showDataset:dataSet
   }
 }else{
   initState = {
@@ -75,7 +76,8 @@ if (TEST){
     fetchKeyStatus: Status.COMPLETE,
     ruleThreshold: [-0.05, 0.05],
     dragArray: [],
-    showAttrNum: 0
+    showAttrNum: 0,
+    showDataset: ''
 }
 }
 

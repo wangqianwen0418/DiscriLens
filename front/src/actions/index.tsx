@@ -1,7 +1,7 @@
 import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES, 
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
-    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS} from 'Const';
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,CHANGE_SHOW_DATASET} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -252,6 +252,17 @@ export const ChangeKeyAttr = (keyAttrs: string[])=>{
     }
 }
 
+export interface showDataset{
+    type: CHANGE_SHOW_DATASET,
+    showDataset: string
+}
+
+export const changeShowDataset = (showDataset: string): showDataset=>{
+    return {
+        type: CHANGE_SHOW_DATASET,
+        showDataset
+    }
+}
 // export const KeyAttr = (keyAttrs: string[], key_groups:KeyGroup[])=>{
 //     return (dispatch: any)=>{
 //         dispatch(FindKeys(keyAttrs, key_groups))
@@ -259,7 +270,7 @@ export const ChangeKeyAttr = (keyAttrs: string[])=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let {key_attrs} = require('../testdata/'+ dataset + '_' + model + '_key.json'), 
+    let {key_attrs} = require('../testdata/'+ dataset + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
     jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
@@ -274,16 +285,25 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
     dragArray = key_attrs.concat(dragArray.filter(attr=>!key_attrs.includes(attr)))
 
     return (dispatch: any) =>{
-        dispatch(dispatch(GenerateRules(jsonRule)))
         dispatch(GenerateSamples(jsonSamples))
         dispatch(ChangeKeyAttr(key_attrs))
         dispatch(ChangeProtectedAttr(protectedAttr))
         dispatch(ChangeShowAttr(key_attrs))
         dispatch(ChangeDragArray(dragArray))
+        dispatch(dispatch(GenerateRules(jsonRule)))
     }
 }
 
+export const switchModel=(dataset:string,model:string)=>{
+    let jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
+    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json')
+
+    return (dispatch: any) =>{
+        dispatch(dispatch(GenerateRules(jsonRule)))
+        dispatch(GenerateSamples(jsonSamples))
+    }
+}
 
 export type AllActions = GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-ChangeDragArray|ChangeKeyAttr|ChangeShowAttr
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset

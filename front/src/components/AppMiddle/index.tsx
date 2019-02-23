@@ -12,13 +12,13 @@
 
          return <Row className='App-middle'>
 
-          <Col span={3} className='App-left' id='App-left' style={{height:"100%"}}>
+          <Col span={4} className='App-left' id='App-left' style={{height:"100%"}}>
             <svg className='overview' style={{width:"100%", height:"100%"}}>
               <Overview/>
             </svg>
           </Col>
 
-          <Col span={21} className='App-right' style={{height:"100%"}}>
+          <Col span={20} className='App-right' style={{height:"100%"}}>
           <svg className='attribute' style={{width:"100%", height: "25%"}}>
                 <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
             </svg>

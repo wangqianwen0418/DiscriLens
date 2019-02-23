@@ -10,15 +10,4 @@
     font-size: 10px;
 }
 
-.App-middle .App-left{
-    float:left;
-    height:100%;
-    width:10%;
-}
-
-.App-middle .App-right{
-    float:right;
-    height:100%;
-    width:90%;
-}
 
