@@ -1,7 +1,8 @@
 import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES, 
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
-    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,CHANGE_SHOW_DATASET} from 'Const';
+    CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
+    CHANGE_XSCALE,CHANGE_SHOW_DATASET} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -219,6 +220,20 @@ export const ChangeShowAttr = (showAttrs:string[]):ChangeShowAttr =>{
     });
 }
 
+/*****************
+all about changing xScale max
+*****************/ 
+export interface ChangeXScaleMax{
+    type:CHANGE_XSCALE,
+    xScaleMax: number
+}
+
+export const ChangeXSclaeMax = (xScaleMax:number):ChangeXScaleMax =>{
+    return ({
+        type: CHANGE_XSCALE,
+        xScaleMax
+    });
+}
 // combine to start
 
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
@@ -306,4 +321,4 @@ export const switchModel=(dataset:string,model:string)=>{
 
 export type AllActions = GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax

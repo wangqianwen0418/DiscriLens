@@ -10,12 +10,13 @@
      barWidth = this.step * 0.9;
      offsetX=110;
      render(){
-
          return <Row className='App-middle'>
 
           <Col span={4} className='App-left' id='App-left' style={{height:"100%"}}>
-            <svg className='overview' style={{width:"100%", height:"100%"}}>
+            <svg className='overview' style={{width:"100%", height:"30%"}}>
               <Overview/>
+            </svg>
+            <svg className='modelSelection' style={{width:"100%", height:"70%"}}>
               <ModelSelection/>
             </svg>
           </Col>

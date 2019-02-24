@@ -63,7 +63,8 @@ if (TEST){
       ruleThreshold,
       dragArray,
       showAttrNum: keyAttrs.length,
-      showDataset:dataSet
+      showDataset:dataSet,
+      xScaleMax: -1,
   }
 }else{
   initState = {
@@ -77,7 +78,8 @@ if (TEST){
     ruleThreshold: [-0.05, 0.05],
     dragArray: [],
     showAttrNum: 0,
-    showDataset: ''
+    showDataset: '',
+    xScaleMax: -1,
 }
 }
 

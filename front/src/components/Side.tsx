@@ -36,7 +36,6 @@ export default class Side extends React.Component<Props, State>{
   }
   selectDataset(e:string){
     this.setState({dataset_name: e})
-    this.props.onSelect(e)
     switch(e){
       case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'lr'});break}
       case 'bank': {this.setState({protect_attr:'maritary'});this.setState({model_name:'xgb'});break}

@@ -1,0 +1,7 @@
+.axisSelection .domain{
+    stroke: rgb(204, 204, 204) !important;
+}
+
+.axisSelection .tick line{
+    stroke: rgb(204, 204, 204) !important;
+}

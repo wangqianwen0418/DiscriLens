@@ -9,9 +9,8 @@ export interface Props{
     allRules: Rule[],
     keyAttrs: string[],
     ruleThreshold: number[],
-    showDataset: string,
-    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void,
-    onChangeModel:(dataset:string,model:string) => void
+    xScaleMax: number,
+    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
     transformXLeft: number,
@@ -201,7 +200,7 @@ export default class Overview extends React.Component<Props,State>{
         }
     }
     ruleProcessing(){
-        let {ruleThreshold, allRules,keyAttrs} = this.props
+        let {ruleThreshold, allRules,keyAttrs, xScaleMax} = this.props
         let {inputLeft, inputRight} = this.state
         /**
          * Processing rules by key attrs
@@ -220,7 +219,6 @@ export default class Overview extends React.Component<Props,State>{
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
-        // console.log(dataKeyAttr.length,step)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{
@@ -255,11 +253,11 @@ export default class Overview extends React.Component<Props,State>{
 
 
         // define scales
-        let maxAbsoluteX = rules.length>0?Math.max.apply(null,curveX.map(Math.abs)):0.5
+        let maxAbsoluteX = xScaleMax==-1?(rules.length>0?Math.max.apply(null,curveX.map(Math.abs)):0.5):xScaleMax
         // xScale maps risk_dif to actual svg pixel length along x-axis
         let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
         // yScale maps risk_dif to actual svg pixel length along x-axis
-        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-topStart])
+        let yScale = d3.scaleLinear().domain([0,Math.max(...curveY)]).range([0,bottomEnd-topStart])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
         let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
