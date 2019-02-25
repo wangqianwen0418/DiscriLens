@@ -440,14 +440,14 @@ export default class Itemset extends React.Component<Props, State>{
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
-                        this.drawRuleAgg(ruleAgg, true)
+                        this.drawRuleAgg(ruleAgg, false)
                     }
                 </g>
             )
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemMax)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemMax)
                     offsetY = newY
                     negaRules = negaRules.concat(content)
                 }
