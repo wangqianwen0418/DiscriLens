@@ -19,7 +19,8 @@ export interface State{
     xScaleReverse: d3.ScaleLinear<number, number>
     xScale: d3.ScaleLinear<number, number>
     inputLeft: boolean,
-    inputRight: boolean
+    inputRight: boolean,
+    xScaleMax:number,
 }
 export interface rules{
     rule: string[],
@@ -57,7 +58,8 @@ export default class Overview extends React.Component<Props,State>{
             xScaleReverse:null,
             xScale:null,
             inputLeft: false,
-            inputRight: false
+            inputRight: false,
+            xScaleMax:-1
         }
         this.mouseDownLeft = this.mouseDownLeft.bind(this)
         this.mouseMoveLeft = this.mouseMoveLeft.bind(this)
@@ -84,13 +86,11 @@ export default class Overview extends React.Component<Props,State>{
         this.xLeft = transformXLeft; 
         this.xRight = transformXRight;
     }
-
-    // update state
-    update(xScaleReverse:d3.ScaleLinear<number, number>,zeroAxis:number){
-        this.setState({xScaleReverse})
-        this.setState({zeroAxis})
+    // update axis scales
+    update(xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
+        this.setState({xScale,xScaleReverse})
+        this.setState({xScaleMax:this.props.xScaleMax})
     }
-
     // left dragging
     mouseDownLeft(e: React.MouseEvent){
         if(!this.state.inputLeft){
@@ -270,7 +270,7 @@ export default class Overview extends React.Component<Props,State>{
         let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
         let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
         if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
-
+        if(xScaleMax!=this.state.xScaleMax){this.update(xScale,xScaleReverse)}
         // select rule filtering thresholds
         let selectThr = () =>{
 

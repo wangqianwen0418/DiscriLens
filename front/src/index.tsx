@@ -20,12 +20,12 @@ const TEST = true
 
 let initState:StoreState
 
-let dataSets = ['dataTest', 'academic', 'bank'],
+let dataSets = ['adult', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
     protectedAttrs = ['sex', 'marital'],
-    dataSelect = 2,
+    dataSelect = 0,
     modelSelect = 0,
-    protectedSelect = 1,
+    protectedSelect = 0,
 
     dataSet = dataSets[dataSelect],
     model = models[modelSelect],
@@ -47,7 +47,7 @@ if (TEST){
     }  
     // move key attributes to the front
     // keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
-    keyAttrs=['poutcome', 'education', 'previous']
+    // keyAttrs=['poutcome', 'education', 'previous']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
     
 

@@ -5,3 +5,23 @@
 .axisSelection .tick line{
     stroke: rgb(204, 204, 204) !important;
 }
+
+.borderLine{
+    border-style: inset;
+    
+}
+
+.overviewOut{
+    width:100%;
+    height:70%;
+}
+
+#switchOverview {
+    -webkit-transition: transform 0.3s linear;
+    transition: transform 0.3s linear;
+}
+
+#overviewSelection, #axisSelection{
+    -webkit-transition: transform 0.2s linear;
+    transition: transform 0.2s linear;
+}

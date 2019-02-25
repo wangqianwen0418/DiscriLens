@@ -17,6 +17,7 @@ export interface State{
     fold: boolean,
     dataSet: string,
     selectionCurves: curveData[][],
+    selectedModel: number,
 }
 export interface rules{
     rule: string[],
@@ -46,9 +47,10 @@ export default class modelSelection extends React.Component<Props,State>{
         super(props)
         this.ref = React.createRef()
         this.state={
-            fold: true,
+            fold: false,
             dataSet: null,
             selectionCurves: [],
+            selectedModel: 0,
         }
         this.reverseFold = this.reverseFold.bind(this)
         this.updateModels = this.updateModels.bind(this)
@@ -73,7 +75,7 @@ export default class modelSelection extends React.Component<Props,State>{
     }
 
     changeXScaleMax(max:number){
-        if(this.state.fold){
+        if(!this.state.fold){
             this.props.onChangeXScaleMax(max)
         }else{
             this.props.onChangeXScaleMax(-1)
@@ -124,7 +126,7 @@ export default class modelSelection extends React.Component<Props,State>{
         
         // define scales
         let maxAbsoluteX = ruleAvailable?xMax:0.5
-        return {path:<g id='overviewSelection'>
+        return {path:<g id='overviewSelection' transform={`translate(${this.state.fold?-this.rightEnd*1.5:0},0)`}>
             {
             this.models.map((model,i)=>{
                 
@@ -152,15 +154,14 @@ export default class modelSelection extends React.Component<Props,State>{
                 
                 let changeModel = () => {
                     this.props.onChangeModel(this.props.showDataset,model)
+                    this.setState({selectedModel:i})
                 }
                 axis.push(xScale)
-                return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} id={'multi_models'}>
+                return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} onClick={changeModel} cursor='pointer'>
                         <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/>
-
-                        <foreignObject width={24} height={12} x={this.rightEnd * 1.1} y={bottomEnd*0.85} fontSize={9}>
-                            <input type="radio" id={model} name="drone" value={model}  onClick={changeModel} />
-                            <label>{model}</label>
-                        </foreignObject>
+                        <circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
+                        {i==this.state.selectedModel?<circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={4} style={{fill:'black'}}/>:null}
+                        <text x={this.rightEnd * 1.17} y={bottomEnd*0.9 + 3 }>{this.models[i]}</text>
                     </g>
             })
         }
@@ -173,12 +174,14 @@ export default class modelSelection extends React.Component<Props,State>{
 
     switch(xMax:number){
         let {fold} = this.state
-        let transX = fold?this.leftStart/2:this.rightEnd*1.3,
-            transY = this.intervalHeight * 1.5,
+        let transX = fold?this.leftStart/2:this.rightEnd*1.4,
+            transY = this.bottomEnd + this.intervalHeight*Math.floor(this.models.length/2-1),
             width = this.leftStart/2,
-            height = this.intervalHeight
+            height = this.intervalHeight,
+            cornerR = this.rightEnd * 0.2,
+            buttonWidth = 5
         
-        let icon = d3.line<curveData>().x(d=>d.x).y(d=>d.y) 
+        let line = d3.line<curveData>().x(d=>d.x).y(d=>d.y) 
 
         // the panel is folded
         let iconPoints = [{x:width/4,y:3/8*height,z:0},
@@ -190,36 +193,42 @@ export default class modelSelection extends React.Component<Props,State>{
             {x:width/4,y:height/2,z:0},
             {x:width*3/4,y:height*5/8,z:0}]
         
+        // update state
+        this.changeXScaleMax(xMax)
         let clickButton = () =>{
-            this.changeXScaleMax(xMax)
             this.reverseFold()
         }
+        // border
+        let borderLine = `M${-this.rightEnd*1.4},${this.bottomEnd-this.intervalHeight-transY} h${this.rightEnd*1.4-cornerR} a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR} 
+        v${(this.models.length-1)/2*this.intervalHeight - cornerR} l${buttonWidth*3},${buttonWidth} v${this.intervalHeight-buttonWidth*2}
+        l${-buttonWidth*3},${buttonWidth} v${(this.models.length-1)/2*this.intervalHeight - cornerR}
+        a${cornerR},${cornerR} 0 0 1 ${-cornerR},${cornerR} h${cornerR-this.rightEnd*1.4} `
 
-        return <g id={'switchOverview'} cursor='pointer' onClick={clickButton} transform={`translate(${transX},${transY})`}>
-                <rect width={width} height={height} 
-                style={{fill:'#f0f0f0',stroke:'#d9d9d9'}}><title>{fold?'Expand':'Fold'}</title></rect>
-                <path d={icon(fold?iconPoints:iconPointsReverse)} style={{stroke:'#969696',fill:'none'}}/>
+        // mask
+        let mask = `M${0},${this.bottomEnd - transY} v${height}`
+        return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${transY})`}>
+                <path id="mask" d={mask} style={{strokeWidth:width*2,stroke:'transparent'}}><title>{fold?'Expand':'Fold'}</title></path>
+                <path d={borderLine} style={{fill:'none', stroke:'#d9d9d9', strokeWidth:'1px'}}/>
+                <path d={line(fold?iconPoints:iconPointsReverse)} style={{stroke:'#969696',fill:'none'}}/>
             </g>
     }
 
     render(){
         if(this.state.dataSet!=this.props.showDataset){this.updateModels()}
         let modelSelection = this.modelSelection()
-        return <g key={'overviewOut'} ref={this.ref}>
-                {this.state.fold?null:modelSelection.path}
+        return <g key={'overviewOut'} id="overviewOut" ref={this.ref}>
                 {this.switch(modelSelection.xMax)} 
+                {modelSelection.path}
         </g>
     }
 
     private renderAxisSelection=()=>{
         d3.selectAll('.axisSelection').remove()
-        if(!this.state.fold){
-           for(var i=0;i<this.models.length;i++){
+        for(var i=0;i<this.models.length;i++){
             let axis = d3.axisBottom(this.modelSelection().axis[i]).tickFormat(d3.format('.2f'))
             .tickValues(this.modelSelection().axis[i].ticks(1).concat(this.modelSelection().axis[i].domain()))
-            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisSelection').attr('transform',`translate(0,${this.intervalHeight * (i+1)})`)
+            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisSelection').attr('transform',`translate(${this.state.fold?-this.rightEnd*1.4:0},${this.intervalHeight * (i+1)})`)
             .attr('stroke-width','1.5px').call(axis)
             } 
-        }
     }
 }

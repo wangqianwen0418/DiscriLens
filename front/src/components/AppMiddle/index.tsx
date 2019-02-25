@@ -17,7 +17,7 @@
               <Overview/>
             </svg>
             <svg className='modelSelection' style={{width:"100%", height:"70%"}}>
-              <ModelSelection/>
+               <ModelSelection/>
             </svg>
           </Col>
 

@@ -418,7 +418,7 @@ export default class Attributes extends React.Component<Props, State>{
                 position={draggablePos}
                 onStop={onDragEnd}
                 >
-                    <g className="attr" >
+                    <g className="attr" id={'draggable'+String(attr_i)+attr}>
                         {showAttrs.includes(attr)?
                             <g className='attrChart' cursor='pointer'>
                                 {dataType == 'string'? 
@@ -473,7 +473,7 @@ export default class Attributes extends React.Component<Props, State>{
         /* let boarder = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let keyAttrBoarder:curveData[] = [{x:(keyAttrs.length - 0.2) * step,y:60,z:0},
             {x:(keyAttrs.length - 0.2)* step,y:0,z:0}] */
-        return <g>
+        return <g id={'attributes_draggable'}>
             <g className='attrs' transform={`translate(${this.props.offsetX}, ${this.attr_margin * 2})`}>
                 {attrCharts}
                 {//<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />
