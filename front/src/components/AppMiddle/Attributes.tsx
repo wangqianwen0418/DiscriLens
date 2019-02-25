@@ -403,7 +403,7 @@ export default class Attributes extends React.Component<Props, State>{
                                     msUserSelect:'none'
                                 }}
                                 fontSize={this.fontSize} 
-                                fill={keyAttrs.includes(attr)?'#0e4b8e':'gray'}>
+                                fill={keyAttrs.includes(attr)?'#0e4b8e':'#bbb'}>
                                 {cutTxt(attr, barWidth*0.7/this.fontSize*2)}
                             </text>
                             <text 
