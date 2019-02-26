@@ -11,10 +11,6 @@ then
 ```bash
 pip install -r requirements.txt
 ```
-then install pycausal
-```bash
-pip install git+git://github.com/bd2kccd/py-causal
-```
 
 **Note**: you may fail to install javabridge when run `pip install -r requirements.txt`, here is my solution:  
 ```bash

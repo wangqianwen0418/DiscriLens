@@ -4,8 +4,9 @@ from model.helpers import find_range_cols
 
 import pandas as pd
 import numpy as np
-import math
+from mdlp.discretization import MDLP
 
+import math
 import re
 
 def findRange(thresholds, v):
@@ -29,15 +30,55 @@ def convert_cate(arr):
     return pd.Series([findRange(thresholds, i) for i in arr])
 
 
-def num2cate(dataIn):
-    df = dataIn[:]
-#     new_data = pd.DataFrame()
-    for k in df.columns:
-        if(k in df.select_dtypes(include=['int64','float64'])):
-            values = pd.to_numeric(df[k])
-            df[k] = convert_cate(values.tolist())
+# def num2cate(dataIn):
+#     df = dataIn[:]
+# #     new_data = pd.DataFrame()
+#     for k in df.columns:
+#         if(k in df.select_dtypes(include=['int64','float64'])):
+#             values = pd.to_numeric(df[k])
+#             df[k] = convert_cate(values.tolist())
         
+#     return df
+
+def interval2string(inter):
+    '''
+    Arg:
+        inter (tuple)
+    Return:
+        string; something like a<x<b
+    '''
+    if (inter[0]==-math.inf):
+        return 'x<{}'.format(int(inter[1]))
+    elif (inter[1]==math.inf):
+        return 'x<{}'.format(int(inter[0]))
+    else:
+        return '{}<x<{}'.format(int(inter[0]), int(inter[1]))
+
+def num2cate(df, min=4):
+    '''
+    Arg
+        df (Panda dataframes); the last col must be class, int 0 or 1
+        min (int): The minimum depth of the interval splitting. Overrides
+        the MDLP stopping criterion. If the entropy at a given interval
+        is found to be zero before `min_depth`, the algorithm will stop.
+    Return
+        data (): discretised data using mdlp
+        mdlp (MDLP instance): transform, can be used to transform samples
+    '''
+    Y = df.iloc[:, -1].values
+    continuous_features =df.iloc[:, :-1].select_dtypes(include=['int64','float64']).columns
+    X = df[continuous_features].values
+    mdlp = MDLP(min_depth=4)
+    mdlp.fit(X, Y) # X, Y should be numpy array
+    conv_X = mdlp.transform(X, Y)
+
+    for col_idx, col in enumerate( continuous_features ):
+        print(col)
+        df[col] = [interval2string(i) for i in mdlp.cat2intervals(conv_X, col_idx)]
     return df
+    
+
+
 
 class DataEncoder(object):
     def __init__(self, class_column='class', cat_columns=None):

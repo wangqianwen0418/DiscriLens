@@ -1,4 +1,6 @@
 appnope==0.1.0
+atomicwrites==1.3.0
+attrs==18.2.0
 backcall==0.1.0
 bleach==3.0.2
 Click==7.0
@@ -6,20 +8,25 @@ decorator==4.3.0
 defusedxml==0.5.0
 entrypoints==0.2.3
 Flask==1.0.2
+Flask-Cors==3.0.7
 ipykernel==5.1.0
 ipython==7.2.0
 ipython-genutils==0.2.0
 ipywidgets==7.4.2
 itsdangerous==1.1.0
+javabridge==1.0.18
 jedi==0.13.2
 Jinja2==2.10
+joblib==0.13.1
 jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.2.4
 jupyter-console==6.0.0
 jupyter-core==4.4.0
 MarkupSafe==1.1.0
+-e git+https://github.com/hlin117/mdlp-discretization@205a67faefac9ed4a8102de0c991b580c1a9a922#egg=mdlp_discretization
 mistune==0.8.4
+more-itertools==6.0.0
 nbconvert==5.4.0
 nbformat==4.4.0
 notebook==5.7.4
@@ -29,11 +36,17 @@ pandocfilters==1.4.2
 parso==0.3.1
 pexpect==4.6.0
 pickleshare==0.7.5
+pluggy==0.9.0
 prometheus-client==0.5.0
 prompt-toolkit==2.0.7
 ptyprocess==0.6.0
+py==1.8.0
 py-d3==0.3.0
+-e git://github.com/bd2kccd/py-causal@0c0052ddd184b12658af15d3a088f95490d4b4e2#egg=pycausal
+pydot==1.4.1
 Pygments==2.3.1
+pyparsing==2.3.0
+pytest==4.3.0
 python-dateutil==2.7.5
 pytz==2018.7
 pyzmq==17.1.2
@@ -52,3 +65,4 @@ wcwidth==0.1.7
 webencodings==0.5.1
 Werkzeug==0.14.1
 widgetsnbextension==3.4.2
+xgboost==0.81
