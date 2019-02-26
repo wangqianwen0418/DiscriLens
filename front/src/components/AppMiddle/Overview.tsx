@@ -10,6 +10,7 @@ export interface Props{
     keyAttrs: string[],
     ruleThreshold: number[],
     protectedVal: string,
+    xScaleMax: number,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -20,6 +21,7 @@ export interface State{
     xScale: d3.ScaleLinear<number, number>
     inputLeft: boolean,
     inputRight: boolean,
+    xScaleMax:number,
 }
 export interface rules{
     rule: string[],
@@ -37,6 +39,8 @@ export default class Overview extends React.Component<Props,State>{
     topStart = 40 ;
     // a standard reference length
     markSize = 14; 
+    // interval of different models' view
+    intervalHeight = 90;
     // line's color
     lineColor = 'rgb(204, 204, 204)';
     // color of unselected area (BAD_COLOR is the color of selected area)
@@ -56,6 +60,7 @@ export default class Overview extends React.Component<Props,State>{
             xScale:null,
             inputLeft: false,
             inputRight: false,
+            xScaleMax:-1
         }
         this.mouseDownLeft = this.mouseDownLeft.bind(this)
         this.mouseMoveLeft = this.mouseMoveLeft.bind(this)
@@ -75,19 +80,18 @@ export default class Overview extends React.Component<Props,State>{
         this.renderAxis();
     }
 
+    // initialize states
     initTransformX(transformXLeft:number,transformXRight:number,zeroAxis:number,xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
         this.setState({transformXLeft,transformXRight,zeroAxis,xScale,xScaleReverse})
         this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),xScaleReverse(transformXRight)])
         this.xLeft = transformXLeft; 
         this.xRight = transformXRight;
     }
-
-    // update state
-    update(xScaleReverse:d3.ScaleLinear<number, number>,zeroAxis:number){
-        this.setState({xScaleReverse})
-        this.setState({zeroAxis})
+    // update axis scales
+    update(xScale:d3.ScaleLinear<number, number>,xScaleReverse:d3.ScaleLinear<number, number>){
+        this.setState({xScale,xScaleReverse})
+        this.setState({xScaleMax:this.props.xScaleMax})
     }
-
     // left dragging
     mouseDownLeft(e: React.MouseEvent){
         if(!this.state.inputLeft){
@@ -197,7 +201,7 @@ export default class Overview extends React.Component<Props,State>{
         }
     }
     ruleProcessing(){
-        let {ruleThreshold, allRules,keyAttrs} = this.props
+        let {ruleThreshold, allRules,keyAttrs, xScaleMax} = this.props
         let {inputLeft, inputRight} = this.state
         /**
          * Processing rules by key attrs
@@ -220,7 +224,6 @@ export default class Overview extends React.Component<Props,State>{
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
-        // console.log(dataKeyAttr.length,step)
         let stepCount = 0
         let dataKeyAttr_new:curveData[] = []
         dataKeyAttr.forEach((data,i)=>{
@@ -255,11 +258,11 @@ export default class Overview extends React.Component<Props,State>{
 
 
         // define scales
-        let maxAbsoluteX = Math.max.apply(null,curveX.map(Math.abs))
+        let maxAbsoluteX = xScaleMax==-1?(rules.length>0?Math.max.apply(null,curveX.map(Math.abs)):0.5):xScaleMax
         // xScale maps risk_dif to actual svg pixel length along x-axis
         let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
         // yScale maps risk_dif to actual svg pixel length along x-axis
-        let yScale = d3.scaleLinear().domain([Math.min(...curveY),Math.max(...curveY)]).range([0,bottomEnd-topStart])
+        let yScale = d3.scaleLinear().domain([0,Math.max(...curveY)]).range([0,bottomEnd-topStart])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
         let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
@@ -272,7 +275,7 @@ export default class Overview extends React.Component<Props,State>{
         let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
         let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
         if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
-
+        if(xScaleMax!=this.state.xScaleMax){this.update(xScale,xScaleReverse)}
         // select rule filtering thresholds
         let selectThr = () =>{
 
@@ -331,19 +334,13 @@ export default class Overview extends React.Component<Props,State>{
                 <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 {selectThr()}
             </g>,
-            emptyPath:<g>
-                {//selectThr()
-                }
-            </g>,
             scale:xScale,
             dataKeyAttr:dataKeyAttr_new}
     
     }
     render(){
-        return <g key={'overviewOut'}>
-            {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
+        return <g key={'overviewOut'} ref={this.ref}>
                 {this.ruleProcessing().path}
-            </g>:<g>{this.ruleProcessing().emptyPath}</g>}
         </g>
         // return <g>
         //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>

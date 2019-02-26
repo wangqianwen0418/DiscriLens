@@ -86,6 +86,10 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 }
 
 export default class Bubble extends React.Component<Props, State>{
+    width=100; height=200; scaleRatio = 1; ref: React.RefObject<SVGAElement>=React.createRef();
+    constructor(props: Props){
+        super(props)
+    }
     highlightPath(id: string) {
         d3.select(`path#outline_${id}`)
             .style('stroke-width', 7)
@@ -95,6 +99,11 @@ export default class Bubble extends React.Component<Props, State>{
         d3.selectAll('path.outline')
             .style('stroke', 'gray')
             .style('stroke-width', 1)
+    }
+    getSize(){
+        // return [this.width*this.scaleRatio, this.height*this.scaleRatio]
+        let box = this.ref.current.getBoundingClientRect()
+        return [box.width, box.height]
     }
     render() {
         let { ruleAgg, scoreDomain, highlightRule, samples } = this.props
@@ -111,7 +120,7 @@ export default class Bubble extends React.Component<Props, State>{
             .domain([0, scoreDomain[1]])
             .range([0, 0.6])
         // store the position of circles
-        let radius = 4, width=200, scaleRatio=1 //radius of the item
+        let radius = 4 //radius of the item
 
         let root: ItemHierarchy = {
             id: 'root',
@@ -174,7 +183,7 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         const pack = d3.pack()
-            .size([width, 3*width])
+            .size([this.width, this.height])
             // .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
             d3.hierarchy(root)
@@ -203,7 +212,7 @@ export default class Bubble extends React.Component<Props, State>{
                 strokeWidth={set.data.id.includes(highlightRule)?4:2}
             />)
             set.children.forEach((item: any) => {
-                scaleRatio = radius/item.r
+                this.scaleRatio = radius/item.r
                 itemsPos.push({
                     x: item.x,
                     y: item.y,
@@ -298,7 +307,8 @@ export default class Bubble extends React.Component<Props, State>{
 
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
-            transform={`scale(${scaleRatio})`}>
+            ref={this.ref}
+            transform={`scale(${this.scaleRatio})`}>
             {itemCircles}
             {/* {outlines} */}
         </g>

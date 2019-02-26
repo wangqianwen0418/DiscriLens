@@ -8,7 +8,8 @@ export function mapStateToProps(state:StoreState) {
         allRules: state.allRules,
         protectedVal: state.protectedVal,
         keyAttrs: state.dragArray.slice(0, state.keyAttrNum),
-        ruleThreshold: state.ruleThreshold
+        ruleThreshold: state.ruleThreshold,
+        xScaleMax: state.xScaleMax,
     };
 }
 

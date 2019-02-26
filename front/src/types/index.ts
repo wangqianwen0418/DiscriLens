@@ -48,4 +48,6 @@ export interface StoreState{
     // show_attrs: string[], // record all the attrs that are shown
     showAttrNum: number,
     dragArray: string[],   // array to record each attr's location, used for dragging function
+    showDataset: string, // the dataset that the user is exploring, others will be hidden
+    xScaleMax: number, // used to zoom axis when selection is expanded to keep all axis consistent
 }

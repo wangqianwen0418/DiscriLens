@@ -32,3 +32,21 @@ input[type=number]::-webkit-outer-spin-button {
     width:24px;
     height:12px;
 }
+
+#switchOverview {
+    -webkit-transition: transform 0.3s linear;
+    transition: transform 0.3s linear;
+}
+
+#overviewSelection, #axisSelection{
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+  }

@@ -6,6 +6,7 @@ const Option = Select.Option;
 
 export interface Props{
   ruleThreshold:[number, number],
+  onSelect: (showDataset:string)=>void,
   onStart: (dataset_name:string, model_name:string, protect_attr: string) => void,
   onChange: (ruleThreshold: number[])=> void,
 }
@@ -51,6 +52,8 @@ export default class Side extends React.Component<Props, State>{
     e.preventDefault();
     let {model_name, dataset_name, protect_attr} = this.state
     this.props.onStart(dataset_name, model_name, protect_attr)
+    this.props.onSelect(dataset_name)
+    this.setState({}) // force update
   }
   onChange(e:[number, number]){
     this.props.onChange(e)

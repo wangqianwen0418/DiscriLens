@@ -20,10 +20,10 @@ const TEST = true
 
 let initState:StoreState
 
-let dataSets = ['dataTest', 'academic', 'bank'],
+let dataSets = ['adult', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 2,
-    modelSelect = 1,
+    dataSelect = 1,
+    modelSelect = 2,
 
     dataset = dataSets[dataSelect],
     model = models[modelSelect]
@@ -65,6 +65,8 @@ if (TEST){
       ruleThreshold,
       dragArray,
       showAttrNum: keyAttrs.length,
+      showDataset:dataset,
+      xScaleMax: -1,
   }
 }else{
   initState = {
@@ -80,7 +82,9 @@ if (TEST){
     fetchKeyStatus: Status.COMPLETE,
     ruleThreshold: [-0.05, 0.05],
     dragArray: [],
-    showAttrNum: 0
+    showAttrNum: 0,
+    showDataset: '',
+    xScaleMax: -1,
 }
 }
 

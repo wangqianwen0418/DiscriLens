@@ -13,28 +13,38 @@ def get_rules(dataset_name, protect_attr='',model_name=None):
         model_name = dataset_name
         sample_path = './py/data/{}_clean.csv'.format(dataset_name)
     model_samples = pd.read_csv(sample_path)
+    print('Starting to find rules of ' + model_name + '...')
     rules = find_rules(model_samples, minimum_support=5, min_len=1, protect_attr = protect_attr, target_attr='class', elift_th=[1, 1])
 
     
     rules.to_json(cache_path + '{}_rules.json'.format(model_name),orient='records')
+    print('Rule generation of '+model_name+' done...')
 
-get_rules('adult','sex= Female', 'knn')
-get_rules('adult','sex= Fema le', 'lr')
-get_rules('adult','sex= Female', 'xgb') 
-'''
-get_rules('give_credit','age=0<x<25','knn')
-get_rules('give_credit','age=0<x<25','xgb')
-get_rules('give_credit','age=0<x<25')
-'''
+# get_rules('adult','sex= Female', 'knn')
+# get_rules('adult','sex= Female', 'lr')
+# get_rules('adult','sex= Female', 'xgb') 
+
 # get_rules('bank','marital=divorced','knn') 
-get_rules('bank','marital=divorced','xgb')
-get_rules('bank','marital=divorced','lr')
-# os.system('shutdown -s')
+# get_rules('bank','marital=divorced','xgb')
+# get_rules('bank','marital=divorced','lr')
+
+
+get_rules('german_credit','gender=female','lr')
+get_rules('german_credit','gender=female','xgb')
+get_rules('german_credit','gender=female','knn')
+
+get_rules('academic','gender=F','knn') 
+get_rules('academic','gender=F','xgb')
+get_rules('academic','gender=F','lr')
+
+
+
+print('Finish finding rules...')
 
 models = ['xgb','knn','lr']
-dataSets = ['bank','adult']
+dataSets = ['academic','german_credit']
 
-print('start')
+print('Start adding items...')
 for dataSet in dataSets:
     for model in models:
         sample_name = cache_path  +  dataSet + '_' + model + '_samples.json'
@@ -48,12 +58,15 @@ for dataSet in dataSets:
                     return False
             return True
 
+        print('Entering loop...')
         rules = pd.read_json(rule_name)
         rules['items'] = ''
         for idx, rule in rules.iterrows():
             rules.at[idx, 'items'] = [sample['id'] for i,sample in samples.loc[1000:1999].iterrows() if item_within_rule(sample, rule["antecedent"])] 
         rules.to_json(rule_name, orient='records')
 
-        print(dataSet+'_'+model+' has done')
+        print(dataSet+'_'+model+' has done...')
 
-print('All finished')
+print('All finished!')
+
+os.system('shutdown -s')
