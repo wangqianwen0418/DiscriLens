@@ -22,8 +22,8 @@ let initState:StoreState
 
 let dataSets = ['dataTest', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
-    modelSelect = 2,
+    dataSelect = 2,
+    modelSelect = 1,
 
     dataset = dataSets[dataSelect],
     model = models[modelSelect]

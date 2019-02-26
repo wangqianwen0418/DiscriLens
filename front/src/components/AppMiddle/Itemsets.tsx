@@ -47,6 +47,7 @@ export default class Itemset extends React.Component<Props, State>{
     margin = 65;
     headWidth = this.props.offsetX - this.margin;
     indent: 5;
+    bubbles = [React.createRef()]
 
     constructor(props: Props) {
         super(props)
@@ -386,6 +387,7 @@ export default class Itemset extends React.Component<Props, State>{
                     .map((ruleAgg, i) =>
                         <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
                             <Bubble 
+                            ref={(ref:any)=>this.bubbles.push(ref)}
                                 ruleAgg={ruleAgg} 
                                 scoreDomain={scoreDomain} 
                                 showIDs={showIDs} 
@@ -481,6 +483,7 @@ export default class Itemset extends React.Component<Props, State>{
         // ) {
         //     this.setState({ expandRules: {} })
         // }
+        console.info(this.bubbles)
     }
     render() {
         let { fetchKeyStatus } = this.props
