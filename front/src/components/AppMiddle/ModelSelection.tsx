@@ -178,7 +178,7 @@ export default class modelSelection extends React.Component<Props,State>{
             transY = this.bottomEnd + this.intervalHeight*Math.floor(this.models.length/2-1),
             width = this.leftStart/2,
             height = this.intervalHeight,
-            cornerR = this.rightEnd * 0.2,
+            cornerR = this.rightEnd * 0.1,
             buttonWidth = 5
         
         let line = d3.line<curveData>().x(d=>d.x).y(d=>d.y) 
