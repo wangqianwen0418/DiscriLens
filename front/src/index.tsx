@@ -22,15 +22,15 @@ let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
-    modelSelect = 2,
+    dataSelect = 0,
+    modelSelect = 0,
 
     dataset = dataSets[dataSelect],
     model = models[modelSelect]
 
 if (TEST){
     let filename = dataset + '_' + model
-    // let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
+    let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
@@ -45,7 +45,7 @@ if (TEST){
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
     // move key attributes to the front
-    let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    // let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
     // keyAttrs=['poutcome', 'education', 'previous']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
     
