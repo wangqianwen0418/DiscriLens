@@ -86,7 +86,7 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 }
 
 export default class Bubble extends React.Component<Props, State>{
-    width=100; height=200; scaleRatio = 1; ref: React.RefObject<SVGAElement>=React.createRef();
+    width=100; height=100; scaleRatio = 1; ref: React.RefObject<SVGAElement>=React.createRef();
     constructor(props: Props){
         super(props)
     }
@@ -101,9 +101,9 @@ export default class Bubble extends React.Component<Props, State>{
             .style('stroke-width', 1)
     }
     getSize(){
-        // return [this.width*this.scaleRatio, this.height*this.scaleRatio]
-        let box = this.ref.current.getBoundingClientRect()
-        return [box.width, box.height]
+        return [this.width*this.scaleRatio, this.height*this.scaleRatio]
+        // let box = this.ref.current.getBoundingClientRect()
+        // return [box.width, box.height]
     }
     render() {
         let { ruleAgg, scoreDomain, highlightRule, samples } = this.props
@@ -310,6 +310,7 @@ export default class Bubble extends React.Component<Props, State>{
             ref={this.ref}
             transform={`scale(${this.scaleRatio})`}>
             {itemCircles}
+            <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/>
             {/* {outlines} */}
         </g>
     }
