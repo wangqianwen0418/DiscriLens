@@ -28,3 +28,7 @@ g.rules g.rule{
 g.score circle{
   transform: rotate(-90deg)
 }
+
+.bubblesAgg{
+  transition: transform 0.3s linear;
+}
