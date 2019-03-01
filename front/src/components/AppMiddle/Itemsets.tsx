@@ -10,6 +10,13 @@ import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
 
+const PIN = <g transform={`scale(0.015) `}>
+    <path 
+    stroke='gray'
+    opacity={0.6}
+    d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8zM666.2 549.3l-24.5 24.5 3.8 34.4a259.92 259.92 0 0 1-30.4 153.9L262 408.8c12.9-7.1 26.3-13.1 40.3-17.9 27.2-9.4 55.7-14.1 84.7-14.1 9.6 0 19.3.5 28.9 1.6l34.4 3.8 24.5-24.5L608.5 224 800 415.5 666.2 549.3z"/>
+</g>
+
 export interface Props {
     rules: Rule[],
     samples: DataItem[],
@@ -26,7 +33,8 @@ export interface Props {
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
-    highlightRule: string;
+    hoverRule: string,
+    highlightRules: string[];
 }
 export interface ExpandRule {
     id: string,
@@ -53,12 +61,14 @@ export default class Itemset extends React.Component<Props, State>{
         super(props)
         this.state = {
             expandRules: {},
-            highlightRule: undefined
+            hoverRule: undefined,
+            highlightRules: []
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
+        this.toggleHighlight = this.toggleHighlight.bind(this)
     }
 
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
@@ -105,10 +115,21 @@ export default class Itemset extends React.Component<Props, State>{
         this.setState({ expandRules })
         // console.info(showAttrs, expandRules)
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemMax: number): { content: JSX.Element[], offsetY: number } {
+    toggleHighlight(ruleID: string){
+        let {highlightRules} =this.state
+        let idx = highlightRules.indexOf(ruleID)
+        if (idx==-1){
+            highlightRules.push(ruleID)
+        }else{
+            highlightRules.splice(idx, 1)
+        }
+        this.setState({highlightRules})
+    }
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>): { content: JSX.Element[], offsetY: number } {
         let { rule, children } = ruleNode
         let { antecedent, items, id } = rule
         let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
+        let {highlightRules} = this.state
 
         let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
 
@@ -137,95 +158,97 @@ export default class Itemset extends React.Component<Props, State>{
         // let outCircleRadius = this.lineInterval * 0.8
         // let progressBarWidth = 5
         // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
-        let outRadius = this.lineInterval * 0.9 * items.length / itemMax
-        let inRadius = this.lineInterval * 0.9 * (items.length - rule.sup_pd / rule.conf_pd) / itemMax
-        let circleRadius = (outRadius + inRadius) / 2, progressBarWidth = outRadius - inRadius
-        let parent = <g className={`${ruleNode.rule} rule`}
+
+        let inConf = Math.min(rule.conf_pd, rule.conf_pnd)
+        
+        let progressBarWidth = this.lineInterval*0.2
+        let outRadius = itemScale(items.length) + progressBarWidth/2
+        let inRadius = outRadius -  progressBarWidth*1.1
+        let parent = <g className={`${ruleNode.rule.id} rule`}
             transform={`translate(${this.props.offsetX}, ${offsetY})`}
             // tslint:disable-next-line:jsx-no-lambda
-            onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
+            onMouseEnter={()=>this.setState({hoverRule: rule.id.toString()})}
             // tslint:disable-next-line:jsx-no-lambda
-            onMouseLeave={()=> this.setState({highlightRule:undefined})}
+            onMouseLeave={()=> this.setState({hoverRule:undefined})}
             >
             <g 
                 className="score" 
-                transform={`translate(${-circleRadius + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
+                transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
                 // //tslint:disable-next-line:jsx-no-lambda
                 // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
                 // // tslint:disable-next-line:jsx-no-lambda
                 // onMouseLeave={()=> this.setState({highlightRule:''})}
             >
+                
                 <circle
-                    className="background"
-                    r={circleRadius}
+                    className="background out"
+                    r={outRadius}
                     fill='none'
-                    stroke="#ccc"
+                    stroke="#eee"
+                    strokeLinecap="round"
                     strokeWidth={progressBarWidth}
-                    strokeDasharray={circleRadius * 2 * Math.PI}
+                    strokeDasharray={outRadius * 2 * Math.PI}
                     strokeDashoffset="0" />
                 <circle
-                    className="conf_pnd bar"
+                    className="out bar"
                     stroke="#FF9F1E"
                     strokeWidth={progressBarWidth}
-                    r={circleRadius}
+                    strokeLinecap="round"
+                    r={outRadius}
                     fill='none'
-                    strokeDasharray={circleRadius * 2 * Math.PI}
-                    strokeDashoffset={circleRadius * 2 * Math.PI * (1 - rule.conf_pnd)} />
+                    strokeDasharray={outRadius * 2 * Math.PI}
+                    strokeDashoffset={outRadius * 2 * Math.PI * (1 - rule.conf_pd)} />
                 <circle
-                    className="conf_pd bar"
+                    className="out bar"
+                    // stroke="#98E090"
+                    stroke="#f4d6ba"
+                    strokeWidth={progressBarWidth}
+                    strokeLinecap="round"
+                    r={outRadius}
+                    fill='none'
+                    strokeDasharray={outRadius * 2 * Math.PI}
+                    // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
+                    strokeDashoffset={outRadius * 2 * Math.PI * (1 - inConf)}
+                />
+                <circle
+                    className="background in"
+                    r={inRadius}
+                    fill='none'
+                    stroke="#eee"
+                    strokeLinecap="round"
+                    strokeWidth={progressBarWidth}
+                    strokeDasharray={inRadius * 2 * Math.PI}
+                    strokeDashoffset="0" />
+                <circle
+                    className="in conf bar"
                     stroke="#98E090"
                     strokeWidth={progressBarWidth}
-                    r={circleRadius}
+                    strokeLinecap="round"
+                    r={inRadius}
                     fill='none'
-                    strokeDasharray={circleRadius * 2 * Math.PI}
+                    strokeDasharray={inRadius * 2 * Math.PI}
                     // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
-                    strokeDashoffset={circleRadius * 2 * Math.PI * (1 - (rule.sup_pnd - rule.sup_pd) / (rule.sup_pnd / rule.conf_pnd - rule.sup_pd / rule.conf_pd))}
+                    strokeDashoffset={inRadius * 2 * Math.PI * (1 - rule.conf_pnd)}
                 />
+                <circle
+                    className="in conf bar"
+                    // stroke="#98E090"
+                    stroke="#abdda6"
+                    strokeWidth={progressBarWidth}
+                    strokeLinecap="round"
+                    r={inRadius}
+                    fill='none'
+                    strokeDasharray={inRadius * 2 * Math.PI}
+                    // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
+                    strokeDashoffset={inRadius * 2 * Math.PI * (1 - inConf)}
+                />
+                <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g>
+
                 {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
                     {rule.risk_dif.toFixed(2).replace('0.', '.')}
                 </text> */}
             </g>
-            {/* <g className="score" transform={`translate(${-outCircleRadius + indent - this.headWidth*0.1}, ${this.lineInterval*0.3})`}>
-                <g className='conf_pnd' >
-                    <circle
-                        className="background"
-                        r={outCircleRadius} 
-                        fill='none'
-                        stroke="#ccc"
-                        strokeWidth={progressBarWidth}
-                        strokeDasharray={outCircleRadius * 2 * Math.PI}
-                        strokeDashoffset="0" />
-                    <circle 
-                        className="bar"
-                        stroke="#FF9F1E"
-                        strokeWidth={progressBarWidth}
-                        r={outCircleRadius} 
-                        fill='none'
-                        strokeDasharray={outCircleRadius * 2 * Math.PI}
-                        strokeDashoffset={outCircleRadius * 2 * Math.PI * (1-rule.conf_pnd)} />
-                </g>
-                <g className='conf_pd'>
-                    <circle
-                        className="background"
-                        r={inCircleRadius} 
-                        fill='none'
-                        stroke="#ccc"
-                        strokeWidth={progressBarWidth}
-                        strokeDasharray={inCircleRadius * 2 * Math.PI}
-                        strokeDashoffset="0" />
-                    <circle 
-                        className="bar"
-                        stroke="#FF9F1E"
-                        strokeWidth={progressBarWidth}
-                        r={inCircleRadius} 
-                        fill='none'
-                        strokeDasharray={inCircleRadius * 2 * Math.PI}
-                        // strokeDashoffset={inCircleRadius * 2 * Math.PI * (1-rule.conf_pd)} 
-                        strokeDashoffset={inCircleRadius * 2 * Math.PI * (1- (rule.sup_pnd-rule.sup_pd)/(rule.sup_pnd/rule.conf_pnd-rule.sup_pd/rule.conf_pd) )} 
-                        />
-                </g>
-            </g> */}
-            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * circleRadius}>
+            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
                     {rule.risk_dif.toFixed(2)} */}
@@ -237,6 +260,15 @@ export default class Itemset extends React.Component<Props, State>{
                     stroke="#c3c3c3"
                     strokeWidth='2'
                 />
+                <g className='pin icon' 
+                transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`} 
+                opacity={highlightRules.includes(rule.id.toString())?1:0}
+                // tslint:disable-next-line:jsx-no-lambda
+                onClick={()=>this.toggleHighlight(rule.id.toString())}
+                cursor='pointer'>
+                <rect width={-indent} height={2*this.lineInterval} y={-this.lineInterval } x={0} fill='transparent'/>
+                    {PIN}
+                </g>
                 {/* <line 
             x1={-this.headWidth} y1={0} 
             x2={0} y2={0} 
@@ -250,6 +282,9 @@ export default class Itemset extends React.Component<Props, State>{
                     stroke="#f0f0f0"
                 />
                 <g className="icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
+                    {/* <foreignObject>
+                        <Icon type="pushpin" style={{fontSize:this.lineInterval*0.6}}/>
+                    </foreignObject> */}
                     {ruleNode.children.length == 0 ?
                         <text className="icon" >
                             o
@@ -297,7 +332,7 @@ export default class Itemset extends React.Component<Props, State>{
         if (isExpand) {
             let children: JSX.Element[] = []
             for (let childNode of ruleNode.children) {
-                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemMax)
+                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale)
                 children = children.concat(child)
                 offsetY = newY
             }
@@ -396,7 +431,8 @@ export default class Itemset extends React.Component<Props, State>{
                                 ruleAgg={ruleAgg} 
                                 scoreDomain={scoreDomain} 
                                 showIDs={showIDs} 
-                                highlightRule={this.state.highlightRule}
+                                hoverRule={this.state.hoverRule}
+                                highlightRules={this.state.highlightRules}
                                 samples = {this.props.samples}
                                 protectedVal={this.props.protectedVal}
                             />
@@ -414,7 +450,10 @@ export default class Itemset extends React.Component<Props, State>{
 
         let keyAttrs = dragArray.slice(0, keyAttrNum)
 
-        let itemMax = Math.max(...rules.map(d => d.items.length))
+        let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
+            itemScale = d3.scaleLinear()
+            .domain([itemMin, itemMax])
+            .range([this.lineInterval*0.4, this.lineInterval*0.85])
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
@@ -435,7 +474,7 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemMax)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale)
                     offsetY = newY
                     posRules = posRules.concat(content)
                 }
@@ -454,7 +493,7 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemMax)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale)
                     offsetY = newY
                     negaRules = negaRules.concat(content)
                 }
@@ -471,7 +510,7 @@ export default class Itemset extends React.Component<Props, State>{
 
         // })
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
-        let bubbles = this.drawBubbles(positiveRuleAgg, scoreDomain)
+        let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain), this.drawBubbles(negativeRuleAgg, scoreDomain)]
 
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
@@ -495,7 +534,7 @@ export default class Itemset extends React.Component<Props, State>{
         //     this.setState({ expandRules: {} })
         // }
         // console.info(this.bubbles.map(bubble=>bubble.getBoundingClientRect()))
-        console.info(this.bubbleSize)
+        // console.info(this.bubbleSize)
     }
     render() {
         let { fetchKeyStatus } = this.props

@@ -364,13 +364,13 @@ export default class Overview extends React.Component<Props,State>{
         axisLabel.append('text')
         .attr('x', window.innerWidth*0.1)
         .attr('y', 30)
-        .text(`favor to ${this.props.protectedVal}`)
+        .text(`against ${this.props.protectedVal}`)
         .style('fill', 'gray')
 
         axisLabel.append('text')
         .attr('x', 0)
         .attr('y', 30)
-        .text(`against ${this.props.protectedVal}`)
+        .text(`favor ${this.props.protectedVal}`)
         .style('fill', 'gray')
         .style('text-anchor', 'start')
     }

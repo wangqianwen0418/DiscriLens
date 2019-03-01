@@ -5,7 +5,7 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode, groupByKey, COLORS } from 'Helpers';
+import { RuleAgg, RuleNode, groupByKey, COLORS} from 'Helpers';
 import { Rule, DataItem } from 'types';
 
 
@@ -15,7 +15,8 @@ export interface Props {
     ruleAgg: RuleAgg,
     scoreDomain: [number, number] | [undefined, undefined],
     showIDs: string[],
-    highlightRule: string,
+    hoverRule: string,
+    highlightRules: string[],
     samples: DataItem[],
     protectedVal: string
 }
@@ -86,7 +87,7 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 }
 
 export default class Bubble extends React.Component<Props, State>{
-    width=100; height=100; scaleRatio = 1; ref: React.RefObject<SVGAElement>=React.createRef();
+    width=100; height=100; scaleRatio = 1; radius=4; ref: React.RefObject<SVGAElement>=React.createRef();
     constructor(props: Props){
         super(props)
     }
@@ -106,11 +107,12 @@ export default class Bubble extends React.Component<Props, State>{
         // return [box.width, box.height]
     }
     render() {
-        let { ruleAgg, scoreDomain, highlightRule, samples } = this.props
+        let { ruleAgg, scoreDomain, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
-            items = extractItems(rules)
+            items = extractItems(rules),
+            circlePadding = this.radius*1.5
 
-        // console.info(highlightRule)
+        // console.info(hoverRule)
 
         // cluster item circles to a big circle
         let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
@@ -120,7 +122,6 @@ export default class Bubble extends React.Component<Props, State>{
             .domain([0, scoreDomain[1]])
             .range([0, 0.6])
         // store the position of circles
-        let radius = 4 //radius of the item
 
         let root: ItemHierarchy = {
             id: 'root',
@@ -184,6 +185,9 @@ export default class Bubble extends React.Component<Props, State>{
 
         const pack = d3.pack()
             .size([this.width, this.height])
+            .padding((d:any)=>{
+                return d.depth==0?circlePadding:0
+            })
             // .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
         const datum = pack(
             d3.hierarchy(root)
@@ -191,12 +195,32 @@ export default class Bubble extends React.Component<Props, State>{
         )
 
         let itemCircles: JSX.Element[] = []
+        let highlightCircles: {[id:string]: d3.HierarchyCircularNode<any>[]} = {}
         let itemsPos: any[] = []
+        let strokeWidth = 2
 
-        datum.children.forEach((set:any) => {
+        datum.children.forEach((set:d3.HierarchyCircularNode<any>) => {
             let scoreColor = d3.interpolateOranges(scoreScale(set.children[0].data.score))
-            let strokeColor = highlightRule==undefined?scoreColor:(set.data.id.includes(highlightRule)?scoreColor:'#ccc')
-            let opacity = highlightRule==undefined?1:(set.data.id.includes(highlightRule)?1:0.2)
+            let isHover = set.data.id.includes(hoverRule)
+            // let isHighlight = containsAttr(set.data.id, highlightRules).length>0
+            let strokeColor = hoverRule==undefined?scoreColor:(isHover?scoreColor:'#ccc')
+            let opacity = hoverRule==undefined?1:(isHover?1:0.2)
+
+
+            
+
+
+            highlightRules.forEach(ruleID=>{
+                if (!highlightCircles[ruleID]){
+                    highlightCircles[ruleID] = []
+                }
+                if(set.data.id.includes(ruleID)){
+                    highlightCircles[ruleID].push(
+                        set
+                    )
+                }
+            })
+            
             itemCircles.push(<circle
                 key={set.data.id}
                 id={set.data.id}
@@ -208,11 +232,12 @@ export default class Bubble extends React.Component<Props, State>{
                 // opacity='0.5'
                 stroke={strokeColor}
                 // fill="transparent"
-                // stroke={set.data.id.includes(highlightRule)?"gray":"#FF9F1E"}
-                strokeWidth={set.data.id.includes(highlightRule)?4:2}
+                // stroke={set.data.id.includes(hoverRule)?"gray":"#FF9F1E"}
+                // strokeWidth={ (isHighlight ? 2*strokeWidth : strokeWidth)/this.scaleRatio }
+                strokeWidth={strokeWidth/this.scaleRatio}
             />)
             set.children.forEach((item: any) => {
-                this.scaleRatio = radius/item.r
+                this.scaleRatio = (this.radius+strokeWidth/2)/item.r
                 itemsPos.push({
                     x: item.x,
                     y: item.y,
@@ -228,7 +253,7 @@ export default class Bubble extends React.Component<Props, State>{
                         key={id} cx={item.x} cy={item.y} r={item.r*0.8 }
                         fill={sample.class=="1"?itemColor :'white'}
                         stroke={itemColor}
-                        strokeWidth='2'
+                        strokeWidth={strokeWidth/this.scaleRatio}
                         opacity={opacity}
                         // fill={d3.interpolateOranges(scoreScale(item.data.score))}
                         // fill="#FF9F1E"
@@ -238,80 +263,46 @@ export default class Bubble extends React.Component<Props, State>{
             })
         })
 
-        // var bubbles = new BubbleSet(),
-        //     padding = 2
-            
-        //     console.info('datum', datum)
-        // var outlines = rules
-        //     .filter(rule => showIDs.includes(rule.id.toString()))
-        //     .map(rule => {
-        //         // let itemIn = datum.children
-        //         //     .filter((set:any) => set.data.id.split(',').includes(rule.id.toString()))
-        //         //     .map(set => {
-        //         //         return {
-        //         //             x: set.x-set.r,
-        //         //             y: set.y-set.r,
-        //         //             width: set.r * 2,
-        //         //             height: set.r * 2
-        //         //         }
-        //         //     })
-        //         // let itemOut = datum.children
-        //         //     .filter((set:any) => !set.data.id.split(',').includes(rule.id.toString()))
-        //         //     .map(set => {
-        //         //         return {
-        //         //             x: set.x-set.r,
-        //         //             y: set.y-set.r,
-        //         //             width: set.r * 2,
-        //         //             height: set.r * 2
-        //         //         }
-        //         //     })
-        //         let itemIn = itemsPos
-        //             .filter(itemP => rule.items.includes(itemP.id))
-        //             .map(item => {
-        //                 return {
-        //                     x: item.x,
-        //                     y: item.y,
-        //                     width: item.r * 2/3,
-        //                     height: item.r * 2/3
-        //                 }
-        //             })
-        //         let itemOut = itemsPos
-        //             .filter(itemP => !rule.items.includes(itemP.id))
-        //             .map(item => {
-        //                 return {
-        //                     x: item.x,
-        //                     y: item.y,
-        //                     width: item.r * 2,
-        //                     height: item.r * 2
-        //                 }
-        //             })
-        //         var list = bubbles.createOutline(
-        //             BubbleSet.addPadding(itemIn, padding),
-        //             BubbleSet.addPadding(itemOut, padding),
-        //             null
-        //         );
-        //         var outline = new PointPath(list).transform([
-        //             new ShapeSimplifier(0.0),
-        //             new BSplineShapeGenerator(),
-        //             new ShapeSimplifier(0.1),
-        //         ]);
-        //         const onMouseEnter = () => this.highlightPath(rule.id.toString())
-        //         return <path key={rule.id} d={outline.toString()} id={`outline_${rule.id}`}
-        //             className='outline'
-        //             onMouseEnter={onMouseEnter}
-        //             onMouseLeave={this.onMouseLeave}
-        //             fill='none' stroke={rule.id==highlightRule?'pink':'gray'} 
-        //             strokeWidth={rule.id==highlightRule?4:1} 
-        //             />
-        //     })
+        let outlines = highlightRules.map(ruleID=>{
+            if(highlightCircles[ruleID].length>0){
+                return  <g>
+                    <mask id={`outline_${ruleID}`}>
+                        <circle 
+                        r={circlePadding/this.scaleRatio + this.height/2} 
+                        cx={this.height/2} 
+                        cy={this.height/2} 
+                        fill='white' />
+                            {highlightCircles[ruleID].map(set=>{
+                                return <circle id={set.data.id} key={set.data.id} r={set.r + circlePadding/this.scaleRatio} cx={set.x} cy={set.y} fill="black"/>
+                            })}           
+                    </mask>
+                    <g className='outlines' mask={`url(#outline_${ruleID})`}>
+                        {highlightCircles[ruleID].map(set=>{
+                                return <circle id={set.data.id} key={set.data.id} 
+                                r={set.r+ circlePadding/this.scaleRatio} cx={set.x} cy={set.y} fill="red"
+                                stroke={"gray"}
+                                strokeWidth={2*strokeWidth/this.scaleRatio}
+                                
+                                />
+                            }) 
+                        }
+                    </g> 
+                {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='red' stroke='gray' mask={`url(#outline_${hoverRule})`}/>  */}
+                </g>
+            }
+            else return <g className='emptyOutline'/>
+        })
 
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
             transform={`scale(${this.scaleRatio})`}>
-            {itemCircles}
-            <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/>
-            {/* {outlines} */}
+                {itemCircles}
+                <g className='highlight outlines'>
+                    {outlines}
+                </g>
+            {/* <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/> */}
+            {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='none' stroke='gray'/> */}
         </g>
     }
 }
