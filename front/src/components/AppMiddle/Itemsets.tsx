@@ -34,7 +34,7 @@ export interface Props {
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
     hoverRule: string,
-    highlightRules: string[];
+    highlightRules: {[id:string]: string[]}; // the highlight rules in each ruleAGG
 }
 export interface ExpandRule {
     id: string,
@@ -62,7 +62,7 @@ export default class Itemset extends React.Component<Props, State>{
         this.state = {
             expandRules: {},
             hoverRule: undefined,
-            highlightRules: []
+            highlightRules: {}
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
@@ -115,17 +115,22 @@ export default class Itemset extends React.Component<Props, State>{
         this.setState({ expandRules })
         // console.info(showAttrs, expandRules)
     }
-    toggleHighlight(ruleID: string){
+    toggleHighlight(ruleAggID:string, ruleID: string){
         let {highlightRules} =this.state
-        let idx = highlightRules.indexOf(ruleID)
-        if (idx==-1){
-            highlightRules.push(ruleID)
+        if (!highlightRules[ruleAggID]){
+            highlightRules[ruleAggID] = [ruleID]
         }else{
-            highlightRules.splice(idx, 1)
+            let idx = highlightRules[ruleAggID].indexOf(ruleID)
+            if (idx==-1){
+                highlightRules[ruleAggID].push(ruleID)
+            }else{
+                highlightRules[ruleAggID].splice(idx, 1)
+            }
         }
+        
         this.setState({highlightRules})
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>): { content: JSX.Element[], offsetY: number } {
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string): { content: JSX.Element[], offsetY: number } {
         let { rule, children } = ruleNode
         let { antecedent, items, id } = rule
         let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
@@ -262,9 +267,9 @@ export default class Itemset extends React.Component<Props, State>{
                 />
                 <g className='pin icon' 
                 transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`} 
-                opacity={highlightRules.includes(rule.id.toString())?1:0}
+                opacity={highlightRules[ruleAggID]? (highlightRules[ruleAggID].includes(rule.id.toString())?1:0):0}
                 // tslint:disable-next-line:jsx-no-lambda
-                onClick={()=>this.toggleHighlight(rule.id.toString())}
+                onClick={()=>this.toggleHighlight(ruleAggID, rule.id.toString())}
                 cursor='pointer'>
                 <rect width={-indent} height={2*this.lineInterval} y={-this.lineInterval } x={0} fill='transparent'/>
                     {PIN}
@@ -332,7 +337,7 @@ export default class Itemset extends React.Component<Props, State>{
         if (isExpand) {
             let children: JSX.Element[] = []
             for (let childNode of ruleNode.children) {
-                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale)
+                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale, ruleAggID)
                 children = children.concat(child)
                 offsetY = newY
             }
@@ -432,7 +437,7 @@ export default class Itemset extends React.Component<Props, State>{
                                 scoreDomain={scoreDomain} 
                                 showIDs={showIDs} 
                                 hoverRule={this.state.hoverRule}
-                                highlightRules={this.state.highlightRules}
+                                highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
                                 samples = {this.props.samples}
                                 protectedVal={this.props.protectedVal}
                             />
@@ -460,6 +465,7 @@ export default class Itemset extends React.Component<Props, State>{
         // console.info(results)
 
         let { positiveRuleAgg, negativeRuleAgg } = results
+
         let offsetY = 0
         let posRules: JSX.Element[] = []
         for (let ruleAgg of positiveRuleAgg) {
@@ -474,7 +480,7 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale, ruleAgg.id.toString())
                     offsetY = newY
                     posRules = posRules.concat(content)
                 }
@@ -493,7 +499,7 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale)
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale, ruleAgg.id.toString())
                     offsetY = newY
                     negaRules = negaRules.concat(content)
                 }
