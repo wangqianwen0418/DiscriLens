@@ -55,7 +55,9 @@ export default class Itemset extends React.Component<Props, State>{
     margin = 65;
     headWidth = this.props.offsetX - this.margin;
     indent: 5;
-    bubbleSize: [number, number][] = []
+    bubbleSize: [number, number][] = [];
+    positiveRuleAgg: RuleAgg[] = [];
+    negativeRuleAgg: RuleAgg[] = [];
 
     constructor(props: Props) {
         super(props)
@@ -465,6 +467,8 @@ export default class Itemset extends React.Component<Props, State>{
         // console.info(results)
 
         let { positiveRuleAgg, negativeRuleAgg } = results
+        this.positiveRuleAgg = positiveRuleAgg
+        this.negativeRuleAgg = negativeRuleAgg
 
         let offsetY = 0
         let posRules: JSX.Element[] = []
@@ -531,7 +535,7 @@ export default class Itemset extends React.Component<Props, State>{
             </g>
         </g>
     }
-    componentDidUpdate(prevProp: Props) {
+    componentDidMount() {
         // if (
         //     prevProp.ruleThreshold[0] != this.props.ruleThreshold[0]
         //     || prevProp.ruleThreshold[1] != this.props.ruleThreshold[1]
@@ -541,6 +545,19 @@ export default class Itemset extends React.Component<Props, State>{
         // }
         // console.info(this.bubbles.map(bubble=>bubble.getBoundingClientRect()))
         // console.info(this.bubbleSize)
+        let  {highlightRules} = this.state
+        let {negativeRuleAgg, positiveRuleAgg} = this
+        negativeRuleAgg.forEach(ruleAgg=>{
+            if (!highlightRules[ruleAgg.id]){
+                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node=>node.rule.id.toString()).slice(0, 2)
+            }
+        })
+        positiveRuleAgg.forEach(ruleAgg=>{
+            if (!highlightRules[ruleAgg.id]){
+                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node=>node.rule.id.toString()).slice(0, 2)
+            }
+        })
+        this.setState({highlightRules})
     }
     render() {
         let { fetchKeyStatus } = this.props

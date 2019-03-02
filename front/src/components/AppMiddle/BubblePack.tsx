@@ -110,8 +110,7 @@ export default class Bubble extends React.Component<Props, State>{
         let { ruleAgg, scoreDomain, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules),
-            circlePadding = this.radius*2.5
-        console.info(items)
+            circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
 
         // console.info(hoverRule)
 
@@ -131,42 +130,28 @@ export default class Bubble extends React.Component<Props, State>{
         }
         let  childDict:any = []
 
-        items.forEach((item, itemIdx) => {
+        items.forEach((item) => {
             let currentGroup = item.groups.sort().join(',')
-            if (itemIdx == 0) {
+            
+            // let prevItem = items[itemIdx - 1], prevGroup = prevItem.groups.sort().join(',')
+            if (!childDict.includes(currentGroup)) {
                 root.children.push({
                     id: 'group_' + currentGroup,
                     score: item.score,
                     children: [{
                         id: item.id,
-                        children: [],
                         score: item.score,
+                        children: [],
                     }]
                 })
-            }
-            else {
-                
-                // let prevItem = items[itemIdx - 1], prevGroup = prevItem.groups.sort().join(',')
-                if (!childDict.includes(currentGroup)) {
-                    root.children.push({
-                        id: 'group_' + currentGroup,
-                        score: item.score,
-                        children: [{
-                            id: item.id,
-                            score: item.score,
-                            children: [],
-                        }]
-                    })
-                    childDict.push(currentGroup)
-                } else {
-                    let childID = childDict.indexOf(currentGroup)
-                    root.children[childID].children.push({
-                        id: item.id,
-                        score: item.score,
-                        children: []
-                    })
-                }
-
+                childDict.push(currentGroup)
+            } else {
+                let childID = childDict.indexOf(currentGroup)
+                root.children[childID].children.push({
+                    id: item.id,
+                    score: item.score,
+                    children: []
+                })
             }
         })
 
@@ -195,7 +180,6 @@ export default class Bubble extends React.Component<Props, State>{
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
         )
-        console.info(root)
 
         let itemCircles: JSX.Element[] = []
         let highlightCircles: {[id:string]: d3.HierarchyCircularNode<any>[]} = {}
@@ -273,6 +257,8 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         let outlines = highlightRules.map((ruleID, idx)=>{
+                const percent = highlightRules.length==1?0:(idx/(highlightRules.length-1)) 
+                const padding = ( 0.55 + 0.45* percent) * circlePadding/this.scaleRatio
                 return  <g key={`outline_${ruleID}`} className='outlines'>
                     <mask id={`mask_outline_${ruleID}`}>
                         {/* white part, show */}
@@ -283,14 +269,13 @@ export default class Bubble extends React.Component<Props, State>{
                         fill='white' />
                         {/* black part, hide */}
                         {highlightCircles[ruleID].map(set=>{
-                            return <circle id={set.data.id} key={set.data.id} r={set.r + (1+idx)*0.6*circlePadding/this.scaleRatio} cx={set.x} cy={set.y} fill="black"/>
+                            return <circle id={set.data.id} key={set.data.id} r={set.r + padding} cx={set.x} cy={set.y} fill="black"/>
                         })}           
                     </mask>
-                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`}>
+                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`} stroke={"gray"} fill="gray">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.data.id} key={set.data.id} 
-                                r={set.r+ (1+idx)*0.6*circlePadding/this.scaleRatio} cx={set.x} cy={set.y} fill="gray"
-                                stroke={"gray"}
+                                r={set.r+padding} cx={set.x} cy={set.y} 
                                 strokeWidth={2*strokeWidth/this.scaleRatio}
                                 
                                 />
@@ -301,6 +286,7 @@ export default class Bubble extends React.Component<Props, State>{
                 </g>
         })
 
+       
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
@@ -309,6 +295,8 @@ export default class Bubble extends React.Component<Props, State>{
                 <g className='highlight outlines'>
                     {outlines}
                 </g>
+                
+                
             {/* <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/> */}
             {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='none' stroke='gray'/> */}
         </g>
