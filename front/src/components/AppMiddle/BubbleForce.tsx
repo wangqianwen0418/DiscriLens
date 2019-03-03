@@ -8,7 +8,7 @@ import * as React from 'react';
 import { RuleAgg, RuleNode, COLORS} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
-import {pack as myPack} from 'lib/pack';
+import {pack as myPack} from 'lib/pack/index.js';
 
 
 import * as d3 from 'd3';
@@ -98,6 +98,18 @@ export default class Bubble extends React.Component<Props, State>{
         // let box = this.ref.current.getBoundingClientRect()
         // return [box.width, box.height]
     }
+    shouldComponentUpdate(nextProps: Props){
+        if (nextProps.hoverRule!=this.props.hoverRule){
+            let {hoverRule} = nextProps
+            d3.select(`#bubble_${this.props.ruleAgg.id}`)
+              .selectAll('circle')
+              .attr("stroke", (d:any) => {return d.id.includes(hoverRule)?'pink':'blue'})
+        }
+        return false
+    }
+    componentDidMount(){
+        this.draw()
+    }
     draw(){
         let { ruleAgg, scoreDomain, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
@@ -147,29 +159,8 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
-        let links: string[]=[]
         
-        for (var rule of rules){
-            let source:string = undefined, target: string=undefined
-            for (var child of root.children){   
-                if(child.id.includes(rule.id)){
-                    if(source){
-                        target = child.id
-                        let link = `${source}=>${target}`
-                        if (!links.includes(link)){
-                            links.push(link)
-                        }
-                        source = target
-                        
-                    }else{
-                        source = child.id
-                    }
-                }
-            }
-            
-        }
-
-        console.info(links)
+        
 
         const pack = myPack()
             
@@ -182,6 +173,103 @@ export default class Bubble extends React.Component<Props, State>{
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
         )
+        let forceNodes = datum.children.map((node: d3.HierarchyCircularNode<ItemHierarchy>)=>{
+            return {
+                r: node.r,
+                id: node.data.id              
+            }
+        })
+
+        let links: any[]=[]
+        
+        for (var rule of rules){
+            let source:string = undefined, target: string=undefined, length:number=0
+            for (var child of datum.children){   
+                if(child.data.id.includes(rule.id)){
+                    target = child.data.id
+                    if(source){
+                        
+                        let linkID = links.length
+                        let link = {
+                            id: linkID,
+                            source,
+                            target,
+                            length: child.r + length
+                        }
+                        if (links.length==0||links.filter(d=>d.id==linkID).length==0){
+                            links.push(link)
+                        }
+                    }
+                    source = target
+                    length = child.r
+                }
+            }
+            
+        }
+
+        const simulation = d3.forceSimulation(forceNodes)
+        .force("link", d3.forceLink(links).id((d:any) => d.id).distance(d=>d.length))
+        .force("charge", d3.forceManyBody().strength(d=>{return 1}))
+        .force("collide",d3.forceCollide().radius((d,i)=>{return forceNodes[i].r}))
+        .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+
+        const g = d3.select(`#bubble_${ruleAgg.id}`);
+
+
+
+        const node = g.append("g")
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 1.5)
+            .attr('class', 'forceNodes')
+          .selectAll("circle")
+          
+
+          node
+          .data(forceNodes)
+          .enter()
+          .append("circle")
+            .attr("r", (d:any)=>d.r)
+            .attr('cx', (d:any)=>d.x)
+            .attr('cy', (d:any)=>d.y)
+            .attr('fill', 'none')
+            .attr("stroke", (d:any)=>d.id.includes( hoverRule)?'grey':'blue')
+        .attr('class','node')
+        .attr('id', (d:any)=>d.id)
+            // .call(drag(simulation));
+        
+        const link = g.append("g")
+          .attr("stroke", "#999")
+          .attr('class', 'forceLinks')
+        .selectAll("line")
+        
+
+        
+        
+        link
+        .data(links).enter()
+        .append("line")
+          .attr("stroke-width", 1)
+          .attr('stroke', '#ccc')
+          .attr('x1', d=>d.source.x)
+          .attr('x2', d=>d.target.x)
+          .attr('y1', d=>d.source.y)
+          .attr('y2', d=>d.target.y)
+
+      
+      
+        simulation.on("tick", () => {
+            d3.select(`#bubble_${ruleAgg.id}`)
+            .selectAll('line')
+              .attr("x1", (d:any) => d.source.x)
+              .attr("y1", (d:any) => d.source.y)
+              .attr("x2", (d:any) => d.target.x)
+              .attr("y2", (d:any) => d.target.y);
+      
+            d3.select(`#bubble_${ruleAgg.id}`)
+              .selectAll('circle')
+              .attr("cx", (d:any) => d.x)
+              .attr("cy", (d:any)=> d.y);
+        });
 
         let itemCircles: JSX.Element[] = []
         let highlightCircles: {[id:string]: d3.HierarchyCircularNode<any>[]} = {}
@@ -300,17 +388,17 @@ export default class Bubble extends React.Component<Props, State>{
     }
     render() {
         let {ruleAgg} = this.props
-        let {itemCircles, outlines} = this.draw()
+        // let {itemCircles, outlines} = this.draw()
        
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
             transform={`scale(${this.scaleRatio})`}>
-                {itemCircles}
+                {/* {itemCircles}
                 <g className='highlight outlines'>
                     {outlines}
                 </g>
-                
+                 */}
                 
             {/* <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/> */}
             {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='none' stroke='gray'/> */}

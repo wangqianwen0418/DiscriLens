@@ -3,7 +3,7 @@ export interface DataItem{
 }
 
 export interface Rule{
-    id: number|string,
+    id: string,
     antecedent:  string[],
     cls: string,
     conf_pd: number,
@@ -13,7 +13,7 @@ export interface Rule{
     sup_pd : number,
     sup_pnd : number,
     risk_dif : number,
-    items: (number|string)[],
+    items: (string)[],
     [key:string]:any
 }
 
