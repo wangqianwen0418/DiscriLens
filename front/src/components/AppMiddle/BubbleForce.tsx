@@ -215,7 +215,30 @@ export default class Bubble extends React.Component<Props, State>{
 
         const g = d3.select(`#bubble_${ruleAgg.id}`);
 
-
+        const drag = (simulation:any) => {
+  
+            function dragstarted(d:any) {
+              if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+              d.fx = d.x;
+              d.fy = d.y;
+            }
+            
+            function dragged(d:any) {
+              d.fx = d3.event.x;
+              d.fy = d3.event.y;
+            }
+            
+            function dragended(d:any) {
+              if (!d3.event.active) simulation.alphaTarget(0);
+              d.fx = null;
+              d.fy = null;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+          }
 
         const node = g.append("g")
             .attr("stroke", "#fff")
@@ -231,11 +254,11 @@ export default class Bubble extends React.Component<Props, State>{
             .attr("r", (d:any)=>d.r)
             .attr('cx', (d:any)=>d.x)
             .attr('cy', (d:any)=>d.y)
-            .attr('fill', 'none')
+            .attr('fill', 'white')
             .attr("stroke", (d:any)=>d.id.includes( hoverRule)?'grey':'blue')
         .attr('class','node')
         .attr('id', (d:any)=>d.id)
-            // .call(drag(simulation));
+            .call(drag(simulation));
         
         const link = g.append("g")
           .attr("stroke", "#999")
