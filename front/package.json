@@ -22,7 +22,8 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "tslib": "^1.9.3",
-    "web-request": "^1.0.7"
+    "web-request": "^1.0.7",
+    "xpack": "^0.1.6"
   },
   "scripts": {
     "start": "react-scripts-ts start",

@@ -310,7 +310,8 @@ export default class Bubble extends React.Component<Props, State>{
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
-            transform={`scale(${this.scaleRatio})`}>
+            transform={`scale(${this.scaleRatio})`}
+            >
                 {itemCircles}
                 <g className='highlight outlines'>
                     {outlines}

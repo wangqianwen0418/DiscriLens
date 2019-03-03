@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
 import { Icon } from 'antd';
-import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode } from 'Helpers';
+import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, } from 'Helpers';
 import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
@@ -36,6 +36,7 @@ export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
     hoverRule: string,
     highlightRules: {[id:string]: string[]}; // the highlight rules in each ruleAGG
+    bubblePosition: rect[],
 }
 export interface ExpandRule {
     id: string,
@@ -50,6 +51,16 @@ export interface rules {
     rule: string[],
     risk_dif: number
 }
+export interface axis{
+    x:number,
+    y:number
+}
+export interface rect{
+    x:number,
+    y:number,
+    w:number,
+    h:number,
+}
 
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15;
@@ -59,19 +70,24 @@ export default class Itemset extends React.Component<Props, State>{
     bubbleSize: [number, number][] = [];
     positiveRuleAgg: RuleAgg[] = [];
     negativeRuleAgg: RuleAgg[] = [];
+    yoffSet:number=0;
+    yList:number[] = [];
 
     constructor(props: Props) {
         super(props)
         this.state = {
             expandRules: {},
             hoverRule: undefined,
-            highlightRules: {}
+            highlightRules: {},
+            bubblePosition: []
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
+        this.enterRect = this.enterRect.bind(this)
+        this.leaveRect = this.leaveRect.bind(this)
     }
 
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
@@ -116,7 +132,6 @@ export default class Itemset extends React.Component<Props, State>{
         }
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
-        // console.info(showAttrs, expandRules)
     }
     toggleHighlight(ruleAggID:string, ruleID: string){
         let {highlightRules} =this.state
@@ -133,7 +148,7 @@ export default class Itemset extends React.Component<Props, State>{
         
         this.setState({highlightRules})
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string): { content: JSX.Element[], offsetY: number } {
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum:number=0): { content: JSX.Element[], offsetY: number } {
         let { rule, children } = ruleNode
         let { antecedent, items, id } = rule
         let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
@@ -174,10 +189,19 @@ export default class Itemset extends React.Component<Props, State>{
         let inRadius = outRadius -  progressBarWidth*1.1
         let parent = <g className={`${ruleNode.rule.id} rule`}
             transform={`translate(${this.props.offsetX}, ${offsetY})`}
+            
             // tslint:disable-next-line:jsx-no-lambda
-            onMouseEnter={()=>this.setState({hoverRule: rule.id.toString()})}
+            onMouseEnter={()=>{
+                this.setState({hoverRule: rule.id.toString()})
+                this.enterRect(listNum)
+                }
+            }
             // tslint:disable-next-line:jsx-no-lambda
-            onMouseLeave={()=> this.setState({hoverRule:undefined})}
+            onMouseLeave={()=>{ 
+                    this.setState({hoverRule:undefined})
+                    this.leaveRect()
+                }
+            }
             >
             <g 
                 className="score" 
@@ -340,14 +364,38 @@ export default class Itemset extends React.Component<Props, State>{
         if (isExpand) {
             let children: JSX.Element[] = []
             for (let childNode of ruleNode.children) {
-                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale, ruleAggID)
+                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale, ruleAggID, listNum)
                 children = children.concat(child)
                 offsetY = newY
             }
             content = content.concat(children)
         }
-
         return { content, offsetY }
+    }
+
+    enterRect(i:number){
+        let bubblePosition = this.state.bubblePosition
+        if(bubblePosition.length!=0){
+            let initPos = bubblePosition[i].y
+            this.yoffSet = this.yList[i] - initPos
+            bubblePosition = bubblePosition.map((bubble,j)=>{
+                bubble.y += this.yoffSet
+                return bubble
+            })
+            this.setState({bubblePosition})
+        }
+    }
+
+    leaveRect(){
+        let bubblePosition = this.state.bubblePosition
+        if(bubblePosition.length!=0){
+            bubblePosition = bubblePosition.map((bubble,j)=>{
+                bubble.y -= this.yoffSet
+                return bubble
+            })
+            this.yoffSet = 0
+            this.setState({bubblePosition})
+        }
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         let { antecedent, items, id, nodes } = ruleAgg
@@ -372,7 +420,9 @@ export default class Itemset extends React.Component<Props, State>{
             {items.length}
         </text>
 
+
         let attrValContent = antecedent.map((attrVal => {
+            
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
@@ -402,7 +452,7 @@ export default class Itemset extends React.Component<Props, State>{
                 <rect className='font'
                     width={barWidth / ranges.length} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
-                    fill={favorPD ? "#98E090" : "#FF772D"}
+                    fill={favorPD ? "#98E090" : "#FF772D"} 
                 />
             </g>
         }))
@@ -411,7 +461,8 @@ export default class Itemset extends React.Component<Props, State>{
     }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number]) {
         let { showAttrNum, step } = this.props
-        let { expandRules } = this.state
+        // let {bubblePosition} = this.state
+        let { expandRules} = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
             new Set(
@@ -423,29 +474,61 @@ export default class Itemset extends React.Component<Props, State>{
                 .filter(id => !showIDs.includes(id))
         )
         showIDs = showIDs.filter(id=>!id.includes('agg'))
-        // console.info('show ids', showIDs)
+        
         return <g className='bubbles' transform={`translate(${showAttrNum * step + this.margin}, ${0})`}>
             {
-                ruleAggs
-                    .map((ruleAgg, i) =>
-                        <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
-                            <Bubble 
-                            ref={(ref:any)=>{
-                                if (ref){
-                                    this.bubbleSize.push(ref.getSize())}
+                // ruleAggs
+                //     .map((ruleAgg, i) =>{
+                        
+                        
+                //         // first state bubble ot obtain the bubbleSize to calculate translate
+                //         let bubble = <Bubble 
+                //         ref={(ref:any)=>{
+                //             if (ref){
+                //                 this.bubbleSize.push(ref.getSize())}
+                //             }
+                            
+                //         }
+                //             ruleAgg={ruleAgg} 
+                //             scoreDomain={scoreDomain} 
+                //             showIDs={showIDs} 
+                //             hoverRule={this.state.hoverRule}
+                //             highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
+                //             samples = {this.props.samples}
+                //             protectedVal={this.props.protectedVal}
+                //         />
+                //         return <g key={'bubble_' + ruleAgg.id}  className='bubblesAgg'
+                //         // transform={`translate(${bubblePosition.length==ruleAggs.length?bubblePosition[i].x+100:100},
+                //         // ${bubblePosition.length==ruleAggs.length?bubblePosition[i].y:0})`}
+                //             transform={`translate(${0},${200*i})`}
+                //           >
+                //         {bubble}
+                //     </g>
+                //     }
+                //     )
+                
+                    ruleAggs
+                        .map((ruleAgg, i) =>
+                            <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
+                                <Bubble 
+                                ref={(ref:any)=>{
+                                    if (ref){
+                                        this.bubbleSize.push(ref.getSize())}
+                                    }
+                                    
                                 }
-                                
-                            }
-                                ruleAgg={ruleAgg} 
-                                scoreDomain={scoreDomain} 
-                                showIDs={showIDs} 
-                                hoverRule={this.state.hoverRule}
-                                highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
-                                samples = {this.props.samples}
-                                protectedVal={this.props.protectedVal}
-                            />
-                        </g>
-                    )
+                                    ruleAgg={ruleAgg} 
+                                    scoreDomain={scoreDomain} 
+                                    showIDs={showIDs} 
+                                    hoverRule={this.state.hoverRule}
+                                    highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
+                                    samples = {this.props.samples}
+                                    protectedVal={this.props.protectedVal}
+                                />
+                            </g>
+                        )
+    
+                
 
             }
         </g>
@@ -473,10 +556,18 @@ export default class Itemset extends React.Component<Props, State>{
 
         let offsetY = 0
         let posRules: JSX.Element[] = []
-        for (let ruleAgg of positiveRuleAgg) {
+        if(this.yList.length>positiveRuleAgg.length){
+            this.yList = []
+        }
+        positiveRuleAgg.forEach((ruleAgg,i)=>{
             offsetY += 0.3 * this.lineInterval
+            if(this.yList.length-1<i){
+                this.yList.push(offsetY)
+            }else{
+                this.yList[i] = offsetY
+            }
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
@@ -485,14 +576,14 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale, ruleAgg.id.toString())
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
                     posRules = posRules.concat(content)
                 }
             }
-        }
+        })  
         let negaRules: JSX.Element[] = []
-        for (let ruleAgg of negativeRuleAgg) {
+        negativeRuleAgg.forEach((ruleAgg,i)=> {
             offsetY += 0.3 * this.lineInterval
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
@@ -504,35 +595,27 @@ export default class Itemset extends React.Component<Props, State>{
             offsetY = offsetY + 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale, ruleAgg.id.toString())
+                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
                     negaRules = negaRules.concat(content)
                 }
             }
-        }
+        })
 
-        // let negaRules = negativeRuleAgg.map((ruleAgg,rule_i)=>{
-        //     return <g key={rule_i+'rules'} 
-        //         transform={`translate(${window.innerWidth*0.1}, ${5 + 2*this.lineInterval* rule_i+ offsetY})`}>
-        //         {
-        //             this.drawRuleAggs(ruleAgg.antecedent, ruleAgg.items, attrs, false)
-        //         }
-        //     </g>         
-
-        // })
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain), this.drawBubbles(negativeRuleAgg, scoreDomain)]
 
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
+            
+            <g className='bubbles'>
+                {bubbles}
+            </g>
             <g className='positive rules'>
                 {posRules}
             </g>
             <g className='negative rules'>
                 {negaRules}
-            </g>
-            <g className='bubbles'>
-            {bubbles}
             </g>
         </g>
     }
@@ -560,9 +643,120 @@ export default class Itemset extends React.Component<Props, State>{
         })
         this.setState({highlightRules})
     }
+    findMaxRect(bubblePosition:rect[],num:number){
+        let maxBubble:rect
+        let maxHeight = 0
+        for(var i=0;i<num;i++){
+            if(bubblePosition[i].h+bubblePosition[i].y>maxHeight){
+                maxHeight = bubblePosition[i].h+bubblePosition[i].y
+                maxBubble = bubblePosition[i]
+            }
+        }
+        return maxBubble
+    }
+    /**
+     * Divide and conquer method to find the best place to put the next bubble (greedy, not necessarily opt)
+     */
+    findBestAxis(bubblePosition:rect[],i:number,areaWidth:number,startAxis:number){
+        let pos = bubblePosition
+        let size = this.bubbleSize
+        let length = pos.length
+        if((areaWidth<size[i][0])||(length==0)){return {x:Infinity,y:Infinity}}
+        else{
+            let rightAxis:axis 
+            let leftAxis:axis
+            // the x-Axis value of highest rect
+            let maxB = this.findMaxRect(pos,length)
+            let leftRects:rect[] = [],
+            rightRects:rect[] = []
+            // split all the rect based on the highest one into left part and right part
+            pos.forEach((d,i)=>{
+                // totally right of maxB
+                if(d.x>maxB.x+maxB.w){
+                    rightRects.push(d)
+                }
+                // totally left of maxB
+                else if(d.x+d.w<maxB.x){
+                    leftRects.push(d)
+                }
+                // part overlapping, part right of maxB
+                else if((d.x>=maxB.x)&&(d.x+d.w>maxB.x+maxB.w)){
+                    rightRects.push({x:maxB.x+maxB.w,y:d.y,w:d.x+d.w-maxB.x-maxB.w,h:d.h})
+                }
+                // part overlapping, part left of maxB
+                else if((d.x<maxB.x)&&(d.x+d.w<=maxB.x+maxB.w)){
+                    leftRects.push({x:d.x,y:d.y,w:maxB.x-d.x,h:d.h})
+                }
+                // all overlapping, part right & part left of maxB
+                else if((d.x<maxB.x)&&(d.x+d.w>maxB.x+maxB.w)){
+                    leftRects.push({x:d.x,y:d.y,w:maxB.x-d.x,h:d.h})
+                    rightRects.push({x:maxB.x+maxB.w,y:d.y,w:d.x+d.w-maxB.x-maxB.w,h:d.h})
+                }
+            })
+
+            // if the right side contains zero rect (maxB is the rightest one or input contains only one rect)
+            if(rightRects.length==0){
+                // the x space is large enough
+                if(areaWidth+startAxis-maxB.x-maxB.w>size[i][0]){
+                    rightAxis = {x:maxB.x+maxB.w,y:maxB.y + this.lineInterval*2}
+                }
+                // the x space is too small to hold this incomming rect
+                else{
+                    rightAxis = {x:Infinity,y:Infinity}
+                }
+            }else{
+                let areaWidthNew = areaWidth-(maxB.x+maxB.w-startAxis),
+                startAxisNew = maxB.x+maxB.w
+                rightAxis = this.findBestAxis(rightRects,i,areaWidthNew,startAxisNew)
+            }
+            leftAxis = this.findBestAxis(leftRects,i,maxB.x-startAxis,startAxis)
+            if((rightAxis.y==Infinity)&&(leftAxis.y==Infinity)){
+                return {x:startAxis,y:maxB.y+maxB.h}
+            }
+            else if(rightAxis.y<leftAxis.y){
+                return rightAxis
+            }else{
+                return leftAxis
+            }
+        }
+    }
+
+    // componentDidUpdate(prevProp: Props) {
+    //     let bubblePosition:rect[] = []
+    //     // use this value to control interval length
+    //     let interval = 5
+    //     this.bubbleSize.forEach((bubble,i)=>{
+    //         let transX = 0,
+    //         transY = 0
+    //         if(i==0){
+    //             transX = 0
+    //             transY = this.yList[0]
+    //         }else{
+    //             let greedyPos:axis = this.findBestAxis(bubblePosition,i,250,0)
+    //             greedyPos.y = Math.max(greedyPos.y,this.yList[i])
+    //             transX = greedyPos.x
+    //             transY = greedyPos.y
+    //         }
+    //         bubblePosition.push({x:transX,y:transY,w:bubble[0]+interval,h:bubble[1]+interval})
+    //     })
+    //     // check whether update is needed
+    //     let array1 = bubblePosition,
+    //     array2 = this.state.bubblePosition,
+    //     is_same = true
+    //     if(array1.length == array2.length){
+    //         array1.map((element, index)=>{
+    //             is_same = is_same && ((element.x == array2[index].x)&&(element.y == array2[index].y)); 
+    //         })
+    //     }else{
+    //         is_same = false
+    //     }
+    //     // update state
+    //     if(!is_same){this.setState({bubblePosition})}
+    // }
     render() {
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
+        this.bubbleSize = []
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
