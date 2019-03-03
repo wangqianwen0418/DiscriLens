@@ -8,7 +8,7 @@ import * as React from 'react';
 import { RuleAgg, RuleNode, COLORS} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
-import {pack as myPack} from 'lib/pack';
+import {pack as mypack} from 'lib/pack/index.js';
 
 
 import * as d3 from 'd3';
@@ -147,31 +147,8 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
-        let links: string[]=[]
-        
-        for (var rule of rules){
-            let source:string = undefined, target: string=undefined
-            for (var child of root.children){   
-                if(child.id.includes(rule.id)){
-                    if(source){
-                        target = child.id
-                        let link = `${source}=>${target}`
-                        if (!links.includes(link)){
-                            links.push(link)
-                        }
-                        source = target
-                        
-                    }else{
-                        source = child.id
-                    }
-                }
-            }
-            
-        }
 
-        console.info(links)
-
-        const pack = myPack()
+        const pack = mypack()
             
         pack.size([this.width, this.height])
         pack.padding((d:any)=>{
@@ -182,6 +159,34 @@ export default class Bubble extends React.Component<Props, State>{
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
         )
+        console.info(d3.hierarchy(root).sum(d => 1))
+
+        let links: any[]=[]
+        
+        for (var rule of rules){
+            let source:string = undefined, target: string=undefined, length:number=0
+            for (var child of datum.children){   
+                if(child.data.id.includes(rule.id)){
+                    target = child.data.id
+                    if(source){
+                        
+                        let linkID = links.length
+                        let link = {
+                            id: linkID,
+                            source,
+                            target,
+                            length: child.r + length
+                        }
+                        if (links.length==0||links.filter(d=>d.id==linkID).length==0){
+                            links.push(link)
+                        }
+                    }
+                    source = target
+                    length = child.r
+                }
+            }
+            
+        }
 
         let itemCircles: JSX.Element[] = []
         let highlightCircles: {[id:string]: d3.HierarchyCircularNode<any>[]} = {}

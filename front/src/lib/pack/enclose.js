@@ -1,7 +1,8 @@
 import {shuffle, slice} from "./array";
 
 export default function(circles) {
-  var i = 0, n = (circles = shuffle(slice.call(circles))).length, B = [], p, e;
+  circles = shuffle(slice.call(circles))
+  var i = 0, n = circles.length, B = [], p, e;
 
   while (i < n) {
     p = circles[i];
