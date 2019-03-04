@@ -5,7 +5,7 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode, COLORS} from 'Helpers';
+import { RuleAgg, RuleNode, COLORS, MinLink, getMinLinks} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {pack as mypack} from 'lib/pack/index.js';
@@ -25,6 +25,8 @@ export interface Props {
 export interface State {
 
 }
+
+
 
 export interface ItemHierarchy {
     id: string,
@@ -159,34 +161,11 @@ export default class Bubble extends React.Component<Props, State>{
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
         )
-        console.info(d3.hierarchy(root).sum(d => 1))
 
-        let links: any[]=[]
-        
-        for (var rule of rules){
-            let source:string = undefined, target: string=undefined, length:number=0
-            for (var child of datum.children){   
-                if(child.data.id.includes(rule.id)){
-                    target = child.data.id
-                    if(source){
-                        
-                        let linkID = links.length
-                        let link = {
-                            id: linkID,
-                            source,
-                            target,
-                            length: child.r + length
-                        }
-                        if (links.length==0||links.filter(d=>d.id==linkID).length==0){
-                            links.push(link)
-                        }
-                    }
-                    source = target
-                    length = child.r
-                }
-            }
-            
-        }
+        let links: MinLink[]= getMinLinks(rules, datum.children)
+        console.info(links)
+
+
 
         let itemCircles: JSX.Element[] = []
         let highlightCircles: {[id:string]: d3.HierarchyCircularNode<any>[]} = {}

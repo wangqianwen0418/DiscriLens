@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dagrejs/graphlib": "^2.1.4",
     "antd": "^3.13.0",
     "axios": "^0.18.0",
     "color-interpolate": "^1.0.4",

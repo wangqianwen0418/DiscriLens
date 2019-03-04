@@ -5,7 +5,7 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode, COLORS} from 'Helpers';
+import { RuleAgg, RuleNode, COLORS, getMinLinks} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {pack as myPack} from 'lib/pack/index.js';
@@ -180,36 +180,11 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
-        let links: any[]=[]
-        
-        for (var rule of rules){
-            let source:string = undefined, target: string=undefined, length:number=0
-            for (var child of datum.children){   
-                if(child.data.id.includes(rule.id)){
-                    target = child.data.id
-                    if(source){
-                        
-                        let linkID = links.length
-                        let link = {
-                            id: linkID,
-                            source,
-                            target,
-                            length: child.r + length
-                        }
-                        if (links.length==0||links.filter(d=>d.id==linkID).length==0){
-                            links.push(link)
-                        }
-                    }
-                    source = target
-                    length = child.r
-                }
-            }
-            
-        }
+        let forceLinks: any[]= getMinLinks(rules, datum.children)
 
         const simulation = d3.forceSimulation(forceNodes)
-        .force("link", d3.forceLink(links).id((d:any) => d.id).distance(d=>d.length))
-        .force("charge", d3.forceManyBody().strength(d=>{return 1}))
+        .force("link", d3.forceLink(forceLinks).id((d:any) => d.id).distance(d=>d.length))
+        .force("charge", d3.forceManyBody().strength(d=>{return 4}))
         .force("collide",d3.forceCollide().radius((d,i)=>{return forceNodes[i].r}))
         .force("center", d3.forceCenter(this.width / 2, this.height / 2))
 
@@ -269,7 +244,7 @@ export default class Bubble extends React.Component<Props, State>{
         
         
         link
-        .data(links).enter()
+        .data(forceLinks).enter()
         .append("line")
           .attr("stroke-width", 1)
           .attr('stroke', '#ccc')
