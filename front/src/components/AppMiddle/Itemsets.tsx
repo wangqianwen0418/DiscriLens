@@ -462,7 +462,7 @@ export default class Itemset extends React.Component<Props, State>{
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number]) {
         let { showAttrNum, step } = this.props
         // let {bubblePosition} = this.state
-        let { expandRules} = this.state
+        let { expandRules, bubblePosition} = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
             new Set(
@@ -477,56 +477,56 @@ export default class Itemset extends React.Component<Props, State>{
         
         return <g className='bubbles' transform={`translate(${showAttrNum * step + this.margin}, ${0})`}>
             {
-                // ruleAggs
-                //     .map((ruleAgg, i) =>{
+                ruleAggs
+                    .map((ruleAgg, i) =>{
                         
                         
-                //         // first state bubble ot obtain the bubbleSize to calculate translate
-                //         let bubble = <Bubble 
-                //         ref={(ref:any)=>{
-                //             if (ref){
-                //                 this.bubbleSize.push(ref.getSize())}
-                //             }
+                        // first state bubble ot obtain the bubbleSize to calculate translate
+                        let bubble = <Bubble 
+                        ref={(ref:any)=>{
+                            if (ref){
+                                this.bubbleSize.push(ref.getSize())}
+                            }
                             
-                //         }
-                //             ruleAgg={ruleAgg} 
-                //             scoreDomain={scoreDomain} 
-                //             showIDs={showIDs} 
-                //             hoverRule={this.state.hoverRule}
-                //             highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
-                //             samples = {this.props.samples}
-                //             protectedVal={this.props.protectedVal}
-                //         />
-                //         return <g key={'bubble_' + ruleAgg.id}  className='bubblesAgg'
-                //         // transform={`translate(${bubblePosition.length==ruleAggs.length?bubblePosition[i].x+100:100},
-                //         // ${bubblePosition.length==ruleAggs.length?bubblePosition[i].y:0})`}
-                //             transform={`translate(${0},${200*i})`}
-                //           >
-                //         {bubble}
-                //     </g>
-                //     }
-                //     )
+                        }
+                            ruleAgg={ruleAgg} 
+                            scoreDomain={scoreDomain} 
+                            showIDs={showIDs} 
+                            hoverRule={this.state.hoverRule}
+                            highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
+                            samples = {this.props.samples}
+                            protectedVal={this.props.protectedVal}
+                        />
+
+                        return <g key={'bubble_' + ruleAgg.id}  className='bubblesAgg'
+                        transform={`translate(${bubblePosition.length==ruleAggs.length?bubblePosition[i].x+100:100},
+                        ${bubblePosition.length==ruleAggs.length?bubblePosition[i].y:0})`}
+                          >
+                        {bubble}
+                    </g>
+                    }
+                    )
                 
-                    ruleAggs
-                        .map((ruleAgg, i) =>
-                            <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
-                                <Bubble 
-                                ref={(ref:any)=>{
-                                    if (ref){
-                                        this.bubbleSize.push(ref.getSize())}
-                                    }
+                    // ruleAggs
+                    //     .map((ruleAgg, i) =>
+                    //         <g key={'bubble_' + ruleAgg.id} transform={`translate(100, ${80 * i})`} >
+                    //             <Bubble 
+                    //             ref={(ref:any)=>{
+                    //                 if (ref){
+                    //                     this.bubbleSize.push(ref.getSize())}
+                    //                 }
                                     
-                                }
-                                    ruleAgg={ruleAgg} 
-                                    scoreDomain={scoreDomain} 
-                                    showIDs={showIDs} 
-                                    hoverRule={this.state.hoverRule}
-                                    highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
-                                    samples = {this.props.samples}
-                                    protectedVal={this.props.protectedVal}
-                                />
-                            </g>
-                        )
+                    //             }
+                    //                 ruleAgg={ruleAgg} 
+                    //                 scoreDomain={scoreDomain} 
+                    //                 showIDs={showIDs} 
+                    //                 hoverRule={this.state.hoverRule}
+                    //                 highlightRules={this.state.highlightRules[ruleAgg.id]||[]}
+                    //                 samples = {this.props.samples}
+                    //                 protectedVal={this.props.protectedVal}
+                    //             />
+                    //         </g>
+                    //     )
     
                 
 
@@ -585,6 +585,11 @@ export default class Itemset extends React.Component<Props, State>{
         let negaRules: JSX.Element[] = []
         negativeRuleAgg.forEach((ruleAgg,i)=> {
             offsetY += 0.3 * this.lineInterval
+            if(this.yList.length-1<i){
+                this.yList.push(offsetY)
+            }else{
+                this.yList[i] = offsetY
+            }
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX}, ${offsetY})`} className="rule">
                     {
@@ -661,6 +666,7 @@ export default class Itemset extends React.Component<Props, State>{
         let pos = bubblePosition
         let size = this.bubbleSize
         let length = pos.length
+        console.log(bubblePosition)
         if((areaWidth<size[i][0])||(length==0)){return {x:Infinity,y:Infinity}}
         else{
             let rightAxis:axis 
@@ -721,38 +727,39 @@ export default class Itemset extends React.Component<Props, State>{
         }
     }
 
-    // componentDidUpdate(prevProp: Props) {
-    //     let bubblePosition:rect[] = []
-    //     // use this value to control interval length
-    //     let interval = 5
-    //     this.bubbleSize.forEach((bubble,i)=>{
-    //         let transX = 0,
-    //         transY = 0
-    //         if(i==0){
-    //             transX = 0
-    //             transY = this.yList[0]
-    //         }else{
-    //             let greedyPos:axis = this.findBestAxis(bubblePosition,i,250,0)
-    //             greedyPos.y = Math.max(greedyPos.y,this.yList[i])
-    //             transX = greedyPos.x
-    //             transY = greedyPos.y
-    //         }
-    //         bubblePosition.push({x:transX,y:transY,w:bubble[0]+interval,h:bubble[1]+interval})
-    //     })
-    //     // check whether update is needed
-    //     let array1 = bubblePosition,
-    //     array2 = this.state.bubblePosition,
-    //     is_same = true
-    //     if(array1.length == array2.length){
-    //         array1.map((element, index)=>{
-    //             is_same = is_same && ((element.x == array2[index].x)&&(element.y == array2[index].y)); 
-    //         })
-    //     }else{
-    //         is_same = false
-    //     }
-    //     // update state
-    //     if(!is_same){this.setState({bubblePosition})}
-    // }
+    componentDidUpdate(prevProp: Props) {
+        let bubblePosition:rect[] = []
+        // use this value to control interval length
+        let interval = 5
+        this.bubbleSize.forEach((bubble,i)=>{
+            let transX = 0,
+            transY = 0
+            if(i==0){
+                transX = 0
+                transY = this.yList[0]
+            }else{
+                let greedyPos:axis = this.findBestAxis(bubblePosition,i,250,0)
+                greedyPos.y = Math.max(greedyPos.y,this.yList[i])
+                transX = greedyPos.x
+                transY = greedyPos.y
+            }
+            bubblePosition.push({x:transX,y:transY,w:bubble[0]+interval,h:bubble[1]+interval})
+        })
+        // check whether update is needed
+        let array1 = bubblePosition,
+        array2 = this.state.bubblePosition,
+        is_same = true
+        if(array1.length == array2.length){
+            array1.map((element, index)=>{
+                is_same = is_same && ((element.x == array2[index].x)&&(element.y == array2[index].y)); 
+            })
+        }else{
+            is_same = false
+        }
+        // update state
+        if(!is_same){this.setState({bubblePosition})}
+    }
+
     render() {
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />

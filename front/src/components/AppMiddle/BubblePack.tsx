@@ -159,7 +159,7 @@ export default class Bubble extends React.Component<Props, State>{
             d3.hierarchy(root)
                 .sum(d => 1) // same radius for each item
         )
-        console.info(d3.hierarchy(root).sum(d => 1))
+        // console.info(d3.hierarchy(root).sum(d => 1))
 
         let links: any[]=[]
         
