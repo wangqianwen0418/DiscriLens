@@ -15,7 +15,7 @@ import * as d3 from 'd3';
 
 export interface Props {
     ruleAgg: RuleAgg,
-    scoreDomain: [number, number] | [undefined, undefined],
+    scoreScale: d3.ScaleLinear<number, number>,
     showIDs: string[],
     hoverRule: string,
     highlightRules: string[],
@@ -111,7 +111,7 @@ export default class Bubble extends React.Component<Props, State>{
         this.draw()
     }
     draw(){
-        let { ruleAgg, scoreDomain, hoverRule, highlightRules, samples } = this.props
+        let { ruleAgg, scoreScale, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules),
             circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
@@ -121,10 +121,10 @@ export default class Bubble extends React.Component<Props, State>{
         // cluster item circles to a big circle
         // let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
         
-        let scoreScale = d3
-            .scaleLinear()
-            .domain([0, scoreDomain[1]])
-            .range([0, 0.6])
+        // let scoreScale = d3
+        //     .scaleLinear()
+        //     .domain([0, scoreDomain[1]])
+        //     .range([0, 0.6])
         // store the position of circles
 
         let root: ItemHierarchy = {

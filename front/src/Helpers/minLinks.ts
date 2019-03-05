@@ -7,6 +7,7 @@ export interface MinLink {
     source: string,
     target: string,
     length: number,
+    weight: number,
     id: string
 }
 
@@ -28,7 +29,7 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
 
     // build a graph for each rule
     for (var rule of rules) {
-        let g = new graphlib.Graph({ directed: false })
+        let g = new graphlib.Graph()
         circles.forEach((child: d3.HierarchyCircularNode<ItemHierarchy>, childIdx: number) => {
             let outCircleID = child.data.id
             if (outCircleID.includes(rule.id)) {
@@ -37,17 +38,19 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
         })
         let nodeIDs = g.nodes()
         for (let i = 0; i < nodeIDs.length; i++)
-            for (let j = i; j < nodeIDs.length; j++) {
+            for (let j = i+1; j < nodeIDs.length; j++) {
                 g.setEdge(nodeIDs[i], nodeIDs[j])
             }
         rulesGraph[rule.id] = g
     }
 
 
-    // find the minimum spanning tree for each rule
+    // find the min spanning tree for each rule
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
-        rulesGraph[ruleID] = graphlib.alg.prim(ruleGraph, getEdgeWeight);
+        if (ruleGraph.edges().length>2){
+            rulesGraph[ruleID] = graphlib.alg.prim(ruleGraph, (edgeObj:any)=>-1 * getEdgeWeight(edgeObj, rulesGraph));
+        }
     }
     // update links based on MST
     for (let ruleID in rulesGraph) {
@@ -59,7 +62,8 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
                 id: links.length.toString(),
                 source,
                 target,
-                length: getR(source) + getR(target)
+                length: getR(source) + getR(target),
+                weight: getEdgeWeight(edgeObj, rulesGraph)
             }
             if (links.length == 0 || links.filter(d => d.source == source && d.target == target).length == 0) {
                 links.push(link)

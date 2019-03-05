@@ -5,7 +5,8 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode, COLORS, MinLink, getMinLinks} from 'Helpers';
+import { RuleAgg, RuleNode} from 'Helpers';
+// import { RuleAgg, RuleNode, MinLink, getMinLinks} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {pack as mypack} from 'lib/pack/index.js';
@@ -15,7 +16,8 @@ import * as d3 from 'd3';
 
 export interface Props {
     ruleAgg: RuleAgg,
-    scoreDomain: [number, number] | [undefined, undefined],
+    // scoreScale: d3.ScaleLinear<number, number>,
+    scoreColor: (score: number) => string,
     showIDs: string[],
     hoverRule: string,
     highlightRules: string[],
@@ -66,7 +68,7 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
                 .map(d => d.id)
                 .indexOf(item)
             if (idx > -1) {
-                itemSet[idx].score = Math.max(itemSet[idx].score, rule.risk_dif)
+                itemSet[idx].score = Math.abs(itemSet[idx].score)>Math.abs(rule.risk_dif)?itemSet[idx].score: rule.risk_dif
                 if(!itemSet[idx].groups.includes(rule.id.toString())){
                     itemSet[idx].groups.push(rule.id.toString())
                 }
@@ -74,7 +76,7 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
             } else {
                 itemSet.push({
                     id: item,
-                    score: rule.risk_dif,
+                    score: rule.risk_dif, // score, get the absolute value
                     groups: [rule.id.toString()]
                 })
             }
@@ -101,7 +103,7 @@ export default class Bubble extends React.Component<Props, State>{
         // return [box.width, box.height]
     }
     draw(){
-        let { ruleAgg, scoreDomain, hoverRule, highlightRules, samples } = this.props
+        let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules),
             circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
@@ -110,11 +112,7 @@ export default class Bubble extends React.Component<Props, State>{
 
         // cluster item circles to a big circle
         // let clusteredItems = groupByKey(items, (item)=>[item.score, item.groups.length])
-        
-        let scoreScale = d3
-            .scaleLinear()
-            .domain([0, scoreDomain[1]])
-            .range([0, 0.6])
+       
         // store the position of circles
 
         let root: ItemHierarchy = {
@@ -162,8 +160,8 @@ export default class Bubble extends React.Component<Props, State>{
                 .sum(d => 1) // same radius for each item
         )
 
-        let links: MinLink[]= getMinLinks(rules, datum.children)
-        console.info(links)
+        // let links: MinLink[]= getMinLinks(rules, datum.children)
+        // console.info(links)
 
 
 
@@ -172,11 +170,13 @@ export default class Bubble extends React.Component<Props, State>{
         let itemsPos: any[] = []
         let strokeWidth = 2
 
+        // console.info(datum.children.map((d:any)=>d.data.score), hoverRule)
+
         datum.children.forEach((set:d3.HierarchyCircularNode<any>) => {
-            let scoreColor = d3.interpolateOranges(scoreScale(set.children[0].data.score))
+            let scoreColor_ = scoreColor(set.data.score)
             let isHover = set.data.id.includes(hoverRule)
             // let isHighlight = containsAttr(set.data.id, highlightRules).length>0
-            let strokeColor = hoverRule==undefined?scoreColor:(isHover?scoreColor:'#ccc')
+            let strokeColor = hoverRule==undefined?scoreColor_:(isHover?scoreColor_:'#ccc')
             let opacity = hoverRule==undefined?1:(isHover?1:0.2)
 
 
@@ -207,7 +207,7 @@ export default class Bubble extends React.Component<Props, State>{
                 // opacity='0.5'
                 stroke={strokeColor}
                 // fill="transparent"
-                // stroke={set.data.id.includes(hoverRule)?"gray":"#FF9F1E"}
+                // stroke={set.data.id.includes(hoverRule)?"#b9b9b9":"#FF9F1E"}
                 // strokeWidth={ (isHighlight ? 2*strokeWidth : strokeWidth)/this.scaleRatio }
                 strokeWidth={strokeWidth/this.scaleRatio}
             />)
@@ -222,22 +222,37 @@ export default class Bubble extends React.Component<Props, State>{
                 let id = item.data.id
                 let sample = samples[id]
                 let [protectedAttr, protectedVal] = this.props.protectedVal.split('=')
-                let itemColor = sample[protectedAttr]==protectedVal?COLORS[1]: COLORS[0]
+                let isProtect = sample[protectedAttr]==protectedVal
+                // let itemColor = isProtect?COLORS[1]: COLORS[0]
+                // let itemColor ="#b9b9b9"
+                let itemColor = strokeColor
+                let itemCircle = isProtect? <circle
+                    className='inner bubbles'
+                    key={id} 
+                    // cx={item.x} cy={item.y} 
+                    transform={`translate(${item.x}, ${item.y})`}
+                    r={item.r*0.8 }
+                    fill={sample.class=="1"?itemColor :'white'}
+                    stroke={itemColor}
+                    strokeWidth={strokeWidth/this.scaleRatio}
+                    opacity={opacity}
+                    // fill={d3.interpolateOranges(scoreScale(item.data.score))}
+                    // fill="#FF9F1E"
+                    // opacity={scoreScale(item.data.score)}
+                />
+                :<rect
+                    className='inner bubbles'
+                    key={id} 
+                    fill={sample.class=="1"?itemColor :'white'}
+                    stroke={itemColor}
+                    strokeWidth={strokeWidth/this.scaleRatio}
+                    width={item.r* 1.2 }
+                    height={item.r* 1.2 }
+                    opacity={opacity}
+                    transform={`translate(${item.x - item.r*0.6}, ${item.y- item.r*0.6})`}
+                />
                 itemCircles.push(
-                    <circle
-                        className='inner bubbles'
-                        key={id} 
-                        // cx={item.x} cy={item.y} 
-                        transform={`translate(${item.x}, ${item.y})`}
-                        r={item.r*0.8 }
-                        fill={sample.class=="1"?itemColor :'white'}
-                        stroke={itemColor}
-                        strokeWidth={strokeWidth/this.scaleRatio}
-                        opacity={opacity}
-                        // fill={d3.interpolateOranges(scoreScale(item.data.score))}
-                        // fill="#FF9F1E"
-                        // opacity={scoreScale(item.data.score)}
-                    />
+                    itemCircle
                 )
             })
         })
@@ -251,7 +266,7 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         let outlines = highlightRules.map((ruleID, idx)=>{
-                const percent = highlightRules.length==1?0:(idx/(highlightRules.length-1)) 
+                const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
                 const padding = ( 0.55 + 0.45* percent) * circlePadding/this.scaleRatio
                 return  <g key={`outline_${ruleID}`} className='outlines'>
                     <mask id={`mask_outline_${ruleID}`}>
@@ -266,7 +281,7 @@ export default class Bubble extends React.Component<Props, State>{
                             return <circle id={set.data.id} key={set.data.id} r={set.r + padding} cx={set.x} cy={set.y} fill="black"/>
                         })}           
                     </mask>
-                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`} stroke={"gray"} fill="gray">
+                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`} stroke={"#b9b9b9"} fill="none">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.data.id} key={set.data.id} 
                                 r={set.r+padding} cx={set.x} cy={set.y} 
@@ -279,6 +294,40 @@ export default class Bubble extends React.Component<Props, State>{
                 {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='red' stroke='gray' mask={`url(#outline_${hoverRule})`}/>  */}
                 </g>
         })
+
+        // var bubbles = new BubbleSet(),
+        // padding = 2
+        // outlines = highlightRules.map(rule=>{
+        //     let itemIn = datum.children
+        //     .filter((child:any)=>child.data.id.includes(rule))
+        //     .map((child:any)=>{return {
+        //         x: child.x-child.r,
+        //         y: child.y-child.r,
+        //         width: child.r*2,
+        //         height: child.r*2
+        //     }})
+        //     let itemOut = datum.children
+        //         .filter((child:any)=>!child.data.id.includes(rule))
+        //         .map((child:any)=>{return {
+        //             x: child.x-child.r,
+        //             y: child.y-child.r,
+        //             width: child.r,
+        //             height: child.r
+        //         }})
+        //     var list = bubbles.createOutline(
+        //         BubbleSet.addPadding(itemIn, padding),
+        //         BubbleSet.addPadding(itemOut, padding),
+        //         null
+        //       );
+        //       var outline = new PointPath(list).transform([
+        //         new ShapeSimplifier(0.0),
+        //         new BSplineShapeGenerator(),
+        //         new ShapeSimplifier(0.0),
+        //       ]);
+        //       return <path key={rule} d={outline.toString()} id={`outline_${rule}`}
+        //       className='outline'
+        //       fill='transparent' stroke='gray'/>
+        // })
         return {itemCircles, outlines}
 
     }
