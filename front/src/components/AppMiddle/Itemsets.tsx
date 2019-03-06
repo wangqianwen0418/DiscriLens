@@ -429,7 +429,6 @@ export default class Itemset extends React.Component<Props, State>{
                             stroke = {this.scoreColor(ruleNode.rule.risk_dif)}
                             strokeWidth={2}
                         />
-<<<<<<< HEAD
                         
                         <Tooltip title={val}>
                             <rect className='font'
@@ -445,14 +444,6 @@ export default class Itemset extends React.Component<Props, State>{
                             />
                         </Tooltip>
                         
-=======
-                        <rect className='font'
-                            width={barWidth / ranges.length} height={this.lineInterval}
-                            x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
-                            // fill={favorPD ? "#98E090" : "#FF772D"}
-                            fill = {this.scoreColor(ruleNode.rule.risk_dif)}
-                        />
->>>>>>> 94cf276b4071dddd45caf199ed2756274877bb77
                     </g>
                 }
                 )}
@@ -553,12 +544,7 @@ export default class Itemset extends React.Component<Props, State>{
         attrValContent.unshift(itemSizeLabel)
         return attrValContent
     }
-<<<<<<< HEAD
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag:boolean) {
-=======
-    drawBubbles(ruleAggs: RuleAgg[]) {
-        let { showAttrNum, step } = this.props
->>>>>>> 94cf276b4071dddd45caf199ed2756274877bb77
         // let {bubblePosition} = this.state
         let { expandRules, bubblePosition} = this.state
         // rules that are showing
@@ -719,36 +705,12 @@ export default class Itemset extends React.Component<Props, State>{
             }
         })
 
-<<<<<<< HEAD
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
         this.yList = posYList.concat(negYList)
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain, true), this.drawBubbles(negativeRuleAgg, scoreDomain, false)]
-=======
-        // let negativeScoreDomain = [0, Math.max(...rules.filter(rule=>rule.risk_dif<0).map(rule => -1*rule.risk_dif))]
-        // let negativeScoreScale = d3
-        //     .scaleLinear()
-        //     .domain(negativeScoreDomain)
-        //     .range([0, 0.8])
-        
-        // let positiveScoreDomain = [0, Math.max(...rules.filter(rule=>rule.risk_dif>=0).map(rule => rule.risk_dif))]
-        // let positiveScoreScale = d3
-        //     .scaleLinear()
-        //     .domain(positiveScoreDomain)
-        //     .range([0, 0.8])
-
-        // let [minScore, maxScore ] = d3.extent(rules.map(rule => rule.risk_dif))
-
-        // let scoreColor = d3.scaleLinear()
-        // .domain([minScore<0?minScore:0 , 0, 0, maxScore>0?maxScore:0 ])
-        // .range([d3.interpolateOranges(0.8), d3.interpolateOranges(0.2), d3.interpolateGreens(0.2), d3.interpolateGreens(0.8)])
-
-       
-        
-        let bubbles = [this.drawBubbles(positiveRuleAgg), this.drawBubbles(negativeRuleAgg)]
->>>>>>> 94cf276b4071dddd45caf199ed2756274877bb77
 
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
@@ -804,12 +766,7 @@ export default class Itemset extends React.Component<Props, State>{
         let pos = bubblePosition
         let size = this.bubbleSize
         let length = pos.length
-<<<<<<< HEAD
         if((areaWidth<size[i].w)||(length==0)){return {x:Infinity,y:Infinity}}
-=======
-        // console.log(bubblePosition)
-        if((areaWidth<size[i][0])||(length==0)){return {x:Infinity,y:Infinity}}
->>>>>>> 94cf276b4071dddd45caf199ed2756274877bb77
         else{
             let rightAxis:axis 
             let leftAxis:axis
