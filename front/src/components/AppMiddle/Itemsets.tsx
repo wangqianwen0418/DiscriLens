@@ -6,8 +6,8 @@ import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
 // import Bubble from 'components/AppMiddle/Bubble';
-import Bubble from 'components/AppMiddle/BubbleForce';
-// import Bubble from 'components/AppMiddle/BubblePack';
+// import Bubble from 'components/AppMiddle/BubbleForce';
+import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
 

@@ -187,7 +187,7 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
-        let graph = getMinLinks(rules, datum.children)
+        let graph = getMinLinks(rules, root.children)
         let forceLinks: any[]= graph.edges()
         .map((edgeObj: any)=>{
             let {weight, length} = graph.edge(edgeObj)

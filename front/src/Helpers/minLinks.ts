@@ -1,6 +1,6 @@
 import * as graphlib from '@dagrejs/graphlib';
 import { Rule } from 'types';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
 import { ItemHierarchy } from 'components/AppMiddle/BubblePack';
 
 export interface MinLink {
@@ -22,13 +22,13 @@ const getEdgeWeight = (e: typeof graphlib.graph.edgeObj, rulesGraph: RulesGraph)
     return weight
 }
 
-export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<ItemHierarchy>[]): typeof graphlib.Graph=> {
+export const getMinLinks = (rules: Rule[], circles: ItemHierarchy[]): typeof graphlib.Graph=> {
      let rulesGraph: RulesGraph = {}
     // build a graph for each rule
     for (var rule of rules) {
         let g = new graphlib.Graph({ directed: false })
-        circles.forEach((child: d3.HierarchyCircularNode<ItemHierarchy>, childIdx: number) => {
-            let {groups, id} = child.data
+        circles.forEach((child: ItemHierarchy, childIdx: number) => {
+            let {groups, id} = child
             if (groups.includes(rule.id.toString())) {
                 g.setNode(id)
             }
@@ -54,7 +54,7 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
         for (let edgeObj of ruleGraph.edges()) {
-            const getR = (id: string) => circles.filter((d: any) => d.data.id == id)[0].r
+            const getR = (id: string) => circles.filter((d: any) => d.id == id)[0].r
             let source = edgeObj.v, target = edgeObj.w
             // let link: MinLink = {
             //     id: links.length.toString(),
