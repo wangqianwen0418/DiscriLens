@@ -93,7 +93,7 @@ export default class Itemset extends React.Component<Props, State>{
             return d3.interpolateOranges(
                 d3.scaleLinear()
                 .domain([minScore, 0])
-                .range([0.8, 0.3])(score)
+                .range([0.65, 0.3])(score)
             )
         }else{
             return d3.interpolateGreens(
@@ -202,11 +202,15 @@ export default class Itemset extends React.Component<Props, State>{
         }
 
         let toggleExpand =
-            (e: React.SyntheticEvent) => this.toggleExpand(
+            (e: React.SyntheticEvent) => {
+                e.stopPropagation();
+                e.preventDefault();
+                this.toggleExpand(
                 id.toString(),
                 newAttrs,
                 children.map(child => child.rule.id.toString())
-            )
+                )
+            }
         let isExpand = this.state.expandRules.hasOwnProperty(id)
 
         let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
@@ -244,6 +248,20 @@ export default class Itemset extends React.Component<Props, State>{
                     this.setState({hoverRule:undefined})
                     this.leaveRect()
                 }
+            }
+            // tslint:disable-next-line:jsx-no-lambda
+            onClick={(e: React.MouseEvent)=>{
+                e.preventDefault()
+                e.stopPropagation()
+                let ruleID = rule.id.toString()
+                let {highlightRules} = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
+                if (idx==-1){
+                    highlightRules[ruleAggID].push(ruleID)
+                }else{
+                    highlightRules[ruleAggID].splice(idx, 1)
+                }
+                this.setState({highlightRules})
+            }
             }
             >
             <g 
@@ -352,7 +370,11 @@ export default class Itemset extends React.Component<Props, State>{
                 transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`} 
                 opacity={highlightRules[ruleAggID]? (highlightRules[ruleAggID].includes(rule.id.toString())?1:0):0}
                 // tslint:disable-next-line:jsx-no-lambda
-                onClick={()=>this.toggleHighlight(ruleAggID, rule.id.toString())}
+                onClick={(e:React.MouseEvent)=>{
+                    e.stopPropagation()
+                    e.preventDefault()
+                    this.toggleHighlight(ruleAggID, rule.id.toString())}
+                }
                 cursor='pointer'>
                 <rect width={-indent} height={2*this.lineInterval} y={-this.lineInterval } x={0} fill='transparent'/>
                     {PIN}
