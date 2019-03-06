@@ -17,23 +17,20 @@ const getEdgeWeight = (e: typeof graphlib.graph.edgeObj, rulesGraph: RulesGraph)
     let weight = 0
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
-        if (ruleGraph.edge(e)) weight++;
+        if (ruleGraph.hasEdge(e)) weight=weight+1;
     }
     return weight
 }
 
-export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<ItemHierarchy>[]): MinLink[] => {
-    let links: MinLink[] = [] // links connecting outer circles belonging to the same set
-    
-    let rulesGraph: RulesGraph = {}
-
+export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<ItemHierarchy>[]): typeof graphlib.Graph=> {
+     let rulesGraph: RulesGraph = {}
     // build a graph for each rule
     for (var rule of rules) {
-        let g = new graphlib.Graph()
+        let g = new graphlib.Graph({ directed: false })
         circles.forEach((child: d3.HierarchyCircularNode<ItemHierarchy>, childIdx: number) => {
-            let outCircleID = child.data.id
-            if (outCircleID.includes(rule.id)) {
-                g.setNode(outCircleID)
+            let {groups, id} = child.data
+            if (groups.includes(rule.id.toString())) {
+                g.setNode(id)
             }
         })
         let nodeIDs = g.nodes()
@@ -44,7 +41,7 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
         rulesGraph[rule.id] = g
     }
 
-
+    
     // find the min spanning tree for each rule
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
@@ -53,23 +50,34 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
         }
     }
     // update links based on MST
+    let resultGraph = new graphlib.Graph({ directed: false })
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
         for (let edgeObj of ruleGraph.edges()) {
             const getR = (id: string) => circles.filter((d: any) => d.data.id == id)[0].r
             let source = edgeObj.v, target = edgeObj.w
-            let link: MinLink = {
-                id: links.length.toString(),
-                source,
-                target,
-                length: getR(source) + getR(target),
-                weight: getEdgeWeight(edgeObj, rulesGraph)
-            }
-            if (links.length == 0 || links.filter(d => d.source == source && d.target == target).length == 0) {
-                links.push(link)
+            // let link: MinLink = {
+            //     id: links.length.toString(),
+            //     source,
+            //     target,
+            //     length: getR(source) + getR(target),
+            //     weight: getEdgeWeight(edgeObj, rulesGraph)
+            // }
+            if (!resultGraph.hasEdge(edgeObj)) {
+                // links.push(link)
+                resultGraph.setNode(source)
+                resultGraph.setNode(target)
+                resultGraph.setEdge(
+                    source, 
+                    target, 
+                    {
+                        weight: getEdgeWeight(edgeObj, rulesGraph),
+                        length: getR(source) + getR(target),
+                    }) 
             }
         }
     }
-    return links
+    console.info(resultGraph.edges().map((e:any)=>resultGraph.edge(e)))
+    return resultGraph
 }
 
