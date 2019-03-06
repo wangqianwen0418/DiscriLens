@@ -24,4 +24,3 @@ export  const getColor = (name: string): string =>{
             return COLORS[idx % numColor]
         }
     }
-

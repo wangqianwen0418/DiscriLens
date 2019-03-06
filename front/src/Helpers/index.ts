@@ -11,3 +11,4 @@ export {ruleAggregate, RuleAgg, RuleNode, containsAttr} from "./ruleAggregate";
 export {getAttrRanges} from './getAttrRanges';
 export {groupByKey} from './groupByKey';
 export {filterRules, filterRulesNoThreshold} from './filterRules';
+export {getMinLinks, MinLink} from './minLinks';
