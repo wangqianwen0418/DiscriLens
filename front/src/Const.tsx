@@ -34,3 +34,6 @@ export type CHANGE_SHOW_DATASET = typeof CHANGE_SHOW_DATASET
 
 export const CHANGE_XSCALE = "CHANGE_XSCALE"
 export type CHANGE_XSCALE = typeof CHANGE_XSCALE
+
+export const SELBAR = "SELBAR"
+export type SELBAR = typeof SELBAR

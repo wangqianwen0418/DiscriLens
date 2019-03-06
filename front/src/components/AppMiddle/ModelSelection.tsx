@@ -70,7 +70,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     
     updateModels(){
-        this.models = this.props.showDataset=='academic'?['lr']:['xgb','knn','lr']
+        this.models = ['xgb','knn','lr']
         this.setState({dataSet:this.props.showDataset})
     }
 
@@ -105,6 +105,13 @@ export default class modelSelection extends React.Component<Props,State>{
                         dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
                     }
                 })
+
+                // sort samples points by risk_dif
+                dataKeyAttr = dataKeyAttr.sort((a,b)=>{
+                    return a.x - b.x
+                })
+
+                // down sampling to smooth data
                 let curveY:number[] = []
                 curveX = []
                 let step = Math.ceil(dataKeyAttr.length / 5)

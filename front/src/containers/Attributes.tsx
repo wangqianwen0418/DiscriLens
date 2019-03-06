@@ -1,6 +1,6 @@
 import Attributes from 'components/AppMiddle/Attributes';
 import { StoreState } from 'types';
-import {ChangeDragArray, ChangeKeyAttr, ChangeShowAttr} from 'actions';
+import {ChangeDragArray, ChangeKeyAttr, ChangeShowAttr, ChangeSelectedBar} from 'actions';
 import { connect} from 'react-redux';
 // import { Dispatch } from 'redux';
 
@@ -13,6 +13,7 @@ export function mapStateToProps(state:StoreState) {
         showAttrNum: state.showAttrNum,
         protectedAttr: state.protectedAttr,
         fetchKeyStatus: state.fetchKeyStatus,
+        selected_bar: state.selected_bar,
     };
 }
 
@@ -20,7 +21,8 @@ export function mapDispatchToProps(dispatch: any) {
     return {
         onChangeDragArray:(dragArray:string[])=>{dispatch(ChangeDragArray(dragArray))},
         onChangeKeyAttr: (keyAttrs:string[])=>{dispatch(ChangeKeyAttr(keyAttrs))},
-        onChangeShowAttr: (showAttrs:string[])=>{dispatch(ChangeShowAttr(showAttrs))}
+        onChangeShowAttr: (showAttrs:string[])=>{dispatch(ChangeShowAttr(showAttrs))},
+        onChangeSelectedBar: (selected_bar:string[])=>{dispatch(ChangeSelectedBar(selected_bar))}
     }
 }
 

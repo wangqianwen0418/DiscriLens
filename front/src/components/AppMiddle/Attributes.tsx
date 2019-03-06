@@ -17,12 +17,14 @@ export interface Props {
     step:number,
     barWidth: number,
     offsetX:number,
+    offset:number,
+    selected_bar:string[],
     onChangeKeyAttr: (keyAttrs:string[])=>void,
     onChangeDragArray: (dragArray: string[]) => void,
     onChangeShowAttr: (showAttrs: string[])=>void,
+    onChangeSelectedBar: (selected_bar:string[])=>void,
 }
 export interface State {
-    selected_bar: string[],
     cursorDown: boolean,
 }
 export interface curveData {
@@ -37,7 +39,6 @@ export default class Attributes extends React.Component<Props, State>{
     constructor(props: Props) {
         super(props)
         this.state = {
-            selected_bar: ['', ''],
             // showAttrs: [],
             cursorDown: false,
         }
@@ -53,12 +54,12 @@ export default class Attributes extends React.Component<Props, State>{
     }
 
     changeColor(selected_bar: string[]) {
-        this.setState({ selected_bar })
+        this.props.onChangeSelectedBar(selected_bar)
+        this.setState({})
     }
 
 
     toggleShowAttr(attr:string, showFlag:boolean){
-        // console.info('toggle show')
         let {showAttrNum, keyAttrNum, dragArray} = this.props
         let showAttrs = dragArray.slice(0, showAttrNum),
             keyAttrs = dragArray.slice(0, keyAttrNum),
@@ -84,7 +85,6 @@ export default class Attributes extends React.Component<Props, State>{
 
     // stop dragging
     onDragEnd(attr:string,startNum:number,endNum:number,endReal:number){
-        // console.info('drag end')
         let dragArray:string[] = []
         let {dragArray: oldArray, keyAttrNum} = this.props
         let boarder = oldArray.slice(0, keyAttrNum)
@@ -241,11 +241,11 @@ export default class Attributes extends React.Component<Props, State>{
             {ListNum.map((List,i)=>{
                     let title: string = ''
                     if(i==0){
-                        title = 'x<=' + rangesSplit[i]
+                        title = 'x<' + rangesSplit[i]
                     }else if(i==rangesSplit.length - 1){
                         title = 'x>' + rangesSplit[i - 1]
                     }else{
-                        title = rangesSplit[i-1] + '<x<=' + rangesSplit[i]
+                        title = rangesSplit[i-1] + '<x<' + rangesSplit[i]
                     }
                     // change mouseOn bar's color when the button is not pressed
                     let mouseEnter = (e:any) => {
@@ -324,9 +324,8 @@ export default class Attributes extends React.Component<Props, State>{
      * main function to draw 
      ******************/
     draw() {
-        let { samples, keyAttrNum, barWidth, step, showAttrNum, dragArray } = this.props
+        let {selected_bar, samples, keyAttrNum, barWidth, step, showAttrNum, dragArray } = this.props
         let showAttrs = dragArray.slice(0, showAttrNum), keyAttrs = dragArray.slice(0, keyAttrNum)
-        let { selected_bar } = this.state
         // get numerical data
         samples = samples.slice(0, Math.floor(samples.length/2) )
         let counts:number[] = [] // the height of each bar
@@ -362,7 +361,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - window.innerWidth / 6 - this.props.offsetX)/ step)
+                let endNum = Math.floor((e.x - this.props.offset - window.innerWidth / 6 - this.props.offsetX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -418,7 +417,7 @@ export default class Attributes extends React.Component<Props, State>{
                 position={draggablePos}
                 onStop={onDragEnd}
                 >
-                    <g className="attr" id={'draggable'+String(attr_i)+attr}>
+                    <g className="attr" id={'drag'+String(attr_i)+attr}>
                         {showAttrs.includes(attr)?
                             <g className='attrChart' cursor='pointer'>
                                 {dataType == 'string'? 
@@ -474,7 +473,7 @@ export default class Attributes extends React.Component<Props, State>{
         let keyAttrBoarder:curveData[] = [{x:(keyAttrs.length - 0.2) * step,y:60,z:0},
             {x:(keyAttrs.length - 0.2)* step,y:0,z:0}] */
         return <g id={'attributes_draggable'}>
-            <g className='attrs' transform={`translate(${this.props.offsetX}, ${this.attr_margin * 2})`}>
+            <g className='attrs' transform={`translate(${this.props.offsetX + this.props.offset}, ${this.attr_margin * 2})`}>
                 {attrCharts}
                 {//<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />
                 }

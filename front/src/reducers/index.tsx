@@ -4,7 +4,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
-  CHANGE_XSCALE,CHANGE_SHOW_DATASET} from 'Const';
+  CHANGE_XSCALE,CHANGE_SHOW_DATASET, SELBAR} from 'Const';
 
 import {filterRules} from 'Helpers';
 
@@ -45,6 +45,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
             dragArray.slice(0, keyAttrNum)
           )
         }
+      case SELBAR:
+        return { ...state, selected_bar: action.selected_bar}
       case CHANGE_DRAG_ARRAY:
         return { ...state, dragArray: action.dragArray}
       case CHANGE_KEY_ATTR:

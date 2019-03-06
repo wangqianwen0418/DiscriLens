@@ -69,7 +69,7 @@ export default class Side extends React.Component<Props, State>{
   }
 
   public render(){
-      let {dataset_name, protect_attr, model_name} = this.state
+      let { protect_attr, model_name} = this.state
       return <div className='Side'>
         <Row>
           <Col span={6}>
@@ -86,8 +86,8 @@ export default class Side extends React.Component<Props, State>{
 
             <Select size={'small'} value={model_name} style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>
                 <Option value="lr">lr</Option>
-                {dataset_name=='academic'?null:<Option value="knn">knn</Option>}
-                {dataset_name=='academic'?null:<Option value="xgb">xgb</Option>}
+                <Option value="knn">knn</Option>
+                <Option value="xgb">xgb</Option>
             </Select>
 
             <Select size={'small'} value={protect_attr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>

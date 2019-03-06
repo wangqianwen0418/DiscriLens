@@ -1,7 +1,7 @@
 import Itemsets from 'components/AppMiddle/Itemsets';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeShowAttr} from 'actions';
+import { ChangeShowAttr,ChangeSelectedBar} from 'actions';
 // import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -21,6 +21,7 @@ export function mapDispatchToProps(dispatch: any) {
     return {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
+        onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar))
     }
 }
 

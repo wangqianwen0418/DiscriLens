@@ -219,8 +219,12 @@ export default class Overview extends React.Component<Props,State>{
             }
         })
 
-        // console.info(curveX, dataKeyAttr)
+        // sort sample points by risk_dif
+        dataKeyAttr = dataKeyAttr.sort((a,b)=>{
+            return a.x - b.x
+        })
 
+        // down sampling to smooth curve
         let curveY:number[] = []
         curveX = []
         let step = Math.ceil(dataKeyAttr.length / 5)
@@ -236,7 +240,7 @@ export default class Overview extends React.Component<Props,State>{
                 curveX.push(data.x)
             }
         })
-
+        
         /**
          * Draw area
          * */ 

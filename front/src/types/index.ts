@@ -50,4 +50,5 @@ export interface StoreState{
     dragArray: string[],   // array to record each attr's location, used for dragging function
     showDataset: string, // the dataset that the user is exploring, others will be hidden
     xScaleMax: number, // used to zoom axis when selection is expanded to keep all axis consistent
+    selected_bar: string[], // used to transfer the info of hoverd rect
 }

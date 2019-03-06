@@ -2,7 +2,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
-    CHANGE_XSCALE,CHANGE_SHOW_DATASET} from 'Const';
+    CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -234,6 +234,23 @@ export const ChangeXSclaeMax = (xScaleMax:number):ChangeXScaleMax =>{
         xScaleMax
     });
 }
+
+
+/*****************
+all about changing selected bar
+*****************/ 
+export interface selectedBar{
+    type:SELBAR,
+    selected_bar:string[]
+}
+
+export const ChangeSelectedBar = (selected_bar:string[]):selectedBar =>{
+    return ({
+        type: SELBAR,
+        selected_bar
+    });
+}
+
 // combine to start
 
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
@@ -285,7 +302,7 @@ export const changeShowDataset = (showDataset: string): showDataset=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let {key_attrs} = require('../testdata/'+ dataset + '_key.json'), 
+    let key_attrs = require('../testdata/'+ dataset + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
     jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
@@ -296,6 +313,7 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
     if (dragArray.includes(protectedAttr)){
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
+    console.log(key_attrs)
     // move key attributes to the front
     dragArray = key_attrs.concat(dragArray.filter(attr=>!key_attrs.includes(attr)))
 
@@ -321,4 +339,4 @@ export const switchModel=(dataset:string,model:string)=>{
 
 export type AllActions = GenerateSamples|GenerateRules|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
-ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar

@@ -67,6 +67,7 @@ if (TEST){
       showAttrNum: keyAttrs.length,
       showDataset:dataset,
       xScaleMax: -1,
+      selected_bar:['','']
   }
 }else{
   initState = {
@@ -85,6 +86,7 @@ if (TEST){
     showAttrNum: 0,
     showDataset: '',
     xScaleMax: -1,
+    selected_bar: ['','']
 }
 }
 

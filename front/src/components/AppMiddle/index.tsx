@@ -9,6 +9,7 @@
      public step = 120;
      barWidth = this.step * 0.9;
      offsetX=110;
+     offset = window.innerWidth * 0.25;
      render(){
          return <Row className='App-middle'>
 
@@ -23,10 +24,10 @@
 
           <Col span={20} className='App-right' style={{height:"100%"}}>
           <svg className='attribute' style={{width:"100%", height: "25%"}}>
-                <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
+                <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
             </svg>
             <div className='itemset' style={{width: "100%", height: "75%", overflowY: "scroll"}}>
-                <Itemsets step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
+                <Itemsets step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
             </div>
         </Col>
         </Row>
