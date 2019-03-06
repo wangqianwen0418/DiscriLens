@@ -153,19 +153,6 @@ export default class Bubble extends React.Component<Props, State>{
                 })
             }
         })
-
-
-        // const pack = mypack()
-            
-        // pack.size([this.width, this.height])
-        // pack.padding((d:any)=>{
-        //         return d.depth==0?circlePadding:0
-        //     })
-        //     // .size([width * 35 * radius, Math.ceil(items.length / width) * 15 * radius])
-        // const datum = pack(
-        //     d3.hierarchy(root)
-        //         .sum(d => 1) // same radius for each item
-        // )
         
 
         let graph = getMinLinks(rules, root.children)
@@ -176,8 +163,7 @@ export default class Bubble extends React.Component<Props, State>{
             .forEach((innerCircle:ItemHierarchy)=>{
                 innerCircle.r = this.radius
             })
-            let outerRadius = packEnclose(outerCircle.children)
-            outerCircle.r = outerRadius + circlePadding
+            outerCircle.r = packEnclose(outerCircle.children) + circlePadding/2
         })
         // pack subset circles, using modified packing
         // this.height = this.width = 2*packEnclose(root.children)
@@ -186,6 +172,8 @@ export default class Bubble extends React.Component<Props, State>{
         // update the x,y of children items
         root.children
         .forEach((outerCircle: ItemHierarchy)=>{
+            outerCircle.x += this.width/2
+            outerCircle.y += this.height/2
             outerCircle.children
             .forEach((innerCircle:ItemHierarchy)=>{
                 innerCircle.x += outerCircle.x
@@ -304,8 +292,8 @@ export default class Bubble extends React.Component<Props, State>{
                         {/* white part, show */}
                         <circle 
                         r={1.5*this.height/2} 
-                        // cx={this.height/2} 
-                        // cy={this.height/2} 
+                        cx={this.width/2} 
+                        cy={this.height/2} 
                         fill='white' />
                         {/* black part, hide */}
                         {highlightCircles[ruleID].map(set=>{
@@ -325,40 +313,6 @@ export default class Bubble extends React.Component<Props, State>{
                 {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='red' stroke='gray' mask={`url(#outline_${hoverRule})`}/>  */}
                 </g>
         })
-
-        // var bubbles = new BubbleSet(),
-        // padding = 2
-        // outlines = highlightRules.map(rule=>{
-        //     let itemIn = datum.children
-        //     .filter((child:any)=>child.data.id.includes(rule))
-        //     .map((child:any)=>{return {
-        //         x: child.x-child.r,
-        //         y: child.y-child.r,
-        //         width: child.r*2,
-        //         height: child.r*2
-        //     }})
-        //     let itemOut = datum.children
-        //         .filter((child:any)=>!child.data.id.includes(rule))
-        //         .map((child:any)=>{return {
-        //             x: child.x-child.r,
-        //             y: child.y-child.r,
-        //             width: child.r,
-        //             height: child.r
-        //         }})
-        //     var list = bubbles.createOutline(
-        //         BubbleSet.addPadding(itemIn, padding),
-        //         BubbleSet.addPadding(itemOut, padding),
-        //         null
-        //       );
-        //       var outline = new PointPath(list).transform([
-        //         new ShapeSimplifier(0.0),
-        //         new BSplineShapeGenerator(),
-        //         new ShapeSimplifier(0.0),
-        //       ]);
-        //       return <path key={rule} d={outline.toString()} id={`outline_${rule}`}
-        //       className='outline'
-        //       fill='transparent' stroke='gray'/>
-        // })
         return {itemCircles, outlines}
 
     }
