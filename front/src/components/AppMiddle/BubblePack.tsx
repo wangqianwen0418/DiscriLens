@@ -9,7 +9,7 @@ import * as React from 'react';
 import { RuleAgg, RuleNode, getMinLinks} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
-import {packEnclose} from 'lib/pack/index.js';
+import {packEnclose, graphPack} from 'lib/pack/index.js';
 
 
 // import * as d3 from 'd3';
@@ -166,9 +166,9 @@ export default class Bubble extends React.Component<Props, State>{
         //     d3.hierarchy(root)
         //         .sum(d => 1) // same radius for each item
         // )
+        
 
-        getMinLinks(rules, root.children)
-
+        let graph = getMinLinks(rules, root.children)
         // pack items circles, using default 
         root.children
         .forEach((outerCircle: ItemHierarchy)=>{
@@ -180,7 +180,8 @@ export default class Bubble extends React.Component<Props, State>{
             outerCircle.r = outerRadius + circlePadding
         })
         // pack subset circles, using modified packing
-        this.height = this.width = 2*packEnclose(root.children)
+        // this.height = this.width = 2*packEnclose(root.children)
+        this.height = this.width = 2*graphPack(root.children, graph)
 
         // update the x,y of children items
         root.children
@@ -192,12 +193,13 @@ export default class Bubble extends React.Component<Props, State>{
             })
         })
 
-        console.info(root.children)
-
-
+        
 
         let itemCircles: JSX.Element[] = []
         let highlightCircles: {[id:string]: ItemHierarchy[]} = {}
+        highlightRules.forEach(ruleID=>{
+            highlightCircles[ruleID] = []
+        })
         let itemsPos: any[] = []
         let strokeWidth = 2
 
@@ -215,9 +217,6 @@ export default class Bubble extends React.Component<Props, State>{
 
 
             highlightRules.forEach(ruleID=>{
-                if (!highlightCircles[ruleID]){
-                    highlightCircles[ruleID] = []
-                }
                 if(outerCircle.groups.includes(ruleID)){
                     highlightCircles[ruleID].push(
                         outerCircle

@@ -4,6 +4,7 @@ import constant, {constantZero} from "./constant";
 
 export {packEnclose};
 export {default as packSiblings} from "./siblings";
+export {default as graphPack} from './graphPack';
 
 
 function defaultRadius(d) {
