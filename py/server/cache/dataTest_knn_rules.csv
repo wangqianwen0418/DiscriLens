@@ -1,0 +1,217 @@
+,antecedent,pd,cls,conf_pd,conf_pnd,elift,sup_pd,sup_pnd
+33,"['hours_per_week=25<x<50', 'education_num=4<x<8', 'relationship= Wife']",sex= Female,class=1,0.7142857142857143,0.8666666666666667,0.8241758241758241,5.0,13.0
+136,"['relationship= Wife', 'education= Assoc_acdm']",sex= Female,class=1,0.75,0.8823529411764706,0.85,6.0,15.0
+138,"['education_num=x>12', 'education= Assoc_acdm']",sex= Female,class=1,0.7777777777777778,0.9,0.8641975308641975,7.0,18.0
+205,"['hours_per_week=25<x<50', 'education= Assoc_voc']",sex= Female,class=1,0.7777777777777778,0.8888888888888888,0.8750000000000001,7.0,16.0
+202,"['relationship= Wife', 'native_country= Taiwan']",sex= Female,class=1,0.7142857142857143,0.8,0.8928571428571428,5.0,8.0
+15,"['hours_per_week=1<x<25', 'education_num=x>12', 'workcla= Local_gov']",sex= Female,class=1,0.8333333333333334,0.9333333333333333,0.8928571428571429,5.0,14.0
+207,"['race= Other', 'education= Assoc_voc']",sex= Female,class=1,0.7777777777777778,0.8666666666666667,0.8974358974358975,7.0,13.0
+212,"['workcla= Federal_gov', 'education= Assoc_voc']",sex= Female,class=1,0.8333333333333334,0.9230769230769231,0.9027777777777778,5.0,12.0
+120,"['relationship= Husband', 'hours_per_week=x>74']",sex= Female,class=1,0.8333333333333334,0.9230769230769231,0.9027777777777778,5.0,12.0
+23,"['education_num=x>12', 'race= Black', 'workcla= Local_gov']",sex= Female,class=1,0.8333333333333334,0.9230769230769231,0.9027777777777778,5.0,12.0
+34,"['age=35<x<53', 'education_num=4<x<8', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.9166666666666666,0.9090909090909092,5.0,11.0
+157,"['race= Other', 'workcla= Federal_gov']",sex= Female,class=1,0.8666666666666667,0.9487179487179487,0.9135135135135136,13.0,37.0
+118,"['race= Other', 'hours_per_week=x>74']",sex= Female,class=1,0.8571428571428571,0.9375,0.9142857142857143,6.0,15.0
+135,"['fnlwgt=274186<x<527198', 'education= Assoc_acdm']",sex= Female,class=1,0.875,0.9545454545454546,0.9166666666666666,7.0,21.0
+43,"['education_num=4<x<8', 'workcla= Private', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.9090909090909091,0.9166666666666667,5.0,10.0
+153,"['hours_per_week=25<x<50', 'age=35<x<53', 'workcla= Federal_gov']",sex= Female,class=1,0.875,0.9523809523809523,0.9187500000000001,7.0,20.0
+24,"['hours_per_week=1<x<25', 'race= Black', 'workcla= Local_gov']",sex= Female,class=1,0.8571428571428571,0.9285714285714286,0.923076923076923,6.0,13.0
+83,"['hours_per_week=25<x<50', 'education_num=4<x<8', 'race= Other']",sex= Female,class=1,0.8333333333333334,0.9,0.9259259259259259,10.0,18.0
+198,"['age=35<x<53', 'education_num=x>12', 'race= Black']",sex= Female,class=1,0.8571428571428571,0.9230769230769231,0.9285714285714285,6.0,12.0
+142,"['workcla= State_gov', 'education= Assoc_acdm']",sex= Female,class=1,0.8571428571428571,0.9230769230769231,0.9285714285714285,6.0,12.0
+144,"['education_num=4<x<8', 'native_country= Thailand']",sex= Female,class=1,0.8571428571428571,0.9230769230769231,0.9285714285714285,6.0,12.0
+146,"['hours_per_week=25<x<50', 'native_country= Thailand']",sex= Female,class=1,0.875,0.9411764705882353,0.9296875,7.0,16.0
+206,"['age=35<x<53', 'education= Assoc_voc']",sex= Female,class=1,0.875,0.9411764705882353,0.9296875,7.0,16.0
+133,"['age=35<x<53', 'education= Assoc_acdm']",sex= Female,class=1,0.8888888888888888,0.9545454545454546,0.9312169312169312,8.0,21.0
+145,"['workcla= Private', 'native_country= Thailand']",sex= Female,class=1,0.8571428571428571,0.9166666666666666,0.935064935064935,6.0,11.0
+84,"['age=53<x<71', 'education_num=4<x<8', 'race= Other']",sex= Female,class=1,0.8571428571428571,0.9166666666666666,0.935064935064935,6.0,11.0
+109,"['relationship= Wife', 'age=x>71']",sex= Female,class=1,0.9,0.9615384615384616,0.9359999999999999,9.0,25.0
+204,"['race= Other', 'native_country= Taiwan']",sex= Female,class=1,0.75,0.8,0.9375,6.0,8.0
+88,"['age=53<x<71', 'education_num=x>12', 'race= Other']",sex= Female,class=1,0.875,0.9333333333333333,0.9375,7.0,14.0
+28,"['age=35<x<53', 'workcla= Local_gov', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.8888888888888888,0.9375000000000001,5.0,8.0
+201,"['age=35<x<53', 'native_country= Taiwan']",sex= Female,class=1,0.8333333333333334,0.8888888888888888,0.9375000000000001,5.0,8.0
+111,"['education_num=x>12', 'race= Other', 'age=x>71']",sex= Female,class=1,0.8333333333333334,0.8888888888888888,0.9375000000000001,5.0,8.0
+119,"['workcla= Federal_gov', 'hours_per_week=x>74']",sex= Female,class=1,0.9,0.9565217391304348,0.9409090909090909,9.0,22.0
+134,"['race= Other', 'education= Assoc_acdm']",sex= Female,class=1,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+140,"['workcla= Local_gov', 'education= Assoc_acdm']",sex= Female,class=1,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+36,"['education_num=4<x<8', 'relationship= Wife']",sex= Female,class=1,0.8888888888888888,0.9444444444444444,0.9411764705882353,16.0,34.0
+13,"['hours_per_week=1<x<25', 'age=35<x<53', 'workcla= Local_gov']",sex= Female,class=1,0.8888888888888888,0.9444444444444444,0.9411764705882353,8.0,17.0
+158,"['education_num=x>12', 'race= Other', 'workcla= Federal_gov']",sex= Female,class=1,0.875,0.9285714285714286,0.9423076923076923,7.0,13.0
+58,"['hours_per_week=1<x<25', 'race= Black', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.9090909090909091,0.9428571428571428,6.0,10.0
+54,"['education_num=x>12', 'race= Other', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.9090909090909091,0.9428571428571428,6.0,10.0
+35,"['age=53<x<71', 'education_num=4<x<8', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.9090909090909091,0.9428571428571428,6.0,10.0
+122,"['education_num=x>12', 'hours_per_week=x>74']",sex= Female,class=1,0.9,0.9545454545454546,0.9428571428571428,9.0,21.0
+193,"['hours_per_week=1<x<25', 'age=35<x<53', 'race= Black']",sex= Female,class=1,0.9,0.9545454545454546,0.9428571428571428,9.0,21.0
+164,"['workcla= Federal_gov', 'relationship= Husband']",sex= Female,class=1,0.9,0.9523809523809523,0.9450000000000001,9.0,20.0
+77,"['hours_per_week=25<x<50', 'age=35<x<53', 'education_num=4<x<8']",sex= Female,class=1,0.9090909090909091,0.9583333333333334,0.9486166007905138,10.0,23.0
+110,"['race= Other', 'age=x>71']",sex= Female,class=1,0.9166666666666666,0.9655172413793104,0.9494047619047619,11.0,28.0
+211,"['relationship= Wife', 'education= Assoc_voc']",sex= Female,class=1,0.7777777777777778,0.8181818181818182,0.9506172839506173,7.0,9.0
+49,"['race= Other', 'relationship= Wife']",sex= Female,class=1,0.8695652173913043,0.9142857142857143,0.9510869565217391,20.0,32.0
+121,"['age=53<x<71', 'hours_per_week=x>74']",sex= Female,class=1,0.9166666666666666,0.9629629629629629,0.951923076923077,11.0,26.0
+160,"['age=53<x<71', 'education_num=x>12', 'workcla= Federal_gov']",sex= Female,class=1,0.8571428571428571,0.9,0.9523809523809523,6.0,9.0
+96,"['age=53<x<71', 'education_num=4<x<8', 'workcla= Private']",sex= Female,class=1,0.8571428571428571,0.9,0.9523809523809523,6.0,9.0
+116,"['race= Other', 'fnlwgt=274186<x<527198', 'age=x>71']",sex= Female,class=1,0.8333333333333334,0.875,0.9523809523809524,5.0,7.0
+150,"['workcla= Local_gov', 'native_country= United_States']",sex= Female,class=1,0.8333333333333334,0.875,0.9523809523809524,5.0,7.0
+60,"['age=35<x<53', 'workcla= Federal_gov', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.875,0.9523809523809524,5.0,7.0
+112,"['hours_per_week=50<x<74', 'age=x>71']",sex= Female,class=1,0.9166666666666666,0.9615384615384616,0.9533333333333333,11.0,25.0
+55,"['workcla= State_gov', 'relationship= Wife']",sex= Female,class=1,0.9230769230769231,0.9666666666666667,0.9549071618037136,12.0,29.0
+137,"['race= Black', 'education= Assoc_acdm']",sex= Female,class=1,0.9090909090909091,0.95,0.9569377990430622,10.0,19.0
+89,"['education_num=x>12', 'race= Other']",sex= Female,class=1,0.92,0.9591836734693877,0.9591489361702129,23.0,47.0
+185,"['hours_per_week=50<x<74', 'workcla= State_gov']",sex= Female,class=1,0.9285714285714286,0.967741935483871,0.9595238095238096,13.0,30.0
+32,"['hours_per_week=1<x<25', 'age=35<x<53', 'relationship= Wife']",sex= Female,class=1,0.9,0.9375,0.9600000000000001,9.0,15.0
+191,"['hours_per_week=1<x<25', 'age=35<x<53', 'education_num=x>12']",sex= Female,class=1,0.9230769230769231,0.9615384615384616,0.9600000000000001,12.0,25.0
+199,['native_country= Taiwan'],sex= Female,class=1,0.8947368421052632,0.9310344827586207,0.9610136452241715,17.0,27.0
+148,"['age=35<x<53', 'native_country= United_States']",sex= Female,class=1,0.875,0.9090909090909091,0.9625,7.0,10.0
+85,"['age=35<x<53', 'education_num=4<x<8', 'race= Other']",sex= Female,class=1,0.8888888888888888,0.9230769230769231,0.9629629629629629,8.0,12.0
+65,"['education_num=x>12', 'education= Doctorate']",sex= Female,class=1,0.8888888888888888,0.9230769230769231,0.9629629629629629,8.0,12.0
+41,"['hours_per_week=1<x<25', 'education_num=x>12', 'relationship= Wife']",sex= Female,class=1,0.8888888888888888,0.9230769230769231,0.9629629629629629,8.0,12.0
+108,"['education_num=x>12', 'age=x>71']",sex= Female,class=1,0.9375,0.972972972972973,0.9635416666666666,15.0,36.0
+99,"['age=53<x<71', 'race= Other', 'workcla= Private']",sex= Female,class=1,0.8571428571428571,0.8888888888888888,0.9642857142857143,6.0,8.0
+215,"['age=53<x<71', 'native_country= Philippines']",sex= Female,class=1,0.8571428571428571,0.8888888888888888,0.9642857142857143,6.0,8.0
+45,"['hours_per_week=25<x<50', 'workcla= Private', 'relationship= Wife']",sex= Female,class=1,0.9,0.9333333333333333,0.9642857142857143,9.0,14.0
+27,"['education_num=x>12', 'workcla= Local_gov', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.8888888888888888,0.9642857142857143,6.0,8.0
+203,"['education_num=x>12', 'native_country= Taiwan']",sex= Female,class=1,0.8571428571428571,0.8888888888888888,0.9642857142857143,6.0,8.0
+42,"['age=35<x<53', 'education_num=x>12', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.8888888888888888,0.9642857142857143,6.0,8.0
+81,"['hours_per_week=25<x<50', 'age=53<x<71', 'race= Other']",sex= Female,class=1,0.9166666666666666,0.95,0.9649122807017544,11.0,19.0
+93,"['hours_per_week=25<x<50', 'age=53<x<71', 'workcla= Private']",sex= Female,class=1,0.9230769230769231,0.9565217391304348,0.9650349650349651,12.0,22.0
+98,"['hours_per_week=25<x<50', 'race= Other', 'workcla= Private']",sex= Female,class=1,0.9090909090909091,0.9411764705882353,0.9659090909090909,10.0,16.0
+197,"['hours_per_week=1<x<25', 'education_num=x>12', 'race= Black']",sex= Female,class=1,0.9230769230769231,0.9545454545454546,0.967032967032967,12.0,21.0
+50,"['hours_per_week=25<x<50', 'race= Other', 'relationship= Wife']",sex= Female,class=1,0.8461538461538461,0.875,0.967032967032967,11.0,14.0
+209,['education= Assoc_voc'],sex= Female,class=1,0.9285714285714286,0.96,0.9672619047619049,26.0,48.0
+87,"['hours_per_week=25<x<50', 'age=35<x<53', 'race= Other']",sex= Female,class=1,0.9285714285714286,0.96,0.9672619047619049,13.0,24.0
+113,"['workcla= State_gov', 'age=x>71']",sex= Female,class=1,0.9285714285714286,0.96,0.9672619047619049,13.0,24.0
+180,"['race= Other', 'hours_per_week=50<x<74']",sex= Female,class=1,0.9411764705882353,0.972972972972973,0.9673202614379084,16.0,36.0
+155,"['education_num=4<x<8', 'workcla= Federal_gov']",sex= Female,class=1,0.9411764705882353,0.9722222222222222,0.9680672268907563,16.0,35.0
+40,"['education_num=x>12', 'relationship= Wife']",sex= Female,class=1,0.9230769230769231,0.9534883720930233,0.9681050656660413,24.0,41.0
+82,"['education_num=4<x<8', 'race= Other']",sex= Female,class=1,0.9285714285714286,0.9583333333333334,0.9689440993788819,26.0,46.0
+166,"['race= Other', 'relationship= Husband']",sex= Female,class=1,0.9333333333333333,0.9629629629629629,0.9692307692307693,14.0,26.0
+167,"['age=53<x<71', 'race= Other', 'relationship= Husband']",sex= Female,class=1,0.8888888888888888,0.9166666666666666,0.9696969696969697,8.0,11.0
+51,"['age=53<x<71', 'race= Other', 'relationship= Wife']",sex= Female,class=1,0.8888888888888888,0.9166666666666666,0.9696969696969697,8.0,11.0
+184,"['education_num=x>12', 'workcla= State_gov']",sex= Female,class=1,0.9473684210526315,0.9767441860465116,0.9699248120300752,18.0,42.0
+22,"['race= Black', 'workcla= Local_gov']",sex= Female,class=1,0.9444444444444444,0.9736842105263158,0.9699699699699699,17.0,37.0
+38,"['hours_per_week=50<x<74', 'relationship= Wife']",sex= Female,class=1,0.9375,0.9655172413793104,0.9709821428571428,15.0,28.0
+139,"['hours_per_week=1<x<25', 'workcla= Local_gov', 'education= Assoc_acdm']",sex= Female,class=1,0.875,0.9,0.9722222222222222,7.0,9.0
+183,"['race= Other', 'workcla= State_gov']",sex= Female,class=1,0.9444444444444444,0.9714285714285714,0.9722222222222222,17.0,34.0
+128,"['education_num=x>12', 'race= Other', 'fnlwgt=274186<x<527198']",sex= Female,class=1,0.875,0.9,0.9722222222222222,7.0,9.0
+46,"['age=53<x<71', 'workcla= Private', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+52,"['hours_per_week=25<x<50', 'age=53<x<71', 'race= Other', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+149,"['hours_per_week=1<x<25', 'native_country= United_States']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+208,"['age=53<x<71', 'race= Other', 'education= Assoc_voc']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+130,"['race= Other', 'hours_per_week=50<x<74', 'fnlwgt=274186<x<527198']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+61,"['hours_per_week=25<x<50', 'workcla= Federal_gov', 'relationship= Wife']",sex= Female,class=1,0.8333333333333334,0.8571428571428571,0.9722222222222223,5.0,6.0
+154,"['age=35<x<53', 'workcla= Federal_gov']",sex= Female,class=1,0.9545454545454546,0.9814814814814815,0.9725557461406518,21.0,53.0
+80,"['age=53<x<71', 'race= Other']",sex= Female,class=1,0.9393939393939394,0.9655172413793104,0.972943722943723,31.0,56.0
+26,"['workcla= Local_gov', 'relationship= Wife']",sex= Female,class=1,0.9333333333333333,0.9583333333333334,0.9739130434782608,14.0,23.0
+16,"['age=35<x<53', 'education_num=x>12', 'workcla= Local_gov']",sex= Female,class=1,0.9166666666666666,0.9411764705882353,0.9739583333333333,11.0,16.0
+210,"['age=53<x<71', 'education= Assoc_voc']",sex= Female,class=1,0.9166666666666666,0.9411764705882353,0.9739583333333333,11.0,16.0
+30,"['hours_per_week=25<x<50', 'age=35<x<53', 'relationship= Wife']",sex= Female,class=1,0.9230769230769231,0.9473684210526315,0.9743589743589745,12.0,18.0
+159,"['education_num=x>12', 'workcla= Federal_gov']",sex= Female,class=1,0.9523809523809523,0.9772727272727273,0.9745293466223698,20.0,43.0
+132,['education= Assoc_acdm'],sex= Female,class=1,0.95,0.9746835443037974,0.9746753246753247,38.0,77.0
+181,"['education_num=x>12', 'hours_per_week=50<x<74']",sex= Female,class=1,0.9545454545454546,0.9782608695652174,0.9757575757575758,21.0,45.0
+79,"['hours_per_week=25<x<50', 'race= Other']",sex= Female,class=1,0.9512195121951219,0.9743589743589743,0.9762516046213093,39.0,76.0
+75,"['hours_per_week=25<x<50', 'age=53<x<71', 'education_num=4<x<8']",sex= Female,class=1,0.9375,0.96,0.9765625,15.0,24.0
+31,"['age=35<x<53', 'relationship= Wife']",sex= Female,class=1,0.9354838709677419,0.9574468085106383,0.9770609318996415,29.0,45.0
+115,"['fnlwgt=274186<x<527198', 'age=x>71']",sex= Female,class=1,0.95,0.9722222222222222,0.9771428571428571,19.0,35.0
+171,"['education_num=x>12', 'relationship= Husband']",sex= Female,class=1,0.9565217391304348,0.9787234042553191,0.9773156899810964,22.0,46.0
+141,"['hours_per_week=1<x<25', 'education= Assoc_acdm']",sex= Female,class=1,0.9285714285714286,0.95,0.9774436090225564,13.0,19.0
+114,"['fnlwgt=274186<x<527198', 'workcla= State_gov', 'age=x>71']",sex= Female,class=1,0.8888888888888888,0.9090909090909091,0.9777777777777777,8.0,10.0
+143,['native_country= Thailand'],sex= Female,class=1,0.9545454545454546,0.9761904761904762,0.9778270509977828,21.0,41.0
+56,"['fnlwgt=274186<x<527198', 'relationship= Wife']",sex= Female,class=1,0.9523809523809523,0.9736842105263158,0.9781209781209781,20.0,37.0
+214,['native_country= Philippines'],sex= Female,class=1,0.9444444444444444,0.9655172413793104,0.9781746031746031,17.0,28.0
+97,"['race= Other', 'workcla= Private']",sex= Female,class=1,0.95,0.9705882352941176,0.9787878787878788,19.0,33.0
+44,"['workcla= Private', 'relationship= Wife']",sex= Female,class=1,0.9473684210526315,0.967741935483871,0.9789473684210526,18.0,30.0
+94,"['education_num=4<x<8', 'workcla= Private']",sex= Female,class=1,0.9545454545454546,0.975,0.9790209790209791,21.0,39.0
+194,"['age=35<x<53', 'race= Black']",sex= Female,class=1,0.9629629629629629,0.9833333333333333,0.9792843691148776,26.0,59.0
+39,"['education_num=x>12', 'hours_per_week=50<x<74', 'relationship= Wife']",sex= Female,class=1,0.8571428571428571,0.875,0.9795918367346939,6.0,7.0
+57,"['race= Black', 'relationship= Wife']",sex= Female,class=1,0.95,0.9696969696969697,0.9796874999999999,19.0,32.0
+29,"['hours_per_week=25<x<50', 'relationship= Wife']",sex= Female,class=1,0.9512195121951219,0.9705882352941176,0.9800443458980044,39.0,66.0
+48,"['hours_per_week=25<x<50', 'age=53<x<71', 'relationship= Wife']",sex= Female,class=1,0.9285714285714286,0.9473684210526315,0.9801587301587302,13.0,18.0
+78,['race= Other'],sex= Female,class=1,0.9607843137254902,0.9801980198019802,0.9801940978411567,98.0,198.0
+196,"['education_num=x>12', 'race= Black']",sex= Female,class=1,0.9629629629629629,0.9814814814814815,0.981132075471698,26.0,53.0
+129,"['hours_per_week=50<x<74', 'fnlwgt=274186<x<527198']",sex= Female,class=1,0.9523809523809523,0.9705882352941176,0.9812409812409812,20.0,33.0
+92,"['age=53<x<71', 'workcla= Private']",sex= Female,class=1,0.9583333333333334,0.9761904761904762,0.9817073170731708,23.0,41.0
+95,"['hours_per_week=25<x<50', 'education_num=4<x<8', 'workcla= Private']",sex= Female,class=1,0.9166666666666666,0.9333333333333333,0.9821428571428571,11.0,14.0
+73,"['hours_per_week=25<x<50', 'education_num=4<x<8']",sex= Female,class=1,0.9615384615384616,0.9787234042553191,0.9824414715719064,50.0,92.0
+131,"['education_num=x>12', 'fnlwgt=274186<x<527198']",sex= Female,class=1,0.9629629629629629,0.98,0.982615268329554,26.0,49.0
+37,['relationship= Wife'],sex= Female,class=1,0.96,0.9766081871345029,0.9829940119760479,96.0,167.0
+14,"['education_num=x>12', 'workcla= Local_gov']",sex= Female,class=1,0.96,0.9761904761904762,0.9834146341463414,24.0,41.0
+186,"['fnlwgt=274186<x<527198', 'workcla= State_gov']",sex= Female,class=1,0.9565217391304348,0.9722222222222222,0.9838509316770186,22.0,35.0
+59,"['workcla= Federal_gov', 'relationship= Wife']",sex= Female,class=1,0.9523809523809523,0.967741935483871,0.9841269841269841,20.0,30.0
+200,"['hours_per_week=25<x<50', 'native_country= Taiwan']",sex= Female,class=1,0.875,0.8888888888888888,0.984375,7.0,8.0
+86,"['age=35<x<53', 'race= Other']",sex= Female,class=1,0.967741935483871,0.9821428571428571,0.9853372434017597,30.0,55.0
+76,"['age=35<x<53', 'education_num=4<x<8']",sex= Female,class=1,0.9722222222222222,0.9866666666666667,0.9853603603603603,35.0,74.0
+5,"['hours_per_week=1<x<25', 'workcla= Local_gov']",sex= Female,class=1,0.9696969696969697,0.9836065573770492,0.9858585858585859,32.0,60.0
+117,['hours_per_week=x>74'],sex= Female,class=1,0.9736842105263158,0.9871794871794872,0.9863294600136705,37.0,77.0
+147,['native_country= United_States'],sex= Female,class=1,0.9545454545454546,0.967741935483871,0.9863636363636363,21.0,30.0
+91,"['hours_per_week=25<x<50', 'workcla= Private']",sex= Female,class=1,0.9722222222222222,0.9852941176470589,0.9867330016583747,35.0,67.0
+152,"['hours_per_week=25<x<50', 'workcla= Federal_gov']",sex= Female,class=1,0.9705882352941176,0.9836065573770492,0.986764705882353,33.0,60.0
+127,"['race= Other', 'fnlwgt=274186<x<527198']",sex= Female,class=1,0.9583333333333334,0.9705882352941176,0.9873737373737375,23.0,33.0
+156,"['age=53<x<71', 'workcla= Federal_gov']",sex= Female,class=1,0.9655172413793104,0.9777777777777777,0.987460815047022,28.0,44.0
+187,"['age=53<x<71', 'education_num=x>12']",sex= Female,class=1,0.9736842105263158,0.9859154929577465,0.987593984962406,37.0,70.0
+25,"['hours_per_week=1<x<25', 'relationship= Wife']",sex= Female,class=1,0.9714285714285714,0.9836065573770492,0.9876190476190476,34.0,60.0
+53,"['age=35<x<53', 'race= Other', 'relationship= Wife']",sex= Female,class=1,0.8888888888888888,0.9,0.9876543209876543,8.0,9.0
+165,"['age=53<x<71', 'relationship= Husband']",sex= Female,class=1,0.9655172413793104,0.9772727272727273,0.9879711307137129,28.0,43.0
+74,"['age=53<x<71', 'education_num=4<x<8']",sex= Female,class=1,0.9722222222222222,0.9836065573770492,0.9884259259259259,35.0,60.0
+188,['education_num=x>12'],sex= Female,class=1,0.9769230769230769,0.98828125,0.9885071450288841,127.0,253.0
+192,"['hours_per_week=1<x<25', 'race= Black']",sex= Female,class=1,0.9736842105263158,0.9846153846153847,0.9888980263157895,37.0,64.0
+47,"['age=53<x<71', 'relationship= Wife']",sex= Female,class=1,0.967741935483871,0.9782608695652174,0.989247311827957,30.0,45.0
+125,"['hours_per_week=1<x<25', 'age=35<x<53']",sex= Female,class=1,0.98,0.99,0.98989898989899,49.0,99.0
+151,['workcla= Federal_gov'],sex= Female,class=1,0.9791666666666666,0.9890710382513661,0.9899861878453038,94.0,181.0
+189,"['hours_per_week=1<x<25', 'education_num=x>12']",sex= Female,class=1,0.9791666666666666,0.9886363636363636,0.9904214559386972,47.0,87.0
+190,"['age=35<x<53', 'education_num=x>12']",sex= Female,class=1,0.9772727272727273,0.9866666666666667,0.9904791154791155,43.0,74.0
+71,"['hours_per_week=25<x<50', 'age=53<x<71']",sex= Female,class=1,0.9818181818181818,0.9897959183673469,0.9919400187441425,54.0,97.0
+72,['education_num=4<x<8'],sex= Female,class=1,0.9850746268656716,0.991869918699187,0.9931490090530952,132.0,244.0
+107,['age=x>71'],sex= Female,class=1,0.987012987012987,0.9933333333333333,0.9936372352479735,76.0,149.0
+70,['age=53<x<71'],sex= Female,class=1,0.9867549668874173,0.992619926199262,0.994091435042714,149.0,269.0
+182,['workcla= State_gov'],sex= Female,class=1,0.9885057471264368,0.9941860465116279,0.9942864824897493,86.0,171.0
+179,['hours_per_week=50<x<74'],sex= Female,class=1,0.989247311827957,0.9946808510638298,0.9945374044045772,92.0,187.0
+90,['workcla= Private'],sex= Female,class=1,0.9887640449438202,0.9941520467836257,0.994580304031725,88.0,170.0
+195,['race= Black'],sex= Female,class=1,0.9907407407407407,0.995049504950495,0.9956697991523862,107.0,201.0
+126,['fnlwgt=274186<x<527198'],sex= Female,class=1,0.9907407407407407,0.9945945945945946,0.9961252012882447,107.0,184.0
+123,['age=35<x<53'],sex= Female,class=1,0.987012987012987,0.9899328859060402,0.9970504072198988,152.0,295.0
+0,['hours_per_week=1<x<25'],sex= Female,class=1,0.9946524064171123,0.9970760233918129,0.9975692756441419,186.0,341.0
+69,['hours_per_week=25<x<50'],sex= Female,class=1,0.9900990099009901,0.9921052631578947,0.997977781863067,200.0,377.0
+161,['relationship= Husband'],sex= Female,class=1,0.9883720930232558,0.9878787878787879,1.0004993579683263,85.0,163.0
+66,['education= Doctorate'],sex= Female,class=1,0.9565217391304348,0.9555555555555556,1.0010111223458038,22.0,43.0
+10,['workcla= Local_gov'],sex= Female,class=1,0.9895833333333334,0.9883720930232558,1.0012254901960784,95.0,170.0
+124,"['hours_per_week=25<x<50', 'age=35<x<53']",sex= Female,class=1,0.984375,0.9827586206896551,1.0016447368421053,63.0,114.0
+11,"['age=35<x<53', 'workcla= Local_gov']",sex= Female,class=1,0.9696969696969697,0.967741935483871,1.002020202020202,32.0,60.0
+1,['education_num=8<x<12'],sex= Female,class=1,1.0,0.9959677419354839,1.0040485829959513,127.0,247.0
+100,['race= White'],sex= Female,class=1,1.0,0.9948717948717949,1.0051546391752577,99.0,194.0
+2,"['hours_per_week=25<x<50', 'education_num=8<x<12']",sex= Female,class=1,1.0,0.9907407407407407,1.0093457943925235,57.0,107.0
+103,"['hours_per_week=25<x<50', 'race= White']",sex= Female,class=1,1.0,0.9868421052631579,1.0133333333333334,43.0,75.0
+4,"['age=35<x<53', 'education_num=8<x<12']",sex= Female,class=1,1.0,0.9861111111111112,1.0140845070422535,41.0,71.0
+170,"['hours_per_week=25<x<50', 'relationship= Husband']",sex= Female,class=1,1.0,0.9852941176470589,1.0149253731343284,32.0,67.0
+21,"['hours_per_week=25<x<50', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9841269841269841,1.0161290322580645,36.0,62.0
+101,"['age=35<x<53', 'race= White']",sex= Female,class=1,1.0,0.9838709677419355,1.0163934426229508,32.0,61.0
+168,"['age=35<x<53', 'relationship= Husband']",sex= Female,class=1,1.0,0.9803921568627451,1.02,26.0,50.0
+104,"['education_num=8<x<12', 'race= White']",sex= Female,class=1,1.0,0.9803921568627451,1.02,31.0,50.0
+162,"['education_num=8<x<12', 'relationship= Husband']",sex= Female,class=1,1.0,0.975609756097561,1.0250000000000001,21.0,40.0
+6,"['education_num=8<x<12', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9743589743589743,1.0263157894736843,21.0,38.0
+177,"['workcla= Local_gov', 'relationship= Husband']",sex= Female,class=1,1.0,0.9743589743589743,1.0263157894736843,19.0,38.0
+17,"['race= White', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.972972972972973,1.0277777777777777,22.0,36.0
+172,"['race= White', 'relationship= Husband']",sex= Female,class=1,1.0,0.9714285714285714,1.0294117647058825,18.0,34.0
+3,"['hours_per_week=25<x<50', 'age=35<x<53', 'education_num=8<x<12']",sex= Female,class=1,1.0,0.9696969696969697,1.03125,18.0,32.0
+169,"['hours_per_week=25<x<50', 'age=35<x<53', 'relationship= Husband']",sex= Female,class=1,1.0,0.9583333333333334,1.0434782608695652,11.0,23.0
+102,"['hours_per_week=25<x<50', 'age=35<x<53', 'race= White']",sex= Female,class=1,1.0,0.9583333333333334,1.0434782608695652,15.0,23.0
+12,"['hours_per_week=25<x<50', 'age=35<x<53', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9565217391304348,1.0454545454545454,14.0,22.0
+213,['native_country= South'],sex= Female,class=1,1.0,0.9565217391304348,1.0454545454545454,8.0,22.0
+64,"['hours_per_week=25<x<50', 'education= Doctorate']",sex= Female,class=1,1.0,0.9523809523809523,1.05,11.0,20.0
+163,"['hours_per_week=25<x<50', 'education_num=8<x<12', 'relationship= Husband']",sex= Female,class=1,1.0,0.95,1.0526315789473684,8.0,19.0
+106,"['hours_per_week=25<x<50', 'education_num=8<x<12', 'race= White']",sex= Female,class=1,1.0,0.95,1.0526315789473684,11.0,19.0
+67,"['age=35<x<53', 'education= Doctorate']",sex= Female,class=1,1.0,0.9411764705882353,1.0625,8.0,16.0
+9,"['hours_per_week=25<x<50', 'education_num=8<x<12', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9411764705882353,1.0625,10.0,16.0
+174,"['hours_per_week=25<x<50', 'race= White', 'relationship= Husband']",sex= Female,class=1,1.0,0.9411764705882353,1.0625,9.0,16.0
+7,"['age=35<x<53', 'education_num=8<x<12', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9375,1.0666666666666667,11.0,15.0
+105,"['age=35<x<53', 'education_num=8<x<12', 'race= White']",sex= Female,class=1,1.0,0.9375,1.0666666666666667,10.0,15.0
+63,"['education_num=8<x<12', 'education= Doctorate']",sex= Female,class=1,1.0,0.9333333333333333,1.0714285714285714,8.0,14.0
+176,"['age=35<x<53', 'workcla= Local_gov', 'relationship= Husband']",sex= Female,class=1,1.0,0.9333333333333333,1.0714285714285714,8.0,14.0
+68,"['race= White', 'education= Doctorate']",sex= Female,class=1,1.0,0.9285714285714286,1.0769230769230769,6.0,13.0
+19,"['age=35<x<53', 'race= White', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9230769230769231,1.0833333333333333,6.0,12.0
+18,"['hours_per_week=25<x<50', 'race= White', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9230769230769231,1.0833333333333333,9.0,12.0
+173,"['age=35<x<53', 'race= White', 'relationship= Husband']",sex= Female,class=1,1.0,0.9166666666666666,1.090909090909091,6.0,11.0
+178,"['hours_per_week=25<x<50', 'workcla= Local_gov', 'relationship= Husband']",sex= Female,class=1,1.0,0.9166666666666666,1.090909090909091,6.0,11.0
+20,"['education_num=8<x<12', 'race= White', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.9,1.1111111111111112,8.0,9.0
+62,"['hours_per_week=25<x<50', 'education_num=8<x<12', 'education= Doctorate']",sex= Female,class=1,1.0,0.8888888888888888,1.125,5.0,8.0
+8,"['hours_per_week=25<x<50', 'age=35<x<53', 'education_num=8<x<12', 'workcla= Local_gov']",sex= Female,class=1,1.0,0.8888888888888888,1.125,7.0,8.0
+175,"['education_num=8<x<12', 'race= White', 'relationship= Husband']",sex= Female,class=1,1.0,0.875,1.1428571428571428,5.0,7.0

@@ -1,17 +1,29 @@
 .Attributes g.attr.react-draggable:not(.react-draggable-dragging){
-    transition: transform 0.4s linear;
-  }
+	transition: transform 0.4s linear;
+}
 
-  .Attributes g.attr.react-draggable:not(.react-draggable-dragging) g.attrChart:hover{
-    animation-name: shake;
+.Attributes g.attr.react-draggable:not(.react-draggable-dragging) g.attrChart:hover{
+	animation-name: shake;
 	animation-duration: 0.8s;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
-    animation-delay: 0.5s;
-    
-  }
+	animation-delay: 0.5s;
+}
 
-  @keyframes shake  {
+.Attributes g.attr{
+	animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes shake  {
 	0% { transform: translate(2px, 1px) }
 	20% { transform: translate(-1px, 0px) }
 	40% { transform: translate(1px, -1px) }

@@ -1,36 +1,71 @@
 import { AllActions } from 'actions';
 import { StoreState } from 'types';
-import {BAR_ARRAY,GENERATE_SAMPLES,GENERATE_RULES, 
-  FIND_GROUPS, CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
+import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES, 
+  CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
-  CHANGE_GROUPS_FETCH_STATUS, CHANGE_KEY_ATTR, DRAG_STATUS, SHOW_ATTRS} from 'Const'
+  CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
+  CHANGE_XSCALE,CHANGE_SHOW_DATASET, SELBAR} from 'Const';
+
+import {filterRules} from 'Helpers';
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
+  // console.info('action',action)
+  // console.info('state', state)
+    var {ruleThreshold, keyAttrNum, dragArray, allRules} = state
     switch (action.type) {
       case GENERATE_SAMPLES:
         return { ...state, samples:action.samples}
       case GENERATE_RULES:
-        return { ...state, rules:action.rules}
-      case FIND_GROUPS:  
-        return { ...state, key_attrs:action.key_attrs, key_groups: action.key_groups}      
+        return { 
+          ...state, 
+          allRules:action.rules, 
+          rules: filterRules(
+            action.rules, 
+            ruleThreshold, 
+            dragArray.slice(0, keyAttrNum)
+          )
+        } 
       case CHANGE_PROTECTED_ATTR:  
-        return { ...state, protected_attr:action.protected_attr}
+        return { ...state, protectedAttr:action.protectedAttr}
       case CHANGE_SAMPLES_FETCH_STATUS:
-        return { ...state, fetch_samples_status: action.status}
+        return { ...state, fetchSampleStatus: action.status}
       case CHANGE_RULES_FETCH_STATUS:
-        return { ...state, fetch_samples_status: action.status}
-      case CHANGE_GROUPS_FETCH_STATUS:
-        return { ...state, fetch_groups_status: action.status}
+        return { ...state, fetchSampleStatus: action.status}
+      case CHANGE_KEY_FETCH_STATUS:
+        return { ...state, fetchKeyStatus: action.status}
+      case CHANGE_SHOW_DATASET:
+        return { ...state, showDataset: action.showDataset}
       case CHANGE_RULE_THRESHOLD:
-        return { ...state, thr_rules: action.thr_rules}
-      case BAR_ARRAY:
-        return { ...state, drag_array: action.drag_array}
-      case DRAG_STATUS:
-        return { ...state, drag_status: action.drag_status}
+        return { 
+          ...state, 
+          ruleThreshold: action.ruleThreshold,
+          rules: filterRules(
+            allRules, 
+            action.ruleThreshold, 
+            dragArray.slice(0, keyAttrNum)
+          )
+        }
+      case SELBAR:
+        return { ...state, selected_bar: action.selected_bar}
+      case CHANGE_DRAG_ARRAY:
+        return { ...state, dragArray: action.dragArray}
       case CHANGE_KEY_ATTR:
-        return {...state, key_attrs: action.key_attrs}
-      case SHOW_ATTRS:
-        return {...state, show_attrs: action.show_attrs}
+        let {keyAttrs} = action
+        return { 
+          ...state, 
+          keyAttrNum: keyAttrs.length, 
+          dragArray: keyAttrs.concat(state.dragArray.filter(attr=>!keyAttrs.includes(attr))),
+          rules: filterRules(allRules, ruleThreshold, keyAttrs)
+        } 
+      case CHANGE_SHOW_ATTRS:
+        let {showAttrs} = action
+        return { 
+          ...state, 
+          showAttrNum: showAttrs.length, 
+          dragArray: showAttrs.concat(state.dragArray.filter(attr=>!showAttrs.includes(attr)))
+        } 
+      case CHANGE_XSCALE:
+        return {...state, xScaleMax: action.xScaleMax}
       default:
         return state;
     }

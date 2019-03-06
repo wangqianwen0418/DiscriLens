@@ -1,7 +1,7 @@
-const COLORS: string[] = [
-    "#1A7AB1",
-    "#FF772D",
+export const COLORS: string[] = [
     "#98E090",
+    "#FF9F1E",
+    "#1A7AB1",
     "#FF9398",
     "#9467B9",
     "#C5B0D3",
@@ -11,7 +11,8 @@ const COLORS: string[] = [
     "#BCBC3D",
     "#07C1CD"
     ]
-let names:string[] = ['male', 'female']
+// let names:string[] = ['male', 'female']
+let names:string[] = []
 
 export  const getColor = (name: string): string =>{
         let idx: number = names.indexOf(name)
@@ -23,4 +24,3 @@ export  const getColor = (name: string): string =>{
             return COLORS[idx % numColor]
         }
     }
-

@@ -5,16 +5,17 @@ import { ChangeRuleThresholds} from 'actions';
 
 export function mapStateToProps(state:StoreState) {
     return {
-        rules: state.rules,
-        key_attrs:state.key_attrs,
-        thr_rules: state.thr_rules,
-        drag_status: state.drag_status,
+        allRules: state.allRules,
+        protectedVal: state.protectedVal,
+        keyAttrs: state.dragArray.slice(0, state.keyAttrNum),
+        ruleThreshold: state.ruleThreshold,
+        xScaleMax: state.xScaleMax,
     };
 }
 
 export function mapDispatchToProps(dispatch:any) {
     return {
-        onChange:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
+        onChangeRuleThreshold:(thr_rules:[number, number])=>{dispatch(ChangeRuleThresholds(thr_rules))},
     }
 }
 

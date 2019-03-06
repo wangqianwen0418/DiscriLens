@@ -49,8 +49,6 @@
 }
 
 .Side .ant-select-sm .ant-select-selection--single{
-  width: 70px !important;
-  height: 20px !important;
   font-size: 10px !important;
   text-align: center;
 }
@@ -63,5 +61,5 @@
 }
 
 .Side .ant-input-number .ant-input-number-sm{
-  font-size: 10px;
+  font-size: 10px
 }

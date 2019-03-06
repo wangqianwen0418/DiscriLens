@@ -31,7 +31,7 @@ export default class SetCover extends React.Component<Props, State>{
     }
     changeRule(id: number){
         this.setState({selectRuleID: id})
-        console.info(this.props.rules[id])
+        // console.info(this.props.rules[id])
     }
     draw(){
         /*
@@ -163,7 +163,7 @@ export default class SetCover extends React.Component<Props, State>{
                 d={pathData} 
                 key={i+rule.antecedent} 
                 fill={color}
-                // fill='transparent' 
+                // fill='none' 
                 fillOpacity={selectRuleID==i?0.6:0.1} 
                 stroke={color} 
                 strokeOpacity={0.8}

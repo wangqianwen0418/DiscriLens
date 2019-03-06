@@ -10,6 +10,8 @@ import { createStore,applyMiddleware } from 'redux';
 import rootReducer from 'reducers';
 import { StoreState, Status} from 'types';
 
+import {filterRules} from "Helpers";
+
 
 
 import 'antd/dist/antd.css';
@@ -17,36 +19,74 @@ import 'antd/dist/antd.css';
 const TEST = true
 
 let initState:StoreState
+
+let dataSets = ['adult', 'academic', 'bank'],
+    models = ['xgb', 'knn', 'lr'],
+    dataSelect = 1,
+    modelSelect = 2,
+
+    dataset = dataSets[dataSelect],
+    model = models[modelSelect]
+
 if (TEST){
-    let {key_attrs, key_groups:jsonGroups} = require('./testdata/academic_lr_key.json'), 
-    jsonSamples = require('./testdata/academic_lr_samples.json'),
-    jsonRule = require('./testdata/academic_lr_rules.json')
+    let filename = dataset + '_' + model
+    // let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
+    let samples = require('./testdata/'+filename+'_samples.json')
+    let rules = require('./testdata/'+filename+'_rules.json')
+    let protectedVal = rules[0].pd
+    let protectedAttr = protectedVal.split('=')[0]
+    let ruleThreshold: [number, number] = [-0.0, 0.0]
+
+    let dragArray = [...Object.keys(samples[0])]
+    // remove the attribute 'id' and 'class'
+    dragArray.splice(dragArray.indexOf('id'), 1)
+    dragArray.splice(dragArray.indexOf('class'), 1)
+    if (dragArray.includes(protectedAttr)){
+      dragArray.splice(dragArray.indexOf(protectedAttr), 1)
+    }  
+    // move key attributes to the front
+    let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    // keyAttrs=['poutcome', 'education', 'previous']
+    dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
+    
+
+
     initState = {
-      key_attrs,
-      key_groups: jsonGroups,
-      samples: jsonSamples,
-      rules: jsonRule,
-      protected_attr: 'sex',
-      fetch_samples_status: Status.COMPLETE,
-      fetch_groups_status: Status.COMPLETE,
-      thr_rules:[-0.1,0.1],
-      drag_array: [],
-      drag_status: false,
-      show_attrs: [],
+      dataset, 
+      model,
+      keyAttrNum: keyAttrs.length, 
+      samples,
+      allRules: rules,
+      rules: filterRules(rules, ruleThreshold, keyAttrs),
+      protectedAttr,
+      protectedVal,
+      fetchSampleStatus: Status.COMPLETE,
+      fetchKeyStatus: Status.COMPLETE,
+      ruleThreshold,
+      dragArray,
+      showAttrNum: keyAttrs.length,
+      showDataset:dataset,
+      xScaleMax: -1,
+      selected_bar:['','']
   }
 }else{
   initState = {
-    key_attrs: [],
-    key_groups: [],
+    dataset,
+    model,
+    keyAttrNum: 0,
     samples: [],
+    allRules: [],
     rules: [],
-    protected_attr: '',
-    fetch_samples_status: Status.COMPLETE,
-    fetch_groups_status: Status.COMPLETE,
-    thr_rules:[-0.1,0.1],
-    drag_array: [],
-    drag_status: false,
-    show_attrs: [],
+    protectedAttr: '',
+    protectedVal: '',
+    fetchSampleStatus: Status.COMPLETE,
+    fetchKeyStatus: Status.COMPLETE,
+    ruleThreshold: [-0.05, 0.05],
+    dragArray: [],
+    showAttrNum: 0,
+    showDataset: '',
+    xScaleMax: -1,
+    selected_bar: ['','']
 }
 }
 
@@ -64,4 +104,3 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
-
