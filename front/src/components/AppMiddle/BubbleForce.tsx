@@ -29,7 +29,8 @@ export interface State {
 export interface ItemHierarchy {
     id: string,
     children: ItemHierarchy[],
-    score: number | null
+    score: number | null,
+    groups: string[]
 }
 // export interface SetData {
 //     sets: string[],
@@ -130,6 +131,7 @@ export default class Bubble extends React.Component<Props, State>{
         let root: ItemHierarchy = {
             id: 'root',
             children: [],
+            groups: [],
             score: null
         }
         let  childDict:any = []
@@ -140,11 +142,14 @@ export default class Bubble extends React.Component<Props, State>{
             // let prevItem = items[itemIdx - 1], prevGroup = prevItem.groups.sort().join(',')
             if (!childDict.includes(currentGroup)) {
                 root.children.push({
-                    id: 'rules_' + currentGroup,
+                    // id: 'rules_' + currentGroup,
+                    id: `itemcluster_${root.children.length}`,
+                    groups: item.groups,
                     score: item.score,
                     children: [{
                         id: item.id,
                         score: item.score,
+                        groups: item.groups,
                         children: [],
                     }]
                 })
@@ -154,6 +159,7 @@ export default class Bubble extends React.Component<Props, State>{
                 root.children[childID].children.push({
                     id: item.id,
                     score: item.score,
+                    groups: item.groups,
                     children: []
                 })
             }
@@ -180,7 +186,7 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
 
-        let forceLinks: any[]= getMinLinks(rules, datum.children)
+        let {links: forceLinks}= getMinLinks(rules, datum.children)
 
         const simulation = d3.forceSimulation(forceNodes)
         .force("link", d3.forceLink(forceLinks).id((d:any) => d.id).distance(d=>d.length))

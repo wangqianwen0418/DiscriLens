@@ -5,8 +5,8 @@
 //     BSplineShapeGenerator
 // } from 'lib/bubble.js';
 import * as React from 'react';
-import { RuleAgg, RuleNode} from 'Helpers';
-// import { RuleAgg, RuleNode, MinLink, getMinLinks} from 'Helpers';
+// import { RuleAgg, RuleNode} from 'Helpers';
+import { RuleAgg, RuleNode, getMinLinks} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {pack as mypack} from 'lib/pack/index.js';
@@ -33,7 +33,8 @@ export interface State {
 export interface ItemHierarchy {
     id: string,
     children: ItemHierarchy[],
-    score: number | null
+    score: number | null,
+    groups: string[]
 }
 // export interface SetData {
 //     sets: string[],
@@ -118,6 +119,7 @@ export default class Bubble extends React.Component<Props, State>{
         let root: ItemHierarchy = {
             id: 'root',
             children: [],
+            groups: [],
             score: null
         }
         let  childDict:any = []
@@ -128,11 +130,14 @@ export default class Bubble extends React.Component<Props, State>{
             // let prevItem = items[itemIdx - 1], prevGroup = prevItem.groups.sort().join(',')
             if (!childDict.includes(currentGroup)) {
                 root.children.push({
-                    id: 'rules_' + currentGroup,
+                    // id: 'rules_' + currentGroup,
+                    id: `itemcluster_${root.children.length}`,
+                    groups: item.groups,
                     score: item.score,
                     children: [{
                         id: item.id,
                         score: item.score,
+                        groups: item.groups,
                         children: [],
                     }]
                 })
@@ -142,6 +147,7 @@ export default class Bubble extends React.Component<Props, State>{
                 root.children[childID].children.push({
                     id: item.id,
                     score: item.score,
+                    groups: item.groups,
                     children: []
                 })
             }
@@ -160,8 +166,8 @@ export default class Bubble extends React.Component<Props, State>{
                 .sum(d => 1) // same radius for each item
         )
 
-        // let links: MinLink[]= getMinLinks(rules, datum.children)
-        // console.info(links)
+        let {links}= getMinLinks(rules, datum.children)
+        console.info(links)
 
 
 
@@ -174,7 +180,7 @@ export default class Bubble extends React.Component<Props, State>{
 
         datum.children.forEach((set:d3.HierarchyCircularNode<any>) => {
             let scoreColor_ = scoreColor(set.data.score)
-            let isHover = set.data.id.includes(hoverRule)
+            let isHover = set.data.groups.includes(hoverRule)
             // let isHighlight = containsAttr(set.data.id, highlightRules).length>0
             let strokeColor = hoverRule==undefined?scoreColor_:(isHover?scoreColor_:'#ccc')
             let opacity = hoverRule==undefined?1:(isHover?1:0.2)
@@ -187,7 +193,7 @@ export default class Bubble extends React.Component<Props, State>{
                 if (!highlightCircles[ruleID]){
                     highlightCircles[ruleID] = []
                 }
-                if(set.data.id.includes(ruleID)){
+                if(set.data.groups.includes(ruleID)){
                     highlightCircles[ruleID].push(
                         set
                     )
