@@ -77,7 +77,6 @@ export const getMinLinks = (rules: Rule[], circles: d3.HierarchyCircularNode<Ite
             }
         }
     }
-    console.info(resultGraph.edges().map((e:any)=>resultGraph.edge(e)))
     return resultGraph
 }
 
