@@ -30,10 +30,10 @@ function Node(circle) {
 
 function sortByAllNeighbors(circleID, graph) {
   var neighbors = graph.neighbors(circleID)
-  return neighbors
-    .reduce(
-      (acc, cur) => { acc + graph.edge(cur, circleID).weight }
-    )
+  return neighbors.length > 0 ?
+    neighbors.reduce(
+      (acc, cur) => { return acc + graph.edge(cur, circleID).weight }, 0
+    ) : 0
 }
 
 function sortByPackedNeighbors(circleID, graph, packedcircleIDs) {
@@ -41,7 +41,7 @@ function sortByPackedNeighbors(circleID, graph, packedcircleIDs) {
 
   return neighbors.length > 0 ?
     neighbors.reduce(
-      (acc, cur) => { acc + graph.edge(cur, circleID).weight }
+      (acc, cur) => { return acc + graph.edge(cur, circleID).weight }, 0
     ) : 0
 }
 
@@ -80,36 +80,28 @@ function intersects(a, b) {
   return dr > 0 && dr * dr > dx * dx + dy * dy;
 }
 
-export default function(nodes, graph) {
+export default function (nodes, graph) {
   let circles = [...nodes]
   // modify the front chain packing based on a weighted unconnect graph
   if (!(n = circles.length)) return 0;
 
   var a, b, c, n, aw, pw, i, j, k, sj, sk;
   var packed = []
-  // circles.sort((circleA, circleB) => {
-  //   return sortMetric(circleA.id, packed) - sortMetric(circleB.id, packed)
-  // })
   sortCircle(circles, graph, packed)
 
   // Place the first circle.
   a = circles.pop(), a.x = 0, a.y = 0;
+
   packed.push(a)
   if (!(n > 1)) return a.r;
 
   // Place the second circle.
-  // circles.sort((circleA, circleB) => {
-  //   return sortMetric(circleA.id, packed) - sortMetric(circleB.id, packed)
-  // })
   sortCircle(circles, graph, packed)
   b = circles.pop(), a.x = -b.r, b.x = a.r, b.y = 0;
   packed.push(b)
   if (!(n > 2)) return a.r + b.r;
 
   // Place the third circle.
-  // circles.sort((circleA, circleB) => {
-  //   return sortMetric(circleA.id, packed) - sortMetric(circleB.id, packed)
-  // })
   sortCircle(circles, graph, packed)
   c = circles.pop()
   place(b, a, c);
@@ -121,9 +113,7 @@ export default function(nodes, graph) {
   b.next = a.previous = c;
   c.next = b.previous = a;
 
-  // circles.sort((circleA, circleB) => {
-  //   return sortMetric(circleA.id, packed) - sortMetric(circleB.id, packed)
-  // })
+
   sortCircle(circles, graph, packed)
   c = circles.pop()
   c = new Node(c);
@@ -155,22 +145,9 @@ export default function(nodes, graph) {
     // c.previous = a, c.next = b, a.next = b.previous = b = c;
     c.previous = a, c.next = b, a.next = b.previous = c;
 
-    // // Compute the new closest circle pair to the centroid.
-    // aa = score(a);
-    // while ((c = c.next) !== b) {
-    //   if ((ca = score(c)) < aa) {
-    //     a = c, aa = ca;
-    //   }
-    // }
-    // b = a.next;
-
-
     if (circles.length > 0) {
       // update a,b,c. 
       // c: the new circle to add, with largest sortMetric value in unpacked circles
-      // circles.sort((circleA, circleB) => {
-      //   return sortMetric(circleA.id, packed) - sortMetric(circleB.id, packed)
-      // })
       sortCircle(circles, graph, packed)
       c = new Node(circles.pop())
       // a: a circle in the packed circles that maxmize edge(a,c).weight
