@@ -79,7 +79,7 @@ export interface rect {
 }
 
 export default class Itemset extends React.Component<Props, State>{
-    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15;
+    public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
     headWidth = this.props.offsetX - this.margin;
     indent: 5;
@@ -357,7 +357,7 @@ export default class Itemset extends React.Component<Props, State>{
                     {rule.risk_dif.toFixed(2).replace('0.', '.')}
                 </text> */}
             </g>
-            <text fontSize={10} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
+            <text fontSize={this.fontSize} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
                     {rule.risk_dif.toFixed(2)} */}
@@ -389,13 +389,13 @@ export default class Itemset extends React.Component<Props, State>{
             stroke="#444" 
             /> */}
             </g>
-            <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' >
+            <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
                 <line className="ruleBoundary"
                     x1={indent} y1={this.lineInterval * 0.5}
                     x2={window.innerWidth} y2={this.lineInterval * 0.5}
                     stroke="#f0f0f0"
                 />
-                <g className="icon" transform={`translate(${0}, ${-this.lineInterval / 4})`} onClick={toggleExpand}>
+                <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`} onClick={toggleExpand}>
                     {/* <foreignObject>
                         <Icon type="pushpin" style={{fontSize:this.lineInterval*0.6}}/>
                     </foreignObject> */}
@@ -409,20 +409,20 @@ export default class Itemset extends React.Component<Props, State>{
                         <circle className="icon"
                             // fill='none' stroke='#c3c3c3' strokeWidth={2}
                             fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
-                            r={this.lineInterval * 0.25}
+                            r={this.lineInterval * 0.1}
                             cx={this.lineInterval * 0.3}
                             cy={-this.lineInterval * 0.3}
                         />
                         : <polygon className="icon"
-                        fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
-                        strokeLinejoin="round"
-                        transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
-                        points={`
+                            fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
+                            strokeLinejoin="round"
+                            transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
+                            points={`
                                 ${0},${this.lineInterval * 0.1} 
                                 ${0},${-this.lineInterval * 0.7} 
-                                ${this.lineInterval * 0.4},${this.lineInterval*(-0.3)}
+                                ${this.lineInterval * 0.4},${this.lineInterval * (-0.3)}
                                 `}
-                    />
+                        />
                     }
                 </g>
             </g>
@@ -441,8 +441,8 @@ export default class Itemset extends React.Component<Props, State>{
                         <rect className='background'
                             width={barWidth} height={this.lineInterval}
                             x={step * showAttrs.indexOf(attr)}
-                            // fill='#eee'
-                            fill='none'
+                            fill='#fff'
+                            // fill='none'
                             // stroke={favorPD ? "#98E090" : "#FF772D"}
                             stroke={this.scoreColor(ruleNode.rule.risk_dif)}
                             strokeWidth={2}
@@ -452,7 +452,8 @@ export default class Itemset extends React.Component<Props, State>{
                             <rect className='font'
                                 width={barWidth / ranges.length} height={this.lineInterval}
                                 x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
-                                fill={favorPD ? "#98E090" : "#FF772D"}
+                                // fill={favorPD ? "#98E090" : "#FF772D"}
+                                fill={this.scoreColor(ruleNode.rule.risk_dif)}
                                 onMouseEnter={() => {
                                     this.props.onChangeSelectedBar([attr, val])
                                 }}
@@ -521,41 +522,16 @@ export default class Itemset extends React.Component<Props, State>{
         }
 
         let isExpand = this.state.expandRules.hasOwnProperty(id)
-        let itemSizeLabel = <text fontSize={10} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth - 5}>
+        let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
             {items.length}
         </text>
-
 
         let attrValContent = antecedent.map((attrVal => {
 
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
-            return <g key={attrVal}>
-                {/* <Bubble ruleAgg={ruleAgg}/> */}
-                <rect className='ruleBox'
-                    stroke='#c3c3c3' fill='none'
-                    strokeWidth='1px'
-                    rx={2} ry={2}
-                    x={-this.headWidth} y={-0.5 * this.lineInterval}
-                    height={this.lineInterval * 2} width={step * keyAttrNum + this.headWidth} />
-                <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
-                    {/* <text className="icon"
-                        transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
-                    >
-                        >
-                </text> */}
-                    <polygon className="icon"
-                        fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
-                        strokeLinejoin="round"
-                        transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
-                        points={`
-                                ${0},${this.lineInterval * 0.1} 
-                                ${0},${-this.lineInterval * 0.7} 
-                                ${this.lineInterval * 0.4},${this.lineInterval*(-0.3)}
-                                `}
-                    />
-                </g>
+            return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr)}
@@ -572,9 +548,35 @@ export default class Itemset extends React.Component<Props, State>{
                     fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
                 />
             </g>
-        }))
-        attrValContent.unshift(itemSizeLabel)
-        return attrValContent
+        }
+        ))
+
+        let content = <g className='ruleagg'>
+            {/* <Bubble ruleAgg={ruleAgg}/> */}
+            <rect className='ruleBox'
+                stroke='#c3c3c3' fill='#fff'
+                strokeWidth='2px'
+                rx={2} ry={2}
+                x={-this.headWidth-2*this.fontSize} y={-0.5 * this.lineInterval}
+                height={this.lineInterval * 2} width={step * keyAttrNum + this.headWidth + 2*this.fontSize} />
+            {itemSizeLabel}
+            <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
+
+                <polygon className="icon"
+                    fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
+                    strokeLinejoin="round"
+                    transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
+                    points={`
+                    ${0},${this.lineInterval * 0.1} 
+                    ${0},${-this.lineInterval * 0.7} 
+                    ${this.lineInterval * 0.4},${this.lineInterval * (-0.3)}
+                    `}
+                />
+            </g>
+            {attrValContent}
+        </g>
+
+        return content
     }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
         // let {bubblePosition} = this.state
