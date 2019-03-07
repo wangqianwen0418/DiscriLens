@@ -86,7 +86,7 @@ export default class modelSelection extends React.Component<Props,State>{
         let {dragArray,keyAttrNum} = this.props
         let axis:any[] = []
         let dataKeyAttr_new:curveData[][] = []
-        let xMax = 0, yMax = 0
+        let xMax = 0, yMax:number[] = []
         let ruleAvailable: boolean = false
         this.models.forEach((model,i)=>{
                 let ruleIn = require('../../testdata/'+ this.props.showDataset + '_' + model + '_rules.json')
@@ -128,7 +128,7 @@ export default class modelSelection extends React.Component<Props,State>{
                     }
                 })
                 xMax = Math.max(xMax,Math.max.apply(null,curveX.map(Math.abs)))
-                yMax = Math.max(yMax,Math.max.apply(null,curveY.map(Math.abs)))
+                yMax.push(Math.max.apply(null,curveY.map(Math.abs)))
         })
         
         // define scales
@@ -155,7 +155,7 @@ export default class modelSelection extends React.Component<Props,State>{
                 // xScale maps risk_dif to actual svg pixel length along x-axis
                 let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
                 // yScale maps risk_dif to actual svg pixel length along x-axis
-                let yScale = d3.scaleLinear().domain([0,yMax]).range([0,bottomEnd-topStart])
+                let yScale = d3.scaleLinear().domain([0,yMax[i]]).range([0,bottomEnd-topStart])
                  // area of rules filtered by key_attrs
                 let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
                 

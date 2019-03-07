@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
-import { Icon, Tooltip } from 'antd';
+import { Icon } from 'antd';
 import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, } from 'Helpers';
 import * as d3 from 'd3';
 
@@ -86,8 +86,16 @@ export default class Itemset extends React.Component<Props, State>{
     bubbleSize: rect[] = [];
     positiveRuleAgg: RuleAgg[] = [];
     negativeRuleAgg: RuleAgg[] = [];
-    yoffSet:number=0;
-    yList:number[] = [];
+    // the selected bubble's offsite
+    yOffset:number = 0
+    // the offset of bubbles under the selected one
+    yDown:{i:number,offset:number}={i:0,offset:0};
+    // the offset of bubbles upper of the selected one
+    yUp:{i:number,offset:number}={i:0,offset:0}
+    // the list recording all rule rect position (left up point)
+    yList:number[] = []; 
+    // the list recording the y-axis value that the bubble should have
+    yStandardList:number[] = [];
     rulesLength:number = 0;
 
     scoreColor = (score: number)=>{
@@ -430,8 +438,7 @@ export default class Itemset extends React.Component<Props, State>{
                             strokeWidth={2}
                         />
                         
-                        <Tooltip title={val}>
-                            <rect className='font'
+                        <rect className='font'
                                 width={barWidth / ranges.length} height={this.lineInterval}
                                 x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                                 fill={favorPD ? "#98E090" : "#FF772D"}
@@ -441,8 +448,7 @@ export default class Itemset extends React.Component<Props, State>{
                                 onMouseLeave={()=>{
                                     this.props.onChangeSelectedBar(['',''])
                                 }}
-                            />
-                        </Tooltip>
+                        />
                         
                     </g>
                 }
@@ -467,8 +473,19 @@ export default class Itemset extends React.Component<Props, State>{
     enterRect(i:number){
         let bubblePosition = this.state.bubblePosition
         if(bubblePosition.length!=0){
-            let initPos = bubblePosition[i].y
-            this.yoffSet = this.yList[i] - this.bubbleSize[i].h/2 - initPos
+            let initPos = bubblePosition[i].y,
+            maxRect = this.findMaxRect(bubblePosition,i),
+            minRect = this.findMinRect(bubblePosition,i)
+            // the offset of selected bubble. Equal to bar's central y-value
+            this.yOffset = this.yList[i] - this.bubbleSize[i].h/2 - initPos
+            // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
+            if(minRect&&(this.yList[i]+this.bubbleSize[i].h/2>minRect.y)){
+                this.yDown = {i:i,offset:this.yList[i] + this.bubbleSize[i].h/2-minRect.y}
+            }
+            // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
+            if(maxRect){
+                this.yUp = {i:i,offset:this.yList[i] - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
+            }
             this.setState({})
         }
     }
@@ -476,7 +493,9 @@ export default class Itemset extends React.Component<Props, State>{
     leaveRect(){
         let bubblePosition = this.state.bubblePosition
         if(bubblePosition.length!=0){
-            this.yoffSet = 0
+            this.yDown.offset = 0
+            this.yUp.offset = 0
+            this.yOffset = 0
             this.setState({})
         }
     }
@@ -659,11 +678,10 @@ export default class Itemset extends React.Component<Props, State>{
         let negYList:number[] = []
         positiveRuleAgg.forEach((ruleAgg,i)=>{
             offsetY += 0.3 * this.lineInterval
-            if(posYList.length-1<=i){
-                posYList.push(offsetY+this.yoffSet)
-            }else{
-                posYList[i] = offsetY+this.yoffSet
-            }
+            let posOffset = 0
+            // calculate average y-value of an itemset
+            let posAveY = offsetY
+            
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX+this.props.offset}, ${offsetY})`} className="rule" >
                     {
@@ -679,15 +697,30 @@ export default class Itemset extends React.Component<Props, State>{
                     posRules = posRules.concat(content)
                 }
             }
+            posAveY = (posAveY + offsetY) / 2
+            // record y-axis value of each rule bar
+            if(i<this.yUp.i){
+                posOffset = this.yUp.offset
+            }else if(i>this.yUp.i){
+                posOffset = this.yDown.offset
+            }else{
+                posOffset = this.yOffset
+            }
+            
+            if(posYList.length-1<=i){
+                posYList.push(posAveY+posOffset)
+            }else{
+                posYList[i] = posAveY+posOffset
+            }
+
         })  
-        let negaRules: JSX.Element[] = []
+        let negaRules: JSX.Element[] = [] 
         negativeRuleAgg.forEach((ruleAgg,i)=> {
             offsetY += 0.3 * this.lineInterval
-            if(negYList.length-1<=i){
-                negYList.push(offsetY+this.yoffSet)
-            }else{
-                negYList[i] = offsetY+this.yoffSet
-            }
+            let negOffset = 0
+            // calculate average y-value of an itemset
+            let negAveY = offsetY
+
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX+this.props.offset}, ${offsetY})`} className="rule">
                     {
@@ -702,6 +735,20 @@ export default class Itemset extends React.Component<Props, State>{
                     offsetY = newY
                     negaRules = negaRules.concat(content)
                 }
+            }
+            negAveY = (negAveY + offsetY) / 2
+            // record offset distance of each rule bar
+            if(i+positiveRuleAgg.length<this.yUp.i){
+                negOffset = this.yUp.offset
+            }else if(i+positiveRuleAgg.length>this.yUp.i){
+                negOffset = this.yDown.offset
+            }else{
+                negOffset = this.yOffset
+            }
+            if(negYList.length-1<=i){
+                negYList.push(negAveY+negOffset)
+            }else{
+                negYList[i] = negAveY+negOffset
             }
         })
 
@@ -758,6 +805,18 @@ export default class Itemset extends React.Component<Props, State>{
             }
         }
         return maxBubble
+    }
+
+    findMinRect(bubblePosition:rect[],num:number){
+        let minBubble:rect
+        let minHeight = Infinity
+        for(var i=num+1;i<bubblePosition.length;i++){
+            if(bubblePosition[i].y<minHeight){
+                minHeight = bubblePosition[i].y
+                minBubble = bubblePosition[i]
+            }
+        }
+        return minBubble
     }
     /**
      * Divide and conquer method to find the best place to put the next bubble (greedy, not necessarily opt)

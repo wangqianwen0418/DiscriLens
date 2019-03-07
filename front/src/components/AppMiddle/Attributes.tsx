@@ -34,8 +34,8 @@ export interface curveData {
 }
 
 export default class Attributes extends React.Component<Props, State>{
-    public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 50;
-    height = this.props.step*Math.tan(this.rotate/180*Math.PI)/2
+    public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 90;
+    height = window.innerHeight / 10
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -149,7 +149,7 @@ export default class Attributes extends React.Component<Props, State>{
         //let x1 = in1.x,yA1=in1.y,yR1=in1.z,x2 = in2.x,yA2=in2.y,yR2=in2.z
         return {
             yA0: (yA2 - yA1) * (x0 - x1) / (x2 - x1) + yA1 ,
-            yR0: (yR2 - yR1) * (x0 - x1) / (x2 - x1) + yA1 
+            yR0: (yR2 - yR1) * (x0 - x1) / (x2 - x1) + yR1 
         }
     }
 
@@ -195,7 +195,6 @@ export default class Attributes extends React.Component<Props, State>{
                 reject_num += samples_reject.filter(s => s[attr] === range).length
                 if (((range_i % stepMerge
                     == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
-        
                     ListNum[rangesCounter].push(dataPush(range, accept_num, reject_num))
                     xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
                     yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
@@ -205,7 +204,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
         })
         // re-loop to add interpolation nodes to achieve consistancy
-       // left part
+        // left part
         rangesCounter = 0
         // right part
         let rangesCounter2 = 1
@@ -223,12 +222,11 @@ export default class Attributes extends React.Component<Props, State>{
                 rangesCounter2 ++
             }
         })
-    
         // curve x-axis
         let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
         // curve y-axis for data with class = 1
         let yScaleAcc = d3.scaleLinear().domain([0, yRecord[0]]).range([height / 2, 0]);
-        // curve y-axis for data woth class = 0
+        //6 curve y-axis for data woth class = 0
         let yScaleRej = d3.scaleLinear().domain([0, yRecord[1]]).range([height / 2, height]);
         // draw areas based on axis
         const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
@@ -236,14 +234,18 @@ export default class Attributes extends React.Component<Props, State>{
         
         let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
         let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
+        // x range, left (min) value and right (max) value
+        let xRange:{l:number,r:number} = {l:0,r:0}
         return <g key={attr + 'curve'}>
             <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
             {ListNum.map((List,i)=>{
                     let title: string = ''
                     if(i==0){
                         title = 'x<' + rangesSplit[i]
+                        xRange.l = rangesSplit[i]
                     }else if(i==rangesSplit.length - 1){
                         title = 'x>' + rangesSplit[i - 1]
+                        xRange.r = rangesSplit[i]
                     }else{
                         title = rangesSplit[i-1] + '<x<' + rangesSplit[i]
                     }
@@ -257,7 +259,7 @@ export default class Attributes extends React.Component<Props, State>{
                     // recover bar's color when mouseOut
                     let mouseOut = () => this.changeColor(['', ''])
                     let mouseDown = ()=> {this.changeColor(['', ''])}
-                    return <Tooltip title={title} key={`${attr}_${'curve'}_tooltip`}>
+                    return <Tooltip title={title} key={`${attr}_${String(i)}_${'curve'}_tooltip`}>
                     <g  onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
                         <path d={areasAcc(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? '#DE4863' : GOOD_COLOR }}  />
                         <path d={areasRej(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? 'pink' : BAD_COLOR }}  />
@@ -265,6 +267,8 @@ export default class Attributes extends React.Component<Props, State>{
                     </Tooltip>
                 })
             }
+            <text fill='#0e4b8e' transform={`translate(${0},${this.height*1.15})`}>{xRange.l}</text>
+            <text fill='#0e4b8e' transform={`translate(${this.props.barWidth*0.8},${this.height*1.15})`}>{xRange.r}</text>
         </g>
     }
     /**
@@ -307,7 +311,13 @@ export default class Attributes extends React.Component<Props, State>{
                 // recover bar's color when mouseOut
                 let mouseOut = () => this.changeColor(['', ''])
                 let mouseDown = ()=> {this.changeColor(['', ''])}
-                return <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
+                let rangeText = <text id={'rangeText'} transform={`translate(${range_i * (barWidthidth)},${this.height*1.2})`}>
+                {cutTxt(range, barWidthidth*0.9/this.fontSize*2)}</text>
+                
+                console.log(document.getElementById('rangeText'))
+                
+                return <g>
+                    <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
                     <g key={`${attr}_${range}`}
                         transform={`translate(${range_i * (barWidthidth)}, ${height / 2})`}
                         onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
@@ -315,6 +325,11 @@ export default class Attributes extends React.Component<Props, State>{
                         <rect width={barWidthidth * 0.9} height={reject_h} y={0} style={{ fill: ((color[0] == attr) && (color[1] == range)) ? 'pink' : BAD_COLOR }} />
                          </g>
                 </Tooltip>
+                <g>
+                    {rangeText}
+                </g>
+
+                </g>
             })}
         </g>
 
@@ -399,7 +414,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
 
             // label postition
-            let labelX = showFlag?0:-1*this.height,  labelY = showFlag?1.5*this.height: 1*this.height
+            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?1.5*this.height: 1.5*this.height
             const toggleShowAttr = (e:React.SyntheticEvent)=>{
                 this.toggleShowAttr(attr, showFlag)
             }
@@ -431,7 +446,7 @@ export default class Attributes extends React.Component<Props, State>{
                         }
                         <g 
                             className='attrLabel' 
-                            transform={`rotate(${showFlag?0:-1*this.rotate}) translate(${labelX}, ${labelY})`} 
+                            transform={`translate(${labelX}, ${labelY}) rotate(${showFlag?0:-1*this.rotate})`} 
                             style={{transformOrigin: `(${labelX}, ${labelY})`}}
                         >
                             <rect 
