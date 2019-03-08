@@ -6,6 +6,7 @@ import { ChangeRuleThresholds} from 'actions';
 export function mapStateToProps(state:StoreState) {
     return {
         allRules: state.allRules,
+        compAllRules: state.compAllRules,
         protectedVal: state.protectedVal,
         keyAttrs: state.dragArray.slice(0, state.keyAttrNum),
         ruleThreshold: state.ruleThreshold,

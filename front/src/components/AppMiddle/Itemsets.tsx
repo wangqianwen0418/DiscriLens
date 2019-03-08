@@ -836,7 +836,6 @@ export default class Itemset extends React.Component<Props, State>{
         let maxBubble: rect
         let maxHeight = -Infinity
         for (var i = 0; i < num; i++) {
-            console.log(i)
             if (bubblePosition[i].h + bubblePosition[i].y > maxHeight) {
                 maxHeight = bubblePosition[i].h + bubblePosition[i].y
                 maxBubble = bubblePosition[i]

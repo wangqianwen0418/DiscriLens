@@ -17,7 +17,6 @@ export interface Props {
     step:number,
     barWidth: number,
     offsetX:number,
-    offset:number,
     selected_bar:string[],
     onChangeKeyAttr: (keyAttrs:string[])=>void,
     onChangeDragArray: (dragArray: string[]) => void,
@@ -376,7 +375,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - this.props.offset - window.innerWidth / 6 - this.props.offsetX)/ step)
+                let endNum = Math.floor((e.x - window.innerWidth / 6 - this.props.offsetX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -488,7 +487,7 @@ export default class Attributes extends React.Component<Props, State>{
         let keyAttrBoarder:curveData[] = [{x:(keyAttrs.length - 0.2) * step,y:60,z:0},
             {x:(keyAttrs.length - 0.2)* step,y:0,z:0}] */
         return <g id={'attributes_draggable'}>
-            <g className='attrs' transform={`translate(${this.props.offsetX + this.props.offset}, ${this.attr_margin * 2})`}>
+            <g className='attrs' transform={`translate(${this.props.offsetX }, ${this.attr_margin * 2})`}>
                 {attrCharts}
             </g>
         </g>

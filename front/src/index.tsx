@@ -67,7 +67,11 @@ if (TEST){
       showAttrNum: keyAttrs.length,
       showDataset:dataset,
       xScaleMax: -1,
-      selected_bar:['','']
+      selected_bar:['',''],
+      compAllRules: null,
+      compSamples:null,
+      compRules:null,
+      foldFlag: false,
   }
 }else{
   initState = {
@@ -86,7 +90,11 @@ if (TEST){
     showAttrNum: 0,
     showDataset: '',
     xScaleMax: -1,
-    selected_bar: ['','']
+    selected_bar: ['',''],
+    compAllRules: null,
+    compSamples:null,
+    compRules:null,
+    foldFlag: false,
 }
 }
 

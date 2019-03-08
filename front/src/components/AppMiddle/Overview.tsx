@@ -7,10 +7,12 @@ import {BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
 
 export interface Props{
     allRules: Rule[],
+    compAllRules: Rule[],
     keyAttrs: string[],
     ruleThreshold: number[],
     protectedVal: string,
     xScaleMax: number,
+    offset:number,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -32,7 +34,7 @@ export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
     public leftStart = 20 ; 
     // right end position
-    rightEnd = window.innerWidth * 0.1; 
+    rightEnd = window.innerWidth * 0.2; 
     // bottom end position
     bottomEnd = 120; 
     // top start position 
@@ -48,6 +50,7 @@ export default class Overview extends React.Component<Props,State>{
     // counters for dragging
     xLeft = 0; 
     xRight = 0;
+    offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 2
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -110,8 +113,8 @@ export default class Overview extends React.Component<Props,State>{
     mouseMoveLeft(e: any){
         let { transformXLeft,zeroAxis,xScaleReverse } = this.state
         // the dragging range is restricted to [leftend,0] (in risk_dif space)
-        transformXLeft += (Math.min(Math.max(e.clientX,this.leftStart),zeroAxis) - this.xLeft)
-        this.xLeft = Math.min(Math.max(e.clientX,this.leftStart),zeroAxis)
+        transformXLeft += (Math.min(Math.max(e.clientX-this.offsetX,this.leftStart),zeroAxis) - this.xLeft)
+        this.xLeft = Math.min(Math.max(e.clientX-this.offsetX,this.leftStart),zeroAxis)
         this.setState({ transformXLeft })
         this.props.onChangeRuleThreshold([xScaleReverse(transformXLeft),this.props.ruleThreshold[1]])
         // if button is up
@@ -167,8 +170,8 @@ export default class Overview extends React.Component<Props,State>{
     mouseMoveRight(e: any){
         let {transformXRight,zeroAxis,xScaleReverse } = this.state
          // the dragging range is restricted to [0,rightend] (in risk_dif space)
-        transformXRight += (Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis) - this.xRight)
-        this.xRight = Math.max(Math.min(e.clientX,this.rightEnd),zeroAxis)
+        transformXRight += (Math.max(Math.min(e.clientX-this.offsetX,this.rightEnd),zeroAxis) - this.xRight)
+        this.xRight = Math.max(Math.min(e.clientX-this.offsetX,this.rightEnd),zeroAxis)
         this.setState({ transformXRight })
         this.props.onChangeRuleThreshold([this.props.ruleThreshold[0],xScaleReverse(transformXRight)])
         // if button is up
@@ -200,9 +203,8 @@ export default class Overview extends React.Component<Props,State>{
             }
         }
     }
-    ruleProcessing(){
-        let {ruleThreshold, allRules,keyAttrs, xScaleMax} = this.props
-        let {inputLeft, inputRight} = this.state
+    
+    ruleProcessing(allRules:Rule[],keyAttrs:string[]){
         /**
          * Processing rules by key attrs
          *  */ 
@@ -240,7 +242,27 @@ export default class Overview extends React.Component<Props,State>{
                 curveX.push(data.x)
             }
         })
+
+        return {data:dataKeyAttr_new,x:curveX,y:curveY}
+    }
+
+    drawArea(){
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {inputLeft, inputRight} = this.state
         
+        let dataPro = this.ruleProcessing(allRules,keyAttrs),
+        compDataPro = null, compDataKeyAttr = null,compCurveX = null,compCurveY = null
+        if(compAllRules){
+            compDataPro = this.ruleProcessing(compAllRules,keyAttrs)
+            compDataKeyAttr = compDataPro.data
+            compCurveX = compDataPro.x
+            compCurveY = compDataPro.y
+        }
+        
+        let dataKeyAttr = dataPro.data, curveX:number[] = dataPro.x, curveY = dataPro.y
+        
+        let xMax = Math.max(Math.max.apply(null,curveX.map(Math.abs)),compCurveX?Math.max.apply(null,compCurveX.map(Math.abs)):0),
+            yMax = Math.max(Math.max(...curveY),Math.max(...compCurveY))
         /**
          * Draw area
          * */ 
@@ -258,17 +280,17 @@ export default class Overview extends React.Component<Props,State>{
         // line's color
         let lineColor = this.lineColor;
         // color of unselected area (BAD_COLOR is the color of selected area)
-        let areaColor = this.areaColor
+        // let areaColor = this.areaColor
 
 
         // define scales
-        let maxAbsoluteX = xScaleMax==-1?(rules.length>0?Math.max.apply(null,curveX.map(Math.abs)):0.5):xScaleMax
+        let maxAbsoluteX = xScaleMax==-1?(dataKeyAttr.length>0?xMax:0.5):xScaleMax
         // xScale maps risk_dif to actual svg pixel length along x-axis
-        let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,window.innerWidth*0.1])
+        let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,rightEnd])
         // yScale maps risk_dif to actual svg pixel length along x-axis
-        let yScale = d3.scaleLinear().domain([0,Math.max(...curveY)]).range([0,bottomEnd-topStart])
+        let yScale = d3.scaleLinear().domain([0,yMax]).range([0,bottomEnd-topStart])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
-        let xScaleReverse = d3.scaleLinear().domain([leftStart,window.innerWidth*0.1]).range([-maxAbsoluteX,maxAbsoluteX])
+        let xScaleReverse = d3.scaleLinear().domain([leftStart,rightEnd]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
         let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
         // curve
@@ -329,22 +351,33 @@ export default class Overview extends React.Component<Props,State>{
                     
                 </g>
         }
-        return {path:<g>
-                <clipPath id={'overview_path'}>
-                    <path d={curveKeyAttrs(dataKeyAttr_new)} style={{fill:lineColor}} className='overview'/>
-                </clipPath>
-                <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={areaColor} clipPath={'url(#overview_path)'}/>
-                <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
-                <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
+        return <g>
+                <g>
+                    <clipPath id={'overview_path'}>
+                        <path d={curveKeyAttrs(dataKeyAttr)} style={{fill:lineColor}} className='overview'/>
+                    </clipPath>
+                    <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#bbb'} clipPath={'url(#overview_path)'}/>
+                    <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
+                    <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
+                </g>
+                {compDataKeyAttr?<g>
+                    <clipPath id={'comp_middle'}>
+                        <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#bbb'} clipPath={'url(#comp_overview_path)'}/>
+                    </clipPath>
+                    <clipPath id={'comp_side'}>
+                    <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} stroke='black' clipPath={'url(#comp_overview_path)'}/>
+                    <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} />
+                    </clipPath>
+                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:'#bbb',strokeWidth:1}} className='overview' clipPath='url(#comp_middle)'/>
+                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:BAD_COLOR,strokeWidth:1}} className='overview' clipPath='url(#comp_side)'/>
+                    </g>:null}
                 {selectThr()}
-            </g>,
-            scale:xScale,
-            dataKeyAttr:dataKeyAttr_new}
+            </g>
     
     }
     render(){
-        return <g key={'overviewOut'} ref={this.ref}>
-                {this.ruleProcessing().path}
+        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/2},0)`}>
+                {this.drawArea()}
         </g>
         // return <g>
         //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
@@ -354,28 +387,30 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     private renderAxis=()=>{
-        let axis = d3.axisBottom(this.ruleProcessing().scale).tickFormat(d3.format('.2f'))
-        .tickValues(this.ruleProcessing().scale.ticks(1).concat(this.ruleProcessing().scale.domain()))
+        if(this.state.xScale){
+            let axis = d3.axisBottom(this.state.xScale).tickFormat(d3.format('.2f'))
+            .tickValues(this.state.xScale.ticks(1).concat(this.state.xScale.domain()))
 
-        d3.selectAll('.axis').remove()
-        d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`)
-        .attr('stroke-width','1.5px').call(axis)
+            d3.selectAll('.axis').remove()
+            d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`)
+            .attr('stroke-width','1.5px').call(axis)
 
-        let axisLabel = d3.select('.axis')
-            .append('g')
-            .attr('class', 'axisName')
+            let axisLabel = d3.select('.axis')
+                .append('g')
+                .attr('class', 'axisName')
 
-        axisLabel.append('text')
-        .attr('x', window.innerWidth*0.1)
-        .attr('y', 30)
-        .text(`against ${this.props.protectedVal}`)
-        .style('fill', 'gray')
+            axisLabel.append('text')
+            .attr('x', this.rightEnd)
+            .attr('y', 30)
+            .text(`against ${this.props.protectedVal}`)
+            .style('fill', 'gray')
 
-        axisLabel.append('text')
-        .attr('x', 0)
-        .attr('y', 30)
-        .text(`favor ${this.props.protectedVal}`)
-        .style('fill', 'gray')
-        .style('text-anchor', 'start')
+            axisLabel.append('text')
+            .attr('x', 0)
+            .attr('y', 30)
+            .text(`favor ${this.props.protectedVal}`)
+            .style('fill', 'gray')
+            .style('text-anchor', 'start')
+        }
     }
 }
