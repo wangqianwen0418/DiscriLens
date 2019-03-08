@@ -405,7 +405,7 @@ export default class Attributes extends React.Component<Props, State>{
                 draggablePos = null
             } else {
                 let current_i = this.props.dragArray.indexOf(attr)
-                let x = showFlag?step*current_i: step*showAttrNum + (current_i-showAttrNum)*this.fontSize*2
+                let x = showFlag?step*current_i: step*showAttrNum
                 let y = 0
                 // textColor = this.state.dragArray[attr_i][1] == 1 ? 'red' : 'black'
                 if (x < 0) { x = 0 }
@@ -414,7 +414,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
 
             // label postition
-            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?1.5*this.height: 1.5*this.height
+            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?1.5*this.height: this.fontSize*1.2*(attr_i-keyAttrNum+1)
             const toggleShowAttr = (e:React.SyntheticEvent)=>{
                 this.toggleShowAttr(attr, showFlag)
             }
@@ -446,7 +446,7 @@ export default class Attributes extends React.Component<Props, State>{
                         }
                         <g 
                             className='attrLabel' 
-                            transform={`translate(${labelX}, ${labelY}) rotate(${showFlag?0:-1*this.rotate})`} 
+                            transform={`translate(${labelX}, ${labelY})`} 
                             style={{transformOrigin: `(${labelX}, ${labelY})`}}
                         >
                             <rect 
@@ -490,8 +490,6 @@ export default class Attributes extends React.Component<Props, State>{
         return <g id={'attributes_draggable'}>
             <g className='attrs' transform={`translate(${this.props.offsetX + this.props.offset}, ${this.attr_margin * 2})`}>
                 {attrCharts}
-                {//<path d={boarder(keyAttrBoarder)||''}style={{fill:'none',stroke:'#bbb',strokeWidth:'1px'}} />
-                }
             </g>
         </g>
     }

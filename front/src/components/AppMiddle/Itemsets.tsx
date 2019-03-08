@@ -94,8 +94,8 @@ export default class Itemset extends React.Component<Props, State>{
     yUp:{i:number,offset:number}={i:0,offset:0}
     // the list recording all rule rect position (left up point)
     yList:number[] = []; 
-    // the list recording the y-axis value that the bubble should have
-    yStandardList:number[] = [];
+    // record the max y-value
+    yMaxValue = 0;
     rulesLength:number = 0;
 
     scoreColor = (score: number) => {
@@ -733,6 +733,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
             posAveY = (posAveY + offsetY) / 2
+            this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             // record y-axis value of each rule bar
             if(i<this.yUp.i){
                 posOffset = this.yUp.offset
@@ -772,6 +773,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
             negAveY = (negAveY + offsetY) / 2
+            this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             // record offset distance of each rule bar
             if(i+positiveRuleAgg.length<this.yUp.i){
                 negOffset = this.yUp.offset
@@ -834,6 +836,7 @@ export default class Itemset extends React.Component<Props, State>{
         let maxBubble: rect
         let maxHeight = -Infinity
         for (var i = 0; i < num; i++) {
+            console.log(i)
             if (bubblePosition[i].h + bubblePosition[i].y > maxHeight) {
                 maxHeight = bubblePosition[i].h + bubblePosition[i].y
                 maxBubble = bubblePosition[i]
@@ -979,17 +982,14 @@ export default class Itemset extends React.Component<Props, State>{
                 break
 
         }
-        return (<svg className='itemset' style={{ width: "100%", height: "100%" }}>
-            {/* <defs>
-            <linearGradient id="negativeGradient" x1="0%" y1="0%" x2="100%" y2="100%" >
-                <stop className="stop1" offset="0%" stopColor={d3.interpolateOranges(0.2)}/>
-                <stop className="stop3" offset="100%" stopColor={d3.interpolateOranges(0.8)}/>
-            </linearGradient>
-            <linearGradient id="positiveGradient" x1="0%" y1="0%" x2="0%" y2="100%" gradientUnits="userSpaceOnUse">
-                <stop className="stop1" offset="0%" stopColor={d3.interpolateGreens(0)}/>
-                <stop className="stop3" offset="100%" stopColor={d3.interpolateGreens(0.8)}/>
-            </linearGradient>
-        </defs> */}
+        let maxBubble = this.findMaxRect(this.state.bubblePosition,this.state.bubblePosition.length)
+        let svgHeight:number = 0
+        if(maxBubble){
+            svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
+        }
+        let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
+        
+        return (<svg className='itemset' style={{ width: "100%", height: borderHeight}}>
             <g className='rules' >
                 {content}
             </g>

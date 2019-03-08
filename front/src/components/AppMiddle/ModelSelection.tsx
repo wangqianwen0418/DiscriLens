@@ -167,8 +167,8 @@ export default class modelSelection extends React.Component<Props,State>{
                 return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} onClick={changeModel} cursor='pointer'>
                         <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/>
                         <circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
-                        {i==this.state.selectedModel?<circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={4} style={{fill:'black'}}/>:null}
-                        <text x={this.rightEnd * 1.17} y={bottomEnd*0.9 + 3 }>{this.models[i]}</text>
+                        {i==this.state.selectedModel?<circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={3} style={{fill:'black'}}/>:null}
+                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.9 + 3 }>{this.models[i]}</text>
                     </g>
             })
         }
