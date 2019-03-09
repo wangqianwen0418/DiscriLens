@@ -5,7 +5,11 @@ import { connect} from 'react-redux';
 
 export function mapStateToProps(state:StoreState) {
     return {
-        foldFlag: state.foldFlag
+        foldFlag: state.foldFlag,
+        compSamples:state.compSamples,
+        rules: state.rules,
+        samples: state.samples,
+        compRules:state.compRules,
     };
 }
 

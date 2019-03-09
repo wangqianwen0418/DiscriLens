@@ -6,8 +6,6 @@ import { ChangeShowAttr,ChangeSelectedBar} from 'actions';
 
 export function mapStateToProps(state:StoreState) {
     return {
-        rules: state.rules,
-        samples: state.samples,
         ruleThreshold: state.ruleThreshold,
         keyAttrNum:state.keyAttrNum,
         dragArray: state.dragArray, 

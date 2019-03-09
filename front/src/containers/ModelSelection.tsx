@@ -9,6 +9,7 @@ export function mapStateToProps(state:StoreState) {
         allRules: state.allRules,
         dragArray: state.dragArray,
         keyAttrNum: state.keyAttrNum,
+        accuracy: state.accuracy,
     };
 }
 

@@ -50,7 +50,7 @@ export default class Overview extends React.Component<Props,State>{
     // counters for dragging
     xLeft = 0; 
     xRight = 0;
-    offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 2
+    offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 4 * 3
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -376,7 +376,7 @@ export default class Overview extends React.Component<Props,State>{
     
     }
     render(){
-        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/2},0)`}>
+        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`}>
                 {this.drawArea()}
         </g>
         // return <g>
@@ -400,7 +400,7 @@ export default class Overview extends React.Component<Props,State>{
                 .attr('class', 'axisName')
 
             axisLabel.append('text')
-            .attr('x', this.rightEnd)
+            .attr('x', this.rightEnd - this.leftStart*1.5)
             .attr('y', 30)
             .text(`against ${this.props.protectedVal}`)
             .style('fill', 'gray')

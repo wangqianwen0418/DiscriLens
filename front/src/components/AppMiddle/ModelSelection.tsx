@@ -10,6 +10,7 @@ export interface Props{
     keyAttrNum: number,
     dragArray: string[],
     showDataset: string,
+    accuracy:number[],
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
@@ -53,8 +54,8 @@ export default class modelSelection extends React.Component<Props,State>{
             fold: false,
             dataSet: null,
             selectionCurves: [],
-            selectedModel: 0,
-            selectedCompModel: 0,
+            selectedModel: 2,
+            selectedCompModel: -1,
         }
         this.reverseFold = this.reverseFold.bind(this)
         this.updateModels = this.updateModels.bind(this)
@@ -181,6 +182,8 @@ export default class modelSelection extends React.Component<Props,State>{
                         {i==this.state.selectedModel?<circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={3} style={{fill:'black'}}/>:null}
                         
                         <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.9 + 3 }>{this.models[i]}</text>
+
+                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={bottomEnd*0.95}>{'Acc:'+this.props.accuracy[i]*100+'%'}</text>
                     </g>
                     <g onClick={changeCompModel} cursor='pointer'>
                         <circle cx={this.rightEnd * 1.4} cy={bottomEnd*0.9 } r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />

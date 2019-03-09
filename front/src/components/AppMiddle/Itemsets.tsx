@@ -45,6 +45,7 @@ export interface Props {
     barWidth: number,
     offsetX: number,
     offset: number,
+    compFlag: number,
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
 }
@@ -96,6 +97,8 @@ export default class Itemset extends React.Component<Props, State>{
     yList:number[] = []; 
     // record the max y-value
     yMaxValue = 0;
+    //record the max x-value
+    xMaxValue = 0;
     rulesLength:number = 0;
 
     scoreColor = (score: number) => {
@@ -439,6 +442,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let [attr, val] = attrVal.split('=')
                     let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                         rangeIdx = ranges.indexOf(val)
+                    this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
                     return <g key={attrVal}>
                         {/* <rect className='ruleBox' 
             stroke='#666' fill='none' 
@@ -544,9 +548,9 @@ export default class Itemset extends React.Component<Props, State>{
         let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
             {items.length}
         </text>
-
+        
+        console.log(antecedent)
         let attrValContent = antecedent.map((attrVal => {
-
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
@@ -569,6 +573,8 @@ export default class Itemset extends React.Component<Props, State>{
             </g>
         }
         ))
+
+        this.xMaxValue=Math.max(this.xMaxValue,step * keyAttrNum + this.headWidth + 2*this.fontSize-this.headWidth-2*this.fontSize)
 
         let content = <g className='ruleagg'>
             {/* <Bubble ruleAgg={ruleAgg}/> */}
@@ -598,7 +604,7 @@ export default class Itemset extends React.Component<Props, State>{
         return content
     }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
-        // let {bubblePosition} = this.state
+        let { compFlag, offset } = this.props
         let { expandRules, bubblePosition } = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
@@ -611,22 +617,23 @@ export default class Itemset extends React.Component<Props, State>{
                 .filter(id => !showIDs.includes(id))
         )
         showIDs = showIDs.filter(id => !id.includes('agg'))
+        let bubbleXOffset = compFlag==0?100:10
         return <g className='bubbles' transform={`translate(${0}, ${0})`}>
             {
                 ruleAggs
                     .map((ruleAgg, i) => {
-                        let transX = 100
+                        let transX = bubbleXOffset
                         let transY = 0
                         // calculate translate distance
                         if (bubblePosition.length == this.rulesLength) {
                             if (posFlag) {
                                 // if rules are positive rules
-                                transX = bubblePosition[i].x + 100
+                                transX = 250 - bubblePosition[i].x - bubblePosition[i].w + bubbleXOffset
                                 transY = bubblePosition[i].y
                             } else {
                                 // if rules are negtive rules
                                 let initI = bubblePosition.length - ruleAggs.length
-                                transX = bubblePosition[initI + i].x + 100
+                                transX = 250 - bubblePosition[initI + i].x - bubblePosition[initI+i].w + bubbleXOffset
                                 transY = bubblePosition[initI + i].y
                             }
                         }
@@ -649,7 +656,7 @@ export default class Itemset extends React.Component<Props, State>{
                         />
 
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
-                            transform={`translate(${transX},${transY})`}
+                            transform={`translate(${(compFlag==0)||(compFlag==-1)?transX:transX+offset},${transY})`}
                         >
                             {bubble}
                         </g>
@@ -683,7 +690,7 @@ export default class Itemset extends React.Component<Props, State>{
         </g>
     }
     draw() {
-        let { rules, samples, keyAttrNum, dragArray } = this.props
+        let { rules, samples, keyAttrNum, dragArray,compFlag } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
@@ -718,7 +725,7 @@ export default class Itemset extends React.Component<Props, State>{
             let posAveY = offsetY
             
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${offsetY})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
@@ -758,7 +765,7 @@ export default class Itemset extends React.Component<Props, State>{
             let negAveY = offsetY
 
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${offsetY})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false)
                     }
@@ -923,18 +930,18 @@ export default class Itemset extends React.Component<Props, State>{
 
     componentDidUpdate(prevProp: Props) {
         let bubblePosition: rect[] = []
+        // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 1
         this.bubbleSize.forEach((bubble, i) => {
             let transX = 0,
                 transY = 0
             if (i == 0) {
-                transX = 0
                 transY = this.yList[0] - bubble.h / 2
             } else {
                 let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
                 greedyPos.y = Math.max(greedyPos.y, this.yList[i] - bubble.h / 2)
-                transX = greedyPos.x
+                transX = greedyPos.x 
                 transY = greedyPos.y
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
@@ -987,8 +994,8 @@ export default class Itemset extends React.Component<Props, State>{
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
-        
-        return (<svg className='itemset' style={{ width: "100%", height: borderHeight}}>
+        let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
+        return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}
             </g>

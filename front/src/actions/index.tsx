@@ -2,7 +2,8 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     GENERATE_RULES,CHANGE_PROTECTED_ATTR,CHANGE_RULE_THRESHOLD,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
-    CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES,FOLDFLAG} from 'Const';
+    CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
+    ,FOLDFLAG,ACCURACY} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -68,6 +69,21 @@ export const FetchKeys = (dataset_name:string, model_name: string, protect_attr:
             dispatch( ChangeKeyFetchStatus(Status.COMPLETE) )
         })
     };
+}
+
+/*****************
+all about samples
+*****************/ 
+export interface GenerateAccuracy{
+    type:ACCURACY,
+    accuracy:number[],
+}
+
+export const GenerateAccuracy = (accuracy:number[]):GenerateAccuracy =>{
+    return ({
+        type: ACCURACY,
+        accuracy
+    });
 }
 
 /*****************
@@ -347,7 +363,7 @@ export const changeShowDataset = (showDataset: string): showDataset=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let key_attrs = require('../testdata/'+ dataset + '_key.json'), 
+    let {keyAttrs,accuracy} = require('../testdata/'+ dataset + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
     jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
@@ -359,15 +375,16 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
       dragArray.splice(dragArray.indexOf(protectedAttr), 1)
     }  
     // move key attributes to the front
-    dragArray = key_attrs.concat(dragArray.filter(attr=>!key_attrs.includes(attr)))
+    dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
 
     return (dispatch: any) =>{
         dispatch(GenerateSamples(jsonSamples))
-        dispatch(ChangeKeyAttr(key_attrs))
+        dispatch(ChangeKeyAttr(keyAttrs))
         dispatch(ChangeProtectedAttr(protectedAttr))
-        dispatch(ChangeShowAttr(key_attrs))
+        dispatch(ChangeShowAttr(keyAttrs))
         dispatch(ChangeDragArray(dragArray))
         dispatch(GenerateRules(jsonRule))
+        dispatch(GenerateAccuracy(accuracy))
     }
 }
 
@@ -398,5 +415,5 @@ export const switchCompModel = (dataset:string,model:string)=>{
 }
 
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
-|ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr|
+|ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|
 ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag

@@ -46,3 +46,6 @@ export type SELBAR = typeof SELBAR
 
 export const FOLDFLAG = "FOLDFALG"
 export type FOLDFLAG = typeof FOLDFLAG
+
+export const ACCURACY = "ACCURACY"
+export type ACCURACY = typeof ACCURACY

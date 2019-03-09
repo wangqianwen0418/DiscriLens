@@ -72,6 +72,7 @@ if (TEST){
       compSamples:null,
       compRules:null,
       foldFlag: false,
+      accuracy: [0.81,0.74,0.74]
   }
 }else{
   initState = {
@@ -85,7 +86,7 @@ if (TEST){
     protectedVal: '',
     fetchSampleStatus: Status.COMPLETE,
     fetchKeyStatus: Status.COMPLETE,
-    ruleThreshold: [-0.05, 0.05],
+    ruleThreshold: [-0.1, 0.1],
     dragArray: [],
     showAttrNum: 0,
     showDataset: '',
@@ -95,6 +96,7 @@ if (TEST){
     compSamples:null,
     compRules:null,
     foldFlag: false,
+    accuracy: [0.81,0.74,0.74]
 }
 }
 

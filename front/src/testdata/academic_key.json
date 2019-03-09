@@ -1,1 +1,4 @@
-["StudentAbsenceDays", "raisedhands", "Discussion"]
+{"keyAttrs":["StudentAbsenceDays", "raisedhands", "Discussion"]
+    , "accuracy":[
+        0.81,0.74,0.75
+    ]}

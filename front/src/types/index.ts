@@ -55,4 +55,5 @@ export interface StoreState{
     xScaleMax: number, // used to zoom axis when selection is expanded to keep all axis consistent
     selected_bar: string[], // used to transfer the info of hoverd rect
     foldFlag: boolean, // whether the model selection panle is folded, true is folded and false is expanded
+    accuracy: number[], // used to transfer models' accuracy to display
 }

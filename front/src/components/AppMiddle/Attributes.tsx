@@ -266,8 +266,8 @@ export default class Attributes extends React.Component<Props, State>{
                     </Tooltip>
                 })
             }
-            <text fill='#0e4b8e' transform={`translate(${0},${this.height*1.15})`}>{xRange.l}</text>
-            <text fill='#0e4b8e' transform={`translate(${this.props.barWidth*0.8},${this.height*1.15})`}>{xRange.r}</text>
+            <text  transform={`translate(${0},${this.height*1.15})`}>{xRange.l}</text>
+            <text  transform={`translate(${this.props.barWidth*0.8},${this.height*1.15})`}>{xRange.r}</text>
         </g>
     }
     /**
@@ -312,8 +312,6 @@ export default class Attributes extends React.Component<Props, State>{
                 let mouseDown = ()=> {this.changeColor(['', ''])}
                 let rangeText = <text id={'rangeText'} transform={`translate(${range_i * (barWidthidth)},${this.height*1.2})`}>
                 {cutTxt(range, barWidthidth*0.9/this.fontSize*2)}</text>
-                
-                console.log(document.getElementById('rangeText'))
                 
                 return <g>
                     <Tooltip title={range} key={`${attr}_${range}_tooltip`}>

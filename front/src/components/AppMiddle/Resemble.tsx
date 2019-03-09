@@ -4,9 +4,14 @@ import Itemsets from 'containers/Itemsets';
 import Overview from 'containers/Overview';
 import ModelSelection from 'containers/ModelSelection';
 import {Col, Row} from 'antd';
+import {DataItem,Rule} from 'types';
 
 export interface Props{
    foldFlag:boolean,
+   compSamples:DataItem[],
+   rules:Rule[],
+   samples:DataItem[],
+   compRules:Rule[],
 }
 
 export default class AppMiddel extends React.Component<Props>{
@@ -30,9 +35,26 @@ export default class AppMiddel extends React.Component<Props>{
          <svg className='attribute' style={{width:"70%", height: "30%"}}>
                <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
            </svg>
-           <div className='itemset' style={{width: "100%", height: "70%", overflowY: "scroll"}}>
-               <Itemsets step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
+           {!this.props.compSamples?
+           <div className='itemset' style={{width: "100%", height: "70%", overflow: "auto"}}>
+               <Itemsets compFlag={0} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
            </div>
+           :<div className='itemset' style={{width: "100%", height: "70%",overflowY: "scroll"}}>
+               <Row className='modelCompare'>
+                <Col span={12}>
+                    <div style={{overflowX:'scroll'}}>
+                        <Itemsets compFlag={1} samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
+                    </div>
+                </Col>
+                
+                <Col span={12}>
+                    <div style={{overflowX:'scroll'}}>
+                        <Itemsets compFlag={-1} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
+                    </div>
+                </Col>
+               </Row>
+           </div>
+            }
        </Col>
        </Row>
     }

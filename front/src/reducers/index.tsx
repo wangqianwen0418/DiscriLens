@@ -5,7 +5,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
   CHANGE_XSCALE,CHANGE_SHOW_DATASET, GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES,
-  FOLDFLAG, SELBAR} from 'Const';
+  FOLDFLAG, SELBAR,ACCURACY} from 'Const';
 
 import {filterRules} from 'Helpers';
 
@@ -81,6 +81,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return {...state, xScaleMax: action.xScaleMax}
       case FOLDFLAG:
         return {...state, foldFlag: action.foldFlag}
+      case ACCURACY:
+        return {...state, accuracy:action.accuracy}
       default:
         return state;
     }
