@@ -104,16 +104,16 @@ export default class Itemset extends React.Component<Props, State>{
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
-            return d3.interpolateOranges(
-                d3.scaleLinear()
-                    .domain([minScore, 0])
-                    .range([0.65, 0.3])(score)
-            )
-        } else {
             return d3.interpolateGreens(
                 d3.scaleLinear()
+                    .domain([minScore, 0])
+                    .range([0.8, 0.3])(score)
+            )
+        } else {
+            return d3.interpolateOranges(
+                d3.scaleLinear()
                     .domain([0, maxScore])
-                    .range([0.3, 0.8])(score)
+                    .range([0.3, 0.65])(score)
             )
         }
 
@@ -302,7 +302,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.scoreColor(-Math.pow(10, -5))}
+                    fill={this.scoreColor(Math.pow(10, -5))}
                 />
                 {/* <path
                     className="out bar"
@@ -321,7 +321,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 50),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
                                 })}
-                                fill={this.scoreColor(-(i + 1) / 50)}
+                                fill={this.scoreColor((i + 1) / 50)}
                             />
                         })}
                 </g>
@@ -344,10 +344,10 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(Math.pow(10, -6))}
+                    fill={this.scoreColor(-Math.pow(10, -6))}
                     d={outerArc({
                         startAngle: 0,
-                        endAngle: Math.PI * 2 * inConf
+                        endAngle: Math.PI * 2 * rule.conf_pnd
                     })}
                 />
                 <g className='out gradientArc'>
@@ -358,7 +358,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 360),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
                                 })}
-                                fill={this.scoreColor((i + 1) / 360)}
+                                fill={this.scoreColor(-(i + 1) / 360)}
                             />
                         })}
                 </g>
