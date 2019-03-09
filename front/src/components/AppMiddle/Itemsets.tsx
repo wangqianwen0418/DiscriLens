@@ -351,7 +351,7 @@ export default class Itemset extends React.Component<Props, State>{
                     })}
                 />
                 <g className='out gradientArc'>
-                    {d3.range(Math.floor(rule.conf_pnd - inConf) * 360)
+                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
                         .map(i => {
                             return <path key={i} className="out bar"
                                 d={outerArc({
