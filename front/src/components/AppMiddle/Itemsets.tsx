@@ -549,7 +549,6 @@ export default class Itemset extends React.Component<Props, State>{
             {items.length}
         </text>
         
-        console.log(antecedent)
         let attrValContent = antecedent.map((attrVal => {
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
@@ -723,7 +722,6 @@ export default class Itemset extends React.Component<Props, State>{
             let posOffset = 0
             // calculate average y-value of an itemset
             let posAveY = offsetY
-            
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule" >
                     {
@@ -763,7 +761,7 @@ export default class Itemset extends React.Component<Props, State>{
             let negOffset = 0
             // calculate average y-value of an itemset
             let negAveY = offsetY
-
+            
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule">
                     {
