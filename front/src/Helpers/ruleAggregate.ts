@@ -50,9 +50,9 @@ export const isSubArray = (shortArray:string[], longArray:string[]):boolean=>{
 }
 
 export function oragnizeRules (ruleCollection: RuleNode[], rule: Rule): RuleNode[]{
-    for (let ruleAgg of ruleCollection){
-        if (isSubArray(ruleAgg.rule.antecedent, rule.antecedent)){
-            oragnizeRules(ruleAgg.children, rule)
+    for (let ruleNode of ruleCollection){
+        if (isSubArray(ruleNode.rule.antecedent, rule.antecedent)){
+            oragnizeRules(ruleNode.children, rule)
         }
     }
     let isSibling = (ruleCollection
@@ -114,12 +114,13 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
     let negativeRuleAgg: RuleAgg[] = [] 
     // console.info('pos', positiveRuleNodes)
     // console.info('neg', negativeRuleNodes)
-    for (let ruleNode of positiveRuleNodes){
+    for (var ruleNode of positiveRuleNodes){
         let {antecedent} = ruleNode.rule
         var isContain: boolean = false 
         
         loop1: for (let ruleAgg of positiveRuleAgg){
             isContain = isSubArray(ruleAgg.antecedent, antecedent) 
+           
             if(isContain){
                 ruleAgg.nodes.push(ruleNode)
                 ruleAgg.items = Array.from(
@@ -161,6 +162,7 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
             }
         }
         if (!isContain){
+            console.info(ruleNode.rule.antecedent, negativeRuleAgg.map(r=>r.antecedent))
             negativeRuleAgg.push({
                 id: 'agg'+ruleNode.rule.id,
                 antecedent: ruleNode.rule.antecedent

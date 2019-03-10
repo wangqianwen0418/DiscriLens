@@ -53,7 +53,11 @@ export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
     hoverRule: string,
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
+    // record all the init bubble position for rect position
     bubblePosition: rect[],
+    // record all the bubble position when button is true
+    bubblePositionButton: rect[],
+    buttonSwitch: boolean,
 }
 export interface ExpandRule {
     id: string,
@@ -95,25 +99,29 @@ export default class Itemset extends React.Component<Props, State>{
     yUp:{i:number,offset:number}={i:0,offset:0}
     // the list recording all rule rect position (left up point)
     yList:number[] = []; 
+    // the list recording all rule rect position when button is true
+    yListButton:number[] = [];
+    // the max value of rect
+    yMaxRect:number[] = [];
     // record the max y-value
     yMaxValue = 0;
-    //record the max x-value
+    // record the max x-value
     xMaxValue = 0;
     rulesLength:number = 0;
 
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
-            return d3.interpolateOranges(
-                d3.scaleLinear()
-                    .domain([minScore, 0])
-                    .range([0.65, 0.3])(score)
-            )
-        } else {
             return d3.interpolateGreens(
                 d3.scaleLinear()
+                    .domain([minScore, 0])
+                    .range([0.8, 0.3])(score)
+            )
+        } else {
+            return d3.interpolateOranges(
+                d3.scaleLinear()
                     .domain([0, maxScore])
-                    .range([0.3, 0.8])(score)
+                    .range([0.3, 0.65])(score)
             )
         }
 
@@ -125,7 +133,9 @@ export default class Itemset extends React.Component<Props, State>{
             expandRules: {},
             hoverRule: undefined,
             highlightRules: {},
-            bubblePosition: []
+            bubblePosition: [],
+            bubblePositionButton:[],
+            buttonSwitch: false,
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
@@ -194,7 +204,7 @@ export default class Itemset extends React.Component<Props, State>{
 
         this.setState({ highlightRules })
     }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number } {
+    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, switchOffset:number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number,switchOffset:number } {
         let { rule, children } = ruleNode
         let { antecedent, items, id } = rule
         let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
@@ -249,7 +259,7 @@ export default class Itemset extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offsetX + this.props.offset}, ${offsetY})`}
+            transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -302,7 +312,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.scoreColor(-Math.pow(10, -5))}
+                    fill={this.scoreColor(Math.pow(10, -5))}
                 />
                 {/* <path
                     className="out bar"
@@ -321,7 +331,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 50),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
                                 })}
-                                fill={this.scoreColor(-(i + 1) / 50)}
+                                fill={this.scoreColor((i + 1) / 50)}
                             />
                         })}
                 </g>
@@ -344,21 +354,21 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(Math.pow(10, -6))}
+                    fill={this.scoreColor(-Math.pow(10, -6))}
                     d={outerArc({
                         startAngle: 0,
-                        endAngle: Math.PI * 2 * inConf
+                        endAngle: Math.PI * 2 * rule.conf_pnd
                     })}
                 />
                 <g className='out gradientArc'>
-                    {d3.range(Math.floor(rule.conf_pnd - inConf) * 360)
+                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
                         .map(i => {
                             return <path key={i} className="out bar"
                                 d={outerArc({
                                     startAngle: Math.PI * 2 * (inConf + i / 360),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
                                 })}
-                                fill={this.scoreColor((i + 1) / 360)}
+                                fill={this.scoreColor(-(i + 1) / 360)}
                             />
                         })}
                 </g>
@@ -478,19 +488,21 @@ export default class Itemset extends React.Component<Props, State>{
                 )}
         </g>
         offsetY = offsetY + 2 * this.lineInterval
+        switchOffset = switchOffset + 2 * this.lineInterval
         offsetX += 1
 
         let content = [parent]
         if (isExpand) {
             let children: JSX.Element[] = []
             for (let childNode of ruleNode.children) {
-                let { content: child, offsetY: newY } = this.drawRuleNode(childNode, offsetX, offsetY, favorPD, itemScale, ruleAggID, listNum)
+                let { content: child, offsetY: newY, switchOffset: switchNewY } = this.drawRuleNode(childNode, offsetX, offsetY, switchOffset, favorPD, itemScale, ruleAggID, listNum)
                 children = children.concat(child)
                 offsetY = newY
+                switchOffset = switchNewY
             }
             content = content.concat(children)
         }
-        return { content, offsetY }
+        return { content, offsetY, switchOffset }
     }
 
     enterRect(i: number) {
@@ -548,7 +560,6 @@ export default class Itemset extends React.Component<Props, State>{
         let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
             {items.length}
         </text>
-        
         let attrValContent = antecedent.map((attrVal => {
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
@@ -708,33 +719,47 @@ export default class Itemset extends React.Component<Props, State>{
         let { positiveRuleAgg, negativeRuleAgg } = results
         this.positiveRuleAgg = positiveRuleAgg
         this.negativeRuleAgg = negativeRuleAgg
-
+        // console.info(negativeRuleAgg, positiveRuleAgg)
+        // recording the rect postion for bubble positioning
         let offsetY = 0
+        // recording the rect position based on bubble position
+        let switchOffset = 0
         let posRules: JSX.Element[] = []
         if (this.yList.length > positiveRuleAgg.length + negativeRuleAgg.length) {
             this.yList = []
+            this.yMaxRect = []
         }
 
         let posYList: number[] = []
         let negYList: number[] = []
         positiveRuleAgg.forEach((ruleAgg, i) => {
+            
             offsetY += 0.3 * this.lineInterval
             let posOffset = 0
             // calculate average y-value of an itemset
             let posAveY = offsetY
+            // choose rect dispa=lay mode
+            if(!this.state.buttonSwitch&&(this.yListButton.length!=0)){
+                this.yMaxRect.push(switchOffset)
+                switchOffset = Math.max(this.yListButton[i],switchOffset)
+            }else{
+                switchOffset = offsetY
+            }
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
                 </g>
             )
             offsetY = offsetY + 2 * this.lineInterval
+            switchOffset += 2 * this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, true, itemScale, ruleAgg.id.toString(), i)
+                    let { content, offsetY: newY, switchOffset:switchNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, true, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
                     posRules = posRules.concat(content)
+                    switchOffset = switchNew
                 }
             }
             posAveY = (posAveY + offsetY) / 2
@@ -761,19 +786,27 @@ export default class Itemset extends React.Component<Props, State>{
             let negOffset = 0
             // calculate average y-value of an itemset
             let negAveY = offsetY
-            
+            if(!this.state.buttonSwitch&&(this.yListButton.length!=0)){
+                this.yMaxRect.push(switchOffset)
+                switchOffset = Math.max(this.yListButton[i],switchOffset)
+            }else{
+                switchOffset = offsetY
+            }
+
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${offsetY})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false)
                     }
                 </g>
             )
             offsetY = offsetY + 2 * this.lineInterval
+            switchOffset += 2*this.lineInterval
             if (expandRules.hasOwnProperty(ruleAgg.id)) {
                 for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY } = this.drawRuleNode(ruleNode, 1, offsetY, false, itemScale, ruleAgg.id.toString(), i)
+                    let { content, offsetY: newY, switchOffset:swtichNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, false, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
+                    switchOffset = swtichNew
                     negaRules = negaRules.concat(content)
                 }
             }
@@ -926,28 +959,14 @@ export default class Itemset extends React.Component<Props, State>{
         }
     }
 
-    componentDidUpdate(prevProp: Props) {
-        let bubblePosition: rect[] = []
-        // let {compFlag} = this.props
-        // use this value to control interval length
-        let interval = 1
-        this.bubbleSize.forEach((bubble, i) => {
-            let transX = 0,
-                transY = 0
-            if (i == 0) {
-                transY = this.yList[0] - bubble.h / 2
-            } else {
-                let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
-                greedyPos.y = Math.max(greedyPos.y, this.yList[i] - bubble.h / 2)
-                transX = greedyPos.x 
-                transY = greedyPos.y
-            }
-            bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
-        })
-        // check whether update is needed
-        let array1 = bubblePosition,
-            array2 = this.state.bubblePosition,
-            is_same = true
+    findDirectAxis(bubblePosition:rect[],i:number){
+        let pos = bubblePosition
+
+        return pos[i-1].y + pos[i-1].h
+    }
+
+    compareArray(array1:any[],array2:any[]){
+        let is_same = true
         if (array1.length == array2.length) {
             array1.map((element, index) => {
                 is_same = is_same && ((element.x == array2[index].x) && (element.y == array2[index].y));
@@ -955,8 +974,65 @@ export default class Itemset extends React.Component<Props, State>{
         } else {
             is_same = false
         }
+        return is_same
+    }
+    componentDidUpdate(prevProp: Props) {
+        let bubblePosition: rect[] = []
+        let bubblePositionButton: rect[] = []
+        // let {compFlag} = this.props
+        // use this value to control interval length
+        let interval = 1
+        this.bubbleSize.forEach((bubble, i) => {
+            let transX = 0,
+                transY = 0,
+                transXButton=0,
+                transYButton = 0
+            if (i == 0) {
+                transY = this.yList[0] - bubble.h / 2
+                transYButton = this.yListButton[0] - bubble.h / 2
+            } else {
+                if(this.state.buttonSwitch){
+                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
+                    greedyPos.y = Math.max(greedyPos.y, this.yList[i] - bubble.h / 2)
+
+                    let greedyPosButton: axis = this.findBestAxis(bubblePositionButton, i, 250, 0)
+                    greedyPosButton.y = Math.max(greedyPosButton.y, this.yListButton[i] - bubble.h / 2)
+
+                    transX = greedyPos.x 
+                    transY = greedyPos.y 
+
+                    transXButton = greedyPosButton.x
+                    transYButton = greedyPosButton.y
+                }
+                else{
+                    let directPos:number = this.findDirectAxis(bubblePosition,i)
+                    directPos = Math.max(directPos,this.yList[i]-bubble.h/2)
+                    transY = directPos
+
+                    let directPosButton:number = this.findDirectAxis(bubblePositionButton,i)
+                    directPosButton = Math.max(directPosButton,this.yListButton[i]-bubble.h/2)
+                    transYButton = directPosButton
+                }
+            }
+            bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
+            bubblePositionButton.push({ x: transXButton, y: transYButton, w: bubble.w + interval, h: bubble.h + interval })
+        })
+        // define new rect pos
+        let yListButton:number[] = []
+        bubblePosition.forEach((bubble,i)=>{
+            yListButton.push(bubble.y+bubble.h/2)
+        })
+        console.log('pos',bubblePosition)
+        console.log('pos!!!!!!!!!!!!!',bubblePositionButton)
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        // check whether update is needed
+        let posIsSame = this.compareArray(this.state.bubblePosition,bubblePosition)
         // update state
-        if (!is_same) { this.setState({ bubblePosition }) }
+        if (!posIsSame) { 
+            this.yListButton = yListButton
+            this.setState({bubblePositionButton})
+            this.setState({ bubblePosition }) 
+        }
 
     }
 
@@ -964,6 +1040,7 @@ export default class Itemset extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
+        
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
