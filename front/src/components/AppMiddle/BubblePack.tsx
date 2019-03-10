@@ -95,12 +95,12 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 }
 
 export default class Bubble extends React.Component<Props, State>{
-    width=100; height=100;  radius=4; ref: React.RefObject<SVGAElement>=React.createRef();
+    width=100; height=100;  radius=4; circlePadding=0;ref: React.RefObject<SVGAElement>=React.createRef();
     constructor(props: Props){
         super(props)
     }
     getSize(){
-        return [this.width,  this.height]
+        return [this.width+this.circlePadding,  this.height+this.circlePadding]
         // let box = this.ref.current.getBoundingClientRect()
         // return [box.width, box.height]
     }
@@ -108,7 +108,8 @@ export default class Bubble extends React.Component<Props, State>{
         let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
         let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
             items = extractItems(rules),
-            circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
+        circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
+        this.circlePadding = circlePadding
 
         // console.info(hoverRule)
 
