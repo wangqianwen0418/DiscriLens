@@ -53,10 +53,8 @@ export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
     hoverRule: string,
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
-    // record all the init bubble position for rect position
-    bubblePosition: rect[],
     // record all the bubble position when button is true
-    bubblePositionButton: rect[],
+    bubblePosition: rect[],
     buttonSwitch: boolean,
 }
 export interface ExpandRule {
@@ -97,18 +95,18 @@ export default class Itemset extends React.Component<Props, State>{
     yDown:{i:number,offset:number}={i:0,offset:0};
     // the offset of bubbles upper of the selected one
     yUp:{i:number,offset:number}={i:0,offset:0}
+
     // the list recording all rule rect position (left up point)
     yList:number[] = []; 
-    // the list recording all rule rect position when button is true
-    yListButton:number[] = [];
-    // the max value of rect
-    yMaxRect:number[] = [];
+    // inital value for rect
+    ySumList:number[] = [];
+
     // record the max y-value
     yMaxValue = 0;
     // record the max x-value
     xMaxValue = 0;
     rulesLength:number = 0;
-
+    bubblePosition:rect[] =[];
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
@@ -133,8 +131,7 @@ export default class Itemset extends React.Component<Props, State>{
             expandRules: {},
             hoverRule: undefined,
             highlightRules: {},
-            bubblePosition: [],
-            bubblePositionButton:[],
+            bubblePosition:[],
             buttonSwitch: false,
         }
         this.toggleExpand = this.toggleExpand.bind(this)
@@ -727,21 +724,26 @@ export default class Itemset extends React.Component<Props, State>{
         let posRules: JSX.Element[] = []
         if (this.yList.length > positiveRuleAgg.length + negativeRuleAgg.length) {
             this.yList = []
-            this.yMaxRect = []
         }
 
         let posYList: number[] = []
         let negYList: number[] = []
+
+        let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
+        // positive, orange
         positiveRuleAgg.forEach((ruleAgg, i) => {
-            
+            let ySum = 0
+            if(this.ySumList.length!=0){
+                ySum = this.ySumList[i]
+            }
             offsetY += 0.3 * this.lineInterval
+            switchOffset += 0.3 * this.lineInterval
             let posOffset = 0
             // calculate average y-value of an itemset
-            let posAveY = offsetY
+            let posAveY = switchOffset
             // choose rect dispa=lay mode
-            if(!this.state.buttonSwitch&&(this.yListButton.length!=0)){
-                this.yMaxRect.push(switchOffset)
-                switchOffset = Math.max(this.yListButton[i],switchOffset)
+            if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
+                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)
             }else{
                 switchOffset = offsetY
             }
@@ -762,16 +764,21 @@ export default class Itemset extends React.Component<Props, State>{
                     switchOffset = switchNew
                 }
             }
-            posAveY = (posAveY + offsetY) / 2
+            // posAveY = (posAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             // record y-axis value of each rule bar
-            if(i<this.yUp.i){
-                posOffset = this.yUp.offset
-            }else if(i>this.yUp.i){
-                posOffset = this.yDown.offset
+            if(!this.state.buttonSwitch){
+                posOffset = 0
             }else{
-                posOffset = this.yOffset
+                if(i<this.yUp.i){
+                    posOffset = this.yUp.offset
+                }else if(i>this.yUp.i){
+                    posOffset = this.yDown.offset
+                }else{
+                    posOffset = this.yOffset
+                }
             }
+            
             
             if(posYList.length-1<=i){
                 posYList.push(posAveY+posOffset)
@@ -780,15 +787,22 @@ export default class Itemset extends React.Component<Props, State>{
             }
 
         })  
+        
+        // negtive, green
         let negaRules: JSX.Element[] = [] 
         negativeRuleAgg.forEach((ruleAgg,i)=> {
+            i += positiveRuleAgg.length
+            let ySum = 0
+            if(this.ySumList.length!=0){
+                ySum = this.ySumList[i]
+            }
             offsetY += 0.3 * this.lineInterval
+            switchOffset += 0.3 * this.lineInterval
             let negOffset = 0
             // calculate average y-value of an itemset
             let negAveY = offsetY
-            if(!this.state.buttonSwitch&&(this.yListButton.length!=0)){
-                this.yMaxRect.push(switchOffset)
-                switchOffset = Math.max(this.yListButton[i],switchOffset)
+            if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
+                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)
             }else{
                 switchOffset = offsetY
             }
@@ -810,23 +824,27 @@ export default class Itemset extends React.Component<Props, State>{
                     negaRules = negaRules.concat(content)
                 }
             }
-            negAveY = (negAveY + offsetY) / 2
+            // negAveY = (negAveY + offsetY) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             // record offset distance of each rule bar
-            if(i+positiveRuleAgg.length<this.yUp.i){
-                negOffset = this.yUp.offset
-            }else if(i+positiveRuleAgg.length>this.yUp.i){
-                negOffset = this.yDown.offset
+            if(!this.state.buttonSwitch){
+                negOffset = 0
             }else{
-                negOffset = this.yOffset
+                if(i+positiveRuleAgg.length<this.yUp.i){
+                    negOffset = this.yUp.offset
+                }else if(i+positiveRuleAgg.length>this.yUp.i){
+                    negOffset = this.yDown.offset
+                }else{
+                    negOffset = this.yOffset
+                }
             }
+
             if(negYList.length-1<=i){
                 negYList.push(negAveY+negOffset)
             }else{
                 negYList[i] = negAveY+negOffset
             }
         })
-
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
         this.yList = posYList.concat(negYList)
@@ -969,7 +987,7 @@ export default class Itemset extends React.Component<Props, State>{
         let is_same = true
         if (array1.length == array2.length) {
             array1.map((element, index) => {
-                is_same = is_same && ((element.x == array2[index].x) && (element.y == array2[index].y));
+                is_same = is_same && ((Math.abs(element.x - array2[index].x)<1) && (Math.abs(element.y - array2[index].y)<1));
             })
         } else {
             is_same = false
@@ -978,62 +996,53 @@ export default class Itemset extends React.Component<Props, State>{
     }
     componentDidUpdate(prevProp: Props) {
         let bubblePosition: rect[] = []
-        let bubblePositionButton: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 1
         this.bubbleSize.forEach((bubble, i) => {
             let transX = 0,
-                transY = 0,
-                transXButton=0,
-                transYButton = 0
+                transY = 0
             if (i == 0) {
-                transY = this.yList[0] - bubble.h / 2
-                transYButton = this.yListButton[0] - bubble.h / 2
+                transY = this.yList[0] - bubble.h / 2 + 1.5 * this.lineInterval
             } else {
                 if(this.state.buttonSwitch){
                     let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
                     greedyPos.y = Math.max(greedyPos.y, this.yList[i] - bubble.h / 2)
 
-                    let greedyPosButton: axis = this.findBestAxis(bubblePositionButton, i, 250, 0)
-                    greedyPosButton.y = Math.max(greedyPosButton.y, this.yListButton[i] - bubble.h / 2)
-
                     transX = greedyPos.x 
                     transY = greedyPos.y 
-
-                    transXButton = greedyPosButton.x
-                    transYButton = greedyPosButton.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
-                    directPos = Math.max(directPos,this.yList[i]-bubble.h/2)
+                    directPos = Math.max(directPos + 1.3 * this.lineInterval,this.yList[i]+this.lineInterval-bubble.h/2)
                     transY = directPos
-
-                    let directPosButton:number = this.findDirectAxis(bubblePositionButton,i)
-                    directPosButton = Math.max(directPosButton,this.yListButton[i]-bubble.h/2)
-                    transYButton = directPosButton
                 }
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
-            bubblePositionButton.push({ x: transXButton, y: transYButton, w: bubble.w + interval, h: bubble.h + interval })
         })
         // define new rect pos
         let yListButton:number[] = []
         bubblePosition.forEach((bubble,i)=>{
             yListButton.push(bubble.y+bubble.h/2)
         })
-        console.log('pos',bubblePosition)
-        console.log('pos!!!!!!!!!!!!!',bubblePositionButton)
-        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         // check whether update is needed
         let posIsSame = this.compareArray(this.state.bubblePosition,bubblePosition)
         // update state
         if (!posIsSame) { 
-            this.yListButton = yListButton
-            this.setState({bubblePositionButton})
             this.setState({ bubblePosition }) 
+            this.bubblePosition = bubblePosition
         }
 
+        let bSum = 0
+        this.ySumList = []
+        this.bubbleSize.forEach((bubble,i)=>{
+            if(i==0){
+               bSum += 1/2 * bubble.h 
+            }else{
+                bSum += 1/2 *(bubble.h+this.bubbleSize[i-1].h)
+            }
+            this.ySumList.push(bSum)
+        })
     }
 
     render() {
