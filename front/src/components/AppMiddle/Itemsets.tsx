@@ -548,8 +548,6 @@ export default class Itemset extends React.Component<Props, State>{
         let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
             {items.length}
         </text>
-        
-        console.log(antecedent)
         let attrValContent = antecedent.map((attrVal => {
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
@@ -709,6 +707,7 @@ export default class Itemset extends React.Component<Props, State>{
         let { positiveRuleAgg, negativeRuleAgg } = results
         this.positiveRuleAgg = positiveRuleAgg
         this.negativeRuleAgg = negativeRuleAgg
+        // console.info(negativeRuleAgg, positiveRuleAgg)
 
         let offsetY = 0
         let posRules: JSX.Element[] = []
