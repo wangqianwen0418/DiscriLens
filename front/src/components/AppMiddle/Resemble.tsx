@@ -42,13 +42,13 @@ export default class AppMiddel extends React.Component<Props>{
            :<div className='itemset' style={{width: "100%", height: "70%",overflowY: "scroll"}}>
                <Row className='modelCompare'>
                 <Col span={12}>
-                    <div style={{overflowX:'scroll'}}>
+                    <div id='compareLeft'>
                         <Itemsets compFlag={1} samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
                     </div>
                 </Col>
                 
                 <Col span={12}>
-                    <div style={{overflowX:'scroll'}}>
+                    <div style={{overflowX:'scroll'}} id='compareRight'>
                         <Itemsets compFlag={-1} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
                     </div>
                 </Col>

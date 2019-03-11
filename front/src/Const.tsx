@@ -49,3 +49,6 @@ export type FOLDFLAG = typeof FOLDFLAG
 
 export const ACCURACY = "ACCURACY"
 export type ACCURACY = typeof ACCURACY
+
+export const TRANS_COMPARE = 'TRANS_COMPARE'
+export type TRANS_COMPARE = typeof TRANS_COMPARE

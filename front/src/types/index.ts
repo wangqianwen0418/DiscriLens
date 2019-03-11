@@ -17,6 +17,13 @@ export interface Rule{
     [key:string]:any
 }
 
+export interface rect {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
+
 export interface KeyGroup{
     [key:string]: any
 }
@@ -56,4 +63,7 @@ export interface StoreState{
     selected_bar: string[], // used to transfer the info of hoverd rect
     foldFlag: boolean, // whether the model selection panle is folded, true is folded and false is expanded
     accuracy: number[], // used to transfer models' accuracy to display
+
+    // compare models, [[bubbleposition of compared model],[bubblePosition of prime model],[rect position of prime model]]
+    compareList:{b1:rect[],b2:rect[],r:number[]}, // list of components for model comparison
 }

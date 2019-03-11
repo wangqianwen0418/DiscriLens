@@ -72,7 +72,8 @@ if (TEST){
       compSamples:null,
       compRules:null,
       foldFlag: false,
-      accuracy: [0.81,0.74,0.74]
+      accuracy: [0.81,0.74,0.74],
+      compareList:{b1:[],b2:[],r:[]}
   }
 }else{
   initState = {
@@ -96,7 +97,8 @@ if (TEST){
     compSamples:null,
     compRules:null,
     foldFlag: false,
-    accuracy: [0.81,0.74,0.74]
+    accuracy: [0.81,0.74,0.74],
+    compareList:{b1:[],b2:[],r:[]}
 }
 }
 

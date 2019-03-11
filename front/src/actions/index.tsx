@@ -3,7 +3,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
     CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
-    ,FOLDFLAG,ACCURACY} from 'Const';
+    ,FOLDFLAG,ACCURACY,TRANS_COMPARE} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -24,7 +24,12 @@ export interface Dispatch<S> {
 export interface Dispatch<S> {
   <A>(action:A &{type:any}): A &{type:any};
 }
-
+export interface rect {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
 /*****************g
  *get key attributes which used to define groups
 *****************/ 
@@ -281,7 +286,20 @@ export const ChangeXSclaeMax = (xScaleMax:number):ChangeXScaleMax =>{
     });
 }
 
+/*****************
+all about transfer compareList
+*****************/ 
+export interface compareList{
+    type:TRANS_COMPARE,
+    compareList:{b1:rect[],b2:rect[],r:number[]}
+}
 
+export const TransCompareList = (compareList:{b1:rect[],b2:rect[],r:number[]}):compareList =>{
+    return ({
+        type: TRANS_COMPARE,
+        compareList
+    });
+}
 /*****************
 all about changing selected bar
 *****************/ 
@@ -416,4 +434,4 @@ export const switchCompModel = (dataset:string,model:string)=>{
 
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|
-ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList
