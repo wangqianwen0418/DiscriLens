@@ -390,7 +390,7 @@ export default class Itemset extends React.Component<Props, State>{
             </g>
             <g transform={`translate(${-this.lineInterval}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
                 <line className="ruleBoundary"
-                    x1={indent+this.lineInterval} y1={this.lineInterval * 0.5}
+                    x1={indent+ 0.6*this.lineInterval} y1={this.lineInterval * 0.5}
                     x2={step*showAttrs.length+indent+this.lineInterval*2} y2={this.lineInterval * 0.5}
                     stroke={highlightIdx==-1?"#f0f0f0":boundaryColor[highlightIdx]}
                     strokeWidth={2}

@@ -85,11 +85,11 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
         }
     }
     
-    itemSet.sort((a, b) => a.score - b.score)
-    // console.info('sort score', itemSet)
-    itemSet.sort(
-            (a,b) => b.groups.length - a.groups.length
-            )
+    // itemSet.sort((a, b) => a.score - b.score)
+    // // console.info('sort score', itemSet)
+    // itemSet.sort(
+    //         (a,b) => b.groups.length - a.groups.length
+    //         )
     // console.info('sort group', itemSet)
     return itemSet
 }
@@ -105,8 +105,10 @@ export default class Bubble extends React.Component<Props, State>{
         // return [box.width, box.height]
     }
     draw(){
-        let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
-        let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
+        let { ruleAgg, scoreColor, hoverRule, samples } = this.props
+        let highlightRules = [...this.props.highlightRules]
+        // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
+        let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules),
         circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
         this.circlePadding = circlePadding
