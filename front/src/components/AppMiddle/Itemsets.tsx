@@ -111,7 +111,7 @@ export default class Itemset extends React.Component<Props, State>{
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
             let t= d3.scaleLinear()
-                    .domain([minScore, 0])
+                    .domain([minScore, this.props.ruleThreshold[0]])
                     .range([0.55, 0.25])(score)
             return d3.interpolateGreens(t)
             //    return d3.interpolateGnBu(t)
@@ -119,7 +119,7 @@ export default class Itemset extends React.Component<Props, State>{
         } else {
             return d3.interpolateOrRd(
                 d3.scaleLinear()
-                    .domain([0, maxScore])
+                    .domain([this.props.ruleThreshold[1], maxScore])
                     .range([0.25, 0.55])(score)
             )
         }
@@ -136,11 +136,21 @@ export default class Itemset extends React.Component<Props, State>{
             buttonSwitch: this.props.compFlag==0?true:false,
         }
         this.toggleExpand = this.toggleExpand.bind(this)
+        this.toggleHighlight = this.toggleHighlight.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
         this.enterRect = this.enterRect.bind(this)
         this.leaveRect = this.leaveRect.bind(this)
+    }
+    toggleHighlight(ruleAggID:string, ruleID:string){
+        let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
+        if (idx == -1) {
+            highlightRules[ruleAggID] = [...highlightRules[ruleAggID], ruleID]
+        } else {
+            highlightRules[ruleAggID].splice(idx, 1)
+        }
+        this.setState({ highlightRules })
     }
 
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
@@ -262,14 +272,7 @@ export default class Itemset extends React.Component<Props, State>{
             onClick={(e: React.MouseEvent) => {
                 e.preventDefault()
                 e.stopPropagation()
-                let ruleID = rule.id.toString()
-                let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
-                if (idx == -1) {
-                    highlightRules[ruleAggID] = [...highlightRules[ruleAggID], ruleID]
-                } else {
-                    highlightRules[ruleAggID].splice(idx, 1)
-                }
-                this.setState({ highlightRules })
+                this.toggleHighlight(ruleAggID, rule.id.toString())
             }
             }
         >
@@ -336,15 +339,7 @@ export default class Itemset extends React.Component<Props, State>{
                         endAngle: Math.PI*2*rule.conf_pnd
                     })}
                 /> */}
-                <path
-                    className="out conf bar"
-                    // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(this.props.ruleThreshold[0]||-Math.pow(10, -6))}
-                    d={outerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2 * rule.conf_pnd
-                    })}
-                />
+                
                 <g className='out gradientArc'>
                     {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
                         .map(i => {
@@ -357,6 +352,15 @@ export default class Itemset extends React.Component<Props, State>{
                             />
                         })}
                 </g>
+                <path
+                    className="out conf bar"
+                    // fill={d3.interpolateGreens(0.2)}
+                    fill={this.scoreColor(this.props.ruleThreshold[0]||-Math.pow(10, -6))}
+                    d={outerArc({
+                        startAngle: 0,
+                        endAngle: Math.PI * 2 * rule.conf_pnd
+                    })}
+                />
                 {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
 
                 {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
