@@ -73,7 +73,7 @@ if (TEST){
       compRules:null,
       foldFlag: false,
       accuracy: [0.81,0.74,0.74],
-      compareList:{b1:[],b2:[],r:[]}
+      compareList:{b1:[],b2:[],r:[],p:0}
   }
 }else{
   initState = {
@@ -98,7 +98,7 @@ if (TEST){
     compRules:null,
     foldFlag: false,
     accuracy: [0.81,0.74,0.74],
-    compareList:{b1:[],b2:[],r:[]}
+    compareList:{b1:[],b2:[],r:[],p:0}
 }
 }
 

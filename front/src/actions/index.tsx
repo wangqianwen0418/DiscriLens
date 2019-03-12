@@ -291,10 +291,10 @@ all about transfer compareList
 *****************/ 
 export interface compareList{
     type:TRANS_COMPARE,
-    compareList:{b1:rect[],b2:rect[],r:number[]}
+    compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}
 }
 
-export const TransCompareList = (compareList:{b1:rect[],b2:rect[],r:number[]}):compareList =>{
+export const TransCompareList = (compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}):compareList =>{
     return ({
         type: TRANS_COMPARE,
         compareList

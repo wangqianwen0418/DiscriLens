@@ -1,3 +1,4 @@
+
 // import {
 //     BubbleSet,
 //     PointPath,
@@ -287,7 +288,7 @@ export default class Bubble extends React.Component<Props, State>{
 
         let outlines = highlightRules.map((ruleID, idx)=>{
                 const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
-                const padding = ( 0.55 + 0.45* percent) * circlePadding
+                const padding = ( 0.6 + 0.4* percent) * circlePadding
                 return  <g key={`outline_${ruleID}`} className='outlines'>
                     <mask id={`mask_outline_${ruleID}`}>
                         {/* white part, show */}
@@ -301,11 +302,15 @@ export default class Bubble extends React.Component<Props, State>{
                             return <circle id={set.id} key={set.id} r={set.r-0.5*circlePadding + padding} cx={set.x} cy={set.y} fill="black"/>
                         })}           
                     </mask>
-                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`} stroke={"#b9b9b9"} fill="none">
+                    <g className='outlines' 
+                    mask={`url(#mask_outline_${ruleID})`} 
+                    // stroke={"#b9b9b9"} 
+                    stroke = {'#bbb'}
+                    fill="white">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.id} key={set.id} 
-                                r={set.r-0.5*circlePadding+padding} cx={set.x} cy={set.y} 
-                                strokeWidth={2*strokeWidth}
+                                r={set.r-0.5*circlePadding+padding+0.75*strokeWidth} cx={set.x} cy={set.y} 
+                                strokeWidth={1.5*strokeWidth}
                                 
                                 />
                             }) 

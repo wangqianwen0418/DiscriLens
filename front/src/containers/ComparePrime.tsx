@@ -1,4 +1,4 @@
-import Itemsets from 'components/AppMiddle/Itemsets';
+import ComparePrime from 'components/AppMiddle/ComparePrime';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
 import { ChangeShowAttr,ChangeSelectedBar,TransCompareList} from 'actions';
@@ -30,4 +30,4 @@ export function mapDispatchToProps(dispatch: any) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Itemsets);
+export default connect(mapStateToProps, mapDispatchToProps)(ComparePrime);

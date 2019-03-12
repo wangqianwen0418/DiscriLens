@@ -83,7 +83,7 @@ export interface rect {
     h: number,
 }
 
-export default class Itemset extends React.Component<Props, State>{
+export default class ComparePrime extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
     headWidth = this.props.offsetX - this.margin;
@@ -136,15 +136,13 @@ export default class Itemset extends React.Component<Props, State>{
             hoverRule: undefined,
             highlightRules: {},
             bubblePosition:[],
-            buttonSwitch: this.props.compFlag==0?true:false,
+            buttonSwitch: false,
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
-        this.enterRect = this.enterRect.bind(this)
-        this.leaveRect = this.leaveRect.bind(this)
     }
 
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
@@ -265,13 +263,11 @@ export default class Itemset extends React.Component<Props, State>{
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
                 this.setState({ hoverRule: rule.id.toString() })
-                this.enterRect(listNum)
             }
             }
             // tslint:disable-next-line:jsx-no-lambda
             onMouseLeave={() => {
                 this.setState({ hoverRule: undefined })
-                this.leaveRect()
             }
             }
             // tslint:disable-next-line:jsx-no-lambda
@@ -292,10 +288,6 @@ export default class Itemset extends React.Component<Props, State>{
             <g
                 className="score"
                 transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
-            // //tslint:disable-next-line:jsx-no-lambda
-            // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
-            // // tslint:disable-next-line:jsx-no-lambda
-            // onMouseLeave={()=> this.setState({highlightRule:''})}
             >
 
                 <path
@@ -315,15 +307,6 @@ export default class Itemset extends React.Component<Props, State>{
                     })}
                     fill={this.scoreColor(Math.pow(10, -5))}
                 />
-                {/* <path
-                    className="out bar"
-                    d={outerArc({
-                        startAngle: Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pd
-                    })}
-                    // fill="#FF9F1E"
-                    fill="url(#negativeGradient)"
-                /> */}
                 <g className='in gradientArc'>
                     {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
                         .map(i => {
@@ -506,35 +489,6 @@ export default class Itemset extends React.Component<Props, State>{
         return { content, offsetY, switchOffset }
     }
 
-    enterRect(i: number) {
-        let bubblePosition = this.state.bubblePosition
-        if(bubblePosition.length!=0){
-            let initPos = bubblePosition[i].y,
-            maxRect = this.findMaxRect(bubblePosition,i),
-            minRect = this.findMinRect(bubblePosition,i)
-            // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = this.yList[i].y - this.bubbleSize[i].h/2 - initPos
-            // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h/2>minRect.y)){
-                this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y}
-            }
-            // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
-            if(maxRect){
-                this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
-            }
-            this.setState({})
-        }
-    }
-
-    leaveRect() {
-        let bubblePosition = this.state.bubblePosition
-        if(bubblePosition.length!=0){
-            this.yDown.offset = 0
-            this.yUp.offset = 0
-            this.yOffset = 0
-            this.setState({})
-        }
-    }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         let { antecedent, items, id, nodes } = ruleAgg
         let { barWidth, step, keyAttrNum, dragArray } = this.props
@@ -928,83 +882,6 @@ export default class Itemset extends React.Component<Props, State>{
         return maxBubble
     }
 
-    findMinRect(bubblePosition:rect[],num:number){
-        let minBubble:rect
-        let minHeight = Infinity
-        for(var i=num+1;i<bubblePosition.length;i++){
-            if(bubblePosition[i].y<minHeight){
-                minHeight = bubblePosition[i].y
-                minBubble = bubblePosition[i]
-            }
-        }
-        return minBubble
-    }
-    /**
-     * Divide and conquer method to find the best place to put the next bubble (greedy, not necessarily opt)
-     */
-    findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number) {
-        let pos = bubblePosition
-        let size = this.bubbleSize
-        let length = pos.length
-        if ((areaWidth < size[i].w) || (length == 0)) { return { x: Infinity, y: Infinity } }
-        else {
-            let rightAxis: axis
-            let leftAxis: axis
-            // the x-Axis value of highest rect
-            let maxB = this.findMaxRect(pos, length)
-            let leftRects: rect[] = [],
-                rightRects: rect[] = []
-            // split all the rect based on the highest one into left part and right part
-            pos.forEach((d, i) => {
-                // totally right of maxB
-                if (d.x > maxB.x + maxB.w) {
-                    rightRects.push(d)
-                }
-                // totally left of maxB
-                else if (d.x + d.w < maxB.x) {
-                    leftRects.push(d)
-                }
-                // part overlapping, part right of maxB
-                else if ((d.x >= maxB.x) && (d.x + d.w > maxB.x + maxB.w)) {
-                    rightRects.push({ x: maxB.x + maxB.w, y: d.y, w: d.x + d.w - maxB.x - maxB.w, h: d.h })
-                }
-                // part overlapping, part left of maxB
-                else if ((d.x < maxB.x) && (d.x + d.w <= maxB.x + maxB.w)) {
-                    leftRects.push({ x: d.x, y: d.y, w: maxB.x - d.x, h: d.h })
-                }
-                // all overlapping, part right & part left of maxB
-                else if ((d.x < maxB.x) && (d.x + d.w > maxB.x + maxB.w)) {
-                    leftRects.push({ x: d.x, y: d.y, w: maxB.x - d.x, h: d.h })
-                    rightRects.push({ x: maxB.x + maxB.w, y: d.y, w: d.x + d.w - maxB.x - maxB.w, h: d.h })
-                }
-            })
-            // if the right side contains zero rect (maxB is the rightest one or input contains only one rect)
-            if (rightRects.length == 0) {
-                // the x space is large enough
-                if (areaWidth + startAxis - maxB.x - maxB.w > size[i].w) {
-                    rightAxis = { x: maxB.x + maxB.w, y: maxB.y - size[i].h / 2 + this.yList[i].y - this.yList[i - 1].y }
-                }
-                // the x space is too small to hold this incomming rect
-                else {
-                    rightAxis = { x: Infinity, y: Infinity }
-                }
-            } else {
-                let areaWidthNew = areaWidth - (maxB.x + maxB.w - startAxis),
-                    startAxisNew = maxB.x + maxB.w
-                rightAxis = this.findBestAxis(rightRects, i, areaWidthNew, startAxisNew)
-            }
-            leftAxis = this.findBestAxis(leftRects, i, maxB.x - startAxis, startAxis)
-            if ((rightAxis.y == Infinity) && (leftAxis.y == Infinity)) {
-                return { x: startAxis, y: maxB.y + maxB.h }
-            }
-            else if (rightAxis.y < leftAxis.y) {
-                return rightAxis
-            } else {
-                return leftAxis
-            }
-        }
-    }
-
     findDirectAxis(bubblePosition:rect[],i:number){
         let pos = bubblePosition
 
@@ -1034,18 +911,9 @@ export default class Itemset extends React.Component<Props, State>{
             if (i == 0) {
                 transY = this.yList[0].y - bubble.h/2
             } else {
-                if(this.state.buttonSwitch){
-                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
-                    greedyPos.y = Math.max(greedyPos.y, this.yList[i].y - bubble.h / 2)
-
-                    transX = greedyPos.x 
-                    transY = greedyPos.y 
-                }
-                else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
                     directPos = Math.max(directPos ,this.yList[i].y-bubble.h/2)
                     transY = directPos
-                }
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
         })
