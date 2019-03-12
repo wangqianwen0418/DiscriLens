@@ -17,6 +17,13 @@ export interface Rule{
     [key:string]:any
 }
 
+export interface rect {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
+
 export interface KeyGroup{
     [key:string]: any
 }
@@ -37,8 +44,11 @@ export interface StoreState{
     model: string,
     keyAttrNum: number,
     samples: DataItem[],    // record all samples 
+    compSamples: DataItem[], // record all samples of compared model
     allRules: Rule[], // all rules
+    compAllRules: Rule[], // all rules of compared model
     rules: Rule[],  // filtered rules
+    compRules: Rule[], // filtered rules of compared model
     // key_groups: KeyGroup[], // record all data of key attrs
     fetchSampleStatus: Status,   // loading status
     fetchKeyStatus: Status,    // loadinf status
@@ -51,4 +61,9 @@ export interface StoreState{
     showDataset: string, // the dataset that the user is exploring, others will be hidden
     xScaleMax: number, // used to zoom axis when selection is expanded to keep all axis consistent
     selected_bar: string[], // used to transfer the info of hoverd rect
+    foldFlag: boolean, // whether the model selection panle is folded, true is folded and false is expanded
+    accuracy: number[], // used to transfer models' accuracy to display
+
+    // compare models, [[bubbleposition of compared model],[bubblePosition of prime model],[rect position of prime model]]
+    compareList:{b1:rect[],b2:rect[],r:number[]}, // list of components for model comparison
 }

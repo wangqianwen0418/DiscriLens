@@ -5,6 +5,12 @@ export type GENERATE_SAMPLES = typeof GENERATE_SAMPLES
 export const GENERATE_RULES = 'GENERATE_RULES'
 export type GENERATE_RULES = typeof GENERATE_RULES
 
+export const GENERATE_COMP_SAMPLES = 'GENERATE_COMP_SAMPLES'
+export type GENERATE_COMP_SAMPLES = typeof GENERATE_COMP_SAMPLES
+
+export const GENERATE_COMP_RULES = 'GENERATE_COMP_RULES'
+export type GENERATE_COMP_RULES = typeof GENERATE_COMP_RULES
+
 export const CHANGE_PROTECTED_ATTR = 'CHANGE_PROTECTED_ATTR'
 export type CHANGE_PROTECTED_ATTR = typeof CHANGE_PROTECTED_ATTR
 
@@ -37,3 +43,12 @@ export type CHANGE_XSCALE = typeof CHANGE_XSCALE
 
 export const SELBAR = "SELBAR"
 export type SELBAR = typeof SELBAR
+
+export const FOLDFLAG = "FOLDFALG"
+export type FOLDFLAG = typeof FOLDFLAG
+
+export const ACCURACY = "ACCURACY"
+export type ACCURACY = typeof ACCURACY
+
+export const TRANS_COMPARE = 'TRANS_COMPARE'
+export type TRANS_COMPARE = typeof TRANS_COMPARE

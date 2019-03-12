@@ -67,7 +67,13 @@ if (TEST){
       showAttrNum: keyAttrs.length,
       showDataset:dataset,
       xScaleMax: -1,
-      selected_bar:['','']
+      selected_bar:['',''],
+      compAllRules: null,
+      compSamples:null,
+      compRules:null,
+      foldFlag: false,
+      accuracy: [0.81,0.74,0.74],
+      compareList:{b1:[],b2:[],r:[]}
   }
 }else{
   initState = {
@@ -81,12 +87,18 @@ if (TEST){
     protectedVal: '',
     fetchSampleStatus: Status.COMPLETE,
     fetchKeyStatus: Status.COMPLETE,
-    ruleThreshold: [-0.05, 0.05],
+    ruleThreshold: [-0.1, 0.1],
     dragArray: [],
     showAttrNum: 0,
     showDataset: '',
     xScaleMax: -1,
-    selected_bar: ['','']
+    selected_bar: ['',''],
+    compAllRules: null,
+    compSamples:null,
+    compRules:null,
+    foldFlag: false,
+    accuracy: [0.81,0.74,0.74],
+    compareList:{b1:[],b2:[],r:[]}
 }
 }
 

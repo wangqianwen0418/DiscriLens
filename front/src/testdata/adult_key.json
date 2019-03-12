@@ -1,5 +1,9 @@
-[
+{
+    "keyAttrs":[
     "education_num",
     "relationship",
     "hours_per_week"
+], "accuracy":[
+    0.81,0.74,0.75
 ]
+}
