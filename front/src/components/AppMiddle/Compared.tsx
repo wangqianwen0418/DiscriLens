@@ -109,8 +109,8 @@ export default class Compared extends React.Component<Props, State>{
     yMaxValue = 0;
     // record the max x-value
     xMaxValue = 0;
-    // length of pos 
-    pLenght = 0;
+    // match index
+    matchedIndex:number[] = [];
     unMatchedRulesLength:number = 0;
     matchedRulesLength:number = 0;
     bubblePosition:rect[] =[];
@@ -584,8 +584,9 @@ export default class Compared extends React.Component<Props, State>{
 
         return content
     }
-    drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
-        let { expandRules, bubblePosition } = this.state
+    drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean,matchFlag:boolean) {
+        let { expandRules} = this.state
+        let bubblePosition  = this.bubblePosition
         // rules that are showing
         let showIDs: string[] = Array.from(
             new Set(
@@ -660,16 +661,18 @@ export default class Compared extends React.Component<Props, State>{
     compareTransY(i:number,ante:string[]){
         let compList = this.props.compareList
         let outputBubble = -1,
-        outputRect = -1
+        outputRect = -1,
+        outputIndex
         if(compList.b2.length!=0){
             compList.b2.forEach((bubble,i)=>{
                 if((this.compareString(ante,compList.r[i].r))&&(i<compList.p)){
                     outputBubble = bubble.y
                     outputRect = compList.r[i].y
+                    outputIndex = i
                 }
             }) 
         }
-        return {bubble:outputBubble,rect:outputRect}
+        return {bubble:outputBubble,rect:outputRect,index:outputIndex}
     }
 
     drawMatched(matchedPos:RuleAgg[],matchedNeg:RuleAgg[]){
@@ -679,7 +682,7 @@ export default class Compared extends React.Component<Props, State>{
          * 
          */
         
-        let { rules} = this.props
+        let { rules,compareList} = this.props
         
         let posRules: JSX.Element[] = []
         this.matchYList = []
@@ -687,10 +690,13 @@ export default class Compared extends React.Component<Props, State>{
         this.matchedRulesLength = matchedNeg.length + matchedPos.length
         // positive, orange
         matchedPos.forEach((ruleAgg, i) => {
-
+            let transY = 0
+            if(compareList.r.length!=0){
+                transY = compareList.r[this.matchedIndex[i]].y - this.lineInterval
+            }
             
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${0})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
@@ -702,9 +708,12 @@ export default class Compared extends React.Component<Props, State>{
         let negaRules: JSX.Element[] = [] 
         matchedNeg.forEach((ruleAgg,i)=> {
             i += matchedPos.length
-
+            let transY = 0
+            if(compareList.r.length!=0){
+                transY = compareList.r[this.matchedIndex[i]].y - this.lineInterval
+            }
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${0})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false)
                     }
@@ -714,9 +723,9 @@ export default class Compared extends React.Component<Props, State>{
         })
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
-        let mathchedbubbles = [this.drawBubbles(matchedPos, scoreDomain, true), this.drawBubbles(matchedNeg, scoreDomain, false)]
+        let mathchedbubbles = [this.drawBubbles(matchedPos, scoreDomain, true,true), this.drawBubbles(matchedNeg, scoreDomain, false,true)]
         
-        return {pos:matchedPos,neg:matchedNeg,bubble:mathchedbubbles}
+        return {pos:posRules,neg:negaRules,bubble:mathchedbubbles}
         
     }
     
@@ -863,7 +872,7 @@ export default class Compared extends React.Component<Props, State>{
         this.yList = posYList.concat(negYList)
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
-        let unMathchedbubbles = [this.drawBubbles(unMatchedPos, scoreDomain, true), this.drawBubbles(unMatchedNeg, scoreDomain, false)]
+        let unMathchedbubbles = [this.drawBubbles(unMatchedPos, scoreDomain, true,false), this.drawBubbles(unMatchedNeg, scoreDomain, false,false)]
         
         return {pos:posRules,neg:negaRules,bubble:unMathchedbubbles}
         
@@ -876,7 +885,7 @@ export default class Compared extends React.Component<Props, State>{
 
         let keyAttrs = dragArray.slice(0, keyAttrNum)
 
-        
+        this.matchedIndex = []
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
@@ -889,22 +898,25 @@ export default class Compared extends React.Component<Props, State>{
         unMatchedPos:RuleAgg[] = [], unMatchedNeg:RuleAgg[] = []
 
         positiveRuleAgg.forEach((ruleAgg,i)=>{
-            if(this.compareTransY(i,ruleAgg.antecedent).rect!=-1){
+            let posMatching = this.compareTransY(i,ruleAgg.antecedent)
+            if(posMatching.rect!=-1){
                 matchedPos.push(ruleAgg)
+                this.matchedIndex.push(posMatching.index)
             }else{unMatchedPos.push(ruleAgg)}
         })
 
         negativeRuleAgg.forEach((ruleAgg,i)=>{
-            if(this.compareTransY(i,ruleAgg.antecedent).rect!=-1){
+            let negMatching = this.compareTransY(i,ruleAgg.antecedent)
+            if(negMatching.rect!=-1){
                 matchedNeg.push(ruleAgg)
+                this.matchedIndex.push(negMatching.index)
             }else{unMatchedNeg.push(ruleAgg)}
         })
-        
-        // let match = this.drawMatched(matchedPos,matchedNeg)
+    
+        let match = this.drawMatched(matchedPos,matchedNeg)
         let unMatch = this.drawUnMatched(unMatchedPos,unMatchedNeg)
 
-        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
-{/*               
+        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>              
             <g className='matchBubbles'>
                 {match.bubble}
             </g>
@@ -913,7 +925,7 @@ export default class Compared extends React.Component<Props, State>{
             </g>
             <g className='match negative rules'>
                 {match.neg}
-            </g> */}
+            </g> 
 
             <g className='matchBubbles'>
                 {unMatch.bubble}
@@ -976,17 +988,21 @@ export default class Compared extends React.Component<Props, State>{
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 1
-        this.bubbleSize.forEach((bubble, i) => {
-            let transX = 0,
+        let i = 0
+        this.bubbleSize.forEach((bubble, j) => {
+            if(!this.matchedIndex.includes(j)){
+                let transX = 0,
                 transY = 0
-            if (i == 0) {
-                transY = this.yList[0].y - bubble.h/2
-            } else {
-                    let directPos:number = this.findDirectAxis(bubblePosition,i)
-                    directPos = Math.max(directPos ,this.yList[i].y-bubble.h/2)
-                    transY = directPos
+                if (i == 0) {
+                    transY = this.yList[0].y - bubble.h/2
+                } else {
+                        let directPos:number = this.findDirectAxis(bubblePosition,i)
+                        directPos = Math.max(directPos ,this.yList[i].y-bubble.h/2)
+                        transY = directPos
+                }
+                bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
+                i += 1
             }
-            bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
         })
         // define new rect pos
         let yListButton:number[] = []
@@ -1011,12 +1027,6 @@ export default class Compared extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
-
-        // compare model mode
-        // for the prime model
-
-        console.log(this.yList)
-        console.log(bubblePosition)
     }
 
     render() {
