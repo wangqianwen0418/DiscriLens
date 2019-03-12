@@ -586,7 +586,14 @@ export default class Compared extends React.Component<Props, State>{
     }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean,matchFlag:boolean) {
         let { expandRules} = this.state
-        let bubblePosition  = this.bubblePosition
+        let bubblePosition:any, listLength:number
+        if(matchFlag){
+            bubblePosition = this.matchBubblePosition
+            listLength = this.matchedRulesLength
+        }else{
+            bubblePosition = this.bubblePosition 
+            listLength = this.unMatchedRulesLength
+        }
         // rules that are showing
         let showIDs: string[] = Array.from(
             new Set(
@@ -608,9 +615,9 @@ export default class Compared extends React.Component<Props, State>{
                         let transX = 0
                         let transY = 0
                         // calculate translate distance
-                        if (bubblePosition.length == this.unMatchedRulesLength) {
-                                let rightBorder = this.props.compFlag==1?document.getElementById('compareLeft').clientWidth:250
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + (this.props.compFlag==0?this.props.offsetX:0)
+                        if (bubblePosition.length == listLength) {
+                                let rightBorder = document.getElementById('compareLeft').clientWidth
+                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -631,7 +638,7 @@ export default class Compared extends React.Component<Props, State>{
                             protectedVal={this.props.protectedVal}
                         />
                         let bubbleLine:any
-                        if(bubblePosition.length == this.unMatchedRulesLength){
+                        if(bubblePosition.length == listLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2}
                              h${-window.innerWidth*0.3+bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
@@ -692,7 +699,7 @@ export default class Compared extends React.Component<Props, State>{
         matchedPos.forEach((ruleAgg, i) => {
             let transY = 0
             if(compareList.r.length!=0){
-                transY = compareList.r[this.matchedIndex[i]].y - this.lineInterval
+                transY = compareList.r[this.matchedIndex[i]].y - 0.7*this.lineInterval
             }
             
             posRules.push(
@@ -758,13 +765,12 @@ export default class Compared extends React.Component<Props, State>{
             
             let ySum = 0
             if(this.ySumList.length!=0){
-                ySum = this.ySumList[i]
+                ySum = this.ySumList[i]+1000
             }
             if((i!=0)&&(this.state.buttonSwitch)){
                 offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
-            let posOffset = 0
             // choose rect display mode
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
                 switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
@@ -795,24 +801,12 @@ export default class Compared extends React.Component<Props, State>{
             // posAveY = (posAveY + switchOffset) / 2
             posAveY += this.lineInterval
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
-            // record y-axis value of each rule bar
-            if(!this.state.buttonSwitch){
-                posOffset = 0
-            }else{
-                if(i<this.yUp.i){
-                    posOffset = this.yUp.offset
-                }else if(i>this.yUp.i){
-                    posOffset = this.yDown.offset
-                }else{
-                    posOffset = this.yOffset
-                }
-            }
             
             
             if(posYList.length-1<=i){
-                posYList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
+                posYList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
             }else{
-                posYList[i] = {y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent}
+                posYList[i] = {y:posAveY,h:hPos,r:ruleAgg.antecedent}
             }
 
         })  
@@ -985,12 +979,11 @@ export default class Compared extends React.Component<Props, State>{
     }
     componentDidUpdate(prevProp: Props) {
         let bubblePosition: rect[] = []
-        // let {compFlag} = this.props
-        // use this value to control interval length
-        let interval = 1
-        let i = 0
-        this.bubbleSize.forEach((bubble, j) => {
-            if(!this.matchedIndex.includes(j)){
+        this.matchBubblePosition = []
+        let {compareList} = this.props
+        this.bubbleSize.forEach((bubble, i) => {
+            if(i>=this.matchedIndex.length){
+                i -= this.matchedIndex.length
                 let transX = 0,
                 transY = 0
                 if (i == 0) {
@@ -1000,8 +993,10 @@ export default class Compared extends React.Component<Props, State>{
                         directPos = Math.max(directPos ,this.yList[i].y-bubble.h/2)
                         transY = directPos
                 }
-                bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
-                i += 1
+                bubblePosition.push({ x: transX, y: transY, w: bubble.w, h: bubble.h })
+            }else{
+                console.log(i)
+                this.matchBubblePosition.push({x:0,y:compareList.r[this.matchedIndex[i]].y-bubble.h/2,w:bubble.w,h:bubble.h})
             }
         })
         // define new rect pos
