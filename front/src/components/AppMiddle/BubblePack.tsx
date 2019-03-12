@@ -6,7 +6,7 @@
 // } from 'lib/bubble.js';
 import * as React from 'react';
 // import { RuleAgg, RuleNode} from 'Helpers';
-import { RuleAgg, RuleNode, getMinLinks} from 'Helpers';
+import { RuleAgg, RuleNode, getMinLinks, boundaryColor} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {packEnclose, graphPack} from 'lib/pack/index.js';
@@ -301,11 +301,15 @@ export default class Bubble extends React.Component<Props, State>{
                             return <circle id={set.id} key={set.id} r={set.r-0.5*circlePadding + padding} cx={set.x} cy={set.y} fill="black"/>
                         })}           
                     </mask>
-                    <g className='outlines' mask={`url(#mask_outline_${ruleID})`} stroke={"#b9b9b9"} fill="white">
+                    <g className='outlines' 
+                    mask={`url(#mask_outline_${ruleID})`} 
+                    // stroke={"#b9b9b9"} 
+                    stroke = {boundaryColor[idx]}
+                    fill="white">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.id} key={set.id} 
-                                r={set.r-0.5*circlePadding+padding+0.5*strokeWidth} cx={set.x} cy={set.y} 
-                                strokeWidth={strokeWidth}
+                                r={set.r-0.5*circlePadding+padding+0.75*strokeWidth} cx={set.x} cy={set.y} 
+                                strokeWidth={1.5*strokeWidth}
                                 
                                 />
                             }) 

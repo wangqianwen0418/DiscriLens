@@ -51,7 +51,3 @@ input[type=number]::-webkit-outer-spin-button {
     }
   }
 
-
-.itemset g.pin.icon:hover{
-    opacity: 1;
-}

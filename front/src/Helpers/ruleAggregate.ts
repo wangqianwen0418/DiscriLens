@@ -162,7 +162,6 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
             }
         }
         if (!isContain){
-            console.info(ruleNode.rule.antecedent, negativeRuleAgg.map(r=>r.antecedent))
             negativeRuleAgg.push({
                 id: 'agg'+ruleNode.rule.id,
                 antecedent: ruleNode.rule.antecedent

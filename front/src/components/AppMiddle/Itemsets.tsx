@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
 import { Icon } from 'antd';
-import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, } from 'Helpers';
+import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, boundaryColor} from 'Helpers';
 import * as d3 from 'd3';
 
 // import Euler from 'components/AppMiddle/Euler';
@@ -13,7 +13,7 @@ import "./Itemsets.css";
 
 const PIN = <g transform={`scale(0.015) `}>
     <path
-        d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8zM666.2 549.3l-24.5 24.5 3.8 34.4a259.92 259.92 0 0 1-30.4 153.9L262 408.8c12.9-7.1 26.3-13.1 40.3-17.9 27.2-9.4 55.7-14.1 84.7-14.1 9.6 0 19.3.5 28.9 1.6l34.4 3.8 24.5-24.5L608.5 224 800 415.5 666.2 549.3z" />
+        d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8z"/>
 </g>
 
 // const PIN = <g transform={`scale(0.015) `}>
@@ -110,16 +110,17 @@ export default class Itemset extends React.Component<Props, State>{
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
-            return d3.interpolateGreens(
-                d3.scaleLinear()
+            let t= d3.scaleLinear()
                     .domain([minScore, 0])
-                    .range([0.8, 0.3])(score)
-            )
+                    .range([0.55, 0.25])(score)
+            return d3.interpolateGreens(t)
+            //    return d3.interpolateGnBu(t)
+            // return d3.hsl(170, 0.44+0.56*t, 0.69) + "";
         } else {
-            return d3.interpolateOranges(
+            return d3.interpolateOrRd(
                 d3.scaleLinear()
                     .domain([0, maxScore])
-                    .range([0.3, 0.65])(score)
+                    .range([0.25, 0.55])(score)
             )
         }
 
@@ -138,7 +139,6 @@ export default class Itemset extends React.Component<Props, State>{
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
         this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
-        this.toggleHighlight = this.toggleHighlight.bind(this)
         this.enterRect = this.enterRect.bind(this)
         this.leaveRect = this.leaveRect.bind(this)
     }
@@ -185,21 +185,6 @@ export default class Itemset extends React.Component<Props, State>{
         }
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
-    }
-    toggleHighlight(ruleAggID: string, ruleID: string) {
-        let { highlightRules } = this.state
-        if (!highlightRules[ruleAggID]) {
-            highlightRules[ruleAggID] = [ruleID]
-        } else {
-            let idx = highlightRules[ruleAggID].indexOf(ruleID)
-            if (idx == -1) {
-                highlightRules[ruleAggID].push(ruleID)
-            } else {
-                highlightRules[ruleAggID].splice(idx, 1)
-            }
-        }
-
-        this.setState({ highlightRules })
     }
     drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, switchOffset:number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number,switchOffset:number } {
         let { rule, children } = ruleNode
@@ -254,6 +239,9 @@ export default class Itemset extends React.Component<Props, State>{
             .outerRadius(outRadius + progressBarWidth)
             .cornerRadius(progressBarWidth / 2)
 
+        var highlightIdx = highlightRules[ruleAggID].indexOf(rule.id.toString())
+        // console.info(highlightRules[ruleAggID], rule.id, highlightIdx, boundaryColor)
+
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
             transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
@@ -277,7 +265,7 @@ export default class Itemset extends React.Component<Props, State>{
                 let ruleID = rule.id.toString()
                 let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
                 if (idx == -1) {
-                    highlightRules[ruleAggID].push(ruleID)
+                    highlightRules[ruleAggID] = [...highlightRules[ruleAggID], ruleID]
                 } else {
                     highlightRules[ruleAggID].splice(idx, 1)
                 }
@@ -309,7 +297,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.scoreColor(Math.pow(10, -5))}
+                    fill={this.scoreColor(this.props.ruleThreshold[1]||Math.pow(10, -5))}
                 />
                 {/* <path
                     className="out bar"
@@ -351,7 +339,7 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(-Math.pow(10, -6))}
+                    fill={this.scoreColor(this.props.ruleThreshold[0]||-Math.pow(10, -6))}
                     d={outerArc({
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pnd
@@ -388,25 +376,20 @@ export default class Itemset extends React.Component<Props, State>{
                     strokeWidth='2'
                 />
                 <g className='pin icon'
-                    fill='grey' stroke='grey'
+                    fill={highlightIdx==-1?"grey":boundaryColor[highlightIdx]} 
+                    stroke={highlightIdx==-1?"grey":boundaryColor[highlightIdx]}
                     transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`}
                     opacity={highlightRules[ruleAggID] ? (highlightRules[ruleAggID].includes(rule.id.toString()) ? 1 : 0) : 0}
-                    // // tslint:disable-next-line:jsx-no-lambda
-                    // onClick={(e: React.MouseEvent) => {
-                    //     e.stopPropagation()
-                    //     e.preventDefault()
-                    //     this.toggleHighlight(ruleAggID, rule.id.toString())
-                    // }
-                    // }
                     cursor='pointer'>
                     {PIN}
                 </g>
             </g>
             <g transform={`translate(${-this.lineInterval}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
                 <line className="ruleBoundary"
-                    x1={indent} y1={this.lineInterval * 0.5}
+                    x1={indent+this.lineInterval} y1={this.lineInterval * 0.5}
                     x2={step*showAttrs.length+indent+this.lineInterval*2} y2={this.lineInterval * 0.5}
-                    stroke="#f0f0f0"
+                    stroke={highlightIdx==-1?"#f0f0f0":boundaryColor[highlightIdx]}
+                    strokeWidth={2}
                 />
                 <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`} onClick={toggleExpand}>
                     {/* <foreignObject>
@@ -551,6 +534,7 @@ export default class Itemset extends React.Component<Props, State>{
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
+            let color = this.scoreColor(favorPD ? this.props.ruleThreshold[1]||Math.pow(10, -6) : this.props.ruleThreshold[0]||-Math.pow(10, -6))
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
@@ -558,14 +542,14 @@ export default class Itemset extends React.Component<Props, State>{
                     // fill='#eee'
                     fill='none'
                     // stroke={favorPD ? "#98E090" : "#FF772D"}
-                    stroke={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+                    stroke={color}
                     strokeWidth={2}
                 />
                 <rect className='font'
                     width={barWidth / ranges.length} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
-                    fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+                    fill={color}
                 />
             </g>
         }
@@ -868,16 +852,17 @@ export default class Itemset extends React.Component<Props, State>{
     }
     componentWillReceiveProps(nextProps:Props){
         //  don't know why i cannot call getDerivedStateFromProps, debug later
+        // rule aggregate
         let { rules, samples, keyAttrNum, dragArray } = nextProps
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
-
         let keyAttrs = dragArray.slice(0, keyAttrNum)
 
         let { positiveRuleAgg, negativeRuleAgg } = ruleAggregate(rules, keyAttrs, samples)
         this.positiveRuleAgg = positiveRuleAgg
         this.negativeRuleAgg = negativeRuleAgg
 
+        // initial default highlight rules
         let { highlightRules } = this.state
         negativeRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
