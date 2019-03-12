@@ -1081,9 +1081,6 @@ export default class Itemset extends React.Component<Props, State>{
                 this.props.onTransCompareList({b1:compareList.b1,b2:bubblePosition,r:this.yList,p:this.pLenght})
             }
         }
-
-        console.log(this.yList)
-        console.log(bubblePosition)
     }
 
     render() {
