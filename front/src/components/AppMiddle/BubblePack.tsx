@@ -318,18 +318,33 @@ export default class Bubble extends React.Component<Props, State>{
                 {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='red' stroke='gray' mask={`url(#outline_${hoverRule})`}/>  */}
                 </g>
         })
-        return {itemCircles, outlines}
+
+        let background = <g className='background'>
+        {root.children.map((outerCircle:ItemHierarchy) => {
+            return <circle className='outlines'  key={outerCircle.id}
+            // stroke={"#b9b9b9"} 
+            cx={outerCircle.x}
+            cy={outerCircle.y}
+            r={outerCircle.r + 0.5*circlePadding}
+            stroke = 'white'
+            fill="white"/> 
+            })
+        }</g>
+        
+        
+        return {itemCircles, outlines, background}
 
     }
     render() {
         let {ruleAgg} = this.props
-        let {itemCircles, outlines} = this.draw()
+        let {itemCircles, outlines, background} = this.draw()
        
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
             // transform={`scale(${this.scaleRatio})`}
             >
+                {background}
                 {itemCircles}
                 <g className='highlight outlines'>
                     {outlines}
