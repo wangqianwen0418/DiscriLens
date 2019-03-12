@@ -13,8 +13,6 @@ import "./Itemsets.css";
 
 const PIN = <g transform={`scale(0.015) `}>
     <path
-        stroke='gray'
-        opacity={0.6}
         d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8zM666.2 549.3l-24.5 24.5 3.8 34.4a259.92 259.92 0 0 1-30.4 153.9L262 408.8c12.9-7.1 26.3-13.1 40.3-17.9 27.2-9.4 55.7-14.1 84.7-14.1 9.6 0 19.3.5 28.9 1.6l34.4 3.8 24.5-24.5L608.5 224 800 415.5 666.2 549.3z" />
 </g>
 
@@ -378,6 +376,7 @@ export default class Itemset extends React.Component<Props, State>{
                     strokeWidth='2'
                 />
                 <g className='pin icon'
+                    fill='grey' stroke='grey'
                     transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`}
                     opacity={highlightRules[ruleAggID] ? (highlightRules[ruleAggID].includes(rule.id.toString()) ? 1 : 0) : 0}
                     // // tslint:disable-next-line:jsx-no-lambda
@@ -388,19 +387,13 @@ export default class Itemset extends React.Component<Props, State>{
                     // }
                     // }
                     cursor='pointer'>
-                    <rect width={-indent} height={2 * this.lineInterval} y={-this.lineInterval} x={0} fill='transparent' />
                     {PIN}
                 </g>
-                {/* <line 
-            x1={-this.headWidth} y1={0} 
-            x2={0} y2={0} 
-            stroke="#444" 
-            /> */}
             </g>
-            <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
+            <g transform={`translate(${-this.lineInterval}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
                 <line className="ruleBoundary"
                     x1={indent} y1={this.lineInterval * 0.5}
-                    x2={window.innerWidth} y2={this.lineInterval * 0.5}
+                    x2={step*showAttrs.length+indent+this.lineInterval*2} y2={this.lineInterval * 0.5}
                     stroke="#f0f0f0"
                 />
                 <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`} onClick={toggleExpand}>
@@ -440,11 +433,6 @@ export default class Itemset extends React.Component<Props, State>{
                     let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                         rangeIdx = ranges.indexOf(val)
                     return <g key={attrVal}>
-                        {/* <rect className='ruleBox' 
-            stroke='#666' fill='none' 
-            strokeWidth='1px'
-            x={-20} y={-0.25*this.lineInterval}
-            height={this.lineInterval*1.5} width={step*showAttrs.length + 20}/> */}
 
                         <rect className='background'
                             width={barWidth} height={this.lineInterval}
@@ -579,7 +567,7 @@ export default class Itemset extends React.Component<Props, State>{
                 x={-this.headWidth-2*this.fontSize} y={-0.5 * this.lineInterval}
                 height={this.lineInterval * 2} width={step * keyAttrNum + this.headWidth + 2*this.fontSize} />
             {itemSizeLabel}
-            <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
+            <g className="icon" transform={`translate(${-this.lineInterval}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
 
                 <polygon className="icon"
                     fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
@@ -683,12 +671,10 @@ export default class Itemset extends React.Component<Props, State>{
         </g>
     }
     draw() {
-        let { rules, samples, keyAttrNum, dragArray } = this.props
+        let { rules, samples } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
-
-        let keyAttrs = dragArray.slice(0, keyAttrNum)
 
         let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
             itemScale = d3.scaleLinear()
@@ -696,12 +682,8 @@ export default class Itemset extends React.Component<Props, State>{
                 .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
 
         // aggregate based on key attributes
-        let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
-
-
-        let { positiveRuleAgg, negativeRuleAgg } = results
-        this.positiveRuleAgg = positiveRuleAgg
-        this.negativeRuleAgg = negativeRuleAgg
+        
+        let {positiveRuleAgg, negativeRuleAgg} = this
 
         let offsetY = 0
         let posRules: JSX.Element[] = []
@@ -808,16 +790,19 @@ export default class Itemset extends React.Component<Props, State>{
             </g>
         </g>
     }
-    componentDidMount() {
-        // if (
-        //     prevProp.ruleThreshold[0] != this.props.ruleThreshold[0]
-        //     || prevProp.ruleThreshold[1] != this.props.ruleThreshold[1]
-        //     || prevProp.rules[0].pd != this.props.rules[0].pd
-        // ) {
-        //     this.setState({ expandRules: {} })
-        // }
+    componentWillReceiveProps(nextProps:Props){
+        //  don't know why i cannot call getDerivedStateFromProps, debug later
+        let { rules, samples, keyAttrNum, dragArray } = nextProps
+        // let samples_numerical = samples.slice(0,1000)
+        samples = samples.slice(Math.floor(samples.length / 2), samples.length)
+
+        let keyAttrs = dragArray.slice(0, keyAttrNum)
+
+        let { positiveRuleAgg, negativeRuleAgg } = ruleAggregate(rules, keyAttrs, samples)
+        this.positiveRuleAgg = positiveRuleAgg
+        this.negativeRuleAgg = negativeRuleAgg
+
         let { highlightRules } = this.state
-        let { negativeRuleAgg, positiveRuleAgg } = this
         negativeRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
                 highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)

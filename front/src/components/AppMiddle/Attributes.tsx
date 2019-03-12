@@ -314,8 +314,6 @@ export default class Attributes extends React.Component<Props, State>{
                 let rangeText = <text id={'rangeText'} transform={`translate(${range_i * (barWidthidth)},${this.height*1.2})`}>
                 {cutTxt(range, barWidthidth*0.9/this.fontSize*2)}</text>
                 
-                console.log(document.getElementById('rangeText'))
-                
                 return <g>
                     <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
                     <g key={`${attr}_${range}`}
