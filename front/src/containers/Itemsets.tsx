@@ -1,7 +1,7 @@
 import Itemsets from 'components/AppMiddle/Itemsets';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeShowAttr,ChangeSelectedBar,TransCompareList} from 'actions';
+import { ChangeShowAttr,ChangeSelectedBar} from 'actions';
 // import { Dispatch } from 'redux';
 export interface rect {
     x: number,
@@ -26,7 +26,6 @@ export function mapDispatchToProps(dispatch: any) {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
         onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
-        onTransCompareList :(compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number})=>dispatch(TransCompareList(compareList)),
     }
 }
 

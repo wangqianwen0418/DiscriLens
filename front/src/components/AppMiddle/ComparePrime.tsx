@@ -46,10 +46,11 @@ export interface Props {
     offsetX: number,
     offset: number,
     compFlag: number,
-    compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number},
+    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
+    compareOffset:[number,number]
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
-    onTransCompareList:(compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}) =>void
+    onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}) =>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -107,6 +108,7 @@ export default class ComparePrime extends React.Component<Props, State>{
     yMaxValue = 0;
     // record the max x-value
     xMaxValue = 0;
+    borderHeight:any;
     // length of pos 
     pLenght = 0;
     rulesLength:number = 0;
@@ -589,12 +591,10 @@ export default class ComparePrime extends React.Component<Props, State>{
                 ruleAggs
                     .map((ruleAgg, i) => {
                         i += initI
-                        let transX = 0
+                        let transX = 5
                         let transY = 0
                         // calculate translate distance
                         if (bubblePosition.length == this.rulesLength) {
-                                let rightBorder = this.props.compFlag==1?document.getElementById('compareLeft').clientWidth:250
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + (this.props.compFlag==0?this.props.offsetX:0)
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -683,9 +683,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         // recording the rect position based on bubble position
         let switchOffset = 0
         let posRules: JSX.Element[] = []
-        if (this.yList.length > positiveRuleAgg.length + negativeRuleAgg.length) {
-            this.yList = []
-        }
+        this.yList = []
 
         let posYList: {y:number,h:number,r:string[]}[] = []
         let negYList: {y:number,h:number,r:string[]}[] = []
@@ -702,7 +700,6 @@ export default class ComparePrime extends React.Component<Props, State>{
                 offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
-            let posOffset = 0
             // choose rect display mode
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
                 switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
@@ -732,25 +729,9 @@ export default class ComparePrime extends React.Component<Props, State>{
             // posAveY = (posAveY + switchOffset) / 2
             posAveY += this.lineInterval
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
-            // record y-axis value of each rule bar
-            if(!this.state.buttonSwitch){
-                posOffset = 0
-            }else{
-                if(i<this.yUp.i){
-                    posOffset = this.yUp.offset
-                }else if(i>this.yUp.i){
-                    posOffset = this.yDown.offset
-                }else{
-                    posOffset = this.yOffset
-                }
-            }
             
             
-            if(posYList.length-1<=i){
-                posYList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
-            }else{
-                posYList[i] = {y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent}
-            }
+            posYList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
         this.pLenght = positiveRuleAgg.length
@@ -767,8 +748,6 @@ export default class ComparePrime extends React.Component<Props, State>{
                 offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
-            
-            let negOffset = 0
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
                 switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
             }else{
@@ -776,10 +755,10 @@ export default class ComparePrime extends React.Component<Props, State>{
             }
             
             // calculate average y-value of an itemset
-            let negAveY = offsetY
+            let negAveY = switchOffset
 
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false)
                     }
@@ -799,24 +778,8 @@ export default class ComparePrime extends React.Component<Props, State>{
             negAveY += this.lineInterval
             // negAveY = (negAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
-            // record offset distance of each rule bar
-            if(!this.state.buttonSwitch){
-                negOffset = 0
-            }else{
-                if(i+positiveRuleAgg.length<this.yUp.i){
-                    negOffset = this.yUp.offset
-                }else if(i+positiveRuleAgg.length>this.yUp.i){
-                    negOffset = this.yDown.offset
-                }else{
-                    negOffset = this.yOffset
-                }
-            }
 
-            if(negYList.length-1<=i){
-                negYList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
-            }else{
-                negYList[i] = {y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent}
-            }
+            negYList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
@@ -828,7 +791,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         let buttonPress=()=>{
             this.setState({buttonSwitch:!this.state.buttonSwitch})
         }
-        return <g key='rules' transform={`translate(${compFlag==-1?-this.props.offsetX:0}, ${this.margin})`}>
+        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             {this.props.compFlag==0?<g onClick={buttonPress}>
                <circle cx={50} cy={10} r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
@@ -946,7 +909,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         if((compFlag==-1)&&(compareList.b2)){
             let compareIsSame = this.compareArray(bubblePosition,compareList.b2)
             if(!compareIsSame){
-                this.props.onTransCompareList({b1:compareList.b1,b2:bubblePosition,r:this.yList,p:this.pLenght})
+                this.props.onTransCompareList({b2:bubblePosition,r:this.yList,p:this.pLenght,yMax:this.borderHeight})
             }
         }
     }
@@ -984,6 +947,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
+        this.borderHeight = borderHeight
         let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
         return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >

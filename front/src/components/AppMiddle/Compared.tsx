@@ -46,10 +46,10 @@ export interface Props {
     offsetX: number,
     offset: number,
     compFlag: number,
-    compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number},
+    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
-    onTransCompareList:(compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}) =>void
+    onTransCompareOffset:(compareOffset:[number,number]) =>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -665,17 +665,19 @@ export default class Compared extends React.Component<Props, State>{
         return is_same
     }
 
-    compareTransY(i:number,ante:string[]){
+    compareTransY(posFlag:boolean,ante:string[]){
         let compList = this.props.compareList
         let outputBubble = -1,
         outputRect = -1,
-        outputIndex
+        outputIndex = -1
         if(compList.b2.length!=0){
             compList.b2.forEach((bubble,i)=>{
-                if((this.compareString(ante,compList.r[i].r))&&(i<compList.p)){
-                    outputBubble = bubble.y
-                    outputRect = compList.r[i].y
-                    outputIndex = i
+                if(this.compareString(ante,compList.r[i].r)){
+                    if((posFlag&&(i<compList.p))||(!posFlag&&(i>=compList.p))){
+                        outputBubble = bubble.y
+                        outputRect = compList.r[i].y
+                        outputIndex = i
+                    }
                 }
             }) 
         }
@@ -699,7 +701,7 @@ export default class Compared extends React.Component<Props, State>{
         matchedPos.forEach((ruleAgg, i) => {
             let transY = 0
             if(compareList.r.length!=0){
-                transY = compareList.r[this.matchedIndex[i]].y - 0.7*this.lineInterval
+                transY = Math.max(compareList.r[this.matchedIndex[i]].y - 0.3*this.lineInterval,this.matchBubblePosition.length==this.matchedIndex.length?this.matchBubblePosition[i].y+this.matchBubblePosition[i].h/2:0)
             }
             
             posRules.push(
@@ -717,7 +719,7 @@ export default class Compared extends React.Component<Props, State>{
             i += matchedPos.length
             let transY = 0
             if(compareList.r.length!=0){
-                transY = compareList.r[this.matchedIndex[i]].y - this.lineInterval
+                transY = Math.max(compareList.r[this.matchedIndex[i]].y - 0.3*this.lineInterval,this.matchBubblePosition.length==this.matchedIndex.length?this.matchBubblePosition[i].y+this.matchBubblePosition[i].h/2:0)
             }
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule">
@@ -752,7 +754,7 @@ export default class Compared extends React.Component<Props, State>{
         // recording the rect postion for bubble positioning
         let offsetY = 0
         // recording the rect position based on bubble position
-        let switchOffset = 1000
+        let switchOffset = this.props.compareList.yMax
         let posRules: JSX.Element[] = []
         this.yList = []
 
@@ -892,7 +894,7 @@ export default class Compared extends React.Component<Props, State>{
         unMatchedPos:RuleAgg[] = [], unMatchedNeg:RuleAgg[] = []
 
         positiveRuleAgg.forEach((ruleAgg,i)=>{
-            let posMatching = this.compareTransY(i,ruleAgg.antecedent)
+            let posMatching = this.compareTransY(true,ruleAgg.antecedent)
             if(posMatching.rect!=-1){
                 matchedPos.push(ruleAgg)
                 this.matchedIndex.push(posMatching.index)
@@ -900,7 +902,7 @@ export default class Compared extends React.Component<Props, State>{
         })
 
         negativeRuleAgg.forEach((ruleAgg,i)=>{
-            let negMatching = this.compareTransY(i,ruleAgg.antecedent)
+            let negMatching = this.compareTransY(false,ruleAgg.antecedent)
             if(negMatching.rect!=-1){
                 matchedNeg.push(ruleAgg)
                 this.matchedIndex.push(negMatching.index)
@@ -995,8 +997,14 @@ export default class Compared extends React.Component<Props, State>{
                 }
                 bubblePosition.push({ x: transX, y: transY, w: bubble.w, h: bubble.h })
             }else{
-                console.log(i)
-                this.matchBubblePosition.push({x:0,y:compareList.r[this.matchedIndex[i]].y-bubble.h/2,w:bubble.w,h:bubble.h})
+                let yMatch = compareList.r[this.matchedIndex[i]].y-bubble.h/2,
+                yOverlap = i==0?0:this.matchBubblePosition[i-1].y + this.matchBubblePosition[i-1].h
+                if(yMatch>=yOverlap){
+                    this.matchBubblePosition.push({x:0,y:yMatch,w:bubble.w,h:bubble.h})
+                }else{
+                    this.matchBubblePosition.push({x:0,y:yOverlap,w:bubble.w,h:bubble.h})
+                }
+                
             }
         })
         // define new rect pos

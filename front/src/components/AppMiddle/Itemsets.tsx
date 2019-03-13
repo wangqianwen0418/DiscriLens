@@ -46,10 +46,8 @@ export interface Props {
     offsetX: number,
     offset: number,
     compFlag: number,
-    compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number},
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
-    onTransCompareList:(compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}) =>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -688,20 +686,6 @@ export default class Itemset extends React.Component<Props, State>{
         return is_same
     }
 
-    compareTransY(i:number,ante:string[]){
-        let compList = this.props.compareList
-        let outputBubble = -1,
-        outputRect = -1
-        if(compList.b2.length!=0){
-            compList.b2.forEach((bubble,i)=>{
-                if((this.compareString(ante,compList.r[i].r))&&(i<compList.p)){
-                    outputBubble = bubble.y
-                    outputRect = compList.r[i].y
-                }
-            }) 
-        }
-        return {bubble:outputBubble,rect:outputRect}
-    }
 
     draw() {
         
@@ -1023,7 +1007,6 @@ export default class Itemset extends React.Component<Props, State>{
         return is_same
     }
     componentDidUpdate(prevProp: Props) {
-        let {compareList,compFlag} = this.props
         let bubblePosition: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
@@ -1072,15 +1055,6 @@ export default class Itemset extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
-
-        // compare model mode
-        // for the prime model
-        if((compFlag==-1)&&(compareList.b2)){
-            let compareIsSame = this.compareArray(bubblePosition,compareList.b2)
-            if(!compareIsSame){
-                this.props.onTransCompareList({b1:compareList.b1,b2:bubblePosition,r:this.yList,p:this.pLenght})
-            }
-        }
     }
 
     render() {

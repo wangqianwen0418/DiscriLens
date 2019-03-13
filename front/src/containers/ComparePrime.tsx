@@ -18,6 +18,7 @@ export function mapStateToProps(state:StoreState) {
         showAttrNum: state.showAttrNum,
         fetchKeyStatus: state.fetchKeyStatus,
         compareList: state.compareList,
+        compareOffset:state.compareOffset,
     };
 }
 
@@ -26,7 +27,7 @@ export function mapDispatchToProps(dispatch: any) {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
         onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
-        onTransCompareList :(compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number})=>dispatch(TransCompareList(compareList)),
+        onTransCompareList :(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any})=>dispatch(TransCompareList(compareList)),
     }
 }
 

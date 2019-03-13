@@ -3,7 +3,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
     CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
-    ,FOLDFLAG,ACCURACY,TRANS_COMPARE} from 'Const';
+    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -291,13 +291,28 @@ all about transfer compareList
 *****************/ 
 export interface compareList{
     type:TRANS_COMPARE,
-    compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}
+    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}
 }
 
-export const TransCompareList = (compareList:{b1:rect[],b2:rect[],r:{y:number,r:string[]}[],p:number}):compareList =>{
+export const TransCompareList = (compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}):compareList =>{
     return ({
         type: TRANS_COMPARE,
         compareList
+    });
+}
+
+/*****************
+all about transfer compareOffset
+*****************/ 
+export interface compareOffset{
+    type:TRANS_COMPARE_OFFSET,
+    compareOffset:[number,number]
+}
+
+export const TransCompareOffset = (compareOffset:[number,number]):compareOffset =>{
+    return ({
+        type: TRANS_COMPARE_OFFSET,
+        compareOffset
     });
 }
 /*****************
@@ -433,5 +448,5 @@ export const switchCompModel = (dataset:string,model:string)=>{
 }
 
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
-|ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|
+|ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|compareOffset|
 ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList
