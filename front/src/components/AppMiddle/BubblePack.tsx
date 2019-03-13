@@ -105,8 +105,7 @@ export default class Bubble extends React.Component<Props, State>{
         // return [box.width, box.height]
     }
     draw(){
-        let { ruleAgg, scoreColor, hoverRule, samples } = this.props
-        let highlightRules = [...this.props.highlightRules]
+        let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
         // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
         let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules),

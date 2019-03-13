@@ -630,7 +630,7 @@ export default class Itemset extends React.Component<Props, State>{
                             scoreColor={this.scoreColor}
                             showIDs={showIDs}
                             hoverRule={this.state.hoverRule}
-                            highlightRules={this.state.highlightRules[ruleAgg.id] || []}
+                            highlightRules={[...this.state.highlightRules[ruleAgg.id] ]|| []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
                         />
