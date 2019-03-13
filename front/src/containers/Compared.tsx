@@ -26,7 +26,7 @@ export function mapDispatchToProps(dispatch: any) {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
         onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
-        onTransCompareOffset :(compareOffset:[number,number])=>dispatch(TransCompareOffset(compareOffset))
+        onTransCompareOffset :(compareOffset:{y:number[],index:number[]})=>dispatch(TransCompareOffset(compareOffset))
     }
 }
 

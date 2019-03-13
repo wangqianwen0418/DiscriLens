@@ -306,10 +306,10 @@ all about transfer compareOffset
 *****************/ 
 export interface compareOffset{
     type:TRANS_COMPARE_OFFSET,
-    compareOffset:[number,number]
+    compareOffset:{y:number[],index:number[]}
 }
 
-export const TransCompareOffset = (compareOffset:[number,number]):compareOffset =>{
+export const TransCompareOffset = (compareOffset:{y:number[],index:number[]}):compareOffset =>{
     return ({
         type: TRANS_COMPARE_OFFSET,
         compareOffset

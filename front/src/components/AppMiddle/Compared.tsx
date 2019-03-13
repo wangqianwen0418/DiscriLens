@@ -49,7 +49,7 @@ export interface Props {
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
-    onTransCompareOffset:(compareOffset:[number,number]) =>void
+    onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -101,7 +101,7 @@ export default class Compared extends React.Component<Props, State>{
     // the list recording all rule rect position (left up point)
     yList:{y:number,h:number,r:string[]}[] = []; 
     // matched
-    matchYList:{y:number,h:number,r:string[]}[] = []; 
+    matchYList:{y:number[],index:number[]} = {y:[],index:[]}; 
     // inital value for rect
     ySumList:number[] = [];
 
@@ -645,7 +645,7 @@ export default class Compared extends React.Component<Props, State>{
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
                         >
-                            {this.state.buttonSwitch?null:bubbleLine}
+                            {bubbleLine}
                             {bubble}
                         </g>
                     }
@@ -694,16 +694,21 @@ export default class Compared extends React.Component<Props, State>{
         let { rules,compareList} = this.props
         
         let posRules: JSX.Element[] = []
-        this.matchYList = []
 
         this.matchedRulesLength = matchedNeg.length + matchedPos.length
         // positive, orange
         matchedPos.forEach((ruleAgg, i) => {
             let transY = 0
+            let transYOverlap = 0
+            if((this.matchBubblePosition.length==this.matchedIndex.length)&&(i!=0)){
+                transYOverlap = this.matchBubblePosition[i-1].y+this.matchBubblePosition[i-1].h + this.matchBubblePosition[i].h/2
+            }
             if(compareList.r.length!=0){
-                transY = Math.max(compareList.r[this.matchedIndex[i]].y - 0.3*this.lineInterval,this.matchBubblePosition.length==this.matchedIndex.length?this.matchBubblePosition[i].y+this.matchBubblePosition[i].h/2:0)
+                transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
             }
             
+            this.matchYList.y.push(transYOverlap)
+            this.matchYList.index.push(this.matchedIndex[i])
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule" >
                     {
@@ -718,9 +723,16 @@ export default class Compared extends React.Component<Props, State>{
         matchedNeg.forEach((ruleAgg,i)=> {
             i += matchedPos.length
             let transY = 0
-            if(compareList.r.length!=0){
-                transY = Math.max(compareList.r[this.matchedIndex[i]].y - 0.3*this.lineInterval,this.matchBubblePosition.length==this.matchedIndex.length?this.matchBubblePosition[i].y+this.matchBubblePosition[i].h/2:0)
+            let transYOverlap = 0
+            if((this.matchBubblePosition.length==this.matchedIndex.length)&&(i!=0)){
+                transYOverlap = this.matchBubblePosition[i-1].y+this.matchBubblePosition[i-1].h + this.matchBubblePosition[i].h/2 
             }
+            if(compareList.r.length!=0){
+                transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
+            }
+
+            this.matchYList.y.push(transY)
+            this.matchYList.index.push(this.matchedIndex[i])
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule">
                     {
@@ -767,7 +779,7 @@ export default class Compared extends React.Component<Props, State>{
             
             let ySum = 0
             if(this.ySumList.length!=0){
-                ySum = this.ySumList[i]+1000
+                ySum = this.ySumList[i] + this.props.compareList.yMax
             }
             if((i!=0)&&(this.state.buttonSwitch)){
                 offsetY += 0.3 * this.lineInterval
@@ -776,8 +788,6 @@ export default class Compared extends React.Component<Props, State>{
             // choose rect display mode
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
                 switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
-            }else{
-                switchOffset = offsetY
             }
             
             // calculate average y-value of an itemset
@@ -829,8 +839,6 @@ export default class Compared extends React.Component<Props, State>{
             let negOffset = 0
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
                 switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
-            }else{
-                switchOffset = offsetY
             }
             
             // calculate average y-value of an itemset
@@ -882,6 +890,9 @@ export default class Compared extends React.Component<Props, State>{
         let keyAttrs = dragArray.slice(0, keyAttrNum)
 
         this.matchedIndex = []
+
+        
+        this.matchYList = {y:[],index:[]}
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
@@ -1007,11 +1018,6 @@ export default class Compared extends React.Component<Props, State>{
                 
             }
         })
-        // define new rect pos
-        let yListButton:number[] = []
-        bubblePosition.forEach((bubble,i)=>{
-            yListButton.push(bubble.y+bubble.h/2)
-        })
         // check whether update is needed
         let posIsSame = this.compareArray(this.state.bubblePosition,bubblePosition)
         // update state
@@ -1030,6 +1036,8 @@ export default class Compared extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
+
+        this.props.onTransCompareOffset(this.matchYList)
     }
 
     render() {
@@ -1064,9 +1072,9 @@ export default class Compared extends React.Component<Props, State>{
         if(maxBubble){
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
-        let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
+        let borderHeight = document.getElementsByClassName('itemsetCompared').length!=0?Math.max(document.getElementsByClassName('itemsetCompared')[0].clientHeight,svgHeight):'100%'
         let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
-        return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
+        return (<svg className='itemsetCompared' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}
             </g>

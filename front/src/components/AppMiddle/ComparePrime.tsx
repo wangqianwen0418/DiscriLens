@@ -47,7 +47,7 @@ export interface Props {
     offset: number,
     compFlag: number,
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
-    compareOffset:[number,number]
+    compareOffset:{y:number[],index:number[]}
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
     onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}) =>void
@@ -260,7 +260,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
+            transform={`translate(${this.props.offset}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -659,7 +659,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
     draw() {
         
-        let { rules, samples, keyAttrNum, dragArray,compFlag } = this.props
+        let { rules, samples, keyAttrNum, dragArray } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
@@ -685,10 +685,9 @@ export default class ComparePrime extends React.Component<Props, State>{
         let posRules: JSX.Element[] = []
         this.yList = []
 
-        let posYList: {y:number,h:number,r:string[]}[] = []
-        let negYList: {y:number,h:number,r:string[]}[] = []
-
         let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
+
+        let comparedCounter = 0
         // positive, orange
         positiveRuleAgg.forEach((ruleAgg, i) => {
             
@@ -701,15 +700,30 @@ export default class ComparePrime extends React.Component<Props, State>{
                 switchOffset += 0.3 * this.lineInterval
             }
             // choose rect display mode
-            if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
-            }else{
-                switchOffset = offsetY
+            if(this.bubblePosition.length==arrayLength){
+                let comparedY = 0
+                // suject1:compared model's corresponding y-axis value
+                if(this.props.compareOffset.index.includes(i)){
+                    comparedY = this.lineInterval + this.props.compareOffset.y[comparedCounter]
+                    comparedCounter += 1
+                }
+                // subject2: whether the former rect is expanded
+                let formerRectY = 0
+                if(i!=0){
+                    formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                }
+                // subject3: whether the former bubble overlap
+                let bubbleY = 0
+                if(i!=0){
+                    bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                }
+                switchOffset = Math.max(ySum,switchOffset,comparedY,formerRectY,bubbleY)-this.lineInterval
             }
+
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
@@ -731,7 +745,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             
             
-            posYList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
+            this.yList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
         this.pLenght = positiveRuleAgg.length
@@ -748,10 +762,25 @@ export default class ComparePrime extends React.Component<Props, State>{
                 offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
-            if(!this.state.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
-            }else{
-                switchOffset = offsetY
+            // choose rect display mode
+            if(this.bubblePosition.length==arrayLength){
+                let comparedY = 0
+                // suject1:compared model's corresponding y-axis value
+                if(this.props.compareOffset.index.includes(i)){
+                    comparedY = this.lineInterval + this.props.compareOffset.y[comparedCounter]
+                    comparedCounter += 1
+                }
+                // subject2: whether the former rect is expanded
+                let formerRectY = 0
+                if(i!=0){
+                    formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                }
+                // subject3: whether the former bubble overlap
+                let bubbleY = 0
+                if(i!=0){
+                    bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                }
+                switchOffset = Math.max(ySum,switchOffset,comparedY,formerRectY,bubbleY)-this.lineInterval
             }
             
             // calculate average y-value of an itemset
@@ -779,11 +808,9 @@ export default class ComparePrime extends React.Component<Props, State>{
             // negAveY = (negAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
 
-            negYList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
+            this.yList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
-
-        this.yList = posYList.concat(negYList)
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain, true), this.drawBubbles(negativeRuleAgg, scoreDomain, false)]
@@ -862,8 +889,19 @@ export default class ComparePrime extends React.Component<Props, State>{
         }
         return is_same
     }
+    compareYList(array1:any[],array2:any[]){
+        let is_same = true
+        if (array1.length == array2.length) {
+            array1.map((element, index) => {
+                is_same = is_same && ((Math.abs(element.y - array2[index].y)<1) && (Math.abs(element.h - array2[index].h)<1));
+            })
+        } else {
+            is_same = false
+        }
+        return is_same
+    }
     componentDidUpdate(prevProp: Props) {
-        let {compareList,compFlag} = this.props
+        let {compareList} = this.props
         let bubblePosition: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
@@ -875,16 +913,12 @@ export default class ComparePrime extends React.Component<Props, State>{
                 transY = this.yList[0].y - bubble.h/2
             } else {
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
-                    directPos = Math.max(directPos ,this.yList[i].y-bubble.h/2)
+                    directPos = Math.max(directPos ,this.yList[i].y -bubble.h/2)
                     transY = directPos
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
         })
-        // define new rect pos
-        let yListButton:number[] = []
-        bubblePosition.forEach((bubble,i)=>{
-            yListButton.push(bubble.y+bubble.h/2)
-        })
+
         // check whether update is needed
         let posIsSame = this.compareArray(this.state.bubblePosition,bubblePosition)
         // update state
@@ -906,8 +940,8 @@ export default class ComparePrime extends React.Component<Props, State>{
 
         // compare model mode
         // for the prime model
-        if((compFlag==-1)&&(compareList.b2)){
-            let compareIsSame = this.compareArray(bubblePosition,compareList.b2)
+        if(compareList.b2){
+            let compareIsSame = this.compareYList(this.yList,compareList.r)
             if(!compareIsSame){
                 this.props.onTransCompareList({b2:bubblePosition,r:this.yList,p:this.pLenght,yMax:this.borderHeight})
             }
@@ -946,10 +980,10 @@ export default class ComparePrime extends React.Component<Props, State>{
         if(maxBubble){
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
-        let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
+        let borderHeight = document.getElementsByClassName('itemsetPrime').length!=0?Math.max(document.getElementsByClassName('itemsetPrime')[0].clientHeight,svgHeight):'100%'
         this.borderHeight = borderHeight
         let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
-        return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
+        return (<svg className='itemsetPrime' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}
             </g>

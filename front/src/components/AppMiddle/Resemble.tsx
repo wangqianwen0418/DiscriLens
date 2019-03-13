@@ -35,7 +35,7 @@ export default class AppMiddel extends React.Component<Props>{
              <Overview offset={this.offset}/>
          </svg>
          <svg className='attribute' style={{width:"70%", height: "30%"}}>
-               <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX}/>
+               <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} foldFlag={this.props.foldFlag}/>
            </svg>
            {!this.props.compSamples?
            <div className='itemset' style={{width: "100%", height: "70%", overflow: "auto"}}>

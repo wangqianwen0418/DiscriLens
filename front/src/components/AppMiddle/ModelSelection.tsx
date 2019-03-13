@@ -45,7 +45,9 @@ export default class modelSelection extends React.Component<Props,State>{
     lineColor = 'rgb(204, 204, 204)';
     // color of unselected area (BAD_COLOR is the color of selected area)
     areaColor = 'rgb(232, 232, 232)';
-    models: string[] = []
+    models: string[] = [];
+    yScale:any[];
+    yMax:number[] = [];
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -91,6 +93,8 @@ export default class modelSelection extends React.Component<Props,State>{
     modelSelection(){
         let {dragArray,keyAttrNum} = this.props
         let axis:any[] = []
+        this.yScale = []
+        this.yMax = []
         let dataKeyAttr_new:curveData[][] = []
         let xMax = 0, yMax:number[] = []
         let ruleAvailable: boolean = false
@@ -159,10 +163,12 @@ export default class modelSelection extends React.Component<Props,State>{
                 // xScale maps risk_dif to actual svg pixel length along x-axis
                 let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,this.rightEnd])
                 // yScale maps risk_dif to actual svg pixel length along x-axis
-                let yScale = d3.scaleLinear().domain([0,yMax[i]]).range([0,intervalHeight*0.7])
+                let yScale = d3.scaleLinear().domain([0,yMax[i]]).range([0,-intervalHeight*0.7])
                  // area of rules filtered by key_attrs
-                let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
+                let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
                 
+                this.yScale.push(yScale)
+                this.yMax.push(yMax[i])
                 let changeModel = () => {
                     this.props.onChangeModel(this.props.showDataset,model)
                     this.setState({selectedModel:i})
@@ -255,8 +261,17 @@ export default class modelSelection extends React.Component<Props,State>{
         for(var i=0;i<this.models.length;i++){
             let axis = d3.axisBottom(this.modelSelection().axis[i]).tickFormat(d3.format('.2f'))
             .tickValues(this.modelSelection().axis[i].ticks(1).concat(this.modelSelection().axis[i].domain()))
+
             d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisSelection').attr('transform',`translate(${this.state.fold?-this.rightEnd*1.4:0},${this.intervalHeight * (i+1)})`)
             .attr('stroke-width','1.5px').call(axis)
+
+            let yAxis = d3.axisRight(this.yScale[i])
+            .tickValues([this.yMax[i]])
+
+            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisY').attr('transform',`translate(${(this.state.fold?-this.rightEnd*1.4:0) + (this.rightEnd+this.leftStart)/2},${this.intervalHeight * (i+1)})`)
+            .attr('stroke-width','1.5px').call(yAxis)
             } 
+        d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
+        d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
     }
 }
