@@ -9,7 +9,7 @@ import copy
 
 from model.data_encoder import DataEncoder
 from model.helpers import find_range_cols
-from model.data_encoder import num2cate
+from model.data_encoder import num2cate_transform, num2cate_fit
 
 
 
@@ -79,20 +79,19 @@ def get_numAttrs(data):
         #output.append(var)
     return output
 
-def generate_model_samples(samplesInit, model, encoder):
+def generate_model_samples(samplesInit, mdlp, model, encoder):
     """
     models behavior on generated sample data:
     Args:
-        data(pandas DataFrame): training data
-        sample_num(int): 
+        sampleInit(pandas DataFrame): synthetic data
+        mdlp (MDLP instance): mdlp transformer
         model(sklearn model object): already trained model
         encoder(instance of DataGene): instance of DataGene, already fit 
     Return:
         model_samples(pandas DataFrame): generated samples(not-categorized) for front-end
         storeData(pandas DataFrame): generated samples(categorized) for storing (saving as file)
     """
-    #samplesInit = generate_samples(data, sample_num)
-    samples = num2cate(samplesInit)
+    samples = num2cate_transform(samplesInit, mdlp)
     # model predict
     x_samples, _ = encoder.transform(samples)
     y_samples = model.predict(x_samples)

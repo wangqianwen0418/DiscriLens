@@ -1048,6 +1048,7 @@ export default class Itemset extends React.Component<Props, State>{
     }
 
     render() {
+        console.info('render')
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []

@@ -41,9 +41,9 @@ if (TEST){
     // remove the attribute 'id' and 'class'
     dragArray.splice(dragArray.indexOf('id'), 1)
     dragArray.splice(dragArray.indexOf('class'), 1)
-    if (dragArray.includes(protectedAttr)){
-      dragArray.splice(dragArray.indexOf(protectedAttr), 1)
-    }  
+    // if (dragArray.includes(protectedAttr)){
+    //   dragArray.splice(dragArray.indexOf(protectedAttr), 1)
+    // }  
     // move key attributes to the front
     // let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
     // keyAttrs=['poutcome', 'education', 'previous']
