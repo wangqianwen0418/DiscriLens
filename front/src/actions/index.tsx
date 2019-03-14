@@ -3,7 +3,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
     CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
-    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET} from 'Const';
+    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET,EXPAND_RULE} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -301,6 +301,22 @@ export const TransCompareList = (compareList:{b2:rect[],r:{y:number,r:string[]}[
     });
 }
 
+
+/*****************
+all about transfer expandRule
+*****************/ 
+export interface expandRule{
+    type:EXPAND_RULE,
+    expandRule:{id: number, newAttrs: string[], children: string[]}
+}
+
+export const TransExpandRule = (expandRule:{id: number, newAttrs: string[], children: string[]}):expandRule =>{
+    return ({
+        type: EXPAND_RULE,
+        expandRule
+    });
+}
+
 /*****************
 all about transfer compareOffset
 *****************/ 
@@ -433,20 +449,29 @@ export const switchModel=(dataset:string,model:string)=>{
 
 export const switchCompModel = (dataset:string,model:string)=>{
     
-    let jsonSamples = require('../testdata/' + dataset + '_' + model + '_samples.json'),
-    jsonRule = require('../testdata/' + dataset + '_' + model + '_rules.json')
-    
-    if(!model||!dataset){
-        jsonRule = null
-        jsonSamples = null
+    if((dataset=='')||(model=='')){
+        return (dispatch:any) =>{
+            dispatch(GenerateCompSamples(null))
+            dispatch(GenerateCompRules(null))
+        }
     }
+    else{
+        let jsonSamples = require('../testdata/' + dataset + '_' + model + '_samples.json'),
+        jsonRule = require('../testdata/' + dataset + '_' + model + '_rules.json')
+        
+        if(!model||!dataset){
+            jsonRule = null
+            jsonSamples = null
+        }
 
-    return (dispatch:any) =>{
-        dispatch(GenerateCompSamples(jsonSamples))
-        dispatch(GenerateCompRules(jsonRule))
+        return (dispatch:any) =>{
+            dispatch(GenerateCompSamples(jsonSamples))
+            dispatch(GenerateCompRules(jsonRule))
+        }
     }
+    
 }
 
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|compareOffset|
-ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList
+ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList|expandRule

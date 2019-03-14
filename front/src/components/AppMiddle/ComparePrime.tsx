@@ -51,6 +51,7 @@ export interface Props {
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
     onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}) =>void
+    onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -147,10 +148,10 @@ export default class ComparePrime extends React.Component<Props, State>{
         this.toggleHighlight = this.toggleHighlight.bind(this)
     }
 
-    toggleExpand(id: string, newAttrs: string[], children: string[]) {
+    toggleExpand(numberID:number,id: string, newAttrs: string[], children: string[]) {
+        // this.props.onTransExpandRule({id: numberID, newAttrs: newAttrs, children: children})
         let { expandRules } = this.state
         let { showAttrNum, dragArray, keyAttrNum } = this.props
-
         let showAttrs = dragArray.slice(0, showAttrNum)
 
         const collapseRule = (id: string) => {
@@ -231,6 +232,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                 e.stopPropagation();
                 e.preventDefault();
                 this.toggleExpand(
+                    listNum,
                     id.toString(),
                     newAttrs,
                     children.map(child => child.rule.id.toString())
@@ -491,7 +493,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         return { content, offsetY, switchOffset }
     }
 
-    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
+    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean,numberID:number) {
         let { antecedent, items, id, nodes } = ruleAgg
         let { barWidth, step, keyAttrNum, dragArray } = this.props
         let keyAttrs = dragArray.slice(0, keyAttrNum)
@@ -510,7 +512,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         let toggleExpand = (e: React.SyntheticEvent) => {
             e.stopPropagation();
             e.preventDefault();
-            this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
+            this.toggleExpand(numberID,id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         }
 
         let isExpand = this.state.expandRules.hasOwnProperty(id)
@@ -725,7 +727,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule" >
                     {
-                        this.drawRuleAgg(ruleAgg, true)
+                        this.drawRuleAgg(ruleAgg, true,i)
                     }
                 </g>
             )
@@ -789,7 +791,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule">
                     {
-                        this.drawRuleAgg(ruleAgg, false)
+                        this.drawRuleAgg(ruleAgg, false,i)
                     }
                 </g>
             )

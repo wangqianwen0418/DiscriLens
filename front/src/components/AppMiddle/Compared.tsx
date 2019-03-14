@@ -45,11 +45,11 @@ export interface Props {
     barWidth: number,
     offsetX: number,
     offset: number,
+    expandRule:{id: number, newAttrs: string[], children: string[]},
     compFlag: number,
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
-    onChangeShowAttr: (showAttrs: string[]) => void
-    onChangeSelectedBar: (selected_bar: string[]) => void
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
+    onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -104,6 +104,8 @@ export default class Compared extends React.Component<Props, State>{
     matchYList:{y:number[],index:number[]} = {y:[],index:[]}; 
     // inital value for rect
     ySumList:number[] = [];
+    // rule id of mathced rules
+    ruleID:string[] = [];
 
     // record the max y-value
     yMaxValue = 0;
@@ -151,9 +153,6 @@ export default class Compared extends React.Component<Props, State>{
 
     toggleExpand(id: string, newAttrs: string[], children: string[]) {
         let { expandRules } = this.state
-        let { showAttrNum, dragArray, keyAttrNum } = this.props
-
-        let showAttrs = dragArray.slice(0, showAttrNum)
 
         const collapseRule = (id: string) => {
             for (let childID of expandRules[id].children) {
@@ -163,19 +162,10 @@ export default class Compared extends React.Component<Props, State>{
             }
             delete expandRules[id]
         }
-
+        console.log('sec',expandRules[id])
         if (expandRules[id]) {
             // collapse a rule
             collapseRule(id)
-
-            let remainShowAttrs = [].concat.apply([], Object.values(expandRules).map(d => d.newAttrs))
-            showAttrs = showAttrs
-                .filter(
-                    (attr, i) => {
-                        // is key attribute or is in other expanded rules
-                        return i < keyAttrNum || remainShowAttrs.includes(attr)
-                    }
-                )
         } else {
             // expand a rule
             expandRules[id] = {
@@ -183,13 +173,8 @@ export default class Compared extends React.Component<Props, State>{
                 newAttrs,
                 children
             }
-            showAttrs = showAttrs
-                .concat(
-                    newAttrs
-                        .filter(attr => !showAttrs.includes(attr))
-                )
         }
-        this.props.onChangeShowAttr(showAttrs)
+        this.props.onTransExpandRule({id:-1,newAttrs:[],children:[]})
         this.setState({ expandRules })
     }
     toggleHighlight(ruleAggID: string, ruleID: string) {
@@ -228,16 +213,6 @@ export default class Compared extends React.Component<Props, State>{
             )
         }
 
-        let toggleExpand =
-            (e: React.SyntheticEvent) => {
-                e.stopPropagation();
-                e.preventDefault();
-                this.toggleExpand(
-                    id.toString(),
-                    newAttrs,
-                    children.map(child => child.rule.id.toString())
-                )
-            }
         let isExpand = this.state.expandRules.hasOwnProperty(id)
 
         let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
@@ -262,7 +237,7 @@ export default class Compared extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
+            transform={`translate(${this.headWidth*1.3+2*this.fontSize}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -417,7 +392,7 @@ export default class Compared extends React.Component<Props, State>{
                     x2={window.innerWidth} y2={this.lineInterval * 0.5}
                     stroke="#f0f0f0"
                 />
-                <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`} onClick={toggleExpand}>
+                <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
                     {/* <foreignObject>
                         <Icon type="pushpin" style={{fontSize:this.lineInterval*0.6}}/>
                     </foreignObject> */}
@@ -476,12 +451,6 @@ export default class Compared extends React.Component<Props, State>{
                                 x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                                 // fill={favorPD ? "#98E090" : "#FF772D"}
                                 fill={this.scoreColor(ruleNode.rule.risk_dif)}
-                                onMouseEnter={() => {
-                                    this.props.onChangeSelectedBar([attr, val])
-                                }}
-                                onMouseLeave={() => {
-                                    this.props.onChangeSelectedBar(['', ''])
-                                }}
                         />
                         
                     </g>
@@ -506,8 +475,10 @@ export default class Compared extends React.Component<Props, State>{
         return { content, offsetY, switchOffset }
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
-        let { antecedent, items, id, nodes } = ruleAgg
-        let { barWidth, step, keyAttrNum, dragArray } = this.props
+        // let { antecedent, items, id, nodes } = ruleAgg
+        // let { barWidth, step, keyAttrNum, dragArray } = this.props
+        let { items, id, nodes } = ruleAgg
+        let { step, keyAttrNum, dragArray } = this.props
         let keyAttrs = dragArray.slice(0, keyAttrNum)
         let newAttrs: string[] = []
         for (var node of nodes) {
@@ -521,52 +492,46 @@ export default class Compared extends React.Component<Props, State>{
             )
         }
 
-        let toggleExpand = (e: React.SyntheticEvent) => {
-            e.stopPropagation();
-            e.preventDefault();
-            this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
-        }
-
         let isExpand = this.state.expandRules.hasOwnProperty(id)
         let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
             {items.length}
         </text>
-        let attrValContent = antecedent.map((attrVal => {
-            let [attr, val] = attrVal.split('=')
-            let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
-                rangeIdx = ranges.indexOf(val)
-            return <g key={attrVal} className='ruleagg attrvals'>
-                <rect className='background'
-                    width={barWidth} height={this.lineInterval}
-                    x={step * dragArray.indexOf(attr)}
-                    // fill='#eee'
-                    fill='none'
-                    // stroke={favorPD ? "#98E090" : "#FF772D"}
-                    stroke={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
-                    strokeWidth={2}
-                />
-                <rect className='font'
-                    width={barWidth / ranges.length} height={this.lineInterval}
-                    x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
-                    // fill={favorPD ? "#98E090" : "#FF772D"} 
-                    fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
-                />
-            </g>
-        }
-        ))
+        // let attrValContent = antecedent.map((attrVal => {
+        //     let [attr, val] = attrVal.split('=')
+        //     let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
+        //         rangeIdx = ranges.indexOf(val)
+        //     return <g key={attrVal} className='ruleagg attrvals'>
+        //         <rect className='background'
+        //             width={barWidth} height={this.lineInterval}
+        //             x={step * dragArray.indexOf(attr)}
+        //             // fill='#eee'
+        //             fill='none'
+        //             // stroke={favorPD ? "#98E090" : "#FF772D"}
+        //             stroke={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+        //             strokeWidth={2}
+        //         />
+        //         <rect className='font'
+        //             width={barWidth / ranges.length} height={this.lineInterval}
+        //             x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+        //             // fill={favorPD ? "#98E090" : "#FF772D"} 
+        //             fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+        //         />
+        //     </g>
+        // }
+        // ))
 
         this.xMaxValue=Math.max(this.xMaxValue,step * keyAttrNum + this.headWidth + 2*this.fontSize-this.headWidth-2*this.fontSize)
 
-        let content = <g className='ruleagg'>
+        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize},0)`}>
             {/* <Bubble ruleAgg={ruleAgg}/> */}
             <rect className='ruleBox'
                 stroke='#c3c3c3' fill='#fff'
                 strokeWidth='2px'
                 rx={2} ry={2}
                 x={-this.headWidth-2*this.fontSize} y={-0.5 * this.lineInterval}
-                height={this.lineInterval * 2} width={step * keyAttrNum + this.headWidth + 2*this.fontSize} />
+                height={this.lineInterval * 2} width={this.headWidth + 2*this.fontSize} />
             {itemSizeLabel}
-            <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} cursor='pointer' onClick={toggleExpand}>
+            <g className="icon" transform={`translate(${-15}, ${this.lineInterval * 0.75})`} >
 
                 <polygon className="icon"
                     fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
@@ -579,7 +544,7 @@ export default class Compared extends React.Component<Props, State>{
                     `}
                 />
             </g>
-            {attrValContent}
+            {/* {attrValContent} */}
         </g>
 
         return content
@@ -640,7 +605,7 @@ export default class Compared extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2}
-                             h${-window.innerWidth*0.3+bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${-transX + this.headWidth*0.3},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
@@ -692,8 +657,15 @@ export default class Compared extends React.Component<Props, State>{
          */
         
         let { rules,compareList} = this.props
+        let { expandRules } = this.state
+        let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
+            itemScale = d3.scaleLinear()
+                .domain([itemMin, itemMax])
+                .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
         
         let posRules: JSX.Element[] = []
+
+        this.ruleID = []
 
         this.matchedRulesLength = matchedNeg.length + matchedPos.length
         // positive, orange
@@ -706,7 +678,7 @@ export default class Compared extends React.Component<Props, State>{
             if(compareList.r.length!=0){
                 transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
             }
-            
+            this.ruleID.push(ruleAgg.id)
             this.matchYList.y.push(transYOverlap)
             this.matchYList.index.push(this.matchedIndex[i])
             posRules.push(
@@ -716,6 +688,14 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
+            transY += 2 * this.lineInterval
+            if (expandRules.hasOwnProperty(ruleAgg.id)) {
+                for (let ruleNode of ruleAgg.nodes) {
+                    let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
+                    transY = newY
+                    posRules = posRules.concat(content)
+                }
+            }
         })  
         
         // negtive, green
@@ -730,7 +710,7 @@ export default class Compared extends React.Component<Props, State>{
             if(compareList.r.length!=0){
                 transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
             }
-
+            this.ruleID.push(ruleAgg.id)
             this.matchYList.y.push(transY)
             this.matchYList.index.push(this.matchedIndex[i])
             negaRules.push(
@@ -740,7 +720,14 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
-            
+            transY += 2 * this.lineInterval
+            if (expandRules.hasOwnProperty(ruleAgg.id)) {
+                for (let ruleNode of ruleAgg.nodes) {
+                    let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
+                    transY = newY
+                    posRules = posRules.concat(content)
+                }
+            }
         })
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
@@ -1044,7 +1031,17 @@ export default class Compared extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        
+
+        if(this.props.expandRule.children.length!=0){
+            let expandRules = this.props.expandRule
+            if(this.matchedIndex.indexOf(expandRules.id)!=-1){
+                console.log(expandRules,this.state.expandRules)
+                let id:string
+                id = this.ruleID[this.matchedIndex.indexOf(expandRules.id)]
+                this.toggleExpand(id,expandRules.newAttrs,expandRules.children)
+            }
+            
+        }
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>

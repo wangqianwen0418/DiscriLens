@@ -74,7 +74,8 @@ if (TEST){
       foldFlag: false,
       accuracy: [0.81,0.74,0.74],
       compareList:{b2:[],r:[],p:0,yMax:0},
-      compareOffset:{y:[],index:[]}
+      compareOffset:{y:[],index:[]},
+      expandRule:{id: 0, newAttrs:[], children: []}
   }
 }else{
   initState = {
@@ -100,7 +101,8 @@ if (TEST){
     foldFlag: false,
     accuracy: [0.81,0.74,0.74],
     compareList:{b2:[],r:[],p:0,yMax:0},
-    compareOffset:{y:[],index:[]}
+    compareOffset:{y:[],index:[]},
+    expandRule:{id: 0, newAttrs:[], children: []}
 }
 }
 

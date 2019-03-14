@@ -253,6 +253,7 @@ export default class Overview extends React.Component<Props,State>{
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
         compDataPro = null, compDataKeyAttr = null,compCurveX = null,compCurveY = null
         if(compAllRules){
+            console.log(compAllRules)
             compDataPro = this.ruleProcessing(compAllRules,keyAttrs)
             compDataKeyAttr = compDataPro.data
             compCurveX = compDataPro.x

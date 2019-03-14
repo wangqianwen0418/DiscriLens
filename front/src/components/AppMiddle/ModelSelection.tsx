@@ -92,6 +92,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     modelSelection(){
         let {dragArray,keyAttrNum} = this.props
+        let {selectedModel,selectedCompModel} = this.state
         let axis:any[] = []
         this.yScale = []
         this.yMax = []
@@ -158,6 +159,7 @@ export default class modelSelection extends React.Component<Props,State>{
                 let leftStart = this.leftStart;
                 // line's color
                 let lineColor = this.lineColor;
+                let rightEnd = this.rightEnd;
                 let intervalHeight = this.intervalHeight;
         
                 // xScale maps risk_dif to actual svg pixel length along x-axis
@@ -170,32 +172,56 @@ export default class modelSelection extends React.Component<Props,State>{
                 this.yScale.push(yScale)
                 this.yMax.push(yMax[i])
                 let changeModel = () => {
-                    this.props.onChangeModel(this.props.showDataset,model)
-                    this.setState({selectedModel:i})
+                    if(i!=selectedCompModel){
+                        this.props.onChangeModel(this.props.showDataset,model)
+                        this.setState({selectedModel:i})
+                    }
                 }
 
                 let changeCompModel = () =>{
-                    this.props.onChangeCompModel(this.props.showDataset,model)
-                    this.setState({selectedCompModel:i})
+                    if(i!=selectedModel){
+                        if(selectedCompModel==i){
+                            this.props.onChangeCompModel('','')
+                            this.setState({selectedCompModel:-1})
+                        }else{
+                            this.props.onChangeCompModel(this.props.showDataset,model)
+                            this.setState({selectedCompModel:i})
+                        }
+                    }
                 }
+
+                let buttonPathLeft = `M${1.10*rightEnd},${0.86*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
+
+                let buttonPathRight = `M${1.25*rightEnd},${0.86*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
+                h${-0.15*rightEnd} v${-0.15*rightEnd}`
+                let fontSize = 14
                 axis.push(xScale)
+
+                let button1Color = '#4d4d4d', button2Color = '#4d4d4d'
+                if(selectedModel==i){
+                    button1Color='#ff7f00'
+                    button2Color='#d4d4d4'
+                }
+                if(selectedCompModel==i){
+                    button2Color='#ff7f00'
+                    button1Color='#d4d4d4'
+                }
                 return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
-                    <g onClick={changeModel} cursor='pointer'>
+                    <g>
                         <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/>
-                        
-                        <circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
-                        
-                        {i==this.state.selectedModel?<circle cx={this.rightEnd * 1.1} cy={bottomEnd*0.9 } r={3} style={{fill:'black'}}/>:null}
-                        
-                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.9 + 3 }>{this.models[i]}</text>
+                    
+                        <path d={buttonPathLeft} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
+                        <path d={buttonPathRight} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
+
+                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={0.86*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
+                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={0.86*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
+                        <path d={buttonPathLeft} style={{fill:'transparent'}} onClick={changeCompModel} cursor={i!=this.state.selectedModel?'pointer':null}/>
+                        <path d={buttonPathRight} style={{fill:'transparent'}} onClick={changeModel} cursor={i!=this.state.selectedCompModel?'pointer':null}/>
+
+                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.85}>{this.models[i]}</text>
 
                         <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={bottomEnd*0.95}>{'Acc:'+this.props.accuracy[i]*100+'%'}</text>
                     </g>
-                    <g onClick={changeCompModel} cursor='pointer'>
-                        <circle cx={this.rightEnd * 1.4} cy={bottomEnd*0.9 } r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
-                            
-                        {i==this.state.selectedCompModel?<circle cx={this.rightEnd * 1.4} cy={bottomEnd*0.9 } r={3} style={{fill:'black'}}/>:null}
-                    </g> 
                 </g>
             })
         }
@@ -241,7 +267,7 @@ export default class modelSelection extends React.Component<Props,State>{
         // mask
         let mask = `M${0},${this.intervalHeight*this.models.length/2} v${this.topStart*2}`
         return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${0})`}>
-                <path id="mask" d={mask} style={{strokeWidth:width*2,stroke:'transparent'}}><title>{fold?'Expand':'Fold'}</title></path>
+                <path id="mask" d={mask} style={{strokeWidth:width*1.5,stroke:'transparent'}}><title>{fold?'Expand':'Fold'}</title></path>
                 <path d={borderLine} style={{fill:'none', stroke:'#d9d9d9', strokeWidth:'1px'}} />
                 <path d={line(fold?iconPoints:iconPointsReverse)} style={{stroke:'#969696',fill:'none'}} transform={`translate(0,${transY})`}/>
             </g>

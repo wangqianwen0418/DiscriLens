@@ -5,7 +5,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
   CHANGE_XSCALE,CHANGE_SHOW_DATASET, GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES,
-  FOLDFLAG, SELBAR,ACCURACY,TRANS_COMPARE, TRANS_COMPARE_OFFSET} from 'Const';
+  FOLDFLAG, SELBAR,ACCURACY,TRANS_COMPARE, TRANS_COMPARE_OFFSET,EXPAND_RULE} from 'Const';
 
 import {filterRules} from 'Helpers';
 
@@ -87,6 +87,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return {...state, compareList:action.compareList}
       case TRANS_COMPARE_OFFSET:
         return {...state,compareOffset:action.compareOffset}
+      case EXPAND_RULE:
+        return {...state,expandRule:action.expandRule}
       default:
         return state;
     }
