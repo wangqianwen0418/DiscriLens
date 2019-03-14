@@ -319,7 +319,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 50),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
                                 })}
-                                fill={this.scoreColor((i + 1) / 50)}
+                                fill={this.scoreColor(Math.max((i + 1) / 50, this.props.ruleThreshold[1]))}
                             />
                         })}
                 </g>
@@ -339,19 +339,6 @@ export default class Itemset extends React.Component<Props, State>{
                         endAngle: Math.PI*2*rule.conf_pnd
                     })}
                 /> */}
-                
-                <g className='out gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={outerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 360),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
-                                })}
-                                fill={this.scoreColor(-(i + 1) / 360)}
-                            />
-                        })}
-                </g>
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
@@ -361,6 +348,19 @@ export default class Itemset extends React.Component<Props, State>{
                         endAngle: Math.PI * 2 * rule.conf_pnd
                     })}
                 />
+                <g className='out gradientArc'>
+                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
+                        .map(i => {
+                            return <path key={i} className="out bar"
+                                d={outerArc({
+                                    startAngle: Math.PI * 2 * (inConf + i / 360),
+                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
+                                })}
+                                fill={this.scoreColor(Math.min(-(i + 1) / 360, this.props.ruleThreshold[0]))}
+                            />
+                        })}
+                </g>
+                
                 {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
 
                 {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
