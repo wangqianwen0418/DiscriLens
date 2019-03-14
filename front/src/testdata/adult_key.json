@@ -1,3 +1,3 @@
-{"keyAttrs":["educational-num", "workclass", "relationship", "hours-per-week", "age"], "accuracy":[
-    0.806,0.822,0.829
-]}
+{"keyAttrs":["educational-num", "workclass", "hours-per-week"], "accuracy":{
+    "lr": 0.806,"knn":0.822,"xgb":0.829
+}}
