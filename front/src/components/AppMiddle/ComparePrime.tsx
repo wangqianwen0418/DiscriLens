@@ -719,7 +719,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                 if(i!=0){
                     bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
                 }
-                switchOffset = Math.max(ySum,switchOffset,comparedY,formerRectY,bubbleY)-this.lineInterval
+                switchOffset = Math.max(ySum,comparedY,formerRectY,bubbleY)-this.lineInterval
             }
 
             // calculate average y-value of an itemset
@@ -738,7 +738,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                     let { content, offsetY: newY, switchOffset:switchNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, true, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
                     posRules = posRules.concat(content)
-                    switchOffset = switchNew
+                    switchOffset = switchNew 
                 }
             }
             let hPos = (switchOffset - posAveY )/ 2
@@ -782,7 +782,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                 if(i!=0){
                     bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
                 }
-                switchOffset = Math.max(ySum,switchOffset,comparedY,formerRectY,bubbleY)-this.lineInterval
+                switchOffset = Math.max(ySum,comparedY,formerRectY,bubbleY)-this.lineInterval
             }
             
             // calculate average y-value of an itemset

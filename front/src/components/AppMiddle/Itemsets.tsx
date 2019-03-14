@@ -45,7 +45,6 @@ export interface Props {
     barWidth: number,
     offsetX: number,
     offset: number,
-    compFlag: number,
     buttonSwitch: boolean,
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
@@ -636,8 +635,8 @@ export default class Itemset extends React.Component<Props, State>{
                         let transY = 0
                         // calculate translate distance
                         if (bubblePosition.length == this.rulesLength) {
-                                let rightBorder = this.props.compFlag==1?document.getElementById('compareLeft').clientWidth:250
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + (this.props.compFlag==0?this.props.offsetX:0)
+                                let rightBorder = 250
+                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + this.props.offsetX
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -658,7 +657,7 @@ export default class Itemset extends React.Component<Props, State>{
                             protectedVal={this.props.protectedVal}
                         />
                         let bubbleLine:any
-                        if((this.props.compFlag!=1)&&(bubblePosition.length == this.rulesLength)){
+                        if(bubblePosition.length == this.rulesLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
                              h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
@@ -688,7 +687,7 @@ export default class Itemset extends React.Component<Props, State>{
 
     draw() {
         
-        let { rules, samples, keyAttrNum, dragArray,compFlag } = this.props
+        let { rules, samples, keyAttrNum, dragArray} = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
@@ -712,12 +711,7 @@ export default class Itemset extends React.Component<Props, State>{
         // recording the rect position based on bubble position
         let switchOffset = 0
         let posRules: JSX.Element[] = []
-        if (this.yList.length > positiveRuleAgg.length + negativeRuleAgg.length) {
-            this.yList = []
-        }
-
-        let posYList: {y:number,h:number,r:string[]}[] = []
-        let negYList: {y:number,h:number,r:string[]}[] = []
+        this.yList = []
 
         let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
         // positive, orange
@@ -734,14 +728,24 @@ export default class Itemset extends React.Component<Props, State>{
             let posOffset = 0
             // choose rect display mode
             if(!this.props.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
+                // subject1: whether the former rect is expanded
+                let formerRectY = 0
+                if(i!=0){
+                    formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                }
+                // subject2: whether the former bubble overlap
+                let bubbleY = 0
+                if(i!=0){
+                    bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                }
+                switchOffset = Math.max(ySum,formerRectY,bubbleY)-this.lineInterval
             }else{
                 switchOffset = offsetY
             }
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true)
                     }
@@ -775,11 +779,7 @@ export default class Itemset extends React.Component<Props, State>{
             }
             
             
-            if(posYList.length-1<=i){
-                posYList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
-            }else{
-                posYList[i] = {y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent}
-            }
+            this.yList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
 
         })  
         this.pLenght = positiveRuleAgg.length
@@ -799,16 +799,25 @@ export default class Itemset extends React.Component<Props, State>{
             
             let negOffset = 0
             if(!this.props.buttonSwitch&&(this.bubblePosition.length==arrayLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
+                // subject1: whether the former rect is expanded
+                let formerRectY = 0
+                if(i!=0){
+                    formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                }
+                // subject2: whether the former bubble overlap
+                let bubbleY = 0
+                if(i!=0){
+                    bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                }
+                switchOffset = Math.max(ySum,formerRectY,bubbleY)-this.lineInterval 
             }else{
                 switchOffset = offsetY
             }
             
             // calculate average y-value of an itemset
-            let negAveY = offsetY
-
+            let negAveY = switchOffset
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${compFlag==0?this.props.offsetX + this.props.offset:compFlag==-1?350:0}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false)
                     }
@@ -841,20 +850,14 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
 
-            if(negYList.length-1<=i){
-                negYList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
-            }else{
-                negYList[i] = {y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent}
-            }
+            this.yList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
-
-        this.yList = posYList.concat(negYList)
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain, true), this.drawBubbles(negativeRuleAgg, scoreDomain, false)]
 
-        return <g key='rules' transform={`translate(${compFlag==-1?-this.props.offsetX:0}, ${this.margin})`}>
+        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             
         
