@@ -165,12 +165,12 @@ export default class modelSelection extends React.Component<Props,State>{
                 // xScale maps risk_dif to actual svg pixel length along x-axis
                 let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,this.rightEnd])
                 // yScale maps risk_dif to actual svg pixel length along x-axis
-                let yScale = d3.scaleLinear().domain([0,yMax[i]]).range([0,-intervalHeight*0.7])
+                let yScale = d3.scaleLinear().domain([0,Math.max(...yMax)]).range([0,-intervalHeight*0.7])
                  // area of rules filtered by key_attrs
                 let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
                 
                 this.yScale.push(yScale)
-                this.yMax.push(yMax[i])
+                this.yMax.push(Math.max(...yMax))
                 let changeModel = () => {
                     if(i!=selectedCompModel){
                         this.props.onChangeModel(this.props.showDataset,model)
