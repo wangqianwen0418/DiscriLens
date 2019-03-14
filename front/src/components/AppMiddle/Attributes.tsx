@@ -18,6 +18,7 @@ export interface Props {
     barWidth: number,
     offsetX:number,
     selected_bar:string[],
+    foldFlag: boolean,
     onChangeKeyAttr: (keyAttrs:string[])=>void,
     onChangeDragArray: (dragArray: string[]) => void,
     onChangeShowAttr: (showAttrs: string[])=>void,
@@ -373,7 +374,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - window.innerWidth / 6 - this.props.offsetX)/ step)
+                let endNum = Math.floor((e.x - (this.props.foldFlag?window.innerWidth/24:window.innerWidth / 6) - (this.props.foldFlag?window.innerWidth/80*23:window.innerWidth / 4) - this.props.offsetX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){

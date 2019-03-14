@@ -52,3 +52,9 @@ export type ACCURACY = typeof ACCURACY
 
 export const TRANS_COMPARE = 'TRANS_COMPARE'
 export type TRANS_COMPARE = typeof TRANS_COMPARE
+
+export const TRANS_COMPARE_OFFSET = 'TRANS_COMPARE_OFFSTE'
+export type TRANS_COMPARE_OFFSET = typeof TRANS_COMPARE_OFFSET
+
+export const EXPAND_RULE = 'EXPAND_RULE'
+export type EXPAND_RULE = typeof EXPAND_RULE

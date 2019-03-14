@@ -197,6 +197,108 @@ export const ruleAggregate = (rules:Rule[], keyAttrs: string[], samples: DataIte
     return {positiveRuleAgg, negativeRuleAgg}
 }
 
+
+export const ruleAggregateCompare = (rules:Rule[], keyAttrs: string[], samples: DataItem[], attrs: string[])=>{
+    // console.info(rules)
+    rules.sort((ruleA,ruleB)=>ruleA.antecedent.length - ruleB.antecedent.length)
+    // console.info('rules', rules)
+    let positiveRuleNodes: RuleNode[] = [] 
+    let negativeRuleNodes: RuleNode[] = [] 
+    // console.info(rules)
+    rules.forEach(rule=>{
+        if (rule.favorPD>0){
+            oragnizeRules(positiveRuleNodes, rule)
+        }else{
+            oragnizeRules(negativeRuleNodes, rule)
+        }
+    })
+    // console.info('nodes', positiveRuleNodes, negativeRuleNodes)
+    let positiveRuleAgg: RuleAgg[] = [] 
+    let negativeRuleAgg: RuleAgg[] = [] 
+    // console.info('pos', positiveRuleNodes)
+    // console.info('neg', negativeRuleNodes)
+    for (var ruleNode of positiveRuleNodes){
+        let {antecedent} = ruleNode.rule
+        var isContain: boolean = false 
+        
+        loop1: for (let ruleAgg of positiveRuleAgg){
+            isContain = isSubArray(ruleAgg.antecedent, antecedent) 
+           
+            if(isContain){
+                ruleAgg.nodes.push(ruleNode)
+                ruleAgg.items = Array.from(
+                    new Set( ruleAgg.items.concat(...ruleNode.rule.items) )
+                ) 
+                break loop1
+            }
+        }
+        if (!isContain){
+            positiveRuleAgg.push({
+                id: 'agg'+ruleNode.rule.id,
+                antecedent: ruleNode.rule.antecedent
+                        .filter(attrVal=>{
+                            let attr = attrVal.split('=')[0]
+                            return keyAttrs.includes(attr)
+                        })
+                        .sort((a,b)=>{
+                            let attrA = a.split('=')[0], attrB = b.split('=')[0]
+                            return keyAttrs.indexOf(attrA)-keyAttrs.indexOf(attrB)
+                        }),
+                nodes: [ruleNode],
+                items: ruleNode.rule.items
+            })
+        }
+    }
+    for (let ruleNode of negativeRuleNodes){
+        let {antecedent} = ruleNode.rule
+        let isContain: boolean = false 
+        
+        loop2: for (let ruleAgg of negativeRuleAgg){
+            isContain = isSubArray(ruleAgg.antecedent, antecedent) 
+            // console.log('negAn',antecedent)
+            if(isContain){
+                ruleAgg.nodes.push(ruleNode)
+                ruleAgg.items = Array.from(
+                    new Set( ruleAgg.items.concat(...ruleNode.rule.items) )
+                ) 
+            break loop2
+            }
+        }
+        if (!isContain){
+            negativeRuleAgg.push({
+                id: 'agg'+ruleNode.rule.id,
+                antecedent: ruleNode.rule.antecedent
+                        .filter(attrVal=>{
+                            let attr = attrVal.split('=')[0]
+                            return keyAttrs.includes(attr)
+                        }),
+                nodes: [ruleNode],
+                items: ruleNode.rule.items
+            })
+        }
+        // console.log('hinal',negativeRuleAgg)
+    }
+    // sort rule agg 
+
+    const sortInf = (ante: string[]):number=>{
+        const reducer = (acc: number, cur:string)=>{
+            let [attr, val] = cur.split('=')
+            let ranges = getAttrRanges(samples, attr)
+            let rangeIdx = ranges.indexOf(val)
+            let unit = Math.pow(10, keyAttrs.length-1 - keyAttrs.indexOf(attr))
+            return acc + rangeIdx*unit
+        }
+        let orderScore = ante.reduce(reducer, 0)
+        return orderScore
+    }
+    positiveRuleAgg.sort((aggA, aggB)=>{
+        return sortInf(aggA.antecedent) - sortInf(aggB.antecedent)
+    })
+    negativeRuleAgg.sort((aggA, aggB)=>{
+        return sortInf(aggA.antecedent) - sortInf(aggB.antecedent)
+    })
+    return {positiveRuleAgg, negativeRuleAgg}
+}
 // /****
 // * Test 
 // ******/

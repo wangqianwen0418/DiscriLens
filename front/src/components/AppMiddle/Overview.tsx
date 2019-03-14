@@ -3,7 +3,7 @@ import "./Overview.css"
 import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
-import {BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
+import {GOOD_COLOR,BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
 
 export interface Props{
     allRules: Rule[],
@@ -253,6 +253,7 @@ export default class Overview extends React.Component<Props,State>{
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
         compDataPro = null, compDataKeyAttr = null,compCurveX = null,compCurveY = null
         if(compAllRules){
+            console.log(compAllRules)
             compDataPro = this.ruleProcessing(compAllRules,keyAttrs)
             compDataKeyAttr = compDataPro.data
             compCurveX = compDataPro.x
@@ -312,10 +313,13 @@ export default class Overview extends React.Component<Props,State>{
             let bounderRight:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
             let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
 
+            let rightArrow = <path d={`M -12,${0.9*topStart - 12} h 24 l 6,6 l -6,6 h -24 v -12 `} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+            let leftArrow = <path d={`M 12,${0.9*topStart - 12} h -24 l -6,6 l 6,6 h 24 v -12 `} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
             return <g  cursor='e-resize'>
                  <g id={'rectLeft'} className={'selectThr'} onMouseDown={this.mouseDownLeft}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
-                        <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                        {/* <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/> */}
+                        {leftArrow}
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         {inputLeft?
@@ -333,7 +337,8 @@ export default class Overview extends React.Component<Props,State>{
                 
                 <g id={'rectRight'} className={'selectThr'} onMouseDown={this.mouseDownRight}
                  transform={`translate(${this.state.transformXRight}, 0)`} >
-                        <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/>
+                        {/* <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/> */}
+                        {rightArrow}
                         <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
                         <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         {inputRight?
@@ -362,14 +367,14 @@ export default class Overview extends React.Component<Props,State>{
                 </g>
                 {compDataKeyAttr?<g>
                     <clipPath id={'comp_middle'}>
-                        <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#bbb'} clipPath={'url(#comp_overview_path)'}/>
+                        <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#999'} clipPath={'url(#comp_overview_path)'}/>
                     </clipPath>
                     <clipPath id={'comp_side'}>
                     <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} stroke='black' clipPath={'url(#comp_overview_path)'}/>
-                    <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} />
+                    <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={GOOD_COLOR} />
                     </clipPath>
-                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:'#bbb',strokeWidth:1}} className='overview' clipPath='url(#comp_middle)'/>
-                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:BAD_COLOR,strokeWidth:1}} className='overview' clipPath='url(#comp_side)'/>
+                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:'#999',strokeWidth:1}} className='overview' clipPath='url(#comp_middle)'/>
+                    <path d={curveKeyAttrs(compDataKeyAttr)} style={{fill:'none',stroke:GOOD_COLOR,strokeWidth:1}} className='overview' clipPath='url(#comp_side)'/>
                     </g>:null}
                 {selectThr()}
             </g>
