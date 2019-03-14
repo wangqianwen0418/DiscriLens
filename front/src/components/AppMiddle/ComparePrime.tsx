@@ -738,7 +738,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                     let { content, offsetY: newY, switchOffset:switchNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, true, itemScale, ruleAgg.id.toString(), i)
                     offsetY = newY
                     posRules = posRules.concat(content)
-                    switchOffset = switchNew + 1.3 * this.lineInterval
+                    switchOffset = switchNew
                 }
             }
             let hPos = (switchOffset - posAveY )/ 2
