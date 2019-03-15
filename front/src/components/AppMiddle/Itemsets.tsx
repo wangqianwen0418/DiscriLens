@@ -111,7 +111,7 @@ export default class Itemset extends React.Component<Props, State>{
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
             let t= d3.scaleLinear()
-                    .domain([minScore, this.props.ruleThreshold[0]])
+                    .domain([minScore, 0])
                     .range([0.55, 0.25])(score)
             return d3.interpolateGreens(t)
             //    return d3.interpolateGnBu(t)
@@ -119,7 +119,7 @@ export default class Itemset extends React.Component<Props, State>{
         } else {
             return d3.interpolateOrRd(
                 d3.scaleLinear()
-                    .domain([this.props.ruleThreshold[1], maxScore])
+                    .domain([0, maxScore])
                     .range([0.25, 0.55])(score)
             )
         }
@@ -299,7 +299,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.scoreColor(this.props.ruleThreshold[1]||Math.pow(10, -5))}
+                    fill={this.scoreColor(Math.pow(10, -5))}
                 />
                 {/* <path
                     className="out bar"
@@ -318,7 +318,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 50),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
                                 })}
-                                fill={this.scoreColor(Math.max((i + 1) / 50, this.props.ruleThreshold[1]))}
+                                fill={this.scoreColor((i + 1) / 50)}
                             />
                         })}
                 </g>
@@ -341,7 +341,7 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(this.props.ruleThreshold[0]||-Math.pow(10, -6))}
+                    fill={this.scoreColor(-Math.pow(10, -6))}
                     d={outerArc({
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pnd
@@ -355,7 +355,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     startAngle: Math.PI * 2 * (inConf + i / 360),
                                     endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
                                 })}
-                                fill={this.scoreColor(Math.min(-(i + 1) / 360, this.props.ruleThreshold[0]))}
+                                fill={this.scoreColor(-(i+1)/360)}
                             />
                         })}
                 </g>
@@ -537,7 +537,7 @@ export default class Itemset extends React.Component<Props, State>{
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
-            let color = this.scoreColor(favorPD ? this.props.ruleThreshold[1]||Math.pow(10, -6) : this.props.ruleThreshold[0]||-Math.pow(10, -6))
+            let color = this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
@@ -629,7 +629,7 @@ export default class Itemset extends React.Component<Props, State>{
                             scoreColor={this.scoreColor}
                             showIDs={showIDs}
                             hoverRule={this.state.hoverRule}
-                            highlightRules={[...this.state.highlightRules[ruleAgg.id] ]|| []}
+                            highlightRules={this.state.highlightRules[ruleAgg.id] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
                         />

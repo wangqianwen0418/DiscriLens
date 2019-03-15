@@ -283,11 +283,11 @@ export default class Bubble extends React.Component<Props, State>{
 
         // sort the rules, draw the smallest boundray first
         // highlightRules = highlightRules.filter(id=>highlightCircles[id].length>0)
-        highlightRules.sort((ruleA, ruleB)=>{
-            return highlightCircles[ruleA].length - highlightCircles[ruleB].length
-        })
+        
 
-        let outlines = highlightRules.map((ruleID, idx)=>{
+        let outlines = highlightRules.slice().sort((ruleA, ruleB)=>{
+            return highlightCircles[ruleA].length - highlightCircles[ruleB].length
+        }).map((ruleID, idx)=>{
                 const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
                 const padding = ( 0.6 + 0.4* percent) * circlePadding
                 return  <g key={`outline_${ruleID}`} className='outlines'>
@@ -306,7 +306,7 @@ export default class Bubble extends React.Component<Props, State>{
                     <g className='outlines' 
                     mask={`url(#mask_outline_${ruleID})`} 
                     // stroke={"#b9b9b9"} 
-                    stroke = {boundaryColor[idx]}
+                    stroke = {boundaryColor[highlightRules.indexOf(ruleID)]}
                     fill="white">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.id} key={set.id} 
