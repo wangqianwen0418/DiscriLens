@@ -53,7 +53,7 @@ export default class AppMiddel extends React.Component<Props>{
                     </div>
                 </div>
                <div style={{width: "100%", height: "90%",overflow: "auto"}}>
-                    <Itemsets buttonSwitch={this.viewSwitch} compFlag={0} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
+                    <Itemsets buttonSwitch={this.viewSwitch} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offsetX={this.offsetX} offset={this.offset}/>
                </div>
            </div>
            :<div className='itemset' style={{width: "100%", height: "70%",overflowY: "scroll"}}>

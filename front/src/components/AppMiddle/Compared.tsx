@@ -774,7 +774,7 @@ export default class Compared extends React.Component<Props, State>{
             }
             // choose rect display mode
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
+                switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
             }
             
             // calculate average y-value of an itemset
@@ -825,7 +825,7 @@ export default class Compared extends React.Component<Props, State>{
             
             let negOffset = 0
             if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
-                switchOffset = Math.max(ySum,switchOffset,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
+                switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
             }
             
             // calculate average y-value of an itemset
