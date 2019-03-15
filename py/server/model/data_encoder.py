@@ -67,7 +67,6 @@ def num2cate_fit(df, min=4):
     Y = df.iloc[:, -1].values
     continuous_features =df.iloc[:, :-1].select_dtypes(include=['int64','float64']).columns.tolist()
     continuous_features.sort() # ensoure the features order between fit and transform
-    print('fit', continuous_features)
     X = df[continuous_features].values
     mdlp = MDLP(min_depth=min)
     mdlp.fit(X, Y) # X, Y should be numpy array
@@ -88,7 +87,6 @@ def num2cate_transform(df, mdlp):
     else:
         continuous_features =df.select_dtypes(include=['int64','float64']).columns.tolist()
     continuous_features.sort() # ensoure the features order between fit and transform
-    print('transform', continuous_features)
     X = df[continuous_features].values
     conv_X = mdlp.transform(X)
 
