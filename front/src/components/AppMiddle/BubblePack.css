@@ -11,7 +11,7 @@ g.bubbleSet g.outlines{
   }
 }
 
-g.bubbleSet circle.bubbles{
+g.bubbleSet .bubbles{
     transition: transform 0.8s linear;
 }
 

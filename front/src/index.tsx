@@ -21,8 +21,8 @@ const TEST = true
 let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank'],
-    models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
+    models = ['xgb', 'knn', 'lr', 'svm', 'rf'],
+    dataSelect = 0,
     modelSelect = 2,
 
     dataset = dataSets[dataSelect],
@@ -30,22 +30,22 @@ let dataSets = ['adult', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataset + '_' + model
-    // let {key_attrs: keyAttrs} = require('./testdata/'+filename+'_key.json')
+    let {keyAttrs} = require('./testdata/'+dataset+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
-    let ruleThreshold: [number, number] = [-0.0, 0.0]
+    let ruleThreshold: [number, number] = [-0.05, 0.05]
 
     let dragArray = [...Object.keys(samples[0])]
     // remove the attribute 'id' and 'class'
     dragArray.splice(dragArray.indexOf('id'), 1)
     dragArray.splice(dragArray.indexOf('class'), 1)
-    if (dragArray.includes(protectedAttr)){
-      dragArray.splice(dragArray.indexOf(protectedAttr), 1)
-    }  
+    // if (dragArray.includes(protectedAttr)){
+    //   dragArray.splice(dragArray.indexOf(protectedAttr), 1)
+    // }  
     // move key attributes to the front
-    let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
+    // let keyAttrs =['StudentAbsenceDays', 'raisedhands', 'Discussion']
     // keyAttrs=['poutcome', 'education', 'previous']
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
     

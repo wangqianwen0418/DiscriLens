@@ -7,7 +7,7 @@
 // } from 'lib/bubble.js';
 import * as React from 'react';
 // import { RuleAgg, RuleNode} from 'Helpers';
-import { RuleAgg, RuleNode, getMinLinks} from 'Helpers';
+import { RuleAgg, RuleNode, getMinLinks, boundaryColor} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {packEnclose, graphPack} from 'lib/pack/index.js';
@@ -86,11 +86,11 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
         }
     }
     
-    itemSet.sort((a, b) => a.score - b.score)
-    // console.info('sort score', itemSet)
-    itemSet.sort(
-            (a,b) => b.groups.length - a.groups.length
-            )
+    // itemSet.sort((a, b) => a.score - b.score)
+    // // console.info('sort score', itemSet)
+    // itemSet.sort(
+    //         (a,b) => b.groups.length - a.groups.length
+    //         )
     // console.info('sort group', itemSet)
     return itemSet
 }
@@ -107,7 +107,8 @@ export default class Bubble extends React.Component<Props, State>{
     }
     draw(){
         let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
-        let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
+        // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
+        let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules),
         circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
         this.circlePadding = circlePadding
@@ -282,11 +283,11 @@ export default class Bubble extends React.Component<Props, State>{
 
         // sort the rules, draw the smallest boundray first
         // highlightRules = highlightRules.filter(id=>highlightCircles[id].length>0)
-        highlightRules.sort((ruleA, ruleB)=>{
-            return highlightCircles[ruleA].length - highlightCircles[ruleB].length
-        })
+        
 
-        let outlines = highlightRules.map((ruleID, idx)=>{
+        let outlines = highlightRules.slice().sort((ruleA, ruleB)=>{
+            return highlightCircles[ruleA].length - highlightCircles[ruleB].length
+        }).map((ruleID, idx)=>{
                 const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
                 const padding = ( 0.6 + 0.4* percent) * circlePadding
                 return  <g key={`outline_${ruleID}`} className='outlines'>
@@ -305,7 +306,7 @@ export default class Bubble extends React.Component<Props, State>{
                     <g className='outlines' 
                     mask={`url(#mask_outline_${ruleID})`} 
                     // stroke={"#b9b9b9"} 
-                    stroke = {'#bbb'}
+                    stroke = {boundaryColor[highlightRules.indexOf(ruleID)]}
                     fill="white">
                         {highlightCircles[ruleID].map(set=>{
                                 return <circle id={set.id} key={set.id} 
@@ -319,18 +320,33 @@ export default class Bubble extends React.Component<Props, State>{
                 {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='red' stroke='gray' mask={`url(#outline_${hoverRule})`}/>  */}
                 </g>
         })
-        return {itemCircles, outlines}
+
+        let background = <g className='background'>
+        {root.children.map((outerCircle:ItemHierarchy) => {
+            return <circle className='outlines'  key={outerCircle.id}
+            // stroke={"#b9b9b9"} 
+            cx={outerCircle.x}
+            cy={outerCircle.y}
+            r={outerCircle.r + 0.5*circlePadding}
+            stroke = 'white'
+            fill="white"/> 
+            })
+        }</g>
+        
+        
+        return {itemCircles, outlines, background}
 
     }
     render() {
         let {ruleAgg} = this.props
-        let {itemCircles, outlines} = this.draw()
+        let {itemCircles, outlines, background} = this.draw()
        
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
             // transform={`scale(${this.scaleRatio})`}
             >
+                {background}
                 {itemCircles}
                 <g className='highlight outlines'>
                     {outlines}

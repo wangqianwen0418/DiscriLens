@@ -57,21 +57,27 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=
     pd_rules = pandas.DataFrame(columns = ['antecedent', 'pd', 'cls', 'conf_pd', 'conf_pnd', 'risk_dif', 'elift', 'sup_pd', 'sup_pnd'])
 
     for pair in pd_pairs.itertuples(): 
-        pnd_items = pair.antecedent # potentially non discrimination itemsets
+        all_items = pair.antecedent # potentially non discrimination itemsets
         pd_items = pair.antecedent+ [pair.pd] # potentially discrimination itemsets
 
         # find the corresponding pnd classification rules
-        for pnd_cls in cls_pairs.loc[ cls_pairs['antecedent'].apply(set) == set(pnd_items) ].itertuples():
+        for all_cls in cls_pairs.loc[ cls_pairs['antecedent'].apply(set) == set(all_items) ].itertuples():
             # find the corresponding pd classification rule
-            cls_ = pnd_cls.cls
+            cls_ = all_cls.cls
             pd_cls = cls_pairs.loc[ ( cls_pairs['antecedent'].apply(set) == set(pd_items) ) & (cls_pairs['cls'] == cls_) ]
-            if not pd_cls.empty:
-                conf_pnd = float(pnd_cls.sup/pnd_cls.antecedent_sup)
-                conf_pd = float(pd_cls.sup/pd_cls.antecedent_sup)
+            if not (pd_cls.empty or bool(int(all_cls.sup-pd_cls.sup)==0) ):
+                sup_pd = float(pd_cls.sup)
+                sup_pnd = float(all_cls.sup) - sup_pd #
+                conf_pnd = float(sup_pnd/(all_cls.antecedent_sup - pd_cls.antecedent_sup))
+                conf_pd = float(sup_pd/pd_cls.antecedent_sup)
                 risk_dif = float(conf_pd-conf_pnd)
                 elift = float(conf_pd/conf_pnd)
                 if not risk_th[0] <= risk_dif <= risk_th[1]:
-                    pd_rules.loc[len(pd_rules)] = [pnd_items, pair.pd, cls_, conf_pd, conf_pnd, risk_dif, elift, float(pd_cls.sup), float(pnd_cls.sup)]
+                    if (cls_ == "class=0"):
+                        conf_pd = 1-conf_pd
+                        conf_pnd = 1-conf_pnd
+                        risk_dif = -risk_dif
+                    pd_rules.loc[len(pd_rules)] = [all_items, pair.pd, "class=1", conf_pd, conf_pnd, risk_dif, elift, sup_pd, sup_pnd]
     
     pd_rules = pd_rules.sort_values(by=['risk_dif'])
     pd_rules.insert(loc=0, column='id', value=pd_rules.index)

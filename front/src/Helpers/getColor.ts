@@ -24,3 +24,14 @@ export  const getColor = (name: string): string =>{
             return COLORS[idx % numColor]
         }
     }
+
+export const boundaryColor = [
+    "#b9b9b9",
+    "#e2aaaa",
+    "#7cb8c5",
+    "#8c97bd",
+    "#b9b9b9",
+    "#e2aaaa",
+    "#7cb8c5",
+    "#8c97bd"
+]

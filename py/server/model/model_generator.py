@@ -5,6 +5,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.metrics import accuracy_score
@@ -28,6 +29,10 @@ lr = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True
                 penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
                 verbose=0, warm_start=False
             )
+svm = SVC(gamma='scale')
+
+rf = RandomForestClassifier(n_estimators=10, max_depth=5)
+
 class ModelGene(object):   
     def __init__(self, model_name='knn'):
         self.models = {
@@ -62,6 +67,8 @@ class ModelGene(object):
             "adult_knn": knn,
             "adult_xgb": xgb,
             "adult_lr": lr,
+            "adult_rf": rf,
+            "adult_svm": svm,
 
             "german_credit_xgb": xgb,
             "german_credit_knn":  knn,

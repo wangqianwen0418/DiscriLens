@@ -50,11 +50,11 @@ def interval2string(inter):
     if (inter[0]==-math.inf):
         return 'x<{}'.format(int(inter[1]))
     elif (inter[1]==math.inf):
-        return 'x<{}'.format(int(inter[0]))
+        return 'x>{}'.format(int(inter[0]))
     else:
         return '{}<x<{}'.format(int(inter[0]), int(inter[1]))
 
-def num2cate(df, min=4):
+def num2cate_fit(df, min=4):
     '''
     Arg
         df (Panda dataframes); the last col must be class, int 0 or 1
@@ -62,18 +62,35 @@ def num2cate(df, min=4):
         the MDLP stopping criterion. If the entropy at a given interval
         is found to be zero before `min_depth`, the algorithm will stop.
     Return
-        data (): discretised data using mdlp
         mdlp (MDLP instance): transform, can be used to transform samples
     '''
     Y = df.iloc[:, -1].values
-    continuous_features =df.iloc[:, :-1].select_dtypes(include=['int64','float64']).columns
+    continuous_features =df.iloc[:, :-1].select_dtypes(include=['int64','float64']).columns.tolist()
+    continuous_features.sort() # ensoure the features order between fit and transform
     X = df[continuous_features].values
-    mdlp = MDLP(min_depth=4)
+    mdlp = MDLP(min_depth=min)
     mdlp.fit(X, Y) # X, Y should be numpy array
-    conv_X = mdlp.transform(X, Y)
+
+    return mdlp
+
+def num2cate_transform(df, mdlp):
+    '''
+    Arg
+        df (Panda dataframes): data
+        mdlp (MDLP instance): already fit
+    Return
+        data (): discretised data using mdlp
+    '''
+    df = df.copy()
+    if 'class' in df.columns:
+        continuous_features =df.drop(['class'], axis=1).select_dtypes(include=['int64','float64']).columns.tolist()
+    else:
+        continuous_features =df.select_dtypes(include=['int64','float64']).columns.tolist()
+    continuous_features.sort() # ensoure the features order between fit and transform
+    X = df[continuous_features].values
+    conv_X = mdlp.transform(X)
 
     for col_idx, col in enumerate( continuous_features ):
-        print(col)
         df[col] = [interval2string(i) for i in mdlp.cat2intervals(conv_X, col_idx)]
     return df
     
