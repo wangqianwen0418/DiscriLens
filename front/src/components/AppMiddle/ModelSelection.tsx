@@ -35,8 +35,10 @@ export default class modelSelection extends React.Component<Props,State>{
     rightEnd = window.innerWidth * 0.1; 
     // bottom end position
     bottomEnd = window.innerHeight * 0.8; 
+
+    models: string[] = this.getModel(this.props.showDataset);
     // interval of different models' view
-    intervalHeight = 150;
+    intervalHeight = 0.7 * window.innerHeight / this.models.length
     // top start position 
     topStart = this.intervalHeight*0.2;
     // a standard reference length
@@ -45,7 +47,6 @@ export default class modelSelection extends React.Component<Props,State>{
     lineColor = 'rgb(204, 204, 204)';
     // color of unselected area (BAD_COLOR is the color of selected area)
     areaColor = 'rgb(232, 232, 232)';
-    models: string[] = [];
     yScale:any[];
     yMax:number[] = [];
     private ref: React.RefObject<SVGGElement>;
@@ -76,9 +77,22 @@ export default class modelSelection extends React.Component<Props,State>{
         this.props.onChangeFoldFlag(!this.state.fold)
     }
 
-    
+    getModel(dataset:string){
+        if(dataset=='academic'){
+            return ['xgb', 'knn', 'lr']
+        }
+        else if(dataset=='adult'){
+            return ['xgb', 'knn', 'lr','svm','rf']
+        }
+        else if(dataset=='bank'){
+            return ['xgb', 'knn', 'lr']
+        }
+        return null
+    }
+
     updateModels(){
-        this.models = ['xgb','knn','lr']
+        this.models = this.getModel(this.props.showDataset)
+        this.intervalHeight = 0.7 * window.innerHeight / this.models.length
         this.setState({dataSet:this.props.showDataset})
     }
 
@@ -190,9 +204,9 @@ export default class modelSelection extends React.Component<Props,State>{
                     }
                 }
 
-                let buttonPathLeft = `M${1.10*rightEnd},${0.86*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
+                let buttonPathLeft = `M${1.10*rightEnd},${0.91*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
 
-                let buttonPathRight = `M${1.25*rightEnd},${0.86*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
+                let buttonPathRight = `M${1.25*rightEnd},${0.91*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
                 h${-0.15*rightEnd} v${-0.15*rightEnd}`
                 let fontSize = 14
                 axis.push(xScale)
@@ -213,14 +227,14 @@ export default class modelSelection extends React.Component<Props,State>{
                         <path d={buttonPathLeft} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
                         <path d={buttonPathRight} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
 
-                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={0.86*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
-                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={0.86*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
+                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={0.91*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
+                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={0.91*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
                         <path d={buttonPathLeft} style={{fill:'transparent'}} onClick={changeCompModel} cursor={i!=this.state.selectedModel?'pointer':null}/>
                         <path d={buttonPathRight} style={{fill:'transparent'}} onClick={changeModel} cursor={i!=this.state.selectedCompModel?'pointer':null}/>
 
-                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.85}>{this.models[i]}</text>
+                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.9}>{this.models[i]}</text>
 
-                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={bottomEnd*0.95}>{'Acc:'+this.props.accuracy[i]*100+'%'}</text>
+                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={bottomEnd}>{'Acc:'+this.props.accuracy[i]*100+'%'}</text>
                     </g>
                 </g>
             })
