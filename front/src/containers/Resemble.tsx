@@ -10,6 +10,7 @@ export function mapStateToProps(state:StoreState) {
         rules: state.rules,
         samples: state.samples,
         compRules:state.compRules,
+        compareFlag:state.compareFlag,
     };
 }
 

@@ -41,7 +41,6 @@ export interface Props {
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
-    offsetX: number,
     offset: number,
     buttonSwitch: boolean,
     onChangeShowAttr: (showAttrs: string[]) => void
@@ -81,7 +80,7 @@ export interface rect {
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
-    headWidth = this.props.offsetX - this.margin;
+    headWidth = 45;
     indent: 5;
     bubbleSize: rect[] = [];
     positiveRuleAgg: RuleAgg[] = [];
@@ -252,7 +251,7 @@ export default class Itemset extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
+            transform={`translate(${this.props.offset}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -596,7 +595,7 @@ export default class Itemset extends React.Component<Props, State>{
         return content
     }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
-        // let { compFlag} = this.props
+        let { offset} = this.props
         let { expandRules, bubblePosition } = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
@@ -620,8 +619,8 @@ export default class Itemset extends React.Component<Props, State>{
                         let transY = 0
                         // calculate translate distance
                         if (bubblePosition.length == this.rulesLength) {
-                                let rightBorder = 250
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + this.props.offsetX
+                                let rightBorder = offset-this.headWidth-4*this.fontSize
+                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -723,7 +722,7 @@ export default class Itemset extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${ this.props.offset}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true,i)
                     }
@@ -795,7 +794,7 @@ export default class Itemset extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let negAveY = switchOffset
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
@@ -1067,7 +1066,7 @@ export default class Itemset extends React.Component<Props, State>{
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
-        let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
+        let borderWidth = this.xMaxValue + this.props.offset + 10
         return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}

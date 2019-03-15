@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
 import { Icon } from 'antd';
-import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, } from 'Helpers';
+import { ruleAggregate,  RuleAgg } from 'Helpers';
 import * as d3 from 'd3';
 
-// import Euler from 'components/AppMiddle/Euler';
-// import Bubble from 'components/AppMiddle/Bubble';
-// import Bubble from 'components/AppMiddle/BubbleForce';
 import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
 
-const PIN = <g transform={`scale(0.015) `}>
-    <path
-        stroke='gray'
-        opacity={0.6}
-        d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8zM666.2 549.3l-24.5 24.5 3.8 34.4a259.92 259.92 0 0 1-30.4 153.9L262 408.8c12.9-7.1 26.3-13.1 40.3-17.9 27.2-9.4 55.7-14.1 84.7-14.1 9.6 0 19.3.5 28.9 1.6l34.4 3.8 24.5-24.5L608.5 224 800 415.5 666.2 549.3z" />
-</g>
+// const PIN = <g transform={`scale(0.015) `}>
+//     <path
+//         stroke='gray'
+//         opacity={0.6}
+//         d="M878.3 392.1L631.9 145.7c-6.5-6.5-15-9.7-23.5-9.7s-17 3.2-23.5 9.7L423.8 306.9c-12.2-1.4-24.5-2-36.8-2-73.2 0-146.4 24.1-206.5 72.3a33.23 33.23 0 0 0-2.7 49.4l181.7 181.7-215.4 215.2a15.8 15.8 0 0 0-4.6 9.8l-3.4 37.2c-.9 9.4 6.6 17.4 15.9 17.4.5 0 1 0 1.5-.1l37.2-3.4c3.7-.3 7.2-2 9.8-4.6l215.4-215.4 181.7 181.7c6.5 6.5 15 9.7 23.5 9.7 9.7 0 19.3-4.2 25.9-12.4 56.3-70.3 79.7-158.3 70.2-243.4l161.1-161.1c12.9-12.8 12.9-33.8 0-46.8zM666.2 549.3l-24.5 24.5 3.8 34.4a259.92 259.92 0 0 1-30.4 153.9L262 408.8c12.9-7.1 26.3-13.1 40.3-17.9 27.2-9.4 55.7-14.1 84.7-14.1 9.6 0 19.3.5 28.9 1.6l34.4 3.8 24.5-24.5L608.5 224 800 415.5 666.2 549.3z" />
+// </g>
 
 // const PIN = <g transform={`scale(0.015) `}>
 //     <path 
@@ -43,13 +40,11 @@ export interface Props {
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
-    offsetX: number,
     offset: number,
     expandRule:{id: number, newAttrs: string[], children: string[]},
-    compFlag: number,
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
-    onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
+    // onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -57,7 +52,6 @@ export interface State {
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
     // record all the bubble position when button is true
     bubblePosition: rect[],
-    buttonSwitch: boolean,
 }
 export interface ExpandRule {
     id: string,
@@ -86,17 +80,11 @@ export interface rect {
 export default class Compared extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
-    headWidth = this.props.offsetX - this.margin;
+    headWidth = 45;
     indent: 5;
     bubbleSize: rect[] = [];
     positiveRuleAgg: RuleAgg[] = [];
     negativeRuleAgg: RuleAgg[] = [];
-    // the selected bubble's offsite
-    yOffset:number = 0
-    // the offset of bubbles under the selected one
-    yDown:{i:number,offset:number}={i:0,offset:0};
-    // the offset of bubbles upper of the selected one
-    yUp:{i:number,offset:number}={i:0,offset:0}
 
     // the list recording all rule rect position (left up point)
     yList:{y:number,h:number,r:string[]}[] = []; 
@@ -142,338 +130,337 @@ export default class Compared extends React.Component<Props, State>{
             hoverRule: undefined,
             highlightRules: {},
             bubblePosition:[],
-            buttonSwitch: this.props.compFlag==0?true:false,
         }
-        this.toggleExpand = this.toggleExpand.bind(this)
+        // this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
-        this.drawRuleNode = this.drawRuleNode.bind(this)
+        // this.drawRuleNode = this.drawRuleNode.bind(this)
         this.drawBubbles = this.drawBubbles.bind(this)
-        this.toggleHighlight = this.toggleHighlight.bind(this)
+        // this.toggleHighlight = this.toggleHighlight.bind(this)
     }
 
-    toggleExpand(id: string, newAttrs: string[], children: string[]) {
-        let { expandRules } = this.state
+    // toggleExpand(id: string, newAttrs: string[], children: string[]) {
+    //     let { expandRules } = this.state
 
-        const collapseRule = (id: string) => {
-            for (let childID of expandRules[id].children) {
-                if (expandRules[childID]) {
-                    collapseRule(childID)
-                }
-            }
-            delete expandRules[id]
-        }
-        console.log('sec',expandRules[id])
-        if (expandRules[id]) {
-            // collapse a rule
-            collapseRule(id)
-        } else {
-            // expand a rule
-            expandRules[id] = {
-                id,
-                newAttrs,
-                children
-            }
-        }
-        this.props.onTransExpandRule({id:-1,newAttrs:[],children:[]})
-        this.setState({ expandRules })
-    }
-    toggleHighlight(ruleAggID: string, ruleID: string) {
-        let { highlightRules } = this.state
-        if (!highlightRules[ruleAggID]) {
-            highlightRules[ruleAggID] = [ruleID]
-        } else {
-            let idx = highlightRules[ruleAggID].indexOf(ruleID)
-            if (idx == -1) {
-                highlightRules[ruleAggID].push(ruleID)
-            } else {
-                highlightRules[ruleAggID].splice(idx, 1)
-            }
-        }
+    //     const collapseRule = (id: string) => {
+    //         for (let childID of expandRules[id].children) {
+    //             if (expandRules[childID]) {
+    //                 collapseRule(childID)
+    //             }
+    //         }
+    //         delete expandRules[id]
+    //     }
+    //     console.log('sec',expandRules[id])
+    //     if (expandRules[id]) {
+    //         // collapse a rule
+    //         collapseRule(id)
+    //     } else {
+    //         // expand a rule
+    //         expandRules[id] = {
+    //             id,
+    //             newAttrs,
+    //             children
+    //         }
+    //     }
+    //     this.props.onTransExpandRule({id:-1,newAttrs:[],children:[]})
+    //     this.setState({ expandRules })
+    // }
+    // toggleHighlight(ruleAggID: string, ruleID: string) {
+    //     let { highlightRules } = this.state
+    //     if (!highlightRules[ruleAggID]) {
+    //         highlightRules[ruleAggID] = [ruleID]
+    //     } else {
+    //         let idx = highlightRules[ruleAggID].indexOf(ruleID)
+    //         if (idx == -1) {
+    //             highlightRules[ruleAggID].push(ruleID)
+    //         } else {
+    //             highlightRules[ruleAggID].splice(idx, 1)
+    //         }
+    //     }
 
-        this.setState({ highlightRules })
-    }
-    drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, switchOffset:number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number,switchOffset:number } {
-        let { rule, children } = ruleNode
-        let { antecedent, items, id } = rule
-        let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
-        let { highlightRules } = this.state
+    //     this.setState({ highlightRules })
+    // }
+    // drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, switchOffset:number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number,switchOffset:number } {
+    //     let { rule, children } = ruleNode
+    //     let { antecedent, items, id } = rule
+    //     let { barWidth, step, keyAttrNum, showAttrNum, dragArray } = this.props
+    //     let { highlightRules } = this.state
 
-        let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
-
-
-        let newAttrs: string[] = []
-        for (var node of children) {
-            newAttrs = newAttrs.concat(
-                node.rule.antecedent
-                    .map(attrVal => attrVal.split('=')[0])
-                    .filter(attr =>
-                        (!keyAttrs.includes(attr))
-                        && (!newAttrs.includes(attr))
-                    )
-            )
-        }
-
-        let isExpand = this.state.expandRules.hasOwnProperty(id)
-
-        let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
-        // let outCircleRadius = this.lineInterval * 0.8
-        // let progressBarWidth = 5
-        // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
-
-        let inConf = Math.min(rule.conf_pd, rule.conf_pnd)
-
-        let progressBarWidth = this.lineInterval * 0.2
-        let outRadius = itemScale(items.length)
-        let inRadius = outRadius - progressBarWidth * 1.1
-        let innerArc: any = d3.arc()
-            .innerRadius(inRadius)
-            .outerRadius(inRadius + progressBarWidth)
-            .cornerRadius(progressBarWidth / 2)
-
-        let outerArc: any = d3.arc()
-            .innerRadius(outRadius)
-            .outerRadius(outRadius + progressBarWidth)
-            .cornerRadius(progressBarWidth / 2)
+    //     let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
 
 
-        let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.headWidth*1.3+2*this.fontSize}, ${switchOffset})`}
+    //     let newAttrs: string[] = []
+    //     for (var node of children) {
+    //         newAttrs = newAttrs.concat(
+    //             node.rule.antecedent
+    //                 .map(attrVal => attrVal.split('=')[0])
+    //                 .filter(attr =>
+    //                     (!keyAttrs.includes(attr))
+    //                     && (!newAttrs.includes(attr))
+    //                 )
+    //         )
+    //     }
 
-            // tslint:disable-next-line:jsx-no-lambda
-            onMouseEnter={() => {
-                this.setState({ hoverRule: rule.id.toString() })
-            }
-            }
-            // tslint:disable-next-line:jsx-no-lambda
-            onMouseLeave={() => {
-                this.setState({ hoverRule: undefined })
-            }
-            }
-            // tslint:disable-next-line:jsx-no-lambda
-            onClick={(e: React.MouseEvent) => {
-                e.preventDefault()
-                e.stopPropagation()
-                let ruleID = rule.id.toString()
-                let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
-                if (idx == -1) {
-                    highlightRules[ruleAggID].push(ruleID)
-                } else {
-                    highlightRules[ruleAggID].splice(idx, 1)
-                }
-                this.setState({ highlightRules })
-            }
-            }
-        >
-            <g
-                className="score"
-                transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
-            // //tslint:disable-next-line:jsx-no-lambda
-            // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
-            // // tslint:disable-next-line:jsx-no-lambda
-            // onMouseLeave={()=> this.setState({highlightRule:''})}
-            >
+    //     let isExpand = this.state.expandRules.hasOwnProperty(id)
 
-                <path
-                    className="background in"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                    fill="#eee"
-                />
+    //     let indent = -this.headWidth + this.headWidth * 0.2 * offsetX
+    //     // let outCircleRadius = this.lineInterval * 0.8
+    //     // let progressBarWidth = 5
+    //     // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
 
-                <path
-                    className="in bar"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2 * rule.conf_pd
-                    })}
-                    fill={this.scoreColor(Math.pow(10, -5))}
-                />
-                {/* <path
-                    className="out bar"
-                    d={outerArc({
-                        startAngle: Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pd
-                    })}
-                    // fill="#FF9F1E"
-                    fill="url(#negativeGradient)"
-                /> */}
-                <g className='in gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={innerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 50),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
-                                })}
-                                fill={this.scoreColor((i + 1) / 50)}
-                            />
-                        })}
-                </g>
-                <path
-                    className="background out"
-                    fill='#eee'
-                    d={outerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                />
-                {/* <path
-                    className="in conf bar"
-                    fill="#98E090"
-                    d = {innerArc({
-                        startAngle:Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pnd
-                    })}
-                /> */}
-                <path
-                    className="out conf bar"
-                    // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(-Math.pow(10, -6))}
-                    d={outerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2 * rule.conf_pnd
-                    })}
-                />
-                <g className='out gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={outerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 360),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
-                                })}
-                                fill={this.scoreColor(-(i + 1) / 360)}
-                            />
-                        })}
-                </g>
-                {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
+    //     let inConf = Math.min(rule.conf_pd, rule.conf_pnd)
 
-                {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
-                    {rule.risk_dif.toFixed(2).replace('0.', '.')}
-                </text> */}
-            </g>
-            <text fontSize={this.fontSize} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
-                {/* {items.length} */}
-                {/* -
-                    {rule.risk_dif.toFixed(2)} */}
-            </text>
-            <g className="tree">
-                <line
-                    x1={indent} y1={-this.lineInterval * 0.5}
-                    x2={indent} y2={this.lineInterval * 1.5}
-                    stroke="#c3c3c3"
-                    strokeWidth='2'
-                />
-                <g className='pin icon'
-                    transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`}
-                    opacity={highlightRules[ruleAggID] ? (highlightRules[ruleAggID].includes(rule.id.toString()) ? 1 : 0) : 0}
-                    // // tslint:disable-next-line:jsx-no-lambda
-                    // onClick={(e: React.MouseEvent) => {
-                    //     e.stopPropagation()
-                    //     e.preventDefault()
-                    //     this.toggleHighlight(ruleAggID, rule.id.toString())
-                    // }
-                    // }
-                    cursor='pointer'>
-                    <rect width={-indent} height={2 * this.lineInterval} y={-this.lineInterval} x={0} fill='transparent' />
-                    {PIN}
-                </g>
-                {/* <line 
-            x1={-this.headWidth} y1={0} 
-            x2={0} y2={0} 
-            stroke="#444" 
-            /> */}
-            </g>
-            <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
-                <line className="ruleBoundary"
-                    x1={indent} y1={this.lineInterval * 0.5}
-                    x2={window.innerWidth} y2={this.lineInterval * 0.5}
-                    stroke="#f0f0f0"
-                />
-                <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
-                    {/* <foreignObject>
-                        <Icon type="pushpin" style={{fontSize:this.lineInterval*0.6}}/>
-                    </foreignObject> */}
-                    {ruleNode.children.length == 0 ?
-                        //             <text className="icon" > o
-                        // </text> :
-                        //             <text className="icon"
-                        //                 transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}>
-                        //                 >
-                        // </text>
-                        <circle className="icon"
-                            // fill='none' stroke='#c3c3c3' strokeWidth={2}
-                            fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
-                            r={this.lineInterval * 0.1}
-                            cx={this.lineInterval * 0.3}
-                            cy={-this.lineInterval * 0.3}
-                        />
-                        : <polygon className="icon"
-                            fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
-                            strokeLinejoin="round"
-                            transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
-                            points={`
-                                ${0},${this.lineInterval * 0.1} 
-                                ${0},${-this.lineInterval * 0.7} 
-                                ${this.lineInterval * 0.4},${this.lineInterval * (-0.3)}
-                                `}
-                        />
-                    }
-                </g>
-            </g>
-            {
-                antecedent.map((attrVal) => {
-                    let [attr, val] = attrVal.split('=')
-                    let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
-                        rangeIdx = ranges.indexOf(val)
-                    this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
-                    return <g key={attrVal}>
-                        {/* <rect className='ruleBox' 
-            stroke='#666' fill='none' 
-            strokeWidth='1px'
-            x={-20} y={-0.25*this.lineInterval}
-            height={this.lineInterval*1.5} width={step*showAttrs.length + 20}/> */}
+    //     let progressBarWidth = this.lineInterval * 0.2
+    //     let outRadius = itemScale(items.length)
+    //     let inRadius = outRadius - progressBarWidth * 1.1
+    //     let innerArc: any = d3.arc()
+    //         .innerRadius(inRadius)
+    //         .outerRadius(inRadius + progressBarWidth)
+    //         .cornerRadius(progressBarWidth / 2)
 
-                        <rect className='background'
-                            width={barWidth} height={this.lineInterval}
-                            x={step * showAttrs.indexOf(attr)}
-                            fill='#fff'
-                            // fill='none'
-                            // stroke={favorPD ? "#98E090" : "#FF772D"}
-                            stroke={this.scoreColor(ruleNode.rule.risk_dif)}
-                            strokeWidth={2}
-                        />
+    //     let outerArc: any = d3.arc()
+    //         .innerRadius(outRadius)
+    //         .outerRadius(outRadius + progressBarWidth)
+    //         .cornerRadius(progressBarWidth / 2)
+
+
+    //     let parent = <g className={`${ruleNode.rule.id} rule`}
+    //         transform={`translate(${this.headWidth*1.3+2*this.fontSize}, ${switchOffset})`}
+
+    //         // tslint:disable-next-line:jsx-no-lambda
+    //         onMouseEnter={() => {
+    //             this.setState({ hoverRule: rule.id.toString() })
+    //         }
+    //         }
+    //         // tslint:disable-next-line:jsx-no-lambda
+    //         onMouseLeave={() => {
+    //             this.setState({ hoverRule: undefined })
+    //         }
+    //         }
+    //         // tslint:disable-next-line:jsx-no-lambda
+    //         onClick={(e: React.MouseEvent) => {
+    //             e.preventDefault()
+    //             e.stopPropagation()
+    //             let ruleID = rule.id.toString()
+    //             let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
+    //             if (idx == -1) {
+    //                 highlightRules[ruleAggID].push(ruleID)
+    //             } else {
+    //                 highlightRules[ruleAggID].splice(idx, 1)
+    //             }
+    //             this.setState({ highlightRules })
+    //         }
+    //         }
+    //     >
+    //         <g
+    //             className="score"
+    //             transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
+    //         // //tslint:disable-next-line:jsx-no-lambda
+    //         // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
+    //         // // tslint:disable-next-line:jsx-no-lambda
+    //         // onMouseLeave={()=> this.setState({highlightRule:''})}
+    //         >
+
+    //             <path
+    //                 className="background in"
+    //                 d={innerArc({
+    //                     startAngle: 0,
+    //                     endAngle: Math.PI * 2
+    //                 })}
+    //                 fill="#eee"
+    //             />
+
+    //             <path
+    //                 className="in bar"
+    //                 d={innerArc({
+    //                     startAngle: 0,
+    //                     endAngle: Math.PI * 2 * rule.conf_pd
+    //                 })}
+    //                 fill={this.scoreColor(Math.pow(10, -5))}
+    //             />
+    //             {/* <path
+    //                 className="out bar"
+    //                 d={outerArc({
+    //                     startAngle: Math.PI*2*inConf,
+    //                     endAngle: Math.PI*2*rule.conf_pd
+    //                 })}
+    //                 // fill="#FF9F1E"
+    //                 fill="url(#negativeGradient)"
+    //             /> */}
+    //             <g className='in gradientArc'>
+    //                 {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
+    //                     .map(i => {
+    //                         return <path key={i} className="out bar"
+    //                             d={innerArc({
+    //                                 startAngle: Math.PI * 2 * (inConf + i / 50),
+    //                                 endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
+    //                             })}
+    //                             fill={this.scoreColor((i + 1) / 50)}
+    //                         />
+    //                     })}
+    //             </g>
+    //             <path
+    //                 className="background out"
+    //                 fill='#eee'
+    //                 d={outerArc({
+    //                     startAngle: 0,
+    //                     endAngle: Math.PI * 2
+    //                 })}
+    //             />
+    //             {/* <path
+    //                 className="in conf bar"
+    //                 fill="#98E090"
+    //                 d = {innerArc({
+    //                     startAngle:Math.PI*2*inConf,
+    //                     endAngle: Math.PI*2*rule.conf_pnd
+    //                 })}
+    //             /> */}
+    //             <path
+    //                 className="out conf bar"
+    //                 // fill={d3.interpolateGreens(0.2)}
+    //                 fill={this.scoreColor(-Math.pow(10, -6))}
+    //                 d={outerArc({
+    //                     startAngle: 0,
+    //                     endAngle: Math.PI * 2 * rule.conf_pnd
+    //                 })}
+    //             />
+    //             <g className='out gradientArc'>
+    //                 {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
+    //                     .map(i => {
+    //                         return <path key={i} className="out bar"
+    //                             d={outerArc({
+    //                                 startAngle: Math.PI * 2 * (inConf + i / 360),
+    //                                 endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
+    //                             })}
+    //                             fill={this.scoreColor(-(i + 1) / 360)}
+    //                         />
+    //                     })}
+    //             </g>
+    //             {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
+
+    //             {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
+    //                 {rule.risk_dif.toFixed(2).replace('0.', '.')}
+    //             </text> */}
+    //         </g>
+    //         <text fontSize={this.fontSize} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
+    //             {/* {items.length} */}
+    //             {/* -
+    //                 {rule.risk_dif.toFixed(2)} */}
+    //         </text>
+    //         <g className="tree">
+    //             <line
+    //                 x1={indent} y1={-this.lineInterval * 0.5}
+    //                 x2={indent} y2={this.lineInterval * 1.5}
+    //                 stroke="#c3c3c3"
+    //                 strokeWidth='2'
+    //             />
+    //             <g className='pin icon'
+    //                 transform={`translate(${indent}, ${this.lineInterval * .5}) rotate(${0})`}
+    //                 opacity={highlightRules[ruleAggID] ? (highlightRules[ruleAggID].includes(rule.id.toString()) ? 1 : 0) : 0}
+    //                 // // tslint:disable-next-line:jsx-no-lambda
+    //                 // onClick={(e: React.MouseEvent) => {
+    //                 //     e.stopPropagation()
+    //                 //     e.preventDefault()
+    //                 //     this.toggleHighlight(ruleAggID, rule.id.toString())
+    //                 // }
+    //                 // }
+    //                 cursor='pointer'>
+    //                 <rect width={-indent} height={2 * this.lineInterval} y={-this.lineInterval} x={0} fill='transparent' />
+    //                 {PIN}
+    //             </g>
+    //             {/* <line 
+    //         x1={-this.headWidth} y1={0} 
+    //         x2={0} y2={0} 
+    //         stroke="#444" 
+    //         /> */}
+    //         </g>
+    //         <g transform={`translate(${-15}, ${this.lineInterval})`} cursor='pointer' className='single rule'>
+    //             <line className="ruleBoundary"
+    //                 x1={indent} y1={this.lineInterval * 0.5}
+    //                 x2={window.innerWidth} y2={this.lineInterval * 0.5}
+    //                 stroke="#f0f0f0"
+    //             />
+    //             <g className="expand icon" transform={`translate(${0}, ${-this.lineInterval / 4})`}>
+    //                 {/* <foreignObject>
+    //                     <Icon type="pushpin" style={{fontSize:this.lineInterval*0.6}}/>
+    //                 </foreignObject> */}
+    //                 {ruleNode.children.length == 0 ?
+    //                     //             <text className="icon" > o
+    //                     // </text> :
+    //                     //             <text className="icon"
+    //                     //                 transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}>
+    //                     //                 >
+    //                     // </text>
+    //                     <circle className="icon"
+    //                         // fill='none' stroke='#c3c3c3' strokeWidth={2}
+    //                         fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
+    //                         r={this.lineInterval * 0.1}
+    //                         cx={this.lineInterval * 0.3}
+    //                         cy={-this.lineInterval * 0.3}
+    //                     />
+    //                     : <polygon className="icon"
+    //                         fill='#c3c3c3' strokeWidth={1} stroke='#c3c3c3'
+    //                         strokeLinejoin="round"
+    //                         transform={`rotate(${isExpand ? 90 : 0} ${this.lineInterval / 4} ${-this.lineInterval / 4})`}
+    //                         points={`
+    //                             ${0},${this.lineInterval * 0.1} 
+    //                             ${0},${-this.lineInterval * 0.7} 
+    //                             ${this.lineInterval * 0.4},${this.lineInterval * (-0.3)}
+    //                             `}
+    //                     />
+    //                 }
+    //             </g>
+    //         </g>
+    //         {
+    //             antecedent.map((attrVal) => {
+    //                 let [attr, val] = attrVal.split('=')
+    //                 let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
+    //                     rangeIdx = ranges.indexOf(val)
+    //                 this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
+    //                 return <g key={attrVal}>
+    //                     {/* <rect className='ruleBox' 
+    //         stroke='#666' fill='none' 
+    //         strokeWidth='1px'
+    //         x={-20} y={-0.25*this.lineInterval}
+    //         height={this.lineInterval*1.5} width={step*showAttrs.length + 20}/> */}
+
+    //                     <rect className='background'
+    //                         width={barWidth} height={this.lineInterval}
+    //                         x={step * showAttrs.indexOf(attr)}
+    //                         fill='#fff'
+    //                         // fill='none'
+    //                         // stroke={favorPD ? "#98E090" : "#FF772D"}
+    //                         stroke={this.scoreColor(ruleNode.rule.risk_dif)}
+    //                         strokeWidth={2}
+    //                     />
                         
-                        <rect className='font'
-                                width={barWidth / ranges.length} height={this.lineInterval}
-                                x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
-                                // fill={favorPD ? "#98E090" : "#FF772D"}
-                                fill={this.scoreColor(ruleNode.rule.risk_dif)}
-                        />
+    //                     <rect className='font'
+    //                             width={barWidth / ranges.length} height={this.lineInterval}
+    //                             x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+    //                             // fill={favorPD ? "#98E090" : "#FF772D"}
+    //                             fill={this.scoreColor(ruleNode.rule.risk_dif)}
+    //                     />
                         
-                    </g>
-                }
-                )}
-        </g>
-        offsetY = offsetY + 2 * this.lineInterval
-        switchOffset = switchOffset + 2 * this.lineInterval
-        offsetX += 1
+    //                 </g>
+    //             }
+    //             )}
+    //     </g>
+    //     offsetY = offsetY + 2 * this.lineInterval
+    //     switchOffset = switchOffset + 2 * this.lineInterval
+    //     offsetX += 1
 
-        let content = [parent]
-        if (isExpand) {
-            let children: JSX.Element[] = []
-            for (let childNode of ruleNode.children) {
-                let { content: child, offsetY: newY, switchOffset: switchNewY } = this.drawRuleNode(childNode, offsetX, offsetY, switchOffset, favorPD, itemScale, ruleAggID, listNum)
-                children = children.concat(child)
-                offsetY = newY
-                switchOffset = switchNewY
-            }
-            content = content.concat(children)
-        }
-        return { content, offsetY, switchOffset }
-    }
+    //     let content = [parent]
+    //     if (isExpand) {
+    //         let children: JSX.Element[] = []
+    //         for (let childNode of ruleNode.children) {
+    //             let { content: child, offsetY: newY, switchOffset: switchNewY } = this.drawRuleNode(childNode, offsetX, offsetY, switchOffset, favorPD, itemScale, ruleAggID, listNum)
+    //             children = children.concat(child)
+    //             offsetY = newY
+    //             switchOffset = switchNewY
+    //         }
+    //         content = content.concat(children)
+    //     }
+    //     return { content, offsetY, switchOffset }
+    // }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
         // let { antecedent, items, id, nodes } = ruleAgg
         // let { barWidth, step, keyAttrNum, dragArray } = this.props
@@ -579,10 +566,12 @@ export default class Compared extends React.Component<Props, State>{
                         i += initI
                         let transX = 0
                         let transY = 0
+                        let transCenter = 0
                         // calculate translate distance
                         if (bubblePosition.length == listLength) {
-                                let rightBorder = document.getElementById('compareLeft').clientWidth
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
+                                let rightBorder = this.props.offset
+                                transX = rightBorder - bubblePosition[i].w
+                                transCenter = rightBorder - bubblePosition[i].w / 2
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -605,7 +594,7 @@ export default class Compared extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2}
-                             h${-transX + this.headWidth*0.3},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${-transCenter + this.headWidth*0.3},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
@@ -657,15 +646,16 @@ export default class Compared extends React.Component<Props, State>{
          */
         
         let { rules,compareList} = this.props
-        let { expandRules } = this.state
-        let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
-            itemScale = d3.scaleLinear()
-                .domain([itemMin, itemMax])
-                .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
+        // let { expandRules } = this.state
+        // let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
+        //     itemScale = d3.scaleLinear()
+        //         .domain([itemMin, itemMax])
+        //         .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
         
         let posRules: JSX.Element[] = []
 
-        this.ruleID = []
+        this.ruleID = []      
+        this.matchYList = {y:[],index:[]}
 
         this.matchedRulesLength = matchedNeg.length + matchedPos.length
         // positive, orange
@@ -679,7 +669,7 @@ export default class Compared extends React.Component<Props, State>{
                 transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
             }
             this.ruleID.push(ruleAgg.id)
-            this.matchYList.y.push(transYOverlap)
+            this.matchYList.y.push(transY)
             this.matchYList.index.push(this.matchedIndex[i])
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${transY})`} className="rule" >
@@ -688,14 +678,14 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
-            transY += 2 * this.lineInterval
-            if (expandRules.hasOwnProperty(ruleAgg.id)) {
-                for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
-                    transY = newY
-                    posRules = posRules.concat(content)
-                }
-            }
+            // transY += 2 * this.lineInterval
+            // if (expandRules.hasOwnProperty(ruleAgg.id)) {
+            //     for (let ruleNode of ruleAgg.nodes) {
+            //         let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
+            //         transY = newY
+            //         posRules = posRules.concat(content)
+            //     }
+            // }
         })  
         
         // negtive, green
@@ -720,14 +710,14 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
-            transY += 2 * this.lineInterval
-            if (expandRules.hasOwnProperty(ruleAgg.id)) {
-                for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
-                    transY = newY
-                    posRules = posRules.concat(content)
-                }
-            }
+            // transY += 2 * this.lineInterval
+            // if (expandRules.hasOwnProperty(ruleAgg.id)) {
+            //     for (let ruleNode of ruleAgg.nodes) {
+            //         let { content, offsetY: newY} = this.drawRuleNode(ruleNode, 1, transY,transY, true, itemScale, ruleAgg.id.toString(), i)
+            //         transY = newY
+            //         posRules = posRules.concat(content)
+            //     }
+            // }
         })
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
@@ -745,20 +735,15 @@ export default class Compared extends React.Component<Props, State>{
          */
         
         let { rules} = this.props
-        let { expandRules } = this.state
-        let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
-            itemScale = d3.scaleLinear()
-                .domain([itemMin, itemMax])
-                .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
-        // recording the rect postion for bubble positioning
-        let offsetY = 0
+        // let { expandRules } = this.state
+        // let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
+        //     itemScale = d3.scaleLinear()
+        //         .domain([itemMin, itemMax])
+        //         .range([this.lineInterval * 0.4, this.lineInterval * 0.85])
         // recording the rect position based on bubble position
         let switchOffset = this.props.compareList.yMax
         let posRules: JSX.Element[] = []
         this.yList = []
-
-        let posYList: {y:number,h:number,r:string[]}[] = []
-        let negYList: {y:number,h:number,r:string[]}[] = []
 
         this.unMatchedRulesLength = unMatchedNeg.length + unMatchedPos.length
         // positive, orange
@@ -768,12 +753,11 @@ export default class Compared extends React.Component<Props, State>{
             if(this.ySumList.length!=0){
                 ySum = this.ySumList[i] + this.props.compareList.yMax
             }
-            if((i!=0)&&(this.state.buttonSwitch)){
-                offsetY += 0.3 * this.lineInterval
+            if(i!=0){
                 switchOffset += 0.3 * this.lineInterval
             }
             // choose rect display mode
-            if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
+            if(this.bubblePosition.length==this.unMatchedRulesLength){
                 switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
             }
             
@@ -786,27 +770,23 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
-            offsetY = offsetY + 2 * this.lineInterval
-            switchOffset += 2 * this.lineInterval
-            if (expandRules.hasOwnProperty(ruleAgg.id)) {
-                for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY, switchOffset:switchNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, true, itemScale, ruleAgg.id.toString(), i)
-                    offsetY = newY
-                    posRules = posRules.concat(content)
-                    switchOffset = switchNew + 1.3 * this.lineInterval
-                }
-            }
+            // offsetY = offsetY + 2 * this.lineInterval
+            // switchOffset += 2 * this.lineInterval
+            // if (expandRules.hasOwnProperty(ruleAgg.id)) {
+            //     for (let ruleNode of ruleAgg.nodes) {
+            //         let { content, offsetY: newY, switchOffset:switchNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, true, itemScale, ruleAgg.id.toString(), i)
+            //         offsetY = newY
+            //         posRules = posRules.concat(content)
+            //         switchOffset = switchNew + 1.3 * this.lineInterval
+            //     }
+            // }
             let hPos = (switchOffset - posAveY )/ 2
             // posAveY = (posAveY + switchOffset) / 2
             posAveY += this.lineInterval
-            this.yMaxValue = Math.max(this.yMaxValue,offsetY)
+            this.yMaxValue = Math.max(this.yMaxValue,switchOffset)
             
             
-            if(posYList.length-1<=i){
-                posYList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
-            }else{
-                posYList[i] = {y:posAveY,h:hPos,r:ruleAgg.antecedent}
-            }
+            this.yList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
         
@@ -816,20 +796,18 @@ export default class Compared extends React.Component<Props, State>{
             i += unMatchedPos.length
             let ySum = 0
             if(this.ySumList.length!=0){
-                ySum = this.ySumList[i]
+                ySum = this.ySumList[i]  + this.props.compareList.yMax
             }
             if(i!=0){
-                offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
             
-            let negOffset = 0
-            if(!this.state.buttonSwitch&&(this.bubblePosition.length==this.unMatchedRulesLength)){
+            if(this.bubblePosition.length==this.unMatchedRulesLength){
                 switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
             }
             
             // calculate average y-value of an itemset
-            let negAveY = offsetY
+            let negAveY = switchOffset
 
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${switchOffset})`} className="rule">
@@ -838,29 +816,22 @@ export default class Compared extends React.Component<Props, State>{
                     }
                 </g>
             )
-            offsetY = offsetY + 2 * this.lineInterval
-            switchOffset += 2*this.lineInterval
-            if (expandRules.hasOwnProperty(ruleAgg.id)) {
-                for (let ruleNode of ruleAgg.nodes) {
-                    let { content, offsetY: newY, switchOffset:swtichNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, false, itemScale, ruleAgg.id.toString(), i)
-                    offsetY = newY
-                    switchOffset = swtichNew
-                    negaRules = negaRules.concat(content)
-                }
-            }
+            // offsetY = offsetY + 2 * this.lineInterval
+            // switchOffset += 2*this.lineInterval
+            // if (expandRules.hasOwnProperty(ruleAgg.id)) {
+            //     for (let ruleNode of ruleAgg.nodes) {
+            //         let { content, offsetY: newY, switchOffset:swtichNew } = this.drawRuleNode(ruleNode, 1, offsetY,switchOffset, false, itemScale, ruleAgg.id.toString(), i)
+            //         offsetY = newY
+            //         switchOffset = swtichNew
+            //         negaRules = negaRules.concat(content)
+            //     }
+            // }
             let hNeg = (switchOffset - negAveY) / 2  
             negAveY += this.lineInterval
-            // negAveY = (negAveY + switchOffset) / 2
-            this.yMaxValue = Math.max(this.yMaxValue,offsetY)
+            this.yMaxValue = Math.max(this.yMaxValue,switchOffset)
 
-            if(negYList.length-1<=i){
-                negYList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
-            }else{
-                negYList[i] = {y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent}
-            }
+            this.yList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
-
-        this.yList = posYList.concat(negYList)
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let unMathchedbubbles = [this.drawBubbles(unMatchedPos, scoreDomain, true,false), this.drawBubbles(unMatchedNeg, scoreDomain, false,false)]
@@ -876,14 +847,11 @@ export default class Compared extends React.Component<Props, State>{
 
         let keyAttrs = dragArray.slice(0, keyAttrNum)
 
-        this.matchedIndex = []
-
-        
-        this.matchYList = {y:[],index:[]}
+       
 
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
-
+        this.matchedIndex = []  
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         this.positiveRuleAgg = positiveRuleAgg
@@ -909,7 +877,7 @@ export default class Compared extends React.Component<Props, State>{
     
         let match = this.drawMatched(matchedPos,matchedNeg)
         let unMatch = this.drawUnMatched(unMatchedPos,unMatchedNeg)
-
+        
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>              
             <g className='matchBubbles'>
                 {match.bubble}
@@ -1024,7 +992,7 @@ export default class Compared extends React.Component<Props, State>{
             this.ySumList.push(bSum)
         })
 
-        this.props.onTransCompareOffset(this.matchYList)
+        // this.props.onTransCom`pareOffset(this.matchYList)
     }
 
     render() {
@@ -1032,16 +1000,16 @@ export default class Compared extends React.Component<Props, State>{
         let content: JSX.Element = <g />
         this.bubbleSize = []
 
-        if(this.props.expandRule.children.length!=0){
-            let expandRules = this.props.expandRule
-            if(this.matchedIndex.indexOf(expandRules.id)!=-1){
-                console.log(expandRules,this.state.expandRules)
-                let id:string
-                id = this.ruleID[this.matchedIndex.indexOf(expandRules.id)]
-                this.toggleExpand(id,expandRules.newAttrs,expandRules.children)
-            }
+        // if(this.props.expandRule.children.length!=0){
+        //     let expandRules = this.props.expandRule
+        //     if(this.matchedIndex.indexOf(expandRules.id)!=-1){
+        //         console.log(expandRules,this.state.expandRules)
+        //         let id:string
+        //         id = this.ruleID[this.matchedIndex.indexOf(expandRules.id)]
+        //         this.toggleExpand(id,expandRules.newAttrs,expandRules.children)
+        //     }
             
-        }
+        // }
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
@@ -1064,14 +1032,14 @@ export default class Compared extends React.Component<Props, State>{
                 break
 
         }
+
         let maxBubble = this.findMaxRect(this.state.bubblePosition,this.state.bubblePosition.length)
         let svgHeight:number = 0
         if(maxBubble){
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
         let borderHeight = document.getElementsByClassName('itemsetCompared').length!=0?Math.max(document.getElementsByClassName('itemsetCompared')[0].clientHeight,svgHeight):'100%'
-        let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
-        return (<svg className='itemsetCompared' style={{ width: borderWidth, height: borderHeight}}>
+        return (<svg className='itemsetCompared' style={{ width: '100%', height: borderHeight}}>
             <g className='rules' >
                 {content}
             </g>

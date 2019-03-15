@@ -62,6 +62,7 @@ export interface StoreState{
     xScaleMax: number, // used to zoom axis when selection is expanded to keep all axis consistent
     selected_bar: string[], // used to transfer the info of hoverd rect
     foldFlag: boolean, // whether the model selection panle is folded, true is folded and false is expanded
+    compareFlag:boolean,
     accuracy: number[], // used to transfer models' accuracy to display
 
     // compare models, [[bubbleposition of compared model],[bubblePosition of prime model],[rect position of prime model]]

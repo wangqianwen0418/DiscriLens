@@ -1,7 +1,7 @@
 import ModelSelection from 'components/AppMiddle/ModelSelection';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { switchModel,ChangeXSclaeMax,switchCompModel,ChangeFoldFlag} from 'actions';
+import { switchModel,ChangeXSclaeMax,switchCompModel,ChangeFoldFlag,changeCompareMode} from 'actions';
 
 export function mapStateToProps(state:StoreState) {
     return {
@@ -10,6 +10,7 @@ export function mapStateToProps(state:StoreState) {
         dragArray: state.dragArray,
         keyAttrNum: state.keyAttrNum,
         accuracy: state.accuracy,
+        compareFlag:state.compareFlag,
     };
 }
 
@@ -18,7 +19,8 @@ export function mapDispatchToProps(dispatch:any) {
         onChangeXScaleMax:(xScaleMax:number)=>{dispatch(ChangeXSclaeMax(xScaleMax))},
         onChangeModel:(dataset:string,model:string)=>{dispatch(switchModel(dataset,model))},
         onChangeCompModel:(dataset:string,model:string)=>{dispatch(switchCompModel(dataset,model))},
-        onChangeFoldFlag:(foldFlag:boolean)=>{dispatch(ChangeFoldFlag(foldFlag))}
+        onChangeFoldFlag:(foldFlag:boolean)=>{dispatch(ChangeFoldFlag(foldFlag))},
+        onChangeCompareMode:(compareFlag:boolean)=>{dispatch(changeCompareMode(compareFlag))},
     }
 }
 

@@ -11,10 +11,12 @@ export interface Props{
     dragArray: string[],
     showDataset: string,
     accuracy:number[],
+    compareFlag:boolean,
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
     onChangeFoldFlag:(foldFlag:boolean) => void,
+    onChangeCompareMode:(compareFlag:boolean)=>void,
 }
 export interface State{
     fold: boolean,
@@ -195,9 +197,14 @@ export default class modelSelection extends React.Component<Props,State>{
                 let changeCompModel = () =>{
                     if(i!=selectedModel){
                         if(selectedCompModel==i){
-                            this.props.onChangeCompModel('','')
+                            if(this.props.compareFlag){
+                                this.props.onChangeCompareMode(false)
+                            }
                             this.setState({selectedCompModel:-1})
                         }else{
+                            if(!this.props.compareFlag){
+                                this.props.onChangeCompareMode(true)
+                            }
                             this.props.onChangeCompModel(this.props.showDataset,model)
                             this.setState({selectedCompModel:i})
                         }

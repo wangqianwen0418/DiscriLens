@@ -43,9 +43,7 @@ export interface Props {
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
-    offsetX: number,
     offset: number,
-    compFlag: number,
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     compareOffset:{y:number[],index:number[]}
     onChangeShowAttr: (showAttrs: string[]) => void
@@ -59,7 +57,6 @@ export interface State {
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
     // record all the bubble position when button is true
     bubblePosition: rect[],
-    buttonSwitch: boolean,
 }
 export interface ExpandRule {
     id: string,
@@ -88,7 +85,7 @@ export interface rect {
 export default class ComparePrime extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
-    headWidth = this.props.offsetX - this.margin;
+    headWidth = 45;
     indent: 5;
     bubbleSize: rect[] = [];
     positiveRuleAgg: RuleAgg[] = [];
@@ -139,7 +136,6 @@ export default class ComparePrime extends React.Component<Props, State>{
             hoverRule: undefined,
             highlightRules: {},
             bubblePosition:[],
-            buttonSwitch: false,
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.drawRuleAgg = this.drawRuleAgg.bind(this)
@@ -617,14 +613,14 @@ export default class ComparePrime extends React.Component<Props, State>{
                             protectedVal={this.props.protectedVal}
                         />
                         let bubbleLine:any
-                        if((this.props.compFlag!=1)&&(bubblePosition.length == this.rulesLength)){
+                        if(bubblePosition.length == this.rulesLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
                              h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
                         >
-                            {this.state.buttonSwitch?null:bubbleLine}
+                            {bubbleLine}
                             {bubble}
                         </g>
                     }
@@ -661,7 +657,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
     draw() {
         
-        let { rules, samples, keyAttrNum, dragArray } = this.props
+        let { rules, samples, keyAttrNum, dragArray,offset } = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
@@ -697,7 +693,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             if(this.ySumList.length!=0){
                 ySum = this.ySumList[i]
             }
-            if((i!=0)&&(this.state.buttonSwitch)){
+            if(i!=0){
                 offsetY += 0.3 * this.lineInterval
                 switchOffset += 0.3 * this.lineInterval
             }
@@ -725,7 +721,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${offset}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true,i)
                     }
@@ -789,7 +785,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             let negAveY = switchOffset
 
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${350}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${offset}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
@@ -817,17 +813,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain, true), this.drawBubbles(negativeRuleAgg, scoreDomain, false)]
 
-        let buttonPress=()=>{
-            this.setState({buttonSwitch:!this.state.buttonSwitch})
-        }
-        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
-            {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
-            {this.props.compFlag==0?<g onClick={buttonPress}>
-               <circle cx={50} cy={10} r={6} style={{fill:'#f0f0f0',stroke:'#999'}} />
-                        
-            {this.state.buttonSwitch?<circle cx={50} cy={10} r={3} style={{fill:'black'}}/>:null} 
-            </g>:null}
-            
+        return <g key='rules' transform={`translate(${0}, ${this.margin})`}>   
                         
             <g className='bubbles'>
                 {bubbles}
@@ -982,9 +968,15 @@ export default class ComparePrime extends React.Component<Props, State>{
         if(maxBubble){
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
-        let borderHeight = document.getElementsByClassName('itemsetPrime').length!=0?Math.max(document.getElementsByClassName('itemsetPrime')[0].clientHeight,svgHeight):'100%'
+
+
+        let borderHeight = document.getElementsByClassName('itemsetPrime').length?Math.max(document.getElementsByClassName('itemsetPrime')[0].clientHeight,svgHeight):'100%'
         this.borderHeight = borderHeight
-        let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
+        
+        let borderWidth:any = this.xMaxValue + this.props.offset + 10
+        if(borderWidth<window.innerWidth*5/8){
+            borderWidth='100%'
+        }
         return (<svg className='itemsetPrime' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}
