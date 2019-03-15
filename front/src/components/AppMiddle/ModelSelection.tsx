@@ -204,9 +204,11 @@ export default class modelSelection extends React.Component<Props,State>{
                     }
                 }
 
-                let buttonPathLeft = `M${1.10*rightEnd},${0.91*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
+                let startY = bottomEnd - intervalHeight *0.7
 
-                let buttonPathRight = `M${1.25*rightEnd},${0.91*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
+                let buttonPathLeft = `M${1.10*rightEnd},${startY + 0.01*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
+
+                let buttonPathRight = `M${1.25*rightEnd},${startY + 0.01*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
                 h${-0.15*rightEnd} v${-0.15*rightEnd}`
                 let fontSize = 14
                 axis.push(xScale)
@@ -227,14 +229,14 @@ export default class modelSelection extends React.Component<Props,State>{
                         <path d={buttonPathLeft} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
                         <path d={buttonPathRight} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
 
-                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={0.91*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
-                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={0.91*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
+                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={startY + 0.01*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
+                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={startY + 0.01*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
                         <path d={buttonPathLeft} style={{fill:'transparent'}} onClick={changeCompModel} cursor={i!=this.state.selectedModel?'pointer':null}/>
                         <path d={buttonPathRight} style={{fill:'transparent'}} onClick={changeModel} cursor={i!=this.state.selectedCompModel?'pointer':null}/>
 
-                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={bottomEnd*0.9}>{this.models[i]}</text>
+                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={startY}>{this.models[i]}</text>
 
-                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={bottomEnd}>{'Acc:'+this.props.accuracy[i]*100+'%'}</text>
+                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={startY + 0.1*bottomEnd}>{'Acc:'+(this.props.accuracy[i]*100).toFixed(1)+'%'}</text>
                     </g>
                 </g>
             })
