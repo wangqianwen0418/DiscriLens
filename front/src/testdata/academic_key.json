@@ -1,4 +1,4 @@
 {"keyAttrs":["StudentAbsenceDays", "raisedhands", "Discussion"]
-    , "accuracy":[
-        0.937,0.927,0.916
-    ]}
+    , "accuracy":{
+       "knn": 0.927, "lr": 0.927, "xbg":0.958, "svm": 0.906, "rf": 0.9375, "dt":0.916
+    }}
