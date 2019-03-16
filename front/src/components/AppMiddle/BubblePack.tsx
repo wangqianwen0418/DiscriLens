@@ -109,7 +109,7 @@ export default class Bubble extends React.Component<Props, State>{
         // console.info(props)
     }
     shouldComponentUpdate(nextProps:Props){
-        if(nextProps.ruleAgg.id == this.props.ruleAgg.id)
+        if((nextProps.ruleAgg.id == this.props.ruleAgg.id)&&(this.props.hoverRule==nextProps.hoverRule))
         {
             return false
         }
@@ -348,7 +348,6 @@ export default class Bubble extends React.Component<Props, State>{
 
     }
     render() {
-        console.info('render bubbles')
         let {ruleAgg} = this.props
         let {itemCircles, outlines, background} = this.draw()
        
