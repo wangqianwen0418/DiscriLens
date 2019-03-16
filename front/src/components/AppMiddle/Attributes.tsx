@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { DataItem, Status } from 'types';
 import { Icon, Tooltip } from 'antd';
-import { countItem, GOOD_COLOR, BAD_COLOR, cutTxt } from 'Helpers';
+import { countItem, cutTxt,BAD_COLOR,GOOD_COLOR } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';
 import {getAttrRanges} from "Helpers";
 
 import "./Attributes.css";
+// import { histogram } from 'd3';
 export interface Props {
     keyAttrNum: number,
     showAttrNum: number,
@@ -35,7 +36,10 @@ export interface curveData {
 
 export default class Attributes extends React.Component<Props, State>{
     public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 90;
-    height = window.innerHeight / 10
+    height = window.innerHeight / 10;
+    posColor = 'rgb(253, 194, 140)';
+    negColor = 'rgb(183, 226, 177)';
+
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -161,17 +165,16 @@ export default class Attributes extends React.Component<Props, State>{
 
         let rangesNum:number[] = []
         ranges.forEach((range:number,i)=>{rangesNum.push(range)} )
-        let rangesSplit = this.findCateBound(rangesNum)
+        // let rangesSplit = this.findCateBound(rangesNum)
         // step length to merge data, to smooth curve
         function getStep() {
             if (ranges.length < 20) { return 2 }
-            else { return 4 }
+            else { return 2}
         }
         let stepMerge = getStep()
     
         // array recording curve nodes after merging
-        let ListNum: curveData[][] = [[]]
-        const dataPush = (x: number, y: number, z: number): curveData => { return { x, y, z } }
+        let ListNum: {range:number[],acc:number[],rej:number[]} = {range:[],acc:[],rej:[]}
         // split samples by class
         let samples_reject = samples.filter((s) => s.class == 0)
         let samples_accept = samples.filter((s) => s.class == 1)
@@ -185,92 +188,111 @@ export default class Attributes extends React.Component<Props, State>{
             reject_num = 0
         // range_num records now range interval 
         // loop all values of this attr
-        let rangesCounter = 0
         ranges.forEach((range: number, range_i) => {
-            if((range>rangesSplit[rangesCounter])&&(rangesCounter!=rangesSplit.length-1)){
-                {rangesCounter ++}
-                ListNum.push([])
-            }else{
                 accept_num += samples_accept.filter(s => s[attr] === range).length
                 reject_num += samples_reject.filter(s => s[attr] === range).length
                 if (((range_i % stepMerge
                     == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
-                    ListNum[rangesCounter].push(dataPush(range, accept_num, reject_num))
+                    ListNum.range.push(range)
+                    ListNum.acc.push(accept_num)
+                    ListNum.rej.push(reject_num)
                     xRecord = [Math.min(xRecord[0], range), Math.max(xRecord[1], range)]
                     yRecord = [Math.max(yRecord[0], accept_num), Math.max(yRecord[1], reject_num)]
                     accept_num = 0
                     reject_num = 0
                 }
-            }
         })
-        // re-loop to add interpolation nodes to achieve consistancy
-        // left part
-        rangesCounter = 0
-        // right part
-        let rangesCounter2 = 1
-        // line-interpulate between left & right parts
-        ranges.forEach((range:number,i)=>{
-            if((range>rangesSplit[rangesCounter])&&(rangesCounter2<ListNum.length)){
-                // avoid right part being empty
-                while(ListNum[rangesCounter2].length==0){rangesCounter2++}
-                // calculate interpulation values
-                let y0 = this.linearInterpolate(ListNum[rangesCounter][ListNum[rangesCounter].length-1],ListNum[rangesCounter2][0],rangesSplit[rangesCounter])
-                // push new nodes
-                ListNum[rangesCounter].push({x:range,y:y0.yA0,z:y0.yR0})
-                ListNum[rangesCounter2].unshift({x:range,y:y0.yA0,z:y0.yR0})
-                rangesCounter ++
-                rangesCounter2 ++
+
+        let hisWidth = curve_Width/Math.max(...ListNum.range),
+        hisAccHeight = this.height/2/Math.max(...ListNum.acc),
+        hisRejHeight = this.height/2/Math.max(...ListNum.rej)
+
+        ListNum.range = ListNum.range.map((range)=>range*hisWidth)
+        ListNum.acc = ListNum.acc.map((acc)=>acc*hisAccHeight)
+        ListNum.rej = ListNum.rej.map((rej)=>rej*hisRejHeight)
+
+        return <g>
+            {ListNum.range.map((range,i)=>{
+                return <g>
+                <rect x={range} y={this.height/2-ListNum.acc[i]} width={hisWidth*stepMerge} height={ListNum.acc[i]} 
+                    style={{fill:GOOD_COLOR}}/>
+                <rect x={range} y={this.height/2} width={hisWidth*stepMerge} height={ListNum.rej[i]} 
+                    style={{fill:BAD_COLOR}}/>
+                </g>
+            })
             }
-        })
-        // curve x-axis
-        let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
-        // curve y-axis for data with class = 1
-        let yScaleAcc = d3.scaleLinear().domain([0, yRecord[0]]).range([height / 2, 0]);
-        //6 curve y-axis for data woth class = 0
-        let yScaleRej = d3.scaleLinear().domain([0, yRecord[1]]).range([height / 2, height]);
-        // draw areas based on axis
-        const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
-        const areasRej = d3.area<curveData>().x(d => xScale(d.x)).y1(d => yScaleRej(d.z)).y0(height / 2).curve(d3.curveMonotoneX)
-        
-        let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
-        let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
-        // x range, left (min) value and right (max) value
-        let xRange:{l:number,r:number} = {l:0,r:0}
-        return <g key={attr + 'curve'}>
-            <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
-            {ListNum.map((List,i)=>{
-                    let title: string = ''
-                    if(i==0){
-                        title = 'x<' + rangesSplit[i]
-                        xRange.l = rangesSplit[i]
-                    }else if(i==rangesSplit.length - 1){
-                        title = 'x>' + rangesSplit[i - 1]
-                        xRange.r = rangesSplit[i]
-                    }else{
-                        title = rangesSplit[i-1] + '<x<' + rangesSplit[i]
-                    }
-                    // change mouseOn bar's color when the button is not pressed
-                    let mouseEnter = (e:any) => {
-                        // e.buttons is used to detect whether the button is pressed
-                        if(e.buttons==0){
-                            this.changeColor([attr, title])
-                        }
-                    }
-                    // recover bar's color when mouseOut
-                    let mouseOut = () => this.changeColor(['', ''])
-                    let mouseDown = ()=> {this.changeColor(['', ''])}
-                    return <Tooltip title={title} key={`${attr}_${String(i)}_${'curve'}_tooltip`}>
-                    <g  onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
-                        <path d={areasAcc(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? '#DE4863' : GOOD_COLOR }}  />
-                        <path d={areasRej(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? 'pink' : BAD_COLOR }}  />
-                    </g>
-                    </Tooltip>
-                })
-            }
-            <text  transform={`translate(${0},${this.height*1.15})`}>{xRange.l}</text>
-            <text  transform={`translate(${this.props.barWidth*0.8},${this.height*1.15})`}>{xRange.r}</text>
+
         </g>
+        // // re-loop to add interpolation nodes to achieve consistancy
+        // // left part
+        // rangesCounter = 0
+        // // right part
+        // let rangesCounter2 = 1
+        // // line-interpulate between left & right parts
+        // ranges.forEach((range:number,i)=>{
+        //     if((range>rangesSplit[rangesCounter])&&(rangesCounter2<ListNum.length)){
+        //         // avoid right part being empty
+        //         while(ListNum[rangesCounter2].length==0){rangesCounter2++}
+        //         // calculate interpulation values
+        //         let y0 = this.linearInterpolate(ListNum[rangesCounter][ListNum[rangesCounter].length-1],ListNum[rangesCounter2][0],rangesSplit[rangesCounter])
+        //         // push new nodes
+        //         ListNum[rangesCounter].push({x:range,y:y0.yA0,z:y0.yR0})
+        //         ListNum[rangesCounter2].unshift({x:range,y:y0.yA0,z:y0.yR0})
+        //         rangesCounter ++
+        //         rangesCounter2 ++
+        //     }
+        // })
+        // // curve x-axis
+        // let xScale = d3.scaleLinear().domain([xRecord[0], xRecord[1]]).range([0, curve_Width])
+        // // curve y-axis for data with class = 1
+        // let yScaleAcc = d3.scaleLinear().domain([0, yRecord[0]]).range([height / 2, 0]);
+        // //6 curve y-axis for data woth class = 0
+        // let yScaleRej = d3.scaleLinear().domain([0, yRecord[1]]).range([height / 2, height]);
+        // // draw areas based on axis
+        // const areasAcc = d3.area<curveData>().x(d => xScale(d.x)).y1(height / 2).y0(d => yScaleAcc(d.y)).curve(d3.curveMonotoneX)
+        // const areasRej = d3.area<curveData>().x(d => xScale(d.x)).y1(d => yScaleRej(d.z)).y0(height / 2).curve(d3.curveMonotoneX)
+        
+        // let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+        // let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:curve_Width,y:this.height/2,z:0}]
+        // // x range, left (min) value and right (max) value
+        // let xRange:{l:number,r:number} = {l:0,r:0}
+        // return <g key={attr + 'curve'}>
+        //     <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
+        //     {ListNum.map((List,i)=>{
+        //             let title: string = ''
+        //             if(i==0){
+        //                 title = 'x<' + rangesSplit[i]
+        //                 xRange.l = rangesSplit[i]
+        //             }else if(i==rangesSplit.length - 1){
+        //                 title = 'x>' + rangesSplit[i - 1]
+        //                 xRange.r = rangesSplit[i]
+        //             }else{
+        //                 title = rangesSplit[i-1] + '<x<' + rangesSplit[i]
+        //             }
+        //             // change mouseOn bar's color when the button is not pressed
+        //             let mouseEnter = (e:any) => {
+        //                 // e.buttons is used to detect whether the button is pressed
+        //                 if(e.buttons==0){
+        //                     this.changeColor([attr, title])
+        //                 }
+        //             }
+        //             // recover bar's color when mouseOut
+        //             let mouseOut = () => this.changeColor(['', ''])
+        //             let mouseDown = ()=> {this.changeColor(['', ''])}
+        //             return <Tooltip title={title} key={`${attr}_${String(i)}_${'curve'}_tooltip`}>
+        //             <g  onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
+        //                 <path d={areasAcc(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? '#DE4863' : GOOD_COLOR }}  />
+        //                 <path d={areasRej(List) || ''}  style={{ fill: ((selected_bar[0] == attr) && (selected_bar[1] == title)) ? 'pink' : BAD_COLOR }}  />
+        //             </g>
+        //             </Tooltip>
+        //         })
+        //     }
+        //     <text  transform={`translate(${0},${this.height*1.15})`}>{xRange.l}</text>
+        //     <text  transform={`translate(${this.props.barWidth*0.8},${this.height*1.15})`}>{xRange.r}</text>
+        // </g>
     }
+    
+    
     /**
      * Function to draw bars
      * Inputs:
@@ -281,6 +303,75 @@ export default class Attributes extends React.Component<Props, State>{
      *             selected bar (mouse hover) 
      * 
      * */
+    // drawBars = (attr: string, attr_i:number, samples: DataItem[],
+    //     barWidth: number, max_accept: number, max_reject: number, height: number, color: string[]): JSX.Element => {
+    //     // let ranges = samples.map(d => d[attr])
+    //     //     .filter((x: string, i: number, a: string[]) => a.indexOf(x) == i)
+    //     let protectedValue = ['F','M']
+        
+    //     let {protectedAttr} = this.props
+    //     let ranges = getAttrRanges(samples, attr) 
+    //     let samples_reject = samples.filter((s) => s.class == 0)
+    //     let samples_accept = samples.filter((s) => s.class == 1)
+    //     // a single bar's width
+    //     let barWidthidth = barWidth / ranges.length
+        
+    //     let markArea = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+    //     let markData:curveData[] = [{x:0,y:this.height/2,z:0},{x:barWidth - barWidthidth * 0.1,y:this.height/2,z:0}]
+    //     return <g key={attr}>
+    //         <path d={markArea(markData)} stroke='transparent' strokeWidth={this.height}/>
+    //         {ranges.map((range: string, range_i) => {
+    //             let accept_range = samples_accept.filter(s => s[attr] === range),
+    //                 reject_range = samples_reject.filter(s => s[attr] === range)
+                
+    //             let accetpRangeCopy = accept_range.slice(),
+    //             rejectRangeCopy = reject_range.slice()
+
+    //             let acceptPosNum = accept_range.filter(s => s[protectedAttr] === protectedValue[0]).length,
+    //             acceptNegNum = accetpRangeCopy.filter(s => s[protectedAttr] === protectedValue[1]).length,
+    //             rejectPosNum = reject_range.filter(s=>s[protectedAttr] === protectedValue[0]).length,
+    //             rejectNegNum = rejectRangeCopy.filter(s=>s[protectedAttr] === protectedValue[1]).length
+                
+    //             let acceptPosH = height / 2 * acceptPosNum / max_accept,
+    //                 acceptNegH = height / 2 * acceptNegNum / max_accept,
+    //                 rejectPosH = height / 2 * rejectPosNum / max_reject,
+    //                 rejectNegH = height / 2 * rejectNegNum / max_reject
+
+
+    //             // change mouseOn bar's color when the button is not pressed
+    //             let mouseEnter = (e:any) => {
+    //                 // e.buttons is used to detect whether the button is pressed
+    //                 if(e.buttons==0){
+    //                     this.changeColor([attr, range])
+    //                 }
+    //             }
+    //             // recover bar's color when mouseOut
+    //             let mouseOut = () => this.changeColor(['', ''])
+    //             let mouseDown = ()=> {this.changeColor(['', ''])}
+    //             let rangeText = <text id={'rangeText'} transform={`translate(${range_i * (barWidthidth)},${this.height*1.2})`}>
+    //             {cutTxt(range, barWidthidth*0.9/this.fontSize*2)}</text>
+                
+    //             return <g>
+    //                 <Tooltip title={range} key={`${attr}_${range}_tooltip`}>
+    //                 <g key={`${attr}_${range}`}
+    //                     transform={`translate(${range_i * (barWidthidth)}, ${height / 2})`}
+    //                     onMouseOver={mouseEnter} onMouseOut={mouseOut} onMouseDown={mouseDown}>
+    //                     <rect width={barWidthidth * 0.45} height={acceptPosH} y={-1 * acceptPosH-1} style={{ fill:this.posColor}} />
+    //                     <rect width={barWidthidth * 0.45} height={rejectPosH} y={1} style={{ fill:this.posColor}} />
+
+    //                     <rect x={barWidthidth * 0.45} width={barWidthidth * 0.45} height={acceptNegH} y={-1 * acceptNegH-1} style={{ fill:this.negColor}} />
+    //                     <rect x={barWidthidth * 0.45} width={barWidthidth * 0.45} height={rejectNegH} y={1} style={{ fill:this.negColor}} />
+    //                      </g>
+    //             </Tooltip>
+    //             <g>
+    //                 {rangeText}
+    //             </g>
+
+    //             </g>
+    //         })}
+    //     </g>
+
+    // }
     drawBars = (attr: string, attr_i:number, samples: DataItem[],
         barWidth: number, max_accept: number, max_reject: number, height: number, color: string[]): JSX.Element => {
         // let ranges = samples.map(d => d[attr])
@@ -332,7 +423,6 @@ export default class Attributes extends React.Component<Props, State>{
         </g>
 
     }
-
     /********************
      * main function to draw 
      ******************/

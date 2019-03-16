@@ -257,13 +257,11 @@ export default class Itemset extends React.Component<Props, State>{
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
                 this.setState({ hoverRule: rule.id.toString() })
-                this.enterRect(listNum)
             }
             }
             // tslint:disable-next-line:jsx-no-lambda
             onMouseLeave={() => {
                 this.setState({ hoverRule: undefined })
-                this.leaveRect()
             }
             }
             // tslint:disable-next-line:jsx-no-lambda
@@ -508,7 +506,7 @@ export default class Itemset extends React.Component<Props, State>{
             this.setState({})
         }
     }
-    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean) {
+    drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean,listNum:number) {
         let { antecedent, items, id, nodes } = ruleAgg
         let { barWidth, step, keyAttrNum, dragArray } = this.props
         let keyAttrs = dragArray.slice(0, keyAttrNum)
@@ -554,6 +552,17 @@ export default class Itemset extends React.Component<Props, State>{
                     x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
                     fill={color}
+                    // tslint:disable-next-line:jsx-no-lambda
+                    onMouseEnter={() => {
+                        this.enterRect(listNum)
+                    }
+                    }
+                    // tslint:disable-next-line:jsx-no-lambda
+                    onMouseLeave={() => {
+                        this.setState({ hoverRule: undefined })
+                        this.leaveRect()
+                    }
+                    }
                 />
                 <text x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx + 0.5 * barWidth / ranges.length}
                     y={this.lineInterval}
@@ -725,7 +734,7 @@ export default class Itemset extends React.Component<Props, State>{
             posRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule" >
                     {
-                        this.drawRuleAgg(ruleAgg, true)
+                        this.drawRuleAgg(ruleAgg, true,i)
                     }
                 </g>
             )
@@ -797,7 +806,7 @@ export default class Itemset extends React.Component<Props, State>{
             negaRules.push(
                 <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule">
                     {
-                        this.drawRuleAgg(ruleAgg, false)
+                        this.drawRuleAgg(ruleAgg, false,i)
                     }
                 </g>
             )
