@@ -456,6 +456,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let [attr, val] = attrVal.split('=')
                     let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                         rangeIdx = ranges.indexOf(val)
+                        // console.info(ranges)
                     this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
                     return <g key={attrVal}>
 
@@ -481,6 +482,7 @@ export default class Itemset extends React.Component<Props, State>{
                                     this.props.onChangeSelectedBar(['', ''])
                                 }}
                         />
+                       
                         
                     </g>
                 }
@@ -629,6 +631,13 @@ export default class Itemset extends React.Component<Props, State>{
                     }
                     }
                 />
+                <text x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx + 0.5 * barWidth / ranges.length}
+                    y={this.lineInterval}
+                    textAnchor='middle'
+                    fill='#ccc'
+                >
+                    {val}
+                </text>
             </g>
         }
         ))

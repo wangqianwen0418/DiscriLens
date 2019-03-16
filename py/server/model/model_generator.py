@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.metrics import accuracy_score
@@ -13,11 +14,13 @@ from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
 
-xgb = XGBClassifier(
-                max_depth=10, 
-                learning_rate=0.1, 
-                n_estimators=100,seed=10
-            )
+# xgb = XGBClassifier(
+#                 max_depth=10, 
+#                 learning_rate=0.1, 
+#                 n_estimators=100,seed=10
+#             )
+
+xgb = XGBClassifier()
 knn = KNeighborsClassifier(
                 algorithm = "ball_tree",
                 leaf_size = 40,
@@ -32,6 +35,8 @@ lr = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True
 svm = SVC(gamma='scale')
 
 rf = RandomForestClassifier(n_estimators=10, max_depth=5)
+
+dt = DecisionTreeClassifier()
 
 class ModelGene(object):   
     def __init__(self, model_name='knn'):
@@ -63,6 +68,9 @@ class ModelGene(object):
             "academic_xgb": xgb,
             "academic_lr": lr,
             "academic_knn": knn,
+            "academic_rf": rf,
+            "academic_svm": svm,
+            "academic_dt": dt,
             
             "adult_knn": knn,
             "adult_xgb": xgb,

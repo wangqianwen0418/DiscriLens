@@ -105,6 +105,16 @@ export default class Bubble extends React.Component<Props, State>{
         // let box = this.ref.current.getBoundingClientRect()
         // return [box.width, box.height]
     }
+    componentWillReceiveProps(props: Props){
+        // console.info(props)
+    }
+    shouldComponentUpdate(nextProps:Props){
+        if(nextProps.ruleAgg.id == this.props.ruleAgg.id)
+        {
+            return false
+        }
+        return true
+    }
     draw(){
         let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
         // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
@@ -338,6 +348,7 @@ export default class Bubble extends React.Component<Props, State>{
 
     }
     render() {
+        console.info('render bubbles')
         let {ruleAgg} = this.props
         let {itemCircles, outlines, background} = this.draw()
        
