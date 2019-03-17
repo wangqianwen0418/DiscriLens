@@ -109,7 +109,6 @@ export default class Bubble extends React.Component<Props, State>{
         // console.info(props)
     }
     shouldComponentUpdate(nextProps:Props){
-        console.info(nextProps.highlightRules, this.props.highlightRules)
         if(
             (nextProps.ruleAgg.id == this.props.ruleAgg.id)
             &&(this.props.hoverRule==nextProps.hoverRule)

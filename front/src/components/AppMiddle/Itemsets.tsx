@@ -737,10 +737,8 @@ export default class Itemset extends React.Component<Props, State>{
         )
         showIDs = showIDs.filter(id => !id.includes('agg'))
 
-        let initI = posFlag?0:bubblePosition.length - ruleAggs.length
-
-        console.info(this.state.highlightRules)
-
+        let initI = posFlag?0:bubblePosition.length - ruleAggs.length 
+        
         return <g className='bubbles' transform={`translate(${0}, ${0})`}>
             {
                 ruleAggs
