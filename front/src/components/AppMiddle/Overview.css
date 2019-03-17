@@ -6,6 +6,14 @@
     stroke: rgb(204, 204, 204) !important;
 }
 
+.axisSelectionY .domain{
+    stroke: rgb(204, 204, 204) !important;
+}
+
+.axisSelectionY .tick line{
+    stroke: rgb(204, 204, 204) !important;
+}
+
 .selectThrLeft{
     position: relative !important;
     overflow: visible;

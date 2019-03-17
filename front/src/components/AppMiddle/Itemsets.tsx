@@ -711,7 +711,6 @@ export default class Itemset extends React.Component<Props, State>{
                                 transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
                                 transY = bubblePosition[i].y
                         }
-                        console.log('input',this.state.hoverRule)
                         // first state bubble ot obtain the bubbleSize to calculate translate
                         let bubble = <Bubble
                             ref={(ref: any) => {
@@ -1077,6 +1076,7 @@ export default class Itemset extends React.Component<Props, State>{
      */
     findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number) {
         let pos = bubblePosition
+        let yList = this.yList
         let size = this.bubbleSize
         let length = pos.length
         if ((areaWidth < size[i].w) || (length == 0)) { return { x: Infinity, y: Infinity } }
@@ -1113,14 +1113,20 @@ export default class Itemset extends React.Component<Props, State>{
             })
             // if the right side contains zero rect (maxB is the rightest one or input contains only one rect)
             if (rightRects.length == 0) {
-                // the x space is large enough
-                if (areaWidth + startAxis - maxB.x - maxB.w > size[i].w) {
-                    rightAxis = { x: maxB.x + maxB.w, y: maxB.y - size[i].h / 2 + this.yList[i].y - this.yList[i - 1].y }
+                // if the max is still far from the new bubble on y-axis
+                if(yList[i].y-size[i].h/2>maxB.h+maxB.y){
+                    rightAxis = {x:maxB.x,y:yList[i].y-size[i].h/2}
+                }else{
+                    // the x space is large enough
+                    if (areaWidth + startAxis - maxB.x - maxB.w > size[i].w) {
+                        rightAxis = { x: maxB.x + maxB.w, y: yList[i].y - size[i].h/2}
+                    }
+                    // the x space is too small to hold this incomming rect
+                    else {
+                        rightAxis = { x: Infinity, y: Infinity }
+                    }
                 }
-                // the x space is too small to hold this incomming rect
-                else {
-                    rightAxis = { x: Infinity, y: Infinity }
-                }
+                
             } else {
                 let areaWidthNew = areaWidth - (maxB.x + maxB.w - startAxis),
                     startAxisNew = maxB.x + maxB.w
@@ -1159,7 +1165,7 @@ export default class Itemset extends React.Component<Props, State>{
         let bubblePosition: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
-        let interval = 1
+        let interval = 0
         this.bubbleSize.forEach((bubble, i) => {
             let transX = 0,
                 transY = 0
@@ -1204,12 +1210,15 @@ export default class Itemset extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
+        // console.log('size',this.bubbleSize)
     }
 
     render() {
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
+        // console.log('ylist',this.yList)
+        // console.log('bubble',this.state.bubblePosition)
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>

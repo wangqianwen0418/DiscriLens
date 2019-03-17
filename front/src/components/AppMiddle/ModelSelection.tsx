@@ -12,6 +12,7 @@ export interface Props{
     showDataset: string,
     accuracy:number[],
     compareFlag:boolean,
+    divideNum:number
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
@@ -138,22 +139,31 @@ export default class modelSelection extends React.Component<Props,State>{
                     return a.x - b.x
                 })
 
-                // down sampling to smooth data
+                let xMaxTemp = dataKeyAttr[dataKeyAttr.length-1].x,
+                xMinTemp = dataKeyAttr[0].x
+                // down sampling to smooth curve
                 let curveY:number[] = []
                 curveX = []
-                let step = Math.ceil(dataKeyAttr.length / 5)
+                let divideNum = this.props.divideNum
+                let step = (xMaxTemp-xMinTemp)/divideNum
                 let stepCount = 0
+                let dataCount = 0
                 dataKeyAttr_new.push([])
-                dataKeyAttr.forEach((data,j)=>{
-                    stepCount += data.y
-                    if(((j%step==0))||(j==dataKeyAttr.length-1)){
-                        data.y = stepCount
-                        stepCount = 0
-                        dataKeyAttr_new[i].push(data)
-                        curveY.push(data.y)
-                        curveX.push(data.x)
+                for(var j=0;j<divideNum;j++){
+                    let xLower = xMinTemp + step*j,
+                    xHigher = Math.min(xMinTemp + step*(j+1),xMaxTemp),
+                    startX = dataKeyAttr[dataCount].x
+                    while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
+                    {   
+                        stepCount += dataKeyAttr[dataCount].y
+                        if(dataCount<dataKeyAttr.length-1){dataCount += 1}
                     }
-                })
+                    let data:curveData={x:startX,y:stepCount,z:0}
+                    stepCount = 0
+                    dataKeyAttr_new[i].push(data)
+                    curveY.push(data.y)
+                    curveX.push(data.x)
+                }
                 xMax = Math.max(xMax,Math.max.apply(null,curveX.map(Math.abs)))
                 yMax.push(Math.max.apply(null,curveY.map(Math.abs)))
         })
@@ -177,7 +187,6 @@ export default class modelSelection extends React.Component<Props,State>{
                 let lineColor = this.lineColor;
                 let rightEnd = this.rightEnd;
                 let intervalHeight = this.intervalHeight;
-        
                 // xScale maps risk_dif to actual svg pixel length along x-axis
                 let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,this.rightEnd])
                 // yScale maps risk_dif to actual svg pixel length along x-axis

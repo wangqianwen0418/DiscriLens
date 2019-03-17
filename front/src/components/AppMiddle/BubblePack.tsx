@@ -101,9 +101,9 @@ export default class Bubble extends React.Component<Props, State>{
         super(props)
     }
     getSize(){
-        return [this.width+this.circlePadding,  this.height+this.circlePadding]
-        // let box = this.ref.current.getBoundingClientRect()
-        // return [box.width, box.height]
+        // return [this.width+this.circlePadding,  this.height+this.circlePadding]
+        let box = this.ref.current.getBoundingClientRect()
+        return [box.width, box.height]
     }
     componentWillReceiveProps(props: Props){
         // console.info(props)

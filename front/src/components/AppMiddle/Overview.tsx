@@ -13,6 +13,7 @@ export interface Props{
     protectedVal: string,
     xScaleMax: number,
     offset:number,
+    divideNum:number,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -228,22 +229,31 @@ export default class Overview extends React.Component<Props,State>{
             return a.x - b.x
         })
 
+        let xMax = dataKeyAttr[dataKeyAttr.length-1].x,
+        xMin = dataKeyAttr[0].x
         // down sampling to smooth curve
         let curveY:number[] = []
         curveX = []
-        let step = Math.ceil(dataKeyAttr.length / 5)
+        let divideNum = this.props.divideNum
+        let step = (xMax-xMin)/divideNum
         let stepCount = 0
+        let dataCount = 0
         let dataKeyAttr_new:curveData[] = []
-        dataKeyAttr.forEach((data,i)=>{
-            stepCount += data.y
-            if(((i%step==0))||(i==dataKeyAttr.length-1)){
-                data.y = stepCount
-                stepCount = 0
-                dataKeyAttr_new.push(data)
-                curveY.push(data.y)
-                curveX.push(data.x)
+        for(var j=0;j<divideNum;j++){
+            let xLower = xMin + step*j,
+            xHigher = Math.min(xMin + step*(j+1),xMax),
+            startX = dataKeyAttr[dataCount].x
+            while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
+            {   
+                stepCount += dataKeyAttr[dataCount].y
+                if(dataCount<dataKeyAttr.length-1){dataCount += 1}
             }
-        })
+            let data:curveData={x:startX,y:stepCount,z:0}
+            stepCount = 0
+            dataKeyAttr_new.push(data)
+            curveY.push(data.y)
+            curveX.push(data.x)
+        }
 
         return {data:dataKeyAttr_new,x:curveX,y:curveY}
     }
@@ -424,11 +434,12 @@ export default class Overview extends React.Component<Props,State>{
             .style('fill', 'gray')
             .style('text-anchor', 'start')
 
+            d3.selectAll('.axisSelectionY').remove()
 
             let yAxis = d3.axisRight(this.yScale)
             .tickValues([this.yMax])
 
-            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisY').attr('transform',`translate(${(this.rightEnd+this.leftStart)/2},${this.bottomEnd})`)
+            d3.select(this.ref.current).append('g').attr('class','axisSelectionY').attr('id','axisY').attr('transform',`translate(${(this.rightEnd+this.leftStart)/2},${this.bottomEnd})`)
             .attr('stroke-width','1.5px').call(yAxis)
 
             d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')

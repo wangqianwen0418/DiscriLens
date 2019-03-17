@@ -22,6 +22,8 @@ export default class AppMiddel extends React.Component<Props>{
     barWidth = this.step * 0.9;
     offsetX=50;
     viewSwitch = true;
+    // divide number for curve
+    divideNum = 10;
     render(){
         let changeView=()=>{
             this.viewSwitch = !this.viewSwitch
@@ -46,13 +48,13 @@ export default class AppMiddel extends React.Component<Props>{
 
          <Col span={this.props.foldFlag?1:4} className='App-left' id='App-left' style={{height:"100%"}}>
            <svg className='modelSelection' style={{width:"100%", height:"100%"}}>
-              <ModelSelection/>
+              <ModelSelection divideNum={this.divideNum}/>
            </svg>
          </Col>
 
          <Col span={this.props.foldFlag?23:20} className='App-right' style={{height:"100%"}}>
          <svg className='overview' style={{width:offset, height:"30%"}} >
-             <Overview offset={offset}/>
+             <Overview offset={offset} divideNum={this.divideNum}/>
          </svg>
          <svg className='attribute' style={{width:leftWidth-offset, height: "30%"}}>
                <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX+(!this.props.compareFlag?0:offsetComp)} offset={offset} foldFlag={this.props.foldFlag} leftWidth={leftWidth}/>
