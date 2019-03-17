@@ -19,7 +19,7 @@ const TEST = true
 let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank'],
-    models = ['xgb', 'knn', 'lr', 'svm', 'rf'],
+    models = ['xgb', 'knn', 'lr'],
     dataSelect = 1,
     modelSelect = 2,
 
@@ -73,7 +73,8 @@ if (TEST){
       accuracy,
       compareList:{b2:[],r:[],p:0,yMax:0},
       compareOffset:{y:[],index:[]},
-      expandRule:{id: 0, newAttrs:[], children: []}
+      expandRule:{id: 0, newAttrs:[], children: []},
+      compareFlag:false,
   }
 }else{
   initState = {
@@ -100,7 +101,8 @@ if (TEST){
     accuracy:{},
     compareList:{b2:[],r:[],p:0,yMax:0},
     compareOffset:{y:[],index:[]},
-    expandRule:{id: 0, newAttrs:[], children: []}
+    expandRule:{id: 0, newAttrs:[], children: []},
+    compareFlag:false,
 }
 }
 

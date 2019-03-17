@@ -20,6 +20,8 @@ export interface Props {
     offsetX:number,
     selected_bar:string[],
     foldFlag: boolean,
+    leftWidth:number,
+    offset:number,
     onChangeKeyAttr: (keyAttrs:string[])=>void,
     onChangeDragArray: (dragArray: string[]) => void,
     onChangeShowAttr: (showAttrs: string[])=>void,
@@ -169,7 +171,7 @@ export default class Attributes extends React.Component<Props, State>{
         // step length to merge data, to smooth curve
         function getStep() {
             if (ranges.length < 20) { return 2 }
-            else { return 2}
+            else { return 5}
         }
         let stepMerge = getStep()
     
@@ -191,8 +193,8 @@ export default class Attributes extends React.Component<Props, State>{
         ranges.forEach((range: number, range_i) => {
                 accept_num += samples_accept.filter(s => s[attr] === range).length
                 reject_num += samples_reject.filter(s => s[attr] === range).length
-                if (((range_i % stepMerge
-                    == 0) && (range_i != 0)) || (range_i == ranges.length - 1) || ((range_i == 0))) {
+                if ((range_i % stepMerge
+                    == 0&&(range_i!=0))) {
                     ListNum.range.push(range)
                     ListNum.acc.push(accept_num)
                     ListNum.rej.push(reject_num)
@@ -203,20 +205,19 @@ export default class Attributes extends React.Component<Props, State>{
                 }
         })
 
-        let hisWidth = curve_Width/Math.max(...ListNum.range),
+        let hisWidth = curve_Width/ListNum.range.length,
         hisAccHeight = this.height/2/Math.max(...ListNum.acc),
         hisRejHeight = this.height/2/Math.max(...ListNum.rej)
 
-        ListNum.range = ListNum.range.map((range)=>range*hisWidth)
         ListNum.acc = ListNum.acc.map((acc)=>acc*hisAccHeight)
         ListNum.rej = ListNum.rej.map((rej)=>rej*hisRejHeight)
 
         return <g>
             {ListNum.range.map((range,i)=>{
                 return <g>
-                <rect x={range} y={this.height/2-ListNum.acc[i]} width={hisWidth*stepMerge} height={ListNum.acc[i]} 
+                <rect x={hisWidth*i} y={this.height/2-ListNum.acc[i]} width={hisWidth} height={ListNum.acc[i]} 
                     style={{fill:GOOD_COLOR}}/>
-                <rect x={range} y={this.height/2} width={hisWidth*stepMerge} height={ListNum.rej[i]} 
+                <rect x={hisWidth*i} y={this.height/2} width={hisWidth} height={ListNum.rej[i]} 
                     style={{fill:BAD_COLOR}}/>
                 </g>
             })
@@ -464,7 +465,7 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - (this.props.foldFlag?window.innerWidth/24:window.innerWidth / 6) - (this.props.foldFlag?window.innerWidth/80*23:window.innerWidth / 4) - this.props.offsetX)/ step)
+                let endNum = Math.floor((e.x - (window.innerWidth-this.props.leftWidth) - this.props.offset - this.props.offsetX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){

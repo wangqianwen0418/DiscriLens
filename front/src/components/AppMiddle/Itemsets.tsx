@@ -41,7 +41,6 @@ export interface Props {
     fetchKeyStatus: Status,
     step: number,
     barWidth: number,
-    offsetX: number,
     offset: number,
     buttonSwitch: boolean,
     onChangeShowAttr: (showAttrs: string[]) => void
@@ -53,6 +52,8 @@ export interface State {
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
     // record all the bubble position when button is true
     bubblePosition: rect[],
+    hoveredBubble:string[],
+    pressButton:string,
 }
 export interface ExpandRule {
     id: string,
@@ -81,7 +82,7 @@ export interface rect {
 export default class Itemset extends React.Component<Props, State>{
     public height = 40; bar_margin = 1; attr_margin = 8; viewSwitch = -1; lineInterval = 15; fontSize=10
     margin = 65;
-    headWidth = this.props.offsetX - this.margin;
+    headWidth = 45;
     indent: 5;
     bubbleSize: rect[] = [];
     positiveRuleAgg: RuleAgg[] = [];
@@ -132,6 +133,8 @@ export default class Itemset extends React.Component<Props, State>{
             hoverRule: undefined,
             highlightRules: {},
             bubblePosition:[],
+            hoveredBubble:[],
+            pressButton:'',
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
@@ -156,7 +159,6 @@ export default class Itemset extends React.Component<Props, State>{
         let { showAttrNum, dragArray, keyAttrNum } = this.props
 
         let showAttrs = dragArray.slice(0, showAttrNum)
-
         const collapseRule = (id: string) => {
             for (let childID of expandRules[id].children) {
                 if (expandRules[childID]) {
@@ -191,8 +193,33 @@ export default class Itemset extends React.Component<Props, State>{
                         .filter(attr => !showAttrs.includes(attr))
                 )
         }
+        
         this.props.onChangeShowAttr(showAttrs)
         this.setState({ expandRules })
+    }
+
+    hoverColor(id: string,enterFlag:boolean) {
+        let { expandRules,hoveredBubble } = this.state
+
+        const pushID = (id:string) =>{
+            hoveredBubble.push(id)
+            if(expandRules[id]){
+                for (let childID of expandRules[id].children) {
+                    if(!hoveredBubble.includes(childID)){
+                        pushID(childID)
+                    }
+                }  
+            }
+        }
+
+        if (!enterFlag) {
+            hoveredBubble = []
+        } else {
+            // expand a rule
+            pushID(id)
+        }
+
+        this.setState({ hoveredBubble })
     }
     drawRuleNode(ruleNode: RuleNode, offsetX: number, offsetY: number, switchOffset:number, favorPD: boolean, itemScale: d3.ScaleLinear<number, number>, ruleAggID: string, listNum: number = 0): { content: JSX.Element[], offsetY: number,switchOffset:number } {
         let { rule, children } = ruleNode
@@ -201,7 +228,6 @@ export default class Itemset extends React.Component<Props, State>{
         let { highlightRules } = this.state
 
         let keyAttrs = dragArray.slice(0, keyAttrNum), showAttrs = dragArray.slice(0, showAttrNum)
-
 
         let newAttrs: string[] = []
         for (var node of children) {
@@ -252,18 +278,8 @@ export default class Itemset extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`}
+            transform={`translate(${this.props.offset}, ${switchOffset})`}
 
-            // tslint:disable-next-line:jsx-no-lambda
-            onMouseEnter={() => {
-                this.setState({ hoverRule: rule.id.toString() })
-            }
-            }
-            // tslint:disable-next-line:jsx-no-lambda
-            onMouseLeave={() => {
-                this.setState({ hoverRule: undefined })
-            }
-            }
             // tslint:disable-next-line:jsx-no-lambda
             onClick={(e: React.MouseEvent) => {
                 e.preventDefault()
@@ -429,7 +445,10 @@ export default class Itemset extends React.Component<Props, State>{
                         rangeIdx = ranges.indexOf(val)
                         // console.info(ranges)
                     this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
-                    return <g key={attrVal}>
+                    let opacity = 1
+                    if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(String(id)))){opacity=0.3}
+
+                    return <g key={attrVal} >
 
                         <rect className='background'
                             width={barWidth} height={this.lineInterval}
@@ -439,6 +458,7 @@ export default class Itemset extends React.Component<Props, State>{
                             // stroke={favorPD ? "#98E090" : "#FF772D"}
                             stroke={this.scoreColor(ruleNode.rule.risk_dif)}
                             strokeWidth={2}
+                            opacity={opacity}
                         />
                         
                         <rect className='font'
@@ -446,11 +466,14 @@ export default class Itemset extends React.Component<Props, State>{
                                 x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                                 // fill={favorPD ? "#98E090" : "#FF772D"}
                                 fill={this.scoreColor(ruleNode.rule.risk_dif)}
+                                opacity={opacity}
                                 onMouseEnter={() => {
-                                    this.props.onChangeSelectedBar([attr, val])
+                                    this.setState({ hoverRule: rule.id.toString() })
+                                    // this.props.onChangeSelectedBar([attr, val])
                                 }}
                                 onMouseLeave={() => {
-                                    this.props.onChangeSelectedBar(['', ''])
+                                    this.setState({ hoverRule: undefined })
+                                    // this.props.onChangeSelectedBar(['', ''])
                                 }}
                         />
                        
@@ -527,6 +550,11 @@ export default class Itemset extends React.Component<Props, State>{
             e.preventDefault();
             this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         }
+        if(this.state.pressButton){
+            if(this.state.pressButton==id){
+                         this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()));this.setState({pressButton:''});   
+            }
+        }
 
         let isExpand = this.state.expandRules.hasOwnProperty(id)
         let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
@@ -536,7 +564,45 @@ export default class Itemset extends React.Component<Props, State>{
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
-            let color = this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))
+            let opacity = 1
+            if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(id))){opacity=0.3}
+
+            let barWidthTep = barWidth / ranges.length
+            let startX = barWidth / ranges.length * rangeIdx
+            if(val.includes('<')||val.includes('>')){
+                let range = val
+                let rangeLeft:number,rangeRight:number
+
+                let maxTemp:any = -Infinity
+                        this.props.samples.forEach(s =>{
+                            if(s[attr]>maxTemp){
+                                maxTemp = s[attr]
+                            }
+                        })
+                let minTemp:any = Infinity
+                this.props.samples.forEach((s) =>{
+                            if(s[attr]<minTemp){
+                                minTemp = s[attr]
+                            }
+                        })
+                if(range.includes('<x<')){
+                        let split = range.split('<x<')
+                        rangeLeft = parseInt(split[0])
+                        rangeRight = parseInt(split[1])
+                }else if(range.includes('x<')){
+                        let split = range.split('x<')
+                        rangeLeft = minTemp
+                        rangeRight = parseInt(split[1]) 
+                }else if(range.includes('x>')){
+                        let split = range.split('x>')
+                        rangeLeft = parseInt(split[1])
+                        rangeRight = maxTemp
+                }
+                
+                barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
+                startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+            }
+
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
@@ -544,14 +610,16 @@ export default class Itemset extends React.Component<Props, State>{
                     // fill='#eee'
                     fill='none'
                     // stroke={favorPD ? "#98E090" : "#FF772D"}
-                    stroke={color}
+                    stroke={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
                     strokeWidth={2}
+                    opacity={opacity}
                 />
                 <rect className='font'
-                    width={barWidth / ranges.length} height={this.lineInterval}
-                    x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                    width={barWidthTep} height={this.lineInterval}
+                    x={step * dragArray.indexOf(attr) + startX}
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
-                    fill={color}
+                    fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+                    opacity={opacity}
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseEnter={() => {
                         this.enterRect(listNum)
@@ -559,7 +627,6 @@ export default class Itemset extends React.Component<Props, State>{
                     }
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseLeave={() => {
-                        this.setState({ hoverRule: undefined })
                         this.leaveRect()
                     }
                     }
@@ -604,8 +671,18 @@ export default class Itemset extends React.Component<Props, State>{
 
         return content
     }
+
+    connectionCurve=(s:axis, d:axis)=> {
+        let path = `M ${s.x} ${s.y}
+                C ${s.x} ${(s.y + d.y) / 2} ,
+                  ${d.x} ${(s.y + d.y) / 2} ,
+                  ${d.x} ${d.y} `
+    
+        return path
+    }
+
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
-        // let { compFlag} = this.props
+        let { offset} = this.props
         let { expandRules, bubblePosition } = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
@@ -620,6 +697,7 @@ export default class Itemset extends React.Component<Props, State>{
         showIDs = showIDs.filter(id => !id.includes('agg'))
 
         let initI = posFlag?0:bubblePosition.length - ruleAggs.length
+
         return <g className='bubbles' transform={`translate(${0}, ${0})`}>
             {
                 ruleAggs
@@ -629,10 +707,11 @@ export default class Itemset extends React.Component<Props, State>{
                         let transY = 0
                         // calculate translate distance
                         if (bubblePosition.length == this.rulesLength) {
-                                let rightBorder = 250
-                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w + this.props.offsetX
+                                let rightBorder = offset-this.headWidth-4*this.fontSize
+                                transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
                                 transY = bubblePosition[i].y
                         }
+                        console.log('input',this.state.hoverRule)
                         // first state bubble ot obtain the bubbleSize to calculate translate
                         let bubble = <Bubble
                             ref={(ref: any) => {
@@ -655,8 +734,28 @@ export default class Itemset extends React.Component<Props, State>{
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
                              h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
+
+                        // let connectionCurve:any
+                        // if(bubblePosition.length == this.rulesLength){
+                        //     connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
+                        //         ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                        // }
+
+                        let hoverIn = () =>{
+                            this.hoverColor(ruleAgg.id,true)
+                        }
+                
+                        let hoverOut = () =>{
+                            this.hoverColor(ruleAgg.id,false)
+                        }
+                        let clickBubble = (e:any) =>{
+                            this.setState({pressButton:ruleAgg.id})
+                        }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
+                            onMouseEnter={this.props.buttonSwitch?hoverIn:null}
+                            onMouseOut={this.props.buttonSwitch?hoverOut:null}
+                            onClick={clickBubble}
                         >
                             {this.props.buttonSwitch?null:bubbleLine}
                             {bubble}
@@ -664,8 +763,70 @@ export default class Itemset extends React.Component<Props, State>{
                     }
                     )
             }
+            
         </g>
     }
+    drawConnection(results:any){
+        let { offset} = this.props
+        let {  bubblePosition } = this.state
+        let { positiveRuleAgg, negativeRuleAgg } = results
+        return <g>
+        {
+            positiveRuleAgg
+            .map((ruleAgg:any, i:number) => {
+                    let transX = 0
+                    let transY = 0
+                    // calculate translate distance
+                    if (bubblePosition.length == this.rulesLength) {
+                            let rightBorder = offset-this.headWidth-4*this.fontSize
+                            transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
+                            transY = bubblePosition[i].y
+                    }
+                
+
+                    let connectionCurve:any
+                    if(bubblePosition.length == this.rulesLength){
+                        connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                    }
+
+                    return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
+                        transform={`translate(${transX},${transY})`}
+                    >
+                        {this.props.buttonSwitch?connectionCurve:null}
+                    </g>
+            })
+        }
+        {
+            negativeRuleAgg
+            .map((ruleAgg:any, i:number) => {
+                i+=positiveRuleAgg.length
+                    let transX = 0
+                    let transY = 0
+                    // calculate translate distance
+                    if (bubblePosition.length == this.rulesLength) {
+                            let rightBorder = offset-this.headWidth-4*this.fontSize
+                            transX = rightBorder - bubblePosition[i].x - bubblePosition[i].w
+                            transY = bubblePosition[i].y
+                    }
+                
+
+                    let connectionCurve:any
+                    if(bubblePosition.length == this.rulesLength){
+                        connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                    }
+
+                    return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
+                        transform={`translate(${transX},${transY})`}
+                    >
+                        {this.props.buttonSwitch?connectionCurve:null}
+                    </g>
+            })
+        }
+        </g>
+    }
+
     compareString(array1:any[],array2:any[]){
         let is_same = true
         if (array1.length == array2.length) {
@@ -680,6 +841,7 @@ export default class Itemset extends React.Component<Props, State>{
 
 
     draw() {
+        
         let { rules, samples} = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
@@ -732,7 +894,7 @@ export default class Itemset extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${ this.props.offset}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true,i)
                     }
@@ -804,7 +966,7 @@ export default class Itemset extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let negAveY = switchOffset
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offsetX + this.props.offset}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
@@ -843,11 +1005,13 @@ export default class Itemset extends React.Component<Props, State>{
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let bubbles = [this.drawBubbles(positiveRuleAgg, scoreDomain, true), this.drawBubbles(negativeRuleAgg, scoreDomain, false)]
-
+        let connectionCurve = this.drawConnection(this)
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
             
-        
+            <g className='bubbles'>
+                {connectionCurve}
+            </g>
             <g className='bubbles'>
                 {bubbles}
             </g>
@@ -1043,11 +1207,9 @@ export default class Itemset extends React.Component<Props, State>{
     }
 
     render() {
-        console.info('render')
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
@@ -1076,7 +1238,7 @@ export default class Itemset extends React.Component<Props, State>{
             svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
-        let borderWidth = this.xMaxValue + this.props.offset + this.props.offsetX + 10
+        let borderWidth = this.xMaxValue + this.props.offset + 10
         return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}

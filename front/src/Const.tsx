@@ -58,3 +58,6 @@ export type TRANS_COMPARE_OFFSET = typeof TRANS_COMPARE_OFFSET
 
 export const EXPAND_RULE = 'EXPAND_RULE'
 export type EXPAND_RULE = typeof EXPAND_RULE
+
+export const COMPARE_MODE = 'COMPARE_MODE'
+export type COMPARE_MODE = typeof COMPARE_MODE

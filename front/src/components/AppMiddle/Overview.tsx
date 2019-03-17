@@ -34,7 +34,7 @@ export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
     public leftStart = 20 ; 
     // right end position
-    rightEnd = window.innerWidth * 0.2; 
+    rightEnd = window.innerWidth * 0.15; 
     // bottom end position
     bottomEnd = 120; 
     // top start position 
@@ -50,6 +50,8 @@ export default class Overview extends React.Component<Props,State>{
     // counters for dragging
     xLeft = 0; 
     xRight = 0;
+    yScale:any;
+    yMax:number;
     offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 4 * 3
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
@@ -253,7 +255,6 @@ export default class Overview extends React.Component<Props,State>{
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
         compDataPro = null, compDataKeyAttr = null,compCurveX = null,compCurveY = null
         if(compAllRules){
-            console.log(compAllRules)
             compDataPro = this.ruleProcessing(compAllRules,keyAttrs)
             compDataKeyAttr = compDataPro.data
             compCurveX = compDataPro.x
@@ -274,8 +275,6 @@ export default class Overview extends React.Component<Props,State>{
         let leftStart = this.leftStart;
         // right end position
         let rightEnd = this.rightEnd
-        // a standard reference length
-        let markSize = this.markSize;
         // top start position 
         let topStart = this.topStart
         // line's color
@@ -289,15 +288,16 @@ export default class Overview extends React.Component<Props,State>{
         // xScale maps risk_dif to actual svg pixel length along x-axis
         let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,rightEnd])
         // yScale maps risk_dif to actual svg pixel length along x-axis
-        let yScale = d3.scaleLinear().domain([0,yMax]).range([0,bottomEnd-topStart])
+        let yScale = d3.scaleLinear().domain([0,yMax]).range([0,-bottomEnd+topStart])
         // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
         let xScaleReverse = d3.scaleLinear().domain([leftStart,rightEnd]).range([-maxAbsoluteX,maxAbsoluteX])
         // area of rules filtered by key_attrs
-        let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd-yScale(d.y)).curve(d3.curveMonotoneX)
+        let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
         // curve
         let curve = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
 
-
+        this.yScale = yScale
+        this.yMax = yMax
         // initialization state
         let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
         let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
@@ -308,47 +308,54 @@ export default class Overview extends React.Component<Props,State>{
 
             //let xMin = xScale(Math.min(...rangeX))
             //let xMax = xScale(Math.max(...rangeX))
-            
-            let bounderLeft:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
-            let bounderRight:curveData[] = [{x:0.5,y:0.9*topStart,z:0},{x:0.5,y:bottomEnd,z:0}]
-            let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
+            // let startYLeft = 0.65*topStart -12,startYRight = 0.65*topStart
+            let startYLeft = bottomEnd-2 ,startYRight = bottomEnd-2
+            let bounderLeft:curveData[] = [{x:0.5,y:startYLeft,z:0},{x:0.5,y:bottomEnd,z:0}]
+            let bounderRight:curveData[] = [{x:0.5,y:startYRight,z:0},{x:0.5,y:bottomEnd,z:0}]
+            // let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
 
-            let rightArrow = <path d={`M -12,${0.9*topStart - 12} h 24 l 6,6 l -6,6 h -24 v -12 `} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
-            let leftArrow = <path d={`M 12,${0.9*topStart - 12} h -24 l -6,6 l 6,6 h 24 v -12 `} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
-            return <g  cursor='e-resize'>
-                 <g id={'rectLeft'} className={'selectThr'} onMouseDown={this.mouseDownLeft}
+            let rightArrow = `M 0,${startYRight - 12} h 24 l 6,6 l -6,6 h -24 v -12 `
+            let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
+            return <g>
+                 <g id={'rectLeft'} className={'selectThr'}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
-                        {/* <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/> */}
-                        {leftArrow}
-                        <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
-                        <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        {/* <rect rx={2} x={-12} y={startY - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/> */}
+                        
+                        <g onMouseDown={this.mouseDownLeft}  cursor='e-resize'>
+                            <path d={leftArrow} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                            <path d={leftArrow} style={{fill:'transparent'}}/>
+                            <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        </g>
+                        
                         {inputLeft?
-                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inoutBoxLeft'>
+                        <foreignObject width={24} height={12} fontSize={9} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
                             <input type='number' 
-                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
+                            defaultValue={this.props.ruleThreshold[0].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
-                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
+                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
                             {xScaleReverse(this.state.transformXLeft).toFixed(2)}
                         </text>
                         }
                     </g>
                 
-                <g id={'rectRight'} className={'selectThr'} onMouseDown={this.mouseDownRight}
+                <g id={'rectRight'} className={'selectThr'} 
                  transform={`translate(${this.state.transformXRight}, 0)`} >
-                        {/* <rect rx={2} x={-12} y={0.9*topStart - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/> */}
-                        {rightArrow}
-                        <path d={curve(selectMask)} style={{stroke:'transparent',strokeWidth:markSize}}/>
-                        <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        {/* <rect rx={2} x={-12} y={startY - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/> */}
+                        <g onMouseDown={this.mouseDownRight} cursor={'e-resize'}>
+                            <path d={rightArrow} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                            <path d={rightArrow} style={{fill:'transparent'}}/>
+                            <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        </g>
                         {inputRight?
-                        <foreignObject width={24} height={12} fontSize={9} x={-12} y={0.9*topStart - 12} className='inputBoxRight'>
+                        <foreignObject width={24} height={12} fontSize={9} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
-                        <text x={-10} y={0.9*topStart - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
+                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
                             {xScaleReverse(this.state.transformXRight).toFixed(2)}
                         </text>
                         }
@@ -416,6 +423,16 @@ export default class Overview extends React.Component<Props,State>{
             .text(`against ${this.props.protectedVal}`)
             .style('fill', 'gray')
             .style('text-anchor', 'start')
+
+
+            let yAxis = d3.axisRight(this.yScale)
+            .tickValues([this.yMax])
+
+            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisY').attr('transform',`translate(${(this.rightEnd+this.leftStart)/2},${this.bottomEnd})`)
+            .attr('stroke-width','1.5px').call(yAxis)
+
+            d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
+            d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
         }
     }
 }
