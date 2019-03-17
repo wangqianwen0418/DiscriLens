@@ -12,8 +12,6 @@ import { StoreState, Status} from 'types';
 
 import {filterRules} from "Helpers";
 
-
-
 import 'antd/dist/antd.css';
 
 const TEST = true
@@ -30,7 +28,7 @@ let dataSets = ['adult', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataset + '_' + model
-    let {keyAttrs} = require('./testdata/'+dataset+'_key.json')
+    let {keyAttrs, accuracy} = require('./testdata/'+dataset+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
@@ -72,7 +70,7 @@ if (TEST){
       compSamples:null,
       compRules:null,
       foldFlag: false,
-      accuracy: [0.81,0.74,0.74],
+      accuracy,
       compareList:{b2:[],r:[],p:0,yMax:0},
       compareOffset:{y:[],index:[]},
       expandRule:{id: 0, newAttrs:[], children: []}
@@ -99,7 +97,7 @@ if (TEST){
     compSamples:null,
     compRules:null,
     foldFlag: false,
-    accuracy: [0.81,0.74,0.74],
+    accuracy:{},
     compareList:{b2:[],r:[],p:0,yMax:0},
     compareOffset:{y:[],index:[]},
     expandRule:{id: 0, newAttrs:[], children: []}

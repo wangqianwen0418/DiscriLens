@@ -54,7 +54,7 @@ def interval2string(inter):
     else:
         return '{}<x<{}'.format(int(inter[0]), int(inter[1]))
 
-def num2cate_fit(df, min=4):
+def num2cate_fit(df, min=2):
     '''
     Arg
         df (Panda dataframes); the last col must be class, int 0 or 1

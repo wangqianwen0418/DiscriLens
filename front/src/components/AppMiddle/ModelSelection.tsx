@@ -10,7 +10,7 @@ export interface Props{
     keyAttrNum: number,
     dragArray: string[],
     showDataset: string,
-    accuracy:number[],
+    accuracy:{[key:string]:number},
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
@@ -79,7 +79,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     getModel(dataset:string){
         if(dataset=='academic'){
-            return ['xgb', 'knn', 'lr']
+            return ['xgb', 'knn', 'lr','svm','rf','dt']
         }
         else if(dataset=='adult'){
             return ['xgb', 'knn', 'lr','svm','rf']
@@ -236,7 +236,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
                         <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={startY}>{this.models[i]}</text>
 
-                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={startY + 0.1*bottomEnd}>{'Acc:'+(this.props.accuracy[i]*100).toFixed(1)+'%'}</text>
+                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={startY + 0.1*bottomEnd}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
                     </g>
                 </g>
             })

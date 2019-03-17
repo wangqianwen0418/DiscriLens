@@ -24,6 +24,12 @@ const getEdgeWeight = (e: typeof graphlib.graph.edgeObj, rulesGraph: RulesGraph)
 
 export const getMinLinks = (rules: Rule[], circles: ItemHierarchy[]): typeof graphlib.Graph=> {
      let rulesGraph: RulesGraph = {}
+     let resultGraph = new graphlib.Graph({ directed: false })
+
+     if (circles.length==1){
+        resultGraph.setNode(circles[0].id)
+        return resultGraph
+    }
     // build a graph for each rule
     for (var rule of rules) {
         let g = new graphlib.Graph({ directed: false })
@@ -50,7 +56,7 @@ export const getMinLinks = (rules: Rule[], circles: ItemHierarchy[]): typeof gra
         }
     }
     // update links based on MST
-    let resultGraph = new graphlib.Graph({ directed: false })
+    
     for (let ruleID in rulesGraph) {
         let ruleGraph = rulesGraph[ruleID]
         for (let edgeObj of ruleGraph.edges()) {
