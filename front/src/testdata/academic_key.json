@@ -1,9 +1,5 @@
 {
-   "keyAttrs": [
-      "StudentAbsenceDays",
-      "raisedhands",
-      "Discussion"
-   ],
+   "keyAttrs": ["StudentAbsenceDays", "raisedhands", "VisITedResources"],
    "accuracy": {
       "knn": 0.890,
       "lr": 0.904,
@@ -15,7 +11,7 @@
    "causal": [
       "VisITedResources --- class",
       "Relation --- class",
-      "AnnouncementsView --- class",
+      "AnnouncementsView --- VisITedResources",
       "gender --- StudentAbsenceDays",
       "raisedhands --- class",
       "StudentAbsenceDays --- class"

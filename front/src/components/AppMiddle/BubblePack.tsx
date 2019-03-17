@@ -109,8 +109,14 @@ export default class Bubble extends React.Component<Props, State>{
         // console.info(props)
     }
     shouldComponentUpdate(nextProps:Props){
-        if((nextProps.ruleAgg.id == this.props.ruleAgg.id)&&(this.props.hoverRule==nextProps.hoverRule))
+        console.info(nextProps.highlightRules, this.props.highlightRules)
+        if(
+            (nextProps.ruleAgg.id == this.props.ruleAgg.id)
+            &&(this.props.hoverRule==nextProps.hoverRule)
+            && (nextProps.highlightRules.length == this.props.highlightRules.length)
+            )
         {
+            
             return false
         }
         return true
@@ -120,7 +126,7 @@ export default class Bubble extends React.Component<Props, State>{
         // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
         let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules),
-        circlePadding = this.radius*(highlightRules.length)*1.5 // change circle padding based on the highlight boundaries
+        circlePadding = this.radius*(highlightRules.length+1)*1.5 // change circle padding based on the highlight boundaries
         this.circlePadding = circlePadding
 
         // console.info(hoverRule)
@@ -298,7 +304,8 @@ export default class Bubble extends React.Component<Props, State>{
         let outlines = highlightRules.slice().sort((ruleA, ruleB)=>{
             return highlightCircles[ruleA].length - highlightCircles[ruleB].length
         }).map((ruleID, idx)=>{
-                const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
+                // const percent = highlightRules.length==1?1:(idx/(highlightRules.length-1)) 
+                const percent = idx/(highlightRules.length)
                 const padding = ( 0.6 + 0.4* percent) * circlePadding
                 return  <g key={`outline_${ruleID}`} className='outlines'>
                     <mask id={`mask_outline_${ruleID}`}>
@@ -332,16 +339,30 @@ export default class Bubble extends React.Component<Props, State>{
         })
 
         let background = <g className='background'>
-        {root.children.map((outerCircle:ItemHierarchy) => {
+        {   
+            // ruleAgg.nodes.length>1?
+            root.children.map((outerCircle:ItemHierarchy) => {
             return <circle className='outlines'  key={outerCircle.id}
             // stroke={"#b9b9b9"} 
             cx={outerCircle.x}
             cy={outerCircle.y}
-            r={outerCircle.r + 0.5*circlePadding}
-            stroke = 'white'
+            r={outerCircle.r + circlePadding}
+            stroke = {boundaryColor[0]}
+            strokeWidth={strokeWidth*1.5}
+            fill="white"/>} )
+            // : <g/>
+        }
+        {
+            root.children.map((outerCircle:ItemHierarchy) => {
+            return <circle className='outlines'  key={outerCircle.id}
+            // stroke={"#b9b9b9"} 
+            cx={outerCircle.x}
+            cy={outerCircle.y}
+            r={outerCircle.r + circlePadding - strokeWidth}
             fill="white"/> 
             })
-        }</g>
+        }
+        </g>
         
         
         return {itemCircles, outlines, background}
@@ -350,6 +371,7 @@ export default class Bubble extends React.Component<Props, State>{
     render() {
         let {ruleAgg} = this.props
         let {itemCircles, outlines, background} = this.draw()
+        console.info("render bubble")
        
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
