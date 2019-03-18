@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from sklearn.metrics import accuracy_score
 
 from xgboost import XGBClassifier
@@ -17,26 +17,31 @@ from xgboost import XGBClassifier
 # xgb = XGBClassifier(
 #                 max_depth=10, 
 #                 learning_rate=0.1, 
-#                 n_estimators=100,seed=10
+#                 n_estimators=200,seed=10
 #             )
 
-xgb = XGBClassifier()
+xgb = XGBClassifier(
+    eta=0.1, 
+    gamma=4, 
+    max_depth=6, 
+    tree_method="exact"
+)
 knn = KNeighborsClassifier(
-                algorithm = "ball_tree",
-                leaf_size = 40,
-                metric = "manhattan",
-                n_neighbors = 17
-            )
-lr = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-                intercept_scaling=1, max_iter=100, multi_class='ovr', n_jobs=1,
-                penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
-                verbose=0, warm_start=False
-            )
-svm = SVC(gamma='scale')
+        algorithm='brute', leaf_size=17, n_neighbors=16, weights='distance'
+        )
+lr = LogisticRegression(solver='sag', penalty='l2', C= 0.5)
+svm = SVC(kernel='linear', gamma='scale')
 
-rf = RandomForestClassifier(n_estimators=10, max_depth=5)
+rf = RandomForestClassifier(
+    bootstrap=True, 
+    criterion='gini', 
+    max_depth=10, 
+    max_features=5, 
+    min_samples_split=9, 
+    n_estimators=50
+    )
 
-dt = DecisionTreeClassifier()
+dt = DecisionTreeClassifier(criterion= 'entropy', max_depth= 5, min_samples_split= 2)
 
 class ModelGene(object):   
     def __init__(self, model_name='knn'):
@@ -77,6 +82,7 @@ class ModelGene(object):
             "adult_lr": lr,
             "adult_rf": rf,
             "adult_svm": svm,
+            "adult_dt": dt,
 
             "german_credit_xgb": xgb,
             "german_credit_knn":  knn,
@@ -107,8 +113,11 @@ class ModelGene(object):
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
         model = self.model
-        model.fit(x_train, y_train)
-        score = accuracy_score(y_test, model.predict(x_test))
-        # score = cross_val_score(model, x_train, y_train, scoring='accuracy', cv=4) 
-        return model, encoder, score
+        
+        # model.fit(x_train, y_train)
+        # score = accuracy_score(y_test, model.predict(x_test))
+        score_cross = cross_val_score(model, x, y, scoring='accuracy', cv = KFold(n_splits=5, shuffle = True)) 
+        score_cross = sum(score_cross)/len(score_cross)
+        model.fit(x, y)
+        return model, encoder, score_cross
    

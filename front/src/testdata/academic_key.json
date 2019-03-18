@@ -1,4 +1,19 @@
-{"keyAttrs":["StudentAbsenceDays", "raisedhands", "Discussion"]
-    , "accuracy":{
-       "knn": 0.927, "lr": 0.927, "xbg":0.958, "svm": 0.906, "rf": 0.9375, "dt":0.916
-    }}
+{
+   "keyAttrs": ["StudentAbsenceDays", "raisedhands", "VisITedResources"],
+   "accuracy": {
+      "knn": 0.890,
+      "lr": 0.904,
+      "xgb": 0.906,
+      "svm": 0.894,
+      "rf": 0.904,
+      "dt": 0.898
+   },
+   "causal": [
+      "VisITedResources --- class",
+      "Relation --- class",
+      "AnnouncementsView --- VisITedResources",
+      "gender --- StudentAbsenceDays",
+      "raisedhands --- class",
+      "StudentAbsenceDays --- class"
+   ]
+}
