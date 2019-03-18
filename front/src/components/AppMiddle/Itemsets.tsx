@@ -48,7 +48,7 @@ export interface Props {
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
-    hoverRule: string,
+    hoverRule: [string, string], // [ruleID, ruleAggID]
     highlightRules: { [id: string]: string[] }; // the highlight rules in each ruleAGG
     // record all the bubble position when button is true
     bubblePosition: rect[],
@@ -446,6 +446,43 @@ export default class Itemset extends React.Component<Props, State>{
                         // console.info(ranges)
                     this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
                     let opacity = 1
+                    let barWidthTep = barWidth / ranges.length
+                    let startX = barWidth / ranges.length * rangeIdx
+
+                    if(val.includes('<')||val.includes('>')){
+                        let range = val
+                        let rangeLeft:number,rangeRight:number
+        
+                        let maxTemp:any = -Infinity
+                                this.props.samples.forEach(s =>{
+                                    if(s[attr]>maxTemp){
+                                        maxTemp = s[attr]
+                                    }
+                                })
+                        let minTemp:any = Infinity
+                        this.props.samples.forEach((s) =>{
+                                    if(s[attr]<minTemp){
+                                        minTemp = s[attr]
+                                    }
+                                })
+                        if(range.includes('<x<')){
+                                let split = range.split('<x<')
+                                rangeLeft = parseInt(split[0])
+                                rangeRight = parseInt(split[1])
+                        }else if(range.includes('x<')){
+                                let split = range.split('x<')
+                                rangeLeft = minTemp
+                                rangeRight = parseInt(split[1]) 
+                        }else if(range.includes('x>')){
+                                let split = range.split('x>')
+                                rangeLeft = parseInt(split[1])
+                                rangeRight = maxTemp
+                        }
+                        
+                        barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
+                        startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                    }
+
                     if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(String(id)))){opacity=0.3}
 
                     return <g key={attrVal} >
@@ -462,15 +499,19 @@ export default class Itemset extends React.Component<Props, State>{
                         />
                         
                         <rect className='font'
-                                width={barWidth / ranges.length} height={this.lineInterval}
-                                x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                                width={barWidthTep} height={this.lineInterval}
+                                x={step * dragArray.indexOf(attr) + startX}
+                                // width={barWidth / ranges.length} height={this.lineInterval}
+                                // x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
                                 // fill={favorPD ? "#98E090" : "#FF772D"}
                                 fill={this.scoreColor(ruleNode.rule.risk_dif)}
                                 opacity={opacity}
+                                // tslint:disable-next-line:jsx-no-lambda
                                 onMouseEnter={() => {
-                                    this.setState({ hoverRule: rule.id.toString() })
+                                    this.setState({ hoverRule: [rule.id.toString(), ruleAggID] })
                                     // this.props.onChangeSelectedBar([attr, val])
                                 }}
+                                // tslint:disable-next-line:jsx-no-lambda
                                 onMouseLeave={() => {
                                     this.setState({ hoverRule: undefined })
                                     // this.props.onChangeSelectedBar(['', ''])
@@ -683,7 +724,7 @@ export default class Itemset extends React.Component<Props, State>{
 
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean) {
         let { offset} = this.props
-        let { expandRules, bubblePosition } = this.state
+        let { expandRules, bubblePosition, hoverRule, highlightRules } = this.state
         // rules that are showing
         let showIDs: string[] = Array.from(
             new Set(
@@ -696,8 +737,8 @@ export default class Itemset extends React.Component<Props, State>{
         )
         showIDs = showIDs.filter(id => !id.includes('agg'))
 
-        let initI = posFlag?0:bubblePosition.length - ruleAggs.length
-
+        let initI = posFlag?0:bubblePosition.length - ruleAggs.length 
+        
         return <g className='bubbles' transform={`translate(${0}, ${0})`}>
             {
                 ruleAggs
@@ -723,8 +764,8 @@ export default class Itemset extends React.Component<Props, State>{
                             ruleAgg={ruleAgg}
                             scoreColor={this.scoreColor}
                             showIDs={showIDs}
-                            hoverRule={this.state.hoverRule}
-                            highlightRules={this.state.highlightRules[ruleAgg.id] || []}
+                            hoverRule={hoverRule? (hoverRule[1]==ruleAgg.id?hoverRule[0]:undefined) : undefined}
+                            highlightRules={[...highlightRules[ruleAgg.id]] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
                         />
@@ -1038,12 +1079,14 @@ export default class Itemset extends React.Component<Props, State>{
         let { highlightRules } = this.state
         negativeRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
-                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+                highlightRules[ruleAgg.id.toString()] = []
+                // highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
             }
         })
         positiveRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
-                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+                highlightRules[ruleAgg.id.toString()] = []
+                // highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
             }
         })
         this.setState({ highlightRules })

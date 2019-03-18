@@ -1,4 +1,4 @@
-age,workclass,fnlwgt,educational-num,relationship,race,sex,hours-per-week,country,class
+age,workclass,fnlwgt,educational-num,relationship,race,gender,hours-per-week,country,class
 25,Private,226802,7,Own-child,Black,Male,40,US,0
 38,Private,89814,9,Husband,White,Male,50,US,0
 28,Local-gov,336951,12,Husband,White,Male,40,US,1

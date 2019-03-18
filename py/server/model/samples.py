@@ -107,7 +107,7 @@ def generate_model_samples(samplesInit, mdlp, model, encoder):
     return model_samples, storeData
     # return pd.concat([model_samples,storeData]), storeData
 
-def findKeyAttrs(samples, protect_attr, result_attr = 'class'):
+def findKeyAttrs(samples, protect_attr='', result_attr = 'class'):
     """
     Args:
         samples(pandas DataFrame): 

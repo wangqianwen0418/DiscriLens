@@ -436,9 +436,9 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
     // remove the attribute 'id' and 'class'
     dragArray.splice(dragArray.indexOf('id'), 1)
     dragArray.splice(dragArray.indexOf('class'), 1)
-    if (dragArray.includes(protectedAttr)){
-      dragArray.splice(dragArray.indexOf(protectedAttr), 1)
-    }  
+    // if (dragArray.includes(protectedAttr)){
+    //   dragArray.splice(dragArray.indexOf(protectedAttr), 1)
+    // }  
     // move key attributes to the front
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
 
