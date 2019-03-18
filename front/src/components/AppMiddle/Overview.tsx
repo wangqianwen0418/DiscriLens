@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
 import {GOOD_COLOR,BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
+import './Overview.css'
 
 export interface Props{
     allRules: Rule[],
@@ -54,6 +55,7 @@ export default class Overview extends React.Component<Props,State>{
     yScale:any;
     yMax:number;
     offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 4 * 3
+    fontSize=12;
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -229,33 +231,33 @@ export default class Overview extends React.Component<Props,State>{
             return a.x - b.x
         })
 
-        let xMax = dataKeyAttr[dataKeyAttr.length-1].x,
-        xMin = dataKeyAttr[0].x
+        // let xMax = dataKeyAttr[dataKeyAttr.length-1].x,
+        // xMin = dataKeyAttr[0].x
         // down sampling to smooth curve
         let curveY:number[] = []
         curveX = []
-        let divideNum = this.props.divideNum
-        let step = (xMax-xMin)/divideNum
-        let stepCount = 0
-        let dataCount = 0
-        let dataKeyAttr_new:curveData[] = []
-        for(var j=0;j<divideNum;j++){
-            let xLower = xMin + step*j,
-            xHigher = Math.min(xMin + step*(j+1),xMax),
-            startX = dataKeyAttr[dataCount].x
-            while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
-            {   
-                stepCount += dataKeyAttr[dataCount].y
-                if(dataCount<dataKeyAttr.length-1){dataCount += 1}
-            }
-            let data:curveData={x:startX,y:stepCount,z:0}
-            stepCount = 0
-            dataKeyAttr_new.push(data)
+        // let divideNum = this.props.divideNum
+        // let step = (xMax-xMin)/divideNum
+        // let stepCount = 0
+        // let dataCount = 0
+        // let dataKeyAttr_new:curveData[] = []
+        dataKeyAttr.forEach((data,i)=>{
+        // for(var j=0;j<divideNum;j++){
+        //     let xLower = xMin + step*j,
+        //     xHigher = Math.min(xMin + step*(j+1),xMax),
+        //     startX = dataKeyAttr[dataCount].x
+        //     while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
+        //     {   
+        //         stepCount += dataKeyAttr[dataCount].y
+        //         if(dataCount<dataKeyAttr.length-1){dataCount += 1}
+        //     }
+        //     let data:curveData={x:startX,y:stepCount,z:0}
+        //     stepCount = 0
+        //     dataKeyAttr_new.push(data)
             curveY.push(data.y)
             curveX.push(data.x)
-        }
-
-        return {data:dataKeyAttr_new,x:curveX,y:curveY}
+        })
+        return {data:dataKeyAttr,x:curveX,y:curveY}
     }
 
     drawArea(){
@@ -338,13 +340,13 @@ export default class Overview extends React.Component<Props,State>{
                         </g>
                         
                         {inputLeft?
-                        <foreignObject width={24} height={12} fontSize={9} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[0].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
-                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
+                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputLeft} cursor='text'>
                             {xScaleReverse(this.state.transformXLeft).toFixed(2)}
                         </text>
                         }
@@ -359,13 +361,13 @@ export default class Overview extends React.Component<Props,State>{
                             <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         </g>
                         {inputRight?
-                        <foreignObject width={24} height={12} fontSize={9} x={0} y={startYRight - 14} className='inputBoxRight'>
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
-                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
+                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputRight} cursor='text'>
                             {xScaleReverse(this.state.transformXRight).toFixed(2)}
                         </text>
                         }
@@ -397,9 +399,140 @@ export default class Overview extends React.Component<Props,State>{
             </g>
     
     }
+    drawScatter(){
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {inputLeft, inputRight} = this.state
+        
+        let dataPro = this.ruleProcessing(allRules,keyAttrs),
+        compDataPro = null, compDataKeyAttr = null,compCurveX = null,compCurveY = null
+        if(compAllRules){
+            compDataPro = this.ruleProcessing(compAllRules,keyAttrs)
+            compDataKeyAttr = compDataPro.data
+            compCurveX = compDataPro.x
+            compCurveY = compDataPro.y
+        }
+        
+        let dataKeyAttr = dataPro.data, curveX:number[] = dataPro.x, curveY = dataPro.y
+        
+        let xMax = Math.max(Math.max.apply(null,curveX.map(Math.abs)),compCurveX?Math.max.apply(null,compCurveX.map(Math.abs)):0),
+            yMax = Math.max(Math.max(...curveY),Math.max(...compCurveY))
+        
+        /**
+         * Draw scatter plot
+         * */ 
+        // some parameters for drawing
+        // bottom end position
+        let bottomEnd = this.bottomEnd;
+        // left start postition
+        let leftStart = this.leftStart;
+        // right end position
+        let rightEnd = this.rightEnd
+        // top start position 
+        let topStart = this.topStart
+        // line's color
+        let lineColor = this.lineColor;
+        
+        // define scales
+        let maxAbsoluteX = xScaleMax==-1?(dataKeyAttr.length>0?xMax:0.5):xScaleMax
+        // xScale maps risk_dif to actual svg pixel length along x-axis
+        let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,rightEnd])
+        // yScale maps risk_dif to actual svg pixel length along x-axis
+        let yScale = d3.scaleLinear().domain([0,yMax]).range([0,-bottomEnd+topStart])
+        // xScaleReverse maps actual svg pixel length to risk_dif, reserve of xScale
+        let xScaleReverse = d3.scaleLinear().domain([leftStart,rightEnd]).range([-maxAbsoluteX,maxAbsoluteX])
+        // area of rules filtered by key_attrs
+        // let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
+        // curve
+        let curve = d3.line<curveData>().x(d=>d.x).y(d=>d.y)
+
+        this.yScale = yScale
+        this.yMax = yMax
+        // initialization state
+        let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
+        let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
+        if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
+        if(xScaleMax!=this.state.xScaleMax){this.update(xScale,xScaleReverse)}
+        // select rule filtering thresholds
+        let selectThr = () =>{
+
+            //let xMin = xScale(Math.min(...rangeX))
+            //let xMax = xScale(Math.max(...rangeX))
+            // let startYLeft = 0.65*topStart -12,startYRight = 0.65*topStart
+            let startYLeft = bottomEnd+14 ,startYRight = bottomEnd+14
+            let bounderLeft:curveData[] = [{x:0.5,y:startYLeft,z:0},{x:0.5,y:bottomEnd,z:0}]
+            let bounderRight:curveData[] = [{x:0.5,y:startYRight,z:0},{x:0.5,y:bottomEnd,z:0}]
+            // let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
+
+            let rightArrow = `M 0,${startYRight - this.fontSize*1.5} h ${this.fontSize*2.5} l ${this.fontSize*0.75}, ${this.fontSize*0.75} l ${-this.fontSize*0.75}, ${this.fontSize*0.75} h ${-this.fontSize*2.5} v ${-this.fontSize*1.5} `
+            let leftArrow = `M 0,${startYRight - this.fontSize*1.5} h ${-this.fontSize*2.5} l ${-this.fontSize*0.75}, ${this.fontSize*0.75} l ${this.fontSize*0.75}, ${this.fontSize*0.75} h ${this.fontSize*2.5} v ${-this.fontSize*1.5} `
+            
+            // let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
+            return <g>
+                 <g id={'rectLeft'} className={'selectThr'}
+                 transform={`translate(${this.state.transformXLeft}, 0)`}>
+                        {/* <rect rx={2} x={-12} y={startY - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/> */}
+                        
+                        <g onMouseDown={this.mouseDownLeft}  cursor='e-resize'>
+                            <path d={leftArrow} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                            <path d={leftArrow} style={{fill:'transparent'}}/>
+                            <path d={curve(bounderLeft)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        </g>
+                        
+                        {inputLeft?
+                        <foreignObject width={this.fontSize*2.5} height={this.fontSize*1.5} fontSize={this.fontSize} x={-this.fontSize*2.5} y={startYLeft - this.fontSize*1.5} className='inoutBoxLeft'>
+                            <input type='number' 
+                            defaultValue={this.props.ruleThreshold[0].toFixed(2)}
+                            autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
+                        </foreignObject>
+                        :
+                        <text y={startYLeft - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputLeft} cursor='text' textAnchor='end'>
+                            {xScaleReverse(this.state.transformXLeft).toFixed(2)}
+                        </text>
+                        }
+                    </g>
+                
+                <g id={'rectRight'} className={'selectThr'} 
+                 transform={`translate(${this.state.transformXRight}, 0)`} >
+                        {/* <rect rx={2} x={-12} y={startY - 12} width={24} height={12} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}} z-index={-100}/> */}
+                        <g onMouseDown={this.mouseDownRight} cursor={'e-resize'}>
+                            <path d={rightArrow} style={{fill:'white', stroke:lineColor, strokeWidth:1.5}}/>
+                            <path d={rightArrow} style={{fill:'transparent'}}/>
+                            <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
+                        </g>
+                        {inputRight?
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
+                            <input type='number' 
+                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
+                            autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
+                        </foreignObject>
+                        :
+                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputRight} cursor='text'>
+                            {xScaleReverse(this.state.transformXRight).toFixed(2)}
+                        </text>
+                        }
+                    </g>
+                    
+                </g>
+        }
+        return <g>
+                <g>
+                    {dataKeyAttr.map((data,i)=>{
+                            let color = '#bbb'
+                            if((data.x<ruleThreshold[0])||(data.x>ruleThreshold[1])){
+                                color = BAD_COLOR
+                            }
+                            return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
+                            style={{fill:'none',stroke:color,strokeWidth:2}} className='overview'/>
+                        })}
+                </g>
+                {compDataKeyAttr?<g></g>:null}
+                {selectThr()}
+            </g>
+
+    }
     render(){
-        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`}>
-                {this.drawArea()}
+        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} className='overview'>
+                {this.drawScatter()}
         </g>
         // return <g>
         //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
@@ -414,35 +547,47 @@ export default class Overview extends React.Component<Props,State>{
             .tickValues(this.state.xScale.ticks(1).concat(this.state.xScale.domain()))
 
             d3.selectAll('.axis').remove()
-            d3.select(this.ref.current).append('g').attr('class','axis').attr('transform',`translate(0,${this.bottomEnd})`)
+
+            d3.select(this.ref.current)
+            .append('g').attr('class','axis')
+            .attr('id','axisOver')
+            .attr('transform',`translate(0,${this.bottomEnd})`)
             .attr('stroke-width','1.5px').call(axis)
+            .style('font-size', this.fontSize+'px')
 
             let axisLabel = d3.select('.axis')
                 .append('g')
                 .attr('class', 'axisName')
+                .style('font-size', this.fontSize+'px')
 
             axisLabel.append('text')
             .attr('x', this.rightEnd - this.leftStart*1.5)
-            .attr('y', 30)
+            .attr('y', 37)
             .text(`favor ${this.props.protectedVal}`)
             .style('fill', 'gray')
 
             axisLabel.append('text')
             .attr('x', 0)
-            .attr('y', 30)
+            .attr('y', 37)
             .text(`against ${this.props.protectedVal}`)
             .style('fill', 'gray')
             .style('text-anchor', 'start')
+
+            d3.selectAll('#axisOver .tick text').attr('transform','translate(0,7)')
 
             d3.selectAll('.axisSelectionY').remove()
 
             let yAxis = d3.axisRight(this.yScale)
             .tickValues([this.yMax])
+            
 
             d3.select(this.ref.current).append('g').attr('class','axisSelectionY').attr('id','axisY').attr('transform',`translate(${(this.rightEnd+this.leftStart)/2},${this.bottomEnd})`)
             .attr('stroke-width','1.5px').call(yAxis)
 
-            d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
+            d3.selectAll('#axisY .tick text')
+            .attr('transform',`translate(-15, ${-this.fontSize})`)
+            .style('font-size', this.fontSize+'px')
+            
             d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
         }
     }

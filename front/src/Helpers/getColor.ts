@@ -60,3 +60,9 @@ export function hsvToRgb(h:number, s:number, v:number) {
     // return [ r * 255, g * 255, b * 255 ];
     return `rgb(${r*255}, ${g*255}, ${b*255})`
   }
+
+
+  // color
+// export const GOOD_COLOR = '#89bffd'
+export const GOOD_COLOR = '#95c8f7'
+export const BAD_COLOR = '#b9dcfd'

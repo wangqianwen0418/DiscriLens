@@ -139,31 +139,32 @@ export default class modelSelection extends React.Component<Props,State>{
                     return a.x - b.x
                 })
 
-                let xMaxTemp = dataKeyAttr[dataKeyAttr.length-1].x,
-                xMinTemp = dataKeyAttr[0].x
+                // let xMaxTemp = dataKeyAttr[dataKeyAttr.length-1].x,
+                // xMinTemp = dataKeyAttr[0].x
                 // down sampling to smooth curve
                 let curveY:number[] = []
                 curveX = []
-                let divideNum = this.props.divideNum
-                let step = (xMaxTemp-xMinTemp)/divideNum
-                let stepCount = 0
-                let dataCount = 0
+                // let divideNum = this.props.divideNum
+                // let step = (xMaxTemp-xMinTemp)/divideNum
+                // let stepCount = 0
+                // let dataCount = 0
                 dataKeyAttr_new.push([])
-                for(var j=0;j<divideNum;j++){
-                    let xLower = xMinTemp + step*j,
-                    xHigher = Math.min(xMinTemp + step*(j+1),xMaxTemp),
-                    startX = dataKeyAttr[dataCount].x
-                    while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
-                    {   
-                        stepCount += dataKeyAttr[dataCount].y
-                        if(dataCount<dataKeyAttr.length-1){dataCount += 1}
-                    }
-                    let data:curveData={x:startX,y:stepCount,z:0}
-                    stepCount = 0
+                dataKeyAttr.forEach((data)=>{
+                // for(var j=0;j<divideNum;j++){
+                //     let xLower = xMinTemp + step*j,
+                //     xHigher = Math.min(xMinTemp + step*(j+1),xMaxTemp),
+                //     startX = dataKeyAttr[dataCount].x
+                //     while((dataKeyAttr[dataCount].x>=xLower)&&(dataKeyAttr[dataCount].x<=xHigher)&&(dataCount<dataKeyAttr.length-1))
+                //     {   
+                //         stepCount += dataKeyAttr[dataCount].y
+                //         if(dataCount<dataKeyAttr.length-1){dataCount += 1}
+                //     }
+                //     let data:curveData={x:startX,y:stepCount,z:0}
+                //     stepCount = 0
                     dataKeyAttr_new[i].push(data)
                     curveY.push(data.y)
                     curveX.push(data.x)
-                }
+                })
                 xMax = Math.max(xMax,Math.max.apply(null,curveX.map(Math.abs)))
                 yMax.push(Math.max.apply(null,curveY.map(Math.abs)))
         })
@@ -184,7 +185,7 @@ export default class modelSelection extends React.Component<Props,State>{
                 // left start postition
                 let leftStart = this.leftStart;
                 // line's color
-                let lineColor = this.lineColor;
+                // let lineColor = this.lineColor;
                 let rightEnd = this.rightEnd;
                 let intervalHeight = this.intervalHeight;
                 // xScale maps risk_dif to actual svg pixel length along x-axis
@@ -192,7 +193,7 @@ export default class modelSelection extends React.Component<Props,State>{
                 // yScale maps risk_dif to actual svg pixel length along x-axis
                 let yScale = d3.scaleLinear().domain([0,Math.max(...yMax)]).range([0,-intervalHeight*0.7])
                  // area of rules filtered by key_attrs
-                let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
+                // let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
                 
                 this.yScale.push(yScale)
                 this.yMax.push(Math.max(...yMax))
@@ -240,8 +241,12 @@ export default class modelSelection extends React.Component<Props,State>{
                 }
                 return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
                     <g>
-                        <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/>
-                    
+                        {/* <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/> */}
+                        {dataKeyAttr_new[i].map((data,i)=>{
+                                let color = '#bbb'
+                                return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
+                                style={{fill:'none',stroke:color,strokeWidth:2}} className='overview'/>
+                        })}
                         <path d={buttonPathLeft} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
                         <path d={buttonPathRight} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
 

@@ -107,6 +107,7 @@ export default class Itemset extends React.Component<Props, State>{
     pLenght = 0;
     rulesLength:number = 0;
     bubblePosition:rect[] =[];
+    pdColor = [d3.hsl(115, 0.45, 0.72)+'', d3.interpolateOrRd(0.35)]
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
@@ -122,23 +123,23 @@ export default class Itemset extends React.Component<Props, State>{
             //         .range([0.7, 0.3])(score)
             // return d3.interpolateGnBu(t)
 
-            // // plan 3
+            // // plan 4
             // let t= d3.scaleLinear()
             //         .domain([minScore, 0])
             //         .range([1, 0])(score)
             // return d3.hsl(186, 0.5-0.2*t, 0.8-0.4*t)+''
             // // return hsvToRgb(160+20*t, 0.44, 0.85-0.2*t);
 
-            // // plan 4
+            // // plan 3
             let t= d3.scaleLinear()
                     .domain([minScore, 0])
                     .range([1, 0])(score)
-            return d3.hsl(158, 0.45-0.2*t, 0.8-0.4*t)+''
+            return d3.hsl(115, 0.5-0.2*t, 0.9-0.6*t)+''
         } else {
             return d3.interpolateOrRd(
                 d3.scaleLinear()
                     .domain([0, maxScore])
-                    .range([0.25, 0.55])(score)
+                    .range([0.15, 0.55])(score)
             )
         }
 
@@ -330,7 +331,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.scoreColor(Math.pow(10, -5))}
+                    fill={this.pdColor[0]}
                 />
                 {/* <path
                     className="out bar"
@@ -372,7 +373,7 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.scoreColor(-Math.pow(10, -6))}
+                    fill={this.pdColor[1]}
                     d={outerArc({
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pnd
@@ -512,7 +513,7 @@ export default class Itemset extends React.Component<Props, State>{
                             // fill='none'
                             // stroke={favorPD ? "#98E090" : "#FF772D"}
                             stroke={this.scoreColor(ruleNode.rule.risk_dif)}
-                            strokeWidth={2}
+                            strokeWidth={3}
                             opacity={opacity}
                         />
                         
@@ -616,7 +617,9 @@ export default class Itemset extends React.Component<Props, State>{
         }
 
         let isExpand = this.state.expandRules.hasOwnProperty(id)
-        let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
+        let itemSizeLabel = <text 
+        fill='#222'
+        fontSize={14} key='itemSize' y={this.lineInterval} textAnchor="middle" x={-this.headWidth }>
             {items.length}
         </text>
         let attrValContent = antecedent.map((attrVal => {
@@ -625,6 +628,7 @@ export default class Itemset extends React.Component<Props, State>{
                 rangeIdx = ranges.indexOf(val)
             let opacity = 1
             if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(id))){opacity=0.3}
+            let rangeLabel:string[]= ['', '']
 
             let barWidthTep = barWidth / ranges.length
             let startX = barWidth / ranges.length * rangeIdx
@@ -648,14 +652,17 @@ export default class Itemset extends React.Component<Props, State>{
                         let split = range.split('<x<')
                         rangeLeft = parseInt(split[0])
                         rangeRight = parseInt(split[1])
+                        rangeLabel = split
                 }else if(range.includes('x<')){
                         let split = range.split('x<')
                         rangeLeft = minTemp
                         rangeRight = parseInt(split[1]) 
+                        rangeLabel[1] = split[1]
                 }else if(range.includes('x>')){
                         let split = range.split('x>')
                         rangeLeft = parseInt(split[1])
                         rangeRight = maxTemp
+                        rangeLabel[0] = split[1]
                 }
                 
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
@@ -669,15 +676,15 @@ export default class Itemset extends React.Component<Props, State>{
                     // fill='#eee'
                     fill='none'
                     // stroke={favorPD ? "#98E090" : "#FF772D"}
-                    stroke={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
-                    strokeWidth={2}
+                    stroke={favorPD ? this.pdColor[1] : this.pdColor[0]}
+                    strokeWidth={3}
                     opacity={opacity}
                 />
                 <rect className='font'
                     width={barWidthTep} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr) + startX}
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
-                    fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
+                    fill={favorPD ? this.pdColor[1] : this.pdColor[0]}
                     opacity={opacity}
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseEnter={() => {
@@ -690,13 +697,23 @@ export default class Itemset extends React.Component<Props, State>{
                     }
                     }
                 />
-                <text x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx + 0.5 * barWidth / ranges.length}
-                    y={this.lineInterval}
-                    textAnchor='middle'
-                    fill='#ccc'
+                <g className='range_label' 
+                style={{fontSize:11, fill: '#555'}}
+                transform={`translate(${step * dragArray.indexOf(attr) + startX}, ${this.lineInterval})`}
                 >
-                    {val}
+                <text x={0}
+                    textAnchor='end'
+                >
+                    {rangeLabel[0]}
                 </text>
+
+                <text x={barWidthTep}
+                    textAnchor='start'
+                >
+                    {rangeLabel[1]}
+                </text>
+                </g>
+                
             </g>
         }
         ))
@@ -731,10 +748,10 @@ export default class Itemset extends React.Component<Props, State>{
         return content
     }
 
-    connectionCurve=(s:axis, d:axis)=> {
+    connectionCurve=(d:axis, s:axis)=> {
         let path = `M ${s.x} ${s.y}
-                C ${s.x} ${(s.y + d.y) / 2} ,
-                  ${d.x} ${(s.y + d.y) / 2} ,
+                C  ${(s.x + d.x) / 2} ${s.y},
+                  ${(s.x + d.x) / 2} ${d.y} ,
                   ${d.x} ${d.y} `
     
         return path
@@ -1176,7 +1193,7 @@ export default class Itemset extends React.Component<Props, State>{
             if (rightRects.length == 0) {
                 // if the max is still far from the new bubble on y-axis
                 if(yList[i].y-size[i].h/2>maxB.h+maxB.y){
-                    rightAxis = {x:maxB.x,y:yList[i].y-size[i].h/2}
+                    return {x:startAxis,y:yList[i].y-size[i].h/2}
                 }else{
                     // the x space is large enough
                     if (areaWidth + startAxis - maxB.x - maxB.w > size[i].w) {
@@ -1199,7 +1216,9 @@ export default class Itemset extends React.Component<Props, State>{
             }
             else if (rightAxis.y < leftAxis.y) {
                 return rightAxis
-            } else {
+            } else if((rightAxis.y == leftAxis.y)&&(rightAxis.x<leftAxis.x)) {
+                return rightAxis
+            }else{
                 return leftAxis
             }
         }
