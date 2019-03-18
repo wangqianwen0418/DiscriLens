@@ -1158,7 +1158,7 @@ export default class Itemset extends React.Component<Props, State>{
             if (rightRects.length == 0) {
                 // if the max is still far from the new bubble on y-axis
                 if(yList[i].y-size[i].h/2>maxB.h+maxB.y){
-                    rightAxis = {x:maxB.x,y:yList[i].y-size[i].h/2}
+                    return {x:startAxis,y:yList[i].y-size[i].h/2}
                 }else{
                     // the x space is large enough
                     if (areaWidth + startAxis - maxB.x - maxB.w > size[i].w) {
@@ -1181,7 +1181,9 @@ export default class Itemset extends React.Component<Props, State>{
             }
             else if (rightAxis.y < leftAxis.y) {
                 return rightAxis
-            } else {
+            } else if((rightAxis.y == leftAxis.y)&&(rightAxis.x<leftAxis.x)) {
+                return rightAxis
+            }else{
                 return leftAxis
             }
         }
