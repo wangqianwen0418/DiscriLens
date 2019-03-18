@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from sklearn.metrics import accuracy_score
 
 from xgboost import XGBClassifier
@@ -113,10 +113,11 @@ class ModelGene(object):
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
         model = self.model
-        model.fit(x, y)
+        
         # model.fit(x_train, y_train)
         # score = accuracy_score(y_test, model.predict(x_test))
-        score_cross = cross_val_score(model, x, y, scoring='accuracy', cv=5) 
+        score_cross = cross_val_score(model, x, y, scoring='accuracy', cv = KFold(n_splits=5, shuffle = True)) 
         score_cross = sum(score_cross)/len(score_cross)
+        model.fit(x, y)
         return model, encoder, score_cross
    
