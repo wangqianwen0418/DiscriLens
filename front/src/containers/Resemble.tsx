@@ -11,6 +11,7 @@ export function mapStateToProps(state:StoreState) {
         samples: state.samples,
         compRules:state.compRules,
         compareFlag:state.compareFlag,
+        causal: state.causal,
     };
 }
 

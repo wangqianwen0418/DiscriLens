@@ -367,7 +367,7 @@ export default class Bubble extends React.Component<Props, State>{
             cx={outerCircle.x }
             cy={outerCircle.y }
             r={outerCircle.r + circlePadding}
-            stroke = {boundaryColor[0]}
+            stroke = "#b9b9b9"
             strokeWidth={strokeWidth*1.5}
             fill="white"/>} )
             // : <g/>

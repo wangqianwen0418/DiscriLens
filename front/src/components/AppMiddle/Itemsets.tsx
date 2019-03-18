@@ -331,7 +331,7 @@ export default class Itemset extends React.Component<Props, State>{
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pd
                     })}
-                    fill={this.pdColor[0]}
+                    fill={this.pdColor[1]}
                 />
                 {/* <path
                     className="out bar"
@@ -373,7 +373,7 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.pdColor[1]}
+                    fill={this.pdColor[0]}
                     d={outerArc({
                         startAngle: 0,
                         endAngle: Math.PI * 2 * rule.conf_pnd

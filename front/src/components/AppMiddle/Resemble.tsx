@@ -7,8 +7,9 @@ import Compared from 'containers/Compared';
 import ComparePrime from 'containers/ComparePrime'
 import {Col, Row, Switch, Modal, Button} from 'antd';
 import {DataItem,Rule} from 'types';
+import * as dagre from 'dagre';
 
-import * as causal from 'testdata/academic_key.json'
+// import * as causal from 'testdata/academic_key.json'
 
 
 export interface Props{
@@ -18,10 +19,16 @@ export interface Props{
    samples:DataItem[],
    compRules:Rule[],
    compareFlag:boolean,
+   causal:string[]
 }
 
 export interface State {
     causalVisible: boolean
+}
+
+export interface Point{
+    x:number,
+    y:number
 }
 
 export default class AppMiddel extends React.Component<Props, State>{
@@ -37,7 +44,104 @@ export default class AppMiddel extends React.Component<Props, State>{
             causalVisible: false
         }
     }
+    drawGraph(causal:string[]){
+        let nodeW = 75, nodeH = 20, margin =6
+        let dag = new dagre.graphlib.Graph();
+
+        dag.setGraph({
+            ranksep: nodeH,
+            marginx: margin,
+            marginy: margin,
+            rankdir: 'TB',
+            edgesep: nodeH,
+            nodesep: nodeW,
+            ranker: "tight-tree"
+            // ranker: 'longest-path'
+        });
+        dag.setDefaultEdgeLabel(() => { return {}; });
+        for (let edge of causal){
+            let [w, v] = edge.split(' --> ')
+            console.info(w, v)
+            dag.setNode(w, {label:w, width: nodeW, height: nodeH})
+            dag.setNode(v, {label:v, width: nodeW, height: nodeH})
+            dag.setEdge(w, v)
+        }
+
+        dagre.layout(dag)
+
+        const getInter = (p1: Point, p2: Point, n: number) => {
+            return `${p1.x * n + p2.x * (1 - n)} ${p1.y * n + p2.y * (1 - n)}`
+        }
+
+        const getCurve = (points: Point[]) => {
+            let vias = [],
+                len = points.length;
+            const ratio = 0.5
+            for (let i = 0; i < len - 2; i++) {
+                let p1, p2, p3, p4, p5;
+                if (i === 0) {
+                    p1 = `${points[i].x} ${points[i].y}`
+                } else {
+                    p1 = getInter(points[i], points[i + 1], ratio)
+                }
+                p2 = getInter(points[i], points[i + 1], 1 - ratio)
+                p3 = `${points[i + 1].x} ${points[i + 1].y}`
+                p4 = getInter(points[i + 1], points[i + 2], ratio)
+                if (i === len - 3) {
+                    p5 = `${points[i + 2].x} ${points[i + 2].y}`
+                } else {
+                    p5 = getInter(points[i + 1], points[i + 2], 1 - ratio)
+                }
+
+                let cPath = `M ${p1} L${p2} Q${p3} ${p4} L${p5}`
+                vias.push(cPath)
+
+            }
+            return vias
+        }
+        
+
+        let nodes = <g className='causal nodes'>{
+            dag.nodes()
+            .map(v=>{
+                let node = dag.node(v)
+                return <g 
+                    key={node.label} className='node'
+                    transform={`translate(${node.x}, ${node.y})`}
+                >
+                    <rect   
+                        x={-nodeW/2} y={-nodeH/2} width={nodeW} height={nodeH}
+                        stroke='grey'
+                        fill='white'
+                    />
+                    <text textAnchor='middle' y={nodeH*0.2}>{node.label.split('-')[0]}</text>
+                </g>
+            })
+        }</g>
+
+        let edges = <g className='causal edges'>{
+            dag.edges()
+            .map((e,i)=>{
+                let {points} = dag.edge(e)
+                let vias = getCurve(points), start = `M ${points[0].x} ${points[0].y}`
+
+            let pathData = `${start}  ${vias.join(' ')}`
+                return <path 
+                    key={i} 
+                    className='node' 
+                    d={pathData}
+                    fill='none'
+                    stroke='grey'
+                />
+            })
+        }</g>
+
+        let {width, height}=dag.graph() 
+        return {nodes, edges, width, height}
+    }
     render(){
+        let {nodes, edges, width, height} = this.drawGraph(this.props.causal)
+        
         let changeView=()=>{
             this.viewSwitch = !this.viewSwitch
             this.setState({})
@@ -118,13 +222,16 @@ export default class AppMiddel extends React.Component<Props, State>{
        <Modal
           title="Causal Graph"
           visible={this.state.causalVisible}
+          width={width+50}
         //   onOk={this.handleOk}
           // tslint:disable-next-line:jsx-no-lambda
           onCancel={e=>this.setState({causalVisible:false})}
           footer={null}
         >
-        <svg className=''/>
-          {causal.causal}
+        <svg className='causal model' style={{width:width, height: height}}>
+        {nodes}
+        {edges}
+        </svg>
         </Modal>
        </Row>
     }

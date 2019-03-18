@@ -13,17 +13,17 @@
         "rf": 0.823
     },
     "causal": [
-        "hours-per-week --> class",
-        "sex --> hours-per-week",
-        "age --> educational-num",
         "relationship --> class",
+        "hours-per-week --> class",
+        "gender --> hours-per-week",
+        "age --> educational-num",
         "age --> hours-per-week",
-        "race --> fnlwgt",
-        "class --> educational-num",
+        "workclass --> class",
+        "educational-num --> class",
         "country --> fnlwgt",
-        "class --> workclass",
         "hours-per-week --> workclass",
         "educational-num --> country",
-        "race --> country"
+        "race --> country",
+        "race --> fnlwgt"
     ]
 }

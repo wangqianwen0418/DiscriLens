@@ -430,7 +430,7 @@ export const changeShowDataset = (showDataset: string): showDataset=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let {keyAttrs,accuracy} = require('../testdata/'+ dataset + '_key.json'), 
+    let {keyAttrs,accuracy } = require('../testdata/'+ dataset + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
     jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
