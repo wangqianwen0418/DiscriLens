@@ -110,12 +110,30 @@ export default class Itemset extends React.Component<Props, State>{
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
         if (score < 0) {
+            // // plan 1
+            // let t= d3.scaleLinear()
+            //         .domain([minScore, 0])
+            //         .range([0.75, 0.35])(score)
+            // return d3.interpolateGreens(t)
+
+            // // plan 2
+            // let t= d3.scaleLinear()
+            //         .domain([minScore, 0])
+            //         .range([0.7, 0.3])(score)
+            // return d3.interpolateGnBu(t)
+
+            // // plan 3
+            // let t= d3.scaleLinear()
+            //         .domain([minScore, 0])
+            //         .range([1, 0])(score)
+            // return d3.hsl(186, 0.5-0.2*t, 0.8-0.4*t)+''
+            // // return hsvToRgb(160+20*t, 0.44, 0.85-0.2*t);
+
+            // // plan 4
             let t= d3.scaleLinear()
                     .domain([minScore, 0])
-                    .range([0.55, 0.25])(score)
-            return d3.interpolateGreens(t)
-            //    return d3.interpolateGnBu(t)
-            // return d3.hsl(170, 0.44+0.56*t, 0.69) + "";
+                    .range([1, 0])(score)
+            return d3.hsl(158, 0.45-0.2*t, 0.8-0.4*t)+''
         } else {
             return d3.interpolateOrRd(
                 d3.scaleLinear()

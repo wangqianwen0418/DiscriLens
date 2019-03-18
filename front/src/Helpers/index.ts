@@ -3,7 +3,7 @@ export const GOOD_COLOR = '#89bffd'
 export const BAD_COLOR = '#b9dcfd'
 
 export {countItem} from './countItem';
-export {getColor, COLORS, boundaryColor} from './getColor';
+export {getColor, COLORS, boundaryColor, hsvToRgb} from './getColor';
 export {getRadius} from './getRadius';
 export {stepRound} from './stepRound';
 export {cutTxt} from './cutTxt';

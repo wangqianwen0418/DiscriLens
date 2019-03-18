@@ -5,8 +5,11 @@ import Overview from 'containers/Overview';
 import ModelSelection from 'containers/ModelSelection';
 import Compared from 'containers/Compared';
 import ComparePrime from 'containers/ComparePrime'
-import {Col, Row, Switch} from 'antd';
+import {Col, Row, Switch, Modal} from 'antd';
 import {DataItem,Rule} from 'types';
+
+import * as causal from 'testdata/academic_key.json'
+
 
 export interface Props{
    foldFlag:boolean,
@@ -17,13 +20,23 @@ export interface Props{
    compareFlag:boolean,
 }
 
-export default class AppMiddel extends React.Component<Props>{
+export interface State {
+    causalVisible: boolean
+}
+
+export default class AppMiddel extends React.Component<Props, State>{
     public step = 120;
     barWidth = this.step * 0.9;
     offsetX=50;
     viewSwitch = true;
     // divide number for curve
     divideNum = 10;
+    constructor(props:Props){
+        super(props)
+        this.state={
+            causalVisible: false
+        }
+    }
     render(){
         let changeView=()=>{
             this.viewSwitch = !this.viewSwitch
@@ -56,16 +69,20 @@ export default class AppMiddel extends React.Component<Props>{
          <svg className='overview' style={{width:offset, height:"30%"}} >
              <Overview offset={offset} divideNum={this.divideNum}/>
          </svg>
+         {/* <Icon 
+         type="eye" 
+         // tslint:disable-next-line:jsx-no-lambda
+         onClick={e=>this.setState({causalVisible:true})}/> */}
          <svg className='attribute' style={{width:leftWidth-offset, height: "30%"}}>
                <Attributes step={this.step} barWidth={this.barWidth} offsetX={this.offsetX+(!this.props.compareFlag?0:offsetComp)} offset={offset} foldFlag={this.props.foldFlag} leftWidth={leftWidth}/>
            </svg>
            {!this.props.compareFlag?
            <div className='itemset' style={{width: "100%", height: "70%"}}>
                 <div style={{width: "12%", height: "10%",position:'relative',left:switchX}}>
-                    <text>View Switch</text>
+                    View Mode
                     
                     <div style={{float:'right',left:2}}>
-                        <Switch onChange={changeView}/>
+                        <Switch onChange={changeView} checkedChildren="parallel" unCheckedChildren="compact"/>
                     </div>
                 </div>
                <div style={{width: "100%", height: "90%",overflow: "auto"}}>
@@ -89,6 +106,17 @@ export default class AppMiddel extends React.Component<Props>{
            </div>
             }
        </Col>
+       <Modal
+          title="Causal Graph"
+          visible={this.state.causalVisible}
+        //   onOk={this.handleOk}
+          // tslint:disable-next-line:jsx-no-lambda
+          onCancel={e=>this.setState({causalVisible:false})}
+          footer={null}
+        >
+        <svg className=''/>
+          {causal.causal}
+        </Modal>
        </Row>
     }
 }

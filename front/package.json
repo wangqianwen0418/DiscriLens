@@ -9,6 +9,7 @@
     "axios": "^0.18.0",
     "color-interpolate": "^1.0.4",
     "d3": "^5.7.0",
+    "dagre": "^0.8.4",
     "draggable": "^4.2.0",
     "jquery": "^3.3.1",
     "just-animate": "^2.5.1",
