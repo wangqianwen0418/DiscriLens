@@ -11,7 +11,7 @@ import { RuleAgg, RuleNode, getMinLinks, boundaryColor} from 'Helpers';
 import { Rule, DataItem } from 'types';
 import './BubblePack.css';
 import {packEnclose, graphPack} from 'lib/pack/index.js';
-
+ 
 
 // import * as d3 from 'd3';
 
@@ -96,14 +96,15 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 }
 
 export default class Bubble extends React.Component<Props, State>{
-    width=100; height=100;  radius=4; circlePadding=0;ref: React.RefObject<SVGAElement>=React.createRef();
+    width=0; height=0;  radius=4; circlePadding=0;ref: React.RefObject<SVGAElement>=React.createRef();
     constructor(props: Props){
         super(props)
     }
     getSize(){
-        // return [this.width+this.circlePadding,  this.height+this.circlePadding]
-        let box = this.ref.current.getBoundingClientRect()
-        return [box.width, box.height]
+        // let box = this.ref.current.getBoundingClientRect()
+        // // console.info(box)
+        // return [box.width, box.height]
+        return [this.width, this.height]
     }
     componentWillReceiveProps(props: Props){
         // console.info(props)
@@ -185,11 +186,23 @@ export default class Bubble extends React.Component<Props, State>{
         })
         // pack subset circles, using modified packing
         // this.height = this.width = 2*packEnclose(root.children)
-        this.height = this.width = 2*graphPack(root.children, graph)
+        graphPack(root.children, graph)
+        // this.height = this.width = 2*outRadius
+
+        let minX = Math.min(...root.children.map(outerCircle=>outerCircle.x-outerCircle.r)),
+            minY = Math.min(...root.children.map(outerCircle=>outerCircle.y-outerCircle.r)),
+            maxX = Math.max(...root.children.map(outerCircle=>outerCircle.x+outerCircle.r)),
+            maxY = Math.max(...root.children.map(outerCircle=>outerCircle.y+outerCircle.r))
+
+        this.height = maxY - minY + 2*circlePadding
+        this.width = maxX - minX + 2*circlePadding
+
 
         // update the x,y of children items
         root.children
         .forEach((outerCircle: ItemHierarchy)=>{
+            // outerCircle.x += outRadius+circlePadding
+            // outerCircle.y += outRadius+circlePadding
             outerCircle.x += this.width/2
             outerCircle.y += this.height/2
             outerCircle.children
@@ -198,6 +211,9 @@ export default class Bubble extends React.Component<Props, State>{
                 innerCircle.y += outerCircle.y
             })
         })
+
+        
+
 
         
 
@@ -309,11 +325,16 @@ export default class Bubble extends React.Component<Props, State>{
                 return  <g key={`outline_${ruleID}`} className='outlines'>
                     <mask id={`mask_outline_${ruleID}`}>
                         {/* white part, show */}
-                        <circle 
-                        r={1.5*this.height/2} 
-                        cx={this.width/2} 
-                        cy={this.height/2} 
-                        fill='white' />
+                        {/* <circle 
+                        r={1.5*outRadius} 
+                        cx={outRadius} 
+                        cy={outRadius} 
+                        fill='white' /> */}
+                        <rect 
+                        fill='white'
+                        width={this.width}
+                        height={this.height}
+                        />
                         {/* black part, hide */}
                         {highlightCircles[ruleID].map(set=>{
                             return <circle id={set.id} key={set.id} r={set.r-0.5*circlePadding + padding} cx={set.x} cy={set.y} fill="black"/>
@@ -343,8 +364,8 @@ export default class Bubble extends React.Component<Props, State>{
             root.children.map((outerCircle:ItemHierarchy) => {
             return <circle className='outlines'  key={outerCircle.id}
             // stroke={"#b9b9b9"} 
-            cx={outerCircle.x}
-            cy={outerCircle.y}
+            cx={outerCircle.x }
+            cy={outerCircle.y }
             r={outerCircle.r + circlePadding}
             stroke = {boundaryColor[0]}
             strokeWidth={strokeWidth*1.5}
@@ -355,7 +376,7 @@ export default class Bubble extends React.Component<Props, State>{
             root.children.map((outerCircle:ItemHierarchy) => {
             return <circle className='outlines'  key={outerCircle.id}
             // stroke={"#b9b9b9"} 
-            cx={outerCircle.x}
+            cx={outerCircle.x }
             cy={outerCircle.y}
             r={outerCircle.r + circlePadding - strokeWidth}
             fill="white"/> 
@@ -367,16 +388,26 @@ export default class Bubble extends React.Component<Props, State>{
         return {itemCircles, outlines, background}
 
     }
+    // componentDidMount(){
+    //     d3.select(`#bubble_${this.props.ruleAgg.id}`)
+    //     .append('rect')
+    //     .attr('width', this.ref.current.getBoundingClientRect().width)
+    //     .attr('height', this.ref.current.getBoundingClientRect().height)
+    //     .attr('stroke', 'grey')
+    //     .attr('fill', 'none')
+    // }
     render() {
         let {ruleAgg} = this.props
         let {itemCircles, outlines, background} = this.draw()
-        console.info("render bubble")
+        console.info('render bubble')
        
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
+            // transform={`translate(${this.circlePadding}, ${this.circlePadding})`}
             // transform={`scale(${this.scaleRatio})`}
             >
+            {/* <rect width={this.width} height={this.height} /> */}
                 {background}
                 {itemCircles}
                 <g className='highlight outlines'>
@@ -384,7 +415,6 @@ export default class Bubble extends React.Component<Props, State>{
                 </g>
                 
                 
-            {/* <rect className='outline' width={this.width} height={this.height} fill='none' stroke='gray'/> */}
             {/* <circle className='outline' r={this.height/2} cx={this.height/2} cy={this.height/2} fill='none' stroke='gray'/> */}
         </g>
     }
