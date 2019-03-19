@@ -509,7 +509,7 @@ export default class Compared extends React.Component<Props, State>{
 
         this.xMaxValue=Math.max(this.xMaxValue,step * keyAttrNum + this.headWidth + 2*this.fontSize-this.headWidth-2*this.fontSize)
 
-        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize},0)`}>
+        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize+0.1*window.innerWidth},0)`}>
             {/* <Bubble ruleAgg={ruleAgg}/> */}
             <rect className='ruleBox'
                 stroke='#c3c3c3' fill='#fff'
@@ -570,8 +570,8 @@ export default class Compared extends React.Component<Props, State>{
                         // calculate translate distance
                         if (bubblePosition.length == listLength) {
                                 let rightBorder = this.props.offset
-                                transX = rightBorder - bubblePosition[i].w
-                                transCenter = rightBorder - bubblePosition[i].w / 2
+                                transX = rightBorder - bubblePosition[i].w - 5
+                                transCenter = rightBorder - bubblePosition[i].w / 2 - 5
                                 transY = bubblePosition[i].y
                         }
                         // first state bubble ot obtain the bubbleSize to calculate translate
@@ -593,8 +593,8 @@ export default class Compared extends React.Component<Props, State>{
                         />
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){
-                            bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2}
-                             h${-transCenter + this.headWidth*0.3},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                            bubbleLine = <path d={`M${bubblePosition[i].w/2},${bubblePosition[i].h/2}
+                             h${-transCenter + this.props.offset/2},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
@@ -758,7 +758,17 @@ export default class Compared extends React.Component<Props, State>{
             }
             // choose rect display mode
             if(this.bubblePosition.length==this.unMatchedRulesLength){
-                switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval//(this.yList.length==0?this.lineInterval:this.yList[i].h)
+                    // subject1: whether the former rect is expanded
+                    let formerRectY = 0
+                    if(i!=0){
+                        formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                    }
+                    // subject2: whether the former bubble overlap
+                    let bubbleY = 0
+                    if(i!=0){
+                        bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                    }
+                    switchOffset = Math.max(ySum,formerRectY,bubbleY)-this.lineInterval            
             }
             
             // calculate average y-value of an itemset
@@ -803,8 +813,16 @@ export default class Compared extends React.Component<Props, State>{
             }
             
             if(this.bubblePosition.length==this.unMatchedRulesLength){
-                switchOffset = Math.max(ySum,this.bubblePosition[i].y+this.bubblePosition[i].h/2)-this.lineInterval
-            }
+                let formerRectY = 0
+                if(i!=0){
+                    formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
+                }
+                // subject2: whether the former bubble overlap
+                let bubbleY = 0
+                if(i!=0){
+                    bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
+                }
+                switchOffset = Math.max(ySum,formerRectY,bubbleY)-this.lineInterval             }
             
             // calculate average y-value of an itemset
             let negAveY = switchOffset
@@ -834,6 +852,7 @@ export default class Compared extends React.Component<Props, State>{
         })
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
+        // console.log('pos',unMatchedPos)
         let unMathchedbubbles = [this.drawBubbles(unMatchedPos, scoreDomain, true,false), this.drawBubbles(unMatchedNeg, scoreDomain, false,false)]
         
         return {pos:posRules,neg:negaRules,bubble:unMathchedbubbles}
@@ -854,8 +873,6 @@ export default class Compared extends React.Component<Props, State>{
         this.matchedIndex = []  
 
         let { positiveRuleAgg, negativeRuleAgg } = results
-        this.positiveRuleAgg = positiveRuleAgg
-        this.negativeRuleAgg = negativeRuleAgg
         let matchedPos:RuleAgg[]=[], matchedNeg:RuleAgg[] = [],
         unMatchedPos:RuleAgg[] = [], unMatchedNeg:RuleAgg[] = []
 
@@ -992,7 +1009,7 @@ export default class Compared extends React.Component<Props, State>{
             this.ySumList.push(bSum)
         })
 
-        // this.props.onTransCom`pareOffset(this.matchYList)
+        this.props.onTransCompareOffset(this.matchYList)
     }
 
     render() {

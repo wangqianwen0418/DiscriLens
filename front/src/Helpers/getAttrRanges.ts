@@ -36,7 +36,6 @@ export const getAttrRanges =  (samples: DataItem[], attr:string):(string|number)
         
         ranges.sort((a, b)=>range2num(a)-range2num(b))
         attrRanges[attr] = ranges
-        
         return ranges
     }
     

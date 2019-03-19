@@ -42,6 +42,8 @@ export default class AppMiddel extends React.Component<Props>{
         }
 
         let offset = leftWidth * 0.25;
+
+        let compOffset = leftWidth / 3
         
 
         return <Row className='App-middle'>
@@ -74,15 +76,15 @@ export default class AppMiddel extends React.Component<Props>{
            </div>
            :<div className='itemset' style={{width: "100%", height: "70%",overflowY: "scroll"}}>
                <Row className='modelCompare'>
-                <Col span={6}>
+                <Col span={8}>
                     <div id='compareLeft'>
-                        <Compared samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={offset}/>
+                        <Compared samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={compOffset}/>
                     </div>
                 </Col>
                 
-                <Col span={18}>
+                <Col span={16}>
                     <div style={{overflowX:'scroll'}} id='compareRight'>
-                        <ComparePrime samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset+this.offsetX}/>
+                        <ComparePrime samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={2*offset-compOffset+this.offsetX}/>
                     </div>
                 </Col>
                </Row>
