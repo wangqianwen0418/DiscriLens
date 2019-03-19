@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataItem, Status } from 'types';
-import { Icon, Tooltip } from 'antd';
+import { Icon, Tooltip} from 'antd';
 import { countItem, cutTxt,BAD_COLOR,GOOD_COLOR } from 'Helpers';
 import Draggable, { ControlPosition } from 'react-draggable'
 import * as d3 from 'd3';

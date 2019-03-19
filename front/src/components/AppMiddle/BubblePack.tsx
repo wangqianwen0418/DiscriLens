@@ -123,6 +123,7 @@ export default class Bubble extends React.Component<Props, State>{
     }
     draw(){
         let { ruleAgg, scoreColor, hoverRule, highlightRules, samples } = this.props
+        let strokeWidth = 2
         // let rules = flatten(ruleAgg.nodes).sort((a,b)=>a.score-b.score),
         let rules = flatten(ruleAgg.nodes),
             items = extractItems(rules),
@@ -194,8 +195,8 @@ export default class Bubble extends React.Component<Props, State>{
             maxX = Math.max(...root.children.map(outerCircle=>outerCircle.x+outerCircle.r)),
             maxY = Math.max(...root.children.map(outerCircle=>outerCircle.y+outerCircle.r))
 
-        this.height = maxY - minY + 2*circlePadding
-        this.width = maxX - minX + 2*circlePadding
+        this.height = maxY - minY + 2*circlePadding 
+        this.width = maxX - minX + 2*circlePadding 
 
 
         // update the x,y of children items
@@ -203,8 +204,8 @@ export default class Bubble extends React.Component<Props, State>{
         .forEach((outerCircle: ItemHierarchy)=>{
             // outerCircle.x += outRadius+circlePadding
             // outerCircle.y += outRadius+circlePadding
-            outerCircle.x += this.width/2
-            outerCircle.y += this.height/2
+            outerCircle.x = outerCircle.x- minX + circlePadding
+            outerCircle.y = outerCircle.y - minY + circlePadding
             outerCircle.children
             .forEach((innerCircle:ItemHierarchy)=>{
                 innerCircle.x += outerCircle.x
@@ -223,7 +224,7 @@ export default class Bubble extends React.Component<Props, State>{
             highlightCircles[ruleID] = []
         })
         let itemsPos: any[] = []
-        let strokeWidth = 2
+        
 
         // console.info(datum.children.map((d:any)=>d.data.score), hoverRule)
 
@@ -367,7 +368,7 @@ export default class Bubble extends React.Component<Props, State>{
             cx={outerCircle.x }
             cy={outerCircle.y }
             r={outerCircle.r + circlePadding}
-            stroke = {boundaryColor[0]}
+            stroke = "#b9b9b9"
             strokeWidth={strokeWidth*1.5}
             fill="white"/>} )
             // : <g/>

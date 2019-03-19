@@ -39,7 +39,7 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         )
       } 
       case CHANGE_PROTECTED_ATTR:  
-        return { ...state, protectedAttr:action.protectedAttr}
+        return { ...state, protectedAttr:action.protectedAttr, protectedVal: action.protectedVal}
       case CHANGE_SAMPLES_FETCH_STATUS:
         return { ...state, fetchSampleStatus: action.status}
       case CHANGE_RULES_FETCH_STATUS:

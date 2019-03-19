@@ -67,5 +67,6 @@ export interface StoreState{
     // compare models, [[bubbleposition of compared model],[bubblePosition of prime model],[rect position of prime model]]
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}, // list of components for model comparison
     compareOffset:{y:number[],index:number[]}, // if compared view has overlapping
-    expandRule:{id: number, newAttrs: string[], children: string[]}
+    expandRule:{id: number, newAttrs: string[], children: string[]},
+    causal: string[]
 }

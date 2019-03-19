@@ -9,11 +9,11 @@
       "dt": 0.898
    },
    "causal": [
-      "VisITedResources --- class",
-      "Relation --- class",
-      "AnnouncementsView --- VisITedResources",
-      "gender --- StudentAbsenceDays",
-      "raisedhands --- class",
-      "StudentAbsenceDays --- class"
+      "Relation --> class",
+      "VisITedResources --> class",
+      "AnnouncementsView --> VisITedResources",
+      "Gender --> StudentAbsenceDays",
+      "StudentAbsenceDays --> class",
+      "Raisedhands --> class"
    ]
 }

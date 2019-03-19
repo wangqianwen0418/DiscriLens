@@ -28,7 +28,7 @@ let dataSets = ['adult', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataset + '_' + model
-    let {keyAttrs, accuracy} = require('./testdata/'+dataset+'_key.json')
+    let {keyAttrs, accuracy, causal} = require('./testdata/'+dataset+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
@@ -75,6 +75,7 @@ if (TEST){
       compareOffset:{y:[],index:[]},
       expandRule:{id: 0, newAttrs:[], children: []},
       compareFlag:false,
+      causal
   }
 }else{
   initState = {
@@ -103,6 +104,7 @@ if (TEST){
     compareOffset:{y:[],index:[]},
     expandRule:{id: 0, newAttrs:[], children: []},
     compareFlag:false,
+    causal: []
 }
 }
 

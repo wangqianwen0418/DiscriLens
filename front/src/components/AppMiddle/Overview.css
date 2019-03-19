@@ -59,3 +59,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
   }
 
+svg.overview{
+    font-size: 15px !important;
+}
+

@@ -4,6 +4,7 @@ import * as d3 from 'd3'
 import {curveData} from 'components/AppMiddle/Attributes'
 import {Rule} from 'types';
 import {GOOD_COLOR,BAD_COLOR, filterRulesNoThreshold} from 'Helpers'
+import './Overview.css'
 
 export interface Props{
     allRules: Rule[],
@@ -56,6 +57,7 @@ export default class Overview extends React.Component<Props,State>{
     yScale:any;
     yMax:number;
     offsetX = window.innerWidth / 6 + this.props.offset / 5 - this.leftStart / 4 * 3
+    fontSize=12;
     private ref: React.RefObject<SVGGElement>;
     constructor(props:Props){
         super(props)
@@ -340,13 +342,13 @@ export default class Overview extends React.Component<Props,State>{
                         </g>
                         
                         {inputLeft?
-                        <foreignObject width={24} height={12} fontSize={9} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[0].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
-                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
+                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputLeft} cursor='text'>
                             {xScaleReverse(this.state.transformXLeft).toFixed(2)}
                         </text>
                         }
@@ -361,13 +363,13 @@ export default class Overview extends React.Component<Props,State>{
                             <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         </g>
                         {inputRight?
-                        <foreignObject width={24} height={12} fontSize={9} x={0} y={startYRight - 14} className='inputBoxRight'>
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
-                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
+                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputRight} cursor='text'>
                             {xScaleReverse(this.state.transformXRight).toFixed(2)}
                         </text>
                         }
@@ -463,8 +465,10 @@ export default class Overview extends React.Component<Props,State>{
             let bounderRight:curveData[] = [{x:0.5,y:startYRight,z:0},{x:0.5,y:bottomEnd,z:0}]
             // let selectMask:curveData[] = [{x:0.5,y:markSize/2,z:0},{x:0.5,y:bottomEnd,z:0}]
 
-            let rightArrow = `M 0,${startYRight - 12} h 24 l 6,6 l -6,6 h -24 v -12 `
-            let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
+            let rightArrow = `M 0,${startYRight - this.fontSize*1.5} h ${this.fontSize*2.5} l ${this.fontSize*0.75}, ${this.fontSize*0.75} l ${-this.fontSize*0.75}, ${this.fontSize*0.75} h ${-this.fontSize*2.5} v ${-this.fontSize*1.5} `
+            let leftArrow = `M 0,${startYRight - this.fontSize*1.5} h ${-this.fontSize*2.5} l ${-this.fontSize*0.75}, ${this.fontSize*0.75} l ${this.fontSize*0.75}, ${this.fontSize*0.75} h ${this.fontSize*2.5} v ${-this.fontSize*1.5} `
+            
+            // let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
             return <g>
                  <g id={'rectLeft'} className={'selectThr'}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
@@ -477,13 +481,13 @@ export default class Overview extends React.Component<Props,State>{
                         </g>
                         
                         {inputLeft?
-                        <foreignObject width={24} height={12} fontSize={9} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
+                        <foreignObject width={this.fontSize*2.5} height={this.fontSize*1.5} fontSize={this.fontSize} x={-this.fontSize*2.5} y={startYLeft - this.fontSize*1.5} className='inoutBoxLeft'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[0].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
-                        <text x={-24} y={startYLeft - 3} className={'rect_text'} fontSize={9} onClick={this.inputLeft} cursor='text'>
+                        <text y={startYLeft - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputLeft} cursor='text' textAnchor='end'>
                             {xScaleReverse(this.state.transformXLeft).toFixed(2)}
                         </text>
                         }
@@ -498,13 +502,13 @@ export default class Overview extends React.Component<Props,State>{
                             <path d={curve(bounderRight)} style={{fill:'none',stroke:lineColor,strokeWidth:'1.5px'}}/>
                         </g>
                         {inputRight?
-                        <foreignObject width={24} height={12} fontSize={9} x={0} y={startYRight - 14} className='inputBoxRight'>
+                        <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
                             defaultValue={this.props.ruleThreshold[1].toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
-                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={9} onClick={this.inputRight} cursor='text'>
+                        <text x={2} y={startYRight - 3} className={'rect_text'} fontSize={this.fontSize} onClick={this.inputRight} cursor='text'>
                             {xScaleReverse(this.state.transformXRight).toFixed(2)}
                         </text>
                         }
@@ -531,7 +535,7 @@ export default class Overview extends React.Component<Props,State>{
 
     }
     render(){
-        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`}>
+        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} className='overview'>
                 {this.drawScatter()}
         </g>
         // return <g>
@@ -547,12 +551,18 @@ export default class Overview extends React.Component<Props,State>{
             .tickValues(this.state.xScale.ticks(1).concat(this.state.xScale.domain()))
 
             d3.selectAll('.axis').remove()
-            d3.select(this.ref.current).append('g').attr('class','axis').attr('id','axisOver').attr('transform',`translate(0,${this.bottomEnd})`)
+
+            d3.select(this.ref.current)
+            .append('g').attr('class','axis')
+            .attr('id','axisOver')
+            .attr('transform',`translate(0,${this.bottomEnd})`)
             .attr('stroke-width','1.5px').call(axis)
+            .style('font-size', this.fontSize+'px')
 
             let axisLabel = d3.select('.axis')
                 .append('g')
                 .attr('class', 'axisName')
+                .style('font-size', this.fontSize+'px')
 
             axisLabel.append('text')
             .attr('x', this.rightEnd - this.leftStart*1.5)
@@ -573,11 +583,15 @@ export default class Overview extends React.Component<Props,State>{
 
             let yAxis = d3.axisRight(this.yScale)
             .tickValues([this.yMax])
+            
 
             d3.select(this.ref.current).append('g').attr('class','axisSelectionY').attr('id','axisY').attr('transform',`translate(${(this.rightEnd+this.leftStart)/2},${this.bottomEnd})`)
             .attr('stroke-width','1.5px').call(yAxis)
 
-            d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
+            d3.selectAll('#axisY .tick text')
+            .attr('transform',`translate(-15, ${-this.fontSize})`)
+            .style('font-size', this.fontSize+'px')
+            
             d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
         }
     }

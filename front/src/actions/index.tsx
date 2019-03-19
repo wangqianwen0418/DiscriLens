@@ -246,13 +246,15 @@ all about protectedAttr
 *****************/ 
 export interface ChangeProtectedAttr{
     type:CHANGE_PROTECTED_ATTR,
-    protectedAttr:string
+    protectedAttr:string,
+    protectedVal:string
 }
 
-export const ChangeProtectedAttr = (protectedAttr:string):ChangeProtectedAttr =>{
+export const ChangeProtectedAttr = (protectedAttr:string, protectedVal:string=''):ChangeProtectedAttr =>{
     return ({
         type: CHANGE_PROTECTED_ATTR,
-        protectedAttr
+        protectedAttr,
+        protectedVal
     });
 }
 
@@ -385,7 +387,7 @@ export const Start = (dataset_name:string, model_name: string, protect_attr: str
         dispatch(ChangeKeyFetchStatus(Status.PENDING))
         dispatch(ChangeRulesFetchStatus(Status.PENDING))
         dispatch(FetchRules(dataset_name, model_name))
-        dispatch(ChangeProtectedAttr(protect_attr))
+        dispatch(ChangeProtectedAttr(protect_attr, ''))
         FetchSamples(dataset_name, model_name)(dispatch)
         .then(
             () =>{ 
@@ -428,7 +430,7 @@ export const changeShowDataset = (showDataset: string): showDataset=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let {keyAttrs,accuracy} = require('../testdata/'+ dataset + '_key.json'), 
+    let {keyAttrs,accuracy } = require('../testdata/'+ dataset + '_key.json'), 
     jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
     jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
@@ -442,10 +444,13 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
     // move key attributes to the front
     dragArray = keyAttrs.concat(dragArray.filter(attr=>!keyAttrs.includes(attr)))
 
+    let protectedVal = jsonRule[0].pd
+    protectedAttr = protectedVal.split('=')[0]
+
     return (dispatch: any) =>{
         dispatch(GenerateSamples(jsonSamples))
         dispatch(ChangeKeyAttr(keyAttrs))
-        dispatch(ChangeProtectedAttr(protectedAttr))
+        dispatch(ChangeProtectedAttr(protectedAttr, protectedVal))
         dispatch(ChangeShowAttr(keyAttrs))
         dispatch(ChangeDragArray(dragArray))
         dispatch(GenerateRules(jsonRule))

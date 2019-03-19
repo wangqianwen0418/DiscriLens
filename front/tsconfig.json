@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "outDir": "build/dist",
     "module": "esnext",
+    "resolveJsonModule": true,
     "target": "es5",
     "lib": ["es2017", "dom"],
     "sourceMap": true,
