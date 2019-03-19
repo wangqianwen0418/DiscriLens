@@ -161,9 +161,9 @@ export default class AppMiddel extends React.Component<Props, State>{
         let offset = leftWidth * 0.25;
 
         let compOffset = leftWidth / 3
-        
+    
         let leftAppSpan = this.props.foldFlag?23:20 //
-        let upAppHeight = 25 // [0, 100] height of the attribute row
+        let upAppHeight = 30 // [0, 100] height of the attribute row
 
         return <Row className='App-middle'>
 

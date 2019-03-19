@@ -36,14 +36,14 @@ export default class modelSelection extends React.Component<Props,State>{
     public leftStart = 20 ; 
     // right end position
     rightEnd = window.innerWidth * 0.1; 
-    // bottom end position
-    bottomEnd = window.innerHeight * 0.8; 
+    // bottom end position, the height of top bar is 50
+    bottomEnd = (window.innerHeight-50) * 0.8; 
 
     models: string[] = this.getModel(this.props.showDataset);
-    // interval of different models' view
-    intervalHeight = 0.7 * window.innerHeight / this.models.length
     // top start position 
-    topStart = this.intervalHeight*0.2;
+    topStart = 0//this.intervalHeight*0.2;
+    // interval of different models' view
+    intervalHeight = (this.bottomEnd-this.topStart) / this.models.length
     // a standard reference length
     markSize = 14; 
     // line's color
@@ -239,6 +239,11 @@ export default class modelSelection extends React.Component<Props,State>{
                     button2Color='#ff7f00'
                     button1Color='#d4d4d4'
                 }
+                let offsetText = 0
+                if(document.getElementById(`text${this.models[i]}`)){
+                    offsetText = document.getElementById(`text${this.models[i]}`).getClientRects()[0].width/2
+                }
+                
                 return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
                     <g>
                         {/* <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/> */}
@@ -255,7 +260,7 @@ export default class modelSelection extends React.Component<Props,State>{
                         <path d={buttonPathLeft} style={{fill:'transparent'}} onClick={changeCompModel} cursor={i!=this.state.selectedModel?'pointer':null}/>
                         <path d={buttonPathRight} style={{fill:'transparent'}} onClick={changeModel} cursor={i!=this.state.selectedCompModel?'pointer':null}/>
 
-                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={startY}>{this.models[i]}</text>
+                        <text id={'text'+this.models[i]} fill='#0e4b8e' x={this.rightEnd * 1.25-offsetText} y={startY+ 0.01*bottomEnd}>{this.models[i]}</text>
 
                         <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={startY + 0.1*bottomEnd}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
                     </g>
@@ -272,10 +277,10 @@ export default class modelSelection extends React.Component<Props,State>{
     switch(xMax:number){
         let {fold} = this.state
         let transX = fold?this.leftStart/2:this.rightEnd*1.5,
-            transY = this.intervalHeight*this.models.length/2+this.topStart,
             width = this.leftStart/2,
             height = this.intervalHeight/8,
-            cornerR = this.rightEnd * 0.1,
+            transY = this.bottomEnd/2-height/2,
+            // cornerR = this.rightEnd * 0.1,
             buttonWidth = 5
         
         let line = d3.line<curveData>().x(d=>d.x).y(d=>d.y) 
@@ -295,14 +300,17 @@ export default class modelSelection extends React.Component<Props,State>{
         let clickButton = () =>{
             this.reverseFold()
         }
+
+        let buttonHeight = 1/12*window.innerHeight
         // border
-        let borderLine = `M${-this.rightEnd*1.5},${this.topStart} h${this.rightEnd*1.5-cornerR} a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR} 
-        v${(this.models.length-1/2)/2*this.intervalHeight - cornerR} l${buttonWidth*3},${buttonWidth} v${this.intervalHeight/2-buttonWidth*2}
-        l${-buttonWidth*3},${buttonWidth} v${(this.models.length-1/2)/2*this.intervalHeight - cornerR}
-        a${cornerR},${cornerR} 0 0 1 ${-cornerR},${cornerR} h${cornerR-this.rightEnd*1.5} `
+        // a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR}
+        let borderLine = `M${0},${this.topStart}
+        v${this.bottomEnd/2-buttonHeight/8*5} l${buttonWidth*3},${buttonHeight/8} v${buttonHeight}
+        l${-buttonWidth*3},${buttonHeight/8} v${this.bottomEnd/2-buttonHeight/8*5}
+        `
 
         // mask
-        let mask = `M${0},${this.intervalHeight*this.models.length/2} v${this.topStart*2}`
+        let mask = `M${1.5*buttonWidth},${this.topStart+this.bottomEnd/2-buttonHeight/8*5} v${buttonHeight}`
         return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${0})`}>
                 <path id="mask" d={mask} style={{strokeWidth:width*1.5,stroke:'transparent'}}><title>{fold?'Expand':'Fold'}</title></path>
                 <path d={borderLine} style={{fill:'none', stroke:'#d9d9d9', strokeWidth:'1px'}} />
@@ -331,10 +339,10 @@ export default class modelSelection extends React.Component<Props,State>{
             let yAxis = d3.axisRight(this.yScale[i])
             .tickValues([this.yMax[i]])
 
-            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisY').attr('transform',`translate(${(this.state.fold?-this.rightEnd*1.4:0) + (this.rightEnd+this.leftStart)/2},${this.intervalHeight * (i+1)})`)
+            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisYM').attr('transform',`translate(${(this.state.fold?-this.rightEnd*1.4:0) + (this.rightEnd+this.leftStart)/2},${this.intervalHeight * (i+1)})`)
             .attr('stroke-width','1.5px').call(yAxis)
             } 
-        d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
-        d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
+        d3.selectAll('#axisYM .tick text').attr('transform','translate(-15,-5)')
+        d3.selectAll('#axisYM .tick line').attr('x2','12').attr('transform','translate(-6,0)')
     }
 }

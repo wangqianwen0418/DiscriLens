@@ -49,17 +49,17 @@
 }
 
 .Side .ant-select-sm .ant-select-selection--single{
-  font-size: 10px !important;
+  font-size: 12px !important;
   text-align: center;
 }
 
 /* title text */
 .tool-title{
   text-align: center;
-  font-size: 9px;
+  font-size: 12px;
   height: 100%
 }
 
 .Side .ant-input-number .ant-input-number-sm{
-  font-size: 10px
+  font-size: 12px
 }

@@ -577,7 +577,6 @@ export default class Itemset extends React.Component<Props, State>{
             if(maxRect){
                 this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
             }
-            console.log(i)
             this.setState({})
         }
     }
@@ -809,7 +808,7 @@ export default class Itemset extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == this.rulesLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
-                             h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${this.props.offset-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
 
                         // let connectionCurve:any
