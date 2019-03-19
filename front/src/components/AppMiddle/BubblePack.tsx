@@ -13,7 +13,7 @@ import './BubblePack.css';
 import {packEnclose, graphPack} from 'lib/pack/index.js';
  
 
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
 
 export interface Props {
     ruleAgg: RuleAgg,
@@ -174,7 +174,7 @@ export default class Bubble extends React.Component<Props, State>{
             }
         })
         
-
+        
         let graph = getMinLinks(rules, root.children)
         // pack items circles, using default 
         root.children

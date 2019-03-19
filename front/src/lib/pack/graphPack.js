@@ -37,6 +37,9 @@ function sortByAllNeighbors(circleID, graph) {
 }
 
 function sortByPackedNeighbors(circleID, graph, packedcircleIDs) {
+  if (!graph.neighbors(circleID)){
+    return 0
+  }
   var neighbors = graph.neighbors(circleID).filter(id => packedcircleIDs.includes(id))
 
   return neighbors? neighbors.length > 0  ?
