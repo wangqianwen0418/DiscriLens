@@ -47,7 +47,9 @@ export default class Overview extends React.Component<Props,State>{
     // line's color
     lineColor = 'rgb(204, 204, 204)';
     // color of unselected area (BAD_COLOR is the color of selected area)
-    areaColor = 'rgb(232, 232, 232)'
+    areaColor = 'rgb(232, 232, 232)';
+    posColor = 'rgb(253, 211, 161)';
+    negColor = 'rgb(198, 232, 191)'
     // counters for dragging
     xLeft = 0; 
     xRight = 0;
@@ -514,8 +516,10 @@ export default class Overview extends React.Component<Props,State>{
                 <g>
                     {dataKeyAttr.map((data,i)=>{
                             let color = '#bbb'
-                            if((data.x<ruleThreshold[0])||(data.x>ruleThreshold[1])){
-                                color = BAD_COLOR
+                            if(data.x<xScaleReverse(this.state.transformXLeft)){
+                                color = this.negColor
+                            }else if((data.x>xScaleReverse(this.state.transformXRight))){
+                                color = this.posColor
                             }
                             return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
                             style={{fill:'none',stroke:color,strokeWidth:2}} className='overview'/>

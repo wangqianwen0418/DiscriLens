@@ -98,7 +98,8 @@ export default class Itemset extends React.Component<Props, State>{
     yList:{y:number,h:number,r:string[]}[] = []; 
     // inital value for rect
     ySumList:number[] = [];
-
+    // origin yList without offset for lineConnection drawing
+    yListOrigin:{y:number,h:number,r:string[]}[] = []; 
     // record the max y-value
     yMaxValue = 0;
     // record the max x-value
@@ -557,6 +558,7 @@ export default class Itemset extends React.Component<Props, State>{
             if(maxRect){
                 this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
             }
+            console.log(i)
             this.setState({})
         }
     }
@@ -641,7 +643,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
                 
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
-                startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
             }
 
             return <g key={attrVal} className='ruleagg attrvals'>
@@ -796,6 +798,7 @@ export default class Itemset extends React.Component<Props, State>{
                             onMouseEnter={this.props.buttonSwitch?hoverIn:null}
                             onMouseOut={this.props.buttonSwitch?hoverOut:null}
                             onClick={clickBubble}
+                            cursor={'pointer'}
                         >
                             {this.props.buttonSwitch?null:bubbleLine}
                             {bubble}
@@ -827,9 +830,10 @@ export default class Itemset extends React.Component<Props, State>{
                     let connectionCurve:any
                     if(bubblePosition.length == this.rulesLength){
                         connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
-                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yListOrigin[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                     }
-
+                    
+                    
                     return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                         transform={`translate(${transX},${transY})`}
                     >
@@ -854,7 +858,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let connectionCurve:any
                     if(bubblePosition.length == this.rulesLength){
                         connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
-                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yListOrigin[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                     }
 
                     return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
@@ -901,6 +905,7 @@ export default class Itemset extends React.Component<Props, State>{
         let switchOffset = 0
         let posRules: JSX.Element[] = []
         this.yList = []
+        this.yListOrigin = []
 
         let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
         // positive, orange
@@ -960,7 +965,7 @@ export default class Itemset extends React.Component<Props, State>{
             }else{
                 if(i<this.yUp.i){
                     posOffset = this.yUp.offset
-                }else if(i>this.yUp.i){
+                }else if(i>this.yDown.i){
                     posOffset = this.yDown.offset
                 }else{
                     posOffset = this.yOffset
@@ -969,6 +974,7 @@ export default class Itemset extends React.Component<Props, State>{
             
             
             this.yList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
+            this.yListOrigin.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
         this.pLenght = positiveRuleAgg.length
@@ -1030,9 +1036,9 @@ export default class Itemset extends React.Component<Props, State>{
             if(!this.props.buttonSwitch){
                 negOffset = 0
             }else{
-                if(i+positiveRuleAgg.length<this.yUp.i){
+                if(i<this.yUp.i){
                     negOffset = this.yUp.offset
-                }else if(i+positiveRuleAgg.length>this.yUp.i){
+                }else if(i>this.yDown.i){
                     negOffset = this.yDown.offset
                 }else{
                     negOffset = this.yOffset
@@ -1040,6 +1046,7 @@ export default class Itemset extends React.Component<Props, State>{
             }
 
             this.yList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
+            this.yListOrigin.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
@@ -1255,15 +1262,12 @@ export default class Itemset extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
-        // console.log('size',this.bubbleSize)
     }
 
     render() {
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        // console.log('ylist',this.yList)
-        // console.log('bubble',this.state.bubblePosition)
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
