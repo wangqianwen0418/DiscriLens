@@ -468,6 +468,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let opacity = 1
                     let barWidthTep = barWidth / ranges.length
                     let startX = barWidth / ranges.length * rangeIdx
+                    let rangeLabel:string[]= ['', '']
 
                     if(val.includes('<')||val.includes('>')){
                         let range = val
@@ -489,14 +490,17 @@ export default class Itemset extends React.Component<Props, State>{
                                 let split = range.split('<x<')
                                 rangeLeft = parseInt(split[0])
                                 rangeRight = parseInt(split[1])
+                                rangeLabel = split
                         }else if(range.includes('x<')){
                                 let split = range.split('x<')
                                 rangeLeft = minTemp
                                 rangeRight = parseInt(split[1]) 
+                                rangeLabel[1] = split[1]
                         }else if(range.includes('x>')){
                                 let split = range.split('x>')
                                 rangeLeft = parseInt(split[1])
                                 rangeRight = maxTemp
+                                rangeLabel[0] = split[1]
                         }
                         
                         barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
@@ -537,6 +541,22 @@ export default class Itemset extends React.Component<Props, State>{
                                     // this.props.onChangeSelectedBar(['', ''])
                                 }}
                         />
+                        <g className='range_label' 
+                        style={{fontSize:11, fill: '#555'}}
+                        transform={`translate(${step * dragArray.indexOf(attr) + startX}, ${this.lineInterval})`}
+                        >
+                        <text x={0}
+                            textAnchor='end'
+                        >
+                            {rangeLabel[0]}
+                        </text>
+
+                        <text x={barWidthTep}
+                            textAnchor='start'
+                        >
+                            {rangeLabel[1]}
+                        </text>
+                        </g>
                        
                         
                     </g>
@@ -1050,7 +1070,7 @@ export default class Itemset extends React.Component<Props, State>{
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
-                </g>
+                </g> 
             )
             offsetY = offsetY + 2 * this.lineInterval
             switchOffset += 2*this.lineInterval

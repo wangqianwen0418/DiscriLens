@@ -657,7 +657,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
     draw() {
         
-        let { rules, samples, keyAttrNum, dragArray,offset } = this.props
+        let { rules, samples, keyAttrNum, dragArray} = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
@@ -721,7 +721,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${offset}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset/4*3}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true,i)
                     }
@@ -785,7 +785,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             let negAveY = switchOffset
 
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${offset}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset/4*3}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }

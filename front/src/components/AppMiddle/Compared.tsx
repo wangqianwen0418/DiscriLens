@@ -509,7 +509,7 @@ export default class Compared extends React.Component<Props, State>{
 
         this.xMaxValue=Math.max(this.xMaxValue,step * keyAttrNum + this.headWidth + 2*this.fontSize-this.headWidth-2*this.fontSize)
 
-        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize+0.1*window.innerWidth},0)`}>
+        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize},0)`}>
             {/* <Bubble ruleAgg={ruleAgg}/> */}
             <rect className='ruleBox'
                 stroke='#c3c3c3' fill='#fff'
@@ -594,7 +594,7 @@ export default class Compared extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){
                             bubbleLine = <path d={`M${bubblePosition[i].w/2},${bubblePosition[i].h/2}
-                             h${-transCenter + this.props.offset/2},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${-transCenter + 20},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
