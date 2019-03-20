@@ -6,14 +6,16 @@
       "xgb": 0.906,
       "svm": 0.894,
       "rf": 0.904,
-      "dt": 0.898
+      "dt": 0.898,
+      "knn_post1": 0.870,
+      "knn_post2": 0.879
    },
    "causal": [
       "Relation --> class",
       "VisITedResources --> class",
       "AnnouncementsView --> VisITedResources",
-      "Gender --> StudentAbsenceDays",
-      "StudentAbsenceDays --> class",
+      "Gender --> AbsenceDays",
+      "AbsenceDays --> class",
       "Raisedhands --> class"
    ]
 }

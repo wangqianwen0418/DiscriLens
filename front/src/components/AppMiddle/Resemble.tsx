@@ -110,9 +110,11 @@ export default class AppMiddel extends React.Component<Props, State>{
                     transform={`translate(${node.x}, ${node.y})`}
                 >
                     <rect   
-                        x={-nodeW/2} y={-nodeH/2} width={nodeW} height={nodeH}
+                        x={-nodeW*1.5/2} y={-nodeH/2} width={1.5*nodeW} height={nodeH}
                         stroke='grey'
                         fill='white'
+                        rx={2}
+                        ry={2}
                     />
                     <text textAnchor='middle' y={nodeH*0.2}>{node.label.split('-')[0]}</text>
                 </g>
@@ -229,8 +231,8 @@ export default class AppMiddel extends React.Component<Props, State>{
           footer={null}
         >
         <svg className='causal model' style={{width:width, height: height}}>
-        {nodes}
         {edges}
+        {nodes}
         </svg>
         </Modal>
        </Row>
