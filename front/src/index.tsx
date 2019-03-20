@@ -20,7 +20,7 @@ let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
+    dataSelect = 0,
     modelSelect = 2,
 
     dataset = dataSets[dataSelect],
