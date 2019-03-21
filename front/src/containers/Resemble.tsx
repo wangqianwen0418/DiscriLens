@@ -1,7 +1,7 @@
 import Resemble from 'components/AppMiddle/Resemble';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeKeyAttr } from 'actions';
+import { ChangeKeyAttr,switchCompModel,switchModel,changeCompareMode } from 'actions';
 //import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
@@ -16,12 +16,16 @@ export function mapStateToProps(state:StoreState) {
         keyAttrNum:state.keyAttrNum,
         dragArray:state.dragArray,
         protectedAttr:state.protectedAttr,
+        showDataset:state.showDataset,
     };
 }
 
 export function mapDispatchToProps(dispatch: any) {
     return {
         onChangeKeyAttrs:(keyAttrs:string[])=>dispatch(ChangeKeyAttr(keyAttrs)),
+        onChangeModel:(dataset:string,model:string)=>{dispatch(switchModel(dataset,model))},
+        onChangeCompModel:(dataset:string,model:string)=>{dispatch(switchCompModel(dataset,model))},
+        onChangeCompareMode:(compareFlag:boolean)=>{dispatch(changeCompareMode(compareFlag))},
     }
 }
 

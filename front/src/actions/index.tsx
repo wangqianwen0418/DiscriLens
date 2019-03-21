@@ -3,10 +3,11 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
     CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
-    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE} from 'Const';
+    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE,UNMATCHED} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
+import { RuleAgg } from 'Helpers';
 
 const axiosInstance = axios.create({
     baseURL: `http://localhost:7777/api/`,
@@ -379,6 +380,22 @@ export const ChangeFoldFlag = (foldFlag:boolean):foldFlag =>{
         foldFlag
     });
 }
+
+
+/*****************
+all about unMatchedRules
+*****************/ 
+export interface unMatchedRules{
+    type:UNMATCHED,
+    unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}
+}
+
+export const ChangeUnMatchedRules = (unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}):unMatchedRules =>{
+    return ({
+        type: UNMATCHED,
+        unMatchedRules
+    });
+}
 // combine to start
 
 export const Start = (dataset_name:string, model_name: string, protect_attr: string)=>{
@@ -496,4 +513,4 @@ export const switchCompModel = (dataset:string,model:string)=>{
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|compareOffset|
 ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList|expandRule|
-compareMode
+compareMode|unMatchedRules

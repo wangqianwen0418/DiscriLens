@@ -61,3 +61,6 @@ export type EXPAND_RULE = typeof EXPAND_RULE
 
 export const COMPARE_MODE = 'COMPARE_MODE'
 export type COMPARE_MODE = typeof COMPARE_MODE
+
+export const UNMATCHED = 'UNMATCHED'
+export type UNMATCHED = typeof UNMATCHED

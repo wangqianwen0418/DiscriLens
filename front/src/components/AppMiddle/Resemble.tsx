@@ -8,6 +8,9 @@ import ComparePrime from 'containers/ComparePrime'
 import {Col, Row, Switch, Modal, Button} from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
+// import RadioButton from 'antd/lib/radio/radioButton';
+// import RadioGroup from 'antd/lib/radio/group';
+import "./Resemble.css"
 
 // import * as causal from 'testdata/academic_key.json'
 
@@ -23,12 +26,16 @@ export interface Props{
    dragArray:string[],
    keyAttrNum:number,
    protectedAttr:string,
+   showDataset:string,
    onChangeKeyAttrs:(keyAttrs:string[])=>void
 }
 
 export interface State {
     causalVisible: boolean
     selectionRect: any[]
+    selectedModel:string
+    selectedCompareModel:string
+    compareFlag:number
 }
 
 export interface Point{
@@ -47,7 +54,10 @@ export default class AppMiddel extends React.Component<Props, State>{
         super(props)
         this.state={
             causalVisible: false,
-            selectionRect: ['',0,0,0]
+            selectionRect: ['',0,0,0],
+            selectedCompareModel:'',
+            selectedModel:'',
+            compareFlag:0
         }
     }
     stringTransfer(input:string){
@@ -59,7 +69,18 @@ export default class AppMiddel extends React.Component<Props, State>{
             return input
         }
     }
-
+    getModel(dataset:string){
+        if(dataset=='academic'){
+            return ['xgb', 'knn', 'lr','knn_post1','rf','dt']
+        }
+        else if(dataset=='adult'){
+            return ['xgb', 'knn', 'lr','svm','rf']
+        }
+        else if(dataset=='bank'){
+            return ['xgb', 'knn', 'lr']
+        }
+        return null
+    }
     drawGraph(causal:string[]){
         let nodeW = 80, nodeH = 20, margin =6
         let dag = new dagre.graphlib.Graph();
@@ -295,9 +316,52 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
+
+        if(this.props.compareFlag&&!this.state.compareFlag){this.setState({compareFlag:2})}
+        else if(!this.props.compareFlag&&this.state.compareFlag){changeView();this.setState({compareFlag:this.state.compareFlag-1})}
+        
         return <Row className='App-middle'>
 
          <Col span={this.props.foldFlag?1:4} className='App-left' id='App-left' style={{height:"100%"}}>
+           {/* <RadioGroup size='small' defaultValue={'lr'} >
+           {this.props.foldFlag?null:this.getModel(this.props.showDataset).map((model,i)=>{
+               let {selectedCompareModel} = this.state
+               let changeModel = () => {
+                        if(model!=selectedCompareModel){
+                            this.props.onChangeModel(this.props.showDataset,model)
+                            this.setState({selectedModel:model})
+                        }
+                    } */}
+
+                {// let changeCompModel = () =>
+                //         if(model!=selectedModel){
+                //             if(selectedCompareModel==model){
+                //                 if(this.props.compareFlag){
+                //                     this.props.onChangeCompareMode(false)
+                //                 }
+                //                 this.setState({selectedCompareModel:'none'})
+                //             }else{
+                //                 if(!this.props.compareFlag){
+                //                     this.props.onChangeCompareMode(true)
+                //                 }
+                //                 this.props.onChangeCompModel(this.props.showDataset,model)
+                //                 this.setState({selectedCompareModel:model})
+                //             }
+                //         }
+                //     }
+        //         let bottomEnd = (window.innerHeight-50) * 0.8
+        //         let rightEnd = window.innerWidth * 0.1
+        //         let intervalHeight = (bottomEnd-20) / this.getModel(this.props.showDataset).length
+        //         let offsetText = 0
+        //         if(document.getElementById(`buttonText${model}`)){
+        //             offsetText = document.getElementById(`buttonText${model}`).getClientRects()[0].width/2
+        //         }
+        //        return <div id={'buttonText'+model}style={{position:'absolute',left:rightEnd*1.25-offsetText,top:intervalHeight*(i+0.35)}}>
+        //        <RadioButton  value={model} onChange={changeModel} >{model}</RadioButton>
+        //        </div>
+        //    })}
+        //   </RadioGroup>
+                }
            <svg className='modelSelection' style={{width:"100%", height:"100%"}}>
               <ModelSelection divideNum={this.divideNum}/>
            </svg>

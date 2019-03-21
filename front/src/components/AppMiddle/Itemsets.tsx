@@ -399,7 +399,7 @@ export default class Itemset extends React.Component<Props, State>{
                     {rule.risk_dif.toFixed(2).replace('0.', '.')}
                 </text> */}
             </g>
-            <text fontSize={this.fontSize} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
+            <text fontSize={this.fontSize} y={this.lineInterval-2} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
                     {rule.risk_dif.toFixed(2)} */}
@@ -547,12 +547,14 @@ export default class Itemset extends React.Component<Props, State>{
                         >
                         <text x={0}
                             textAnchor='end'
+                            y={-3}
                         >
                             {rangeLabel[0]}
                         </text>
 
                         <text x={barWidthTep}
                             textAnchor='start'
+                            y={-3}
                         >
                             {rangeLabel[1]}
                         </text>
@@ -724,12 +726,14 @@ export default class Itemset extends React.Component<Props, State>{
                 >
                 <text x={0}
                     textAnchor='end'
+                    y={-3}
                 >
                     {rangeLabel[0]}
                 </text>
 
                 <text x={barWidthTep}
                     textAnchor='start'
+                    y={-3}
                 >
                     {rangeLabel[1]}
                 </text>

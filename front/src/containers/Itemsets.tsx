@@ -18,6 +18,7 @@ export function mapStateToProps(state:StoreState) {
         showAttrNum: state.showAttrNum,
         fetchKeyStatus: state.fetchKeyStatus,
         compareList: state.compareList,
+        compareFlag:state.compareFlag
     };
 }
 

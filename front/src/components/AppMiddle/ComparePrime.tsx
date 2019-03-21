@@ -44,6 +44,7 @@ export interface Props {
     step: number,
     barWidth: number,
     offset: number,
+    unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]},
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     compareOffset:{y:number[],index:number[]}
     onChangeShowAttr: (showAttrs: string[]) => void
@@ -99,6 +100,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
     // the list recording all rule rect position (left up point)
     yList:{y:number,h:number,r:string[]}[] = []; 
+    compYList :{y:number,h:number,r:string[]}[] = []; 
     // inital value for rect
     ySumList:number[] = [];
 
@@ -258,7 +260,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offset}, ${switchOffset})`}
+            transform={`translate(${this.props.offset*3/4}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -277,7 +279,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                 let ruleID = rule.id.toString()
                 let { highlightRules } = this.state, idx = highlightRules[ruleAggID].indexOf(ruleID)
                 if (idx == -1) {
-                    highlightRules[ruleAggID].push(ruleID)
+                    highlightRules[ruleAggID] = [...highlightRules[ruleAggID], ruleID]
                 } else {
                     highlightRules[ruleAggID].splice(idx, 1)
                 }
@@ -437,6 +439,47 @@ export default class ComparePrime extends React.Component<Props, State>{
                     let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                         rangeIdx = ranges.indexOf(val)
                     this.xMaxValue = Math.max(this.xMaxValue,step * showAttrs.indexOf(attr)+barWidth)
+
+                    let barWidthTep = barWidth / ranges.length
+                    let startX = barWidth / ranges.length * rangeIdx
+                    let rangeLabel:string[]= ['', '']
+
+                    if(val.includes('<')||val.includes('>')){
+                        let range = val
+                        let rangeLeft:number,rangeRight:number
+        
+                        let maxTemp:any = -Infinity
+                                this.props.samples.forEach(s =>{
+                                    if(s[attr]>maxTemp){
+                                        maxTemp = s[attr]
+                                    }
+                                })
+                        let minTemp:any = Infinity
+                        this.props.samples.forEach((s) =>{
+                                    if(s[attr]<minTemp){
+                                        minTemp = s[attr]
+                                    }
+                                })
+                        if(range.includes('<x<')){
+                                let split = range.split('<x<')
+                                rangeLeft = parseInt(split[0])
+                                rangeRight = parseInt(split[1])
+                                rangeLabel = split
+                        }else if(range.includes('x<')){
+                                let split = range.split('x<')
+                                rangeLeft = minTemp
+                                rangeRight = parseInt(split[1]) 
+                                rangeLabel[1] = split[1]
+                        }else if(range.includes('x>')){
+                                let split = range.split('x>')
+                                rangeLeft = parseInt(split[1])
+                                rangeRight = maxTemp
+                                rangeLabel[0] = split[1]
+                        }
+                        
+                        barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
+                        startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                    }
                     return <g key={attrVal}>
                         {/* <rect className='ruleBox' 
             stroke='#666' fill='none' 
@@ -455,8 +498,8 @@ export default class ComparePrime extends React.Component<Props, State>{
                         />
                         
                         <rect className='font'
-                                width={barWidth / ranges.length} height={this.lineInterval}
-                                x={step * showAttrs.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                                width={barWidthTep} height={this.lineInterval}
+                                x={step * showAttrs.indexOf(attr) + startX}
                                 // fill={favorPD ? "#98E090" : "#FF772D"}
                                 fill={this.scoreColor(ruleNode.rule.risk_dif)}
                                 onMouseEnter={() => {
@@ -466,7 +509,24 @@ export default class ComparePrime extends React.Component<Props, State>{
                                     this.props.onChangeSelectedBar(['', ''])
                                 }}
                         />
-                        
+                        <g className='range_label' 
+                        style={{fontSize:11, fill: '#555'}}
+                        transform={`translate(${step * dragArray.indexOf(attr) + startX}, ${this.lineInterval})`}
+                        >
+                        <text x={0}
+                            textAnchor='end'
+                            y={-3}
+                        >
+                            {rangeLabel[0]}
+                        </text>
+
+                        <text x={barWidthTep}
+                            textAnchor='start'
+                            y={-3}
+                        >
+                            {rangeLabel[1]}
+                        </text>
+                        </g>
                     </g>
                 }
                 )}
@@ -519,6 +579,47 @@ export default class ComparePrime extends React.Component<Props, State>{
             let [attr, val] = attrVal.split('=')
             let ranges = getAttrRanges(this.props.samples, attr).filter(r => typeof (r) == 'string'),
                 rangeIdx = ranges.indexOf(val)
+
+            let rangeLabel:string[]= ['', '']
+
+            let barWidthTep = barWidth / ranges.length
+            let startX = barWidth / ranges.length * rangeIdx
+            if(val.includes('<')||val.includes('>')){
+                let range = val
+                let rangeLeft:number,rangeRight:number
+
+                let maxTemp:any = -Infinity
+                        this.props.samples.forEach(s =>{
+                            if(s[attr]>maxTemp){
+                                maxTemp = s[attr]
+                            }
+                        })
+                let minTemp:any = Infinity
+                this.props.samples.forEach((s) =>{
+                            if(s[attr]<minTemp){
+                                minTemp = s[attr]
+                            }
+                        })
+                if(range.includes('<x<')){
+                        let split = range.split('<x<')
+                        rangeLeft = parseInt(split[0])
+                        rangeRight = parseInt(split[1])
+                        rangeLabel = split
+                }else if(range.includes('x<')){
+                        let split = range.split('x<')
+                        rangeLeft = minTemp
+                        rangeRight = parseInt(split[1]) 
+                        rangeLabel[1] = split[1]
+                }else if(range.includes('x>')){
+                        let split = range.split('x>')
+                        rangeLeft = parseInt(split[1])
+                        rangeRight = maxTemp
+                        rangeLabel[0] = split[1]
+                }
+                
+                barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
+                startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
+            }
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
@@ -530,11 +631,29 @@ export default class ComparePrime extends React.Component<Props, State>{
                     strokeWidth={2}
                 />
                 <rect className='font'
-                    width={barWidth / ranges.length} height={this.lineInterval}
-                    x={step * dragArray.indexOf(attr) + barWidth / ranges.length * rangeIdx}
+                    width={barWidthTep} height={this.lineInterval}
+                    x={step * dragArray.indexOf(attr) + startX}
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
                     fill={this.scoreColor(favorPD ? Math.pow(10, -6) : -Math.pow(10, -6))}
                 />
+                <g className='range_label' 
+                style={{fontSize:11, fill: '#555'}}
+                transform={`translate(${step * dragArray.indexOf(attr) + startX}, ${this.lineInterval})`}
+                >
+                <text x={0}
+                    textAnchor='end'
+                    y={-3}
+                >
+                    {rangeLabel[0]}
+                </text>
+
+                <text x={barWidthTep}
+                    textAnchor='start'
+                    y={-3}
+                >
+                    {rangeLabel[1]}
+                </text>
+                </g>
             </g>
         }
         ))
@@ -682,6 +801,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         let switchOffset = 0
         let posRules: JSX.Element[] = []
         this.yList = []
+        this.compYList = []
 
         let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
 
@@ -690,6 +810,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         positiveRuleAgg.forEach((ruleAgg, i) => {
             
             let ySum = 0
+            let compY = 0
             if(this.ySumList.length!=0){
                 ySum = this.ySumList[i]
             }
@@ -716,6 +837,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                     bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
                 }
                 switchOffset = Math.max(ySum,comparedY,formerRectY,bubbleY)-this.lineInterval
+                compY = i==0?switchOffset+this.lineInterval:Math.max(bubbleY,formerRectY)
             }
 
             // calculate average y-value of an itemset
@@ -742,7 +864,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             posAveY += this.lineInterval
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             
-            
+            this.compYList.push({y:compY,h:hPos,r:ruleAgg.antecedent})
             this.yList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
@@ -753,6 +875,7 @@ export default class ComparePrime extends React.Component<Props, State>{
         negativeRuleAgg.forEach((ruleAgg,i)=> {
             i += positiveRuleAgg.length
             let ySum = 0
+            let compY = 0
             if(this.ySumList.length!=0){
                 ySum = this.ySumList[i]
             }
@@ -779,6 +902,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                     bubbleY = this.bubblePosition[i-1].h + this.bubblePosition[i-1].y+this.bubblePosition[i].h/2
                 }
                 switchOffset = Math.max(ySum,comparedY,formerRectY,bubbleY)-this.lineInterval
+                compY = i==0?switchOffset+this.lineInterval:Math.max(bubbleY,formerRectY)
             }
             
             // calculate average y-value of an itemset
@@ -806,7 +930,44 @@ export default class ComparePrime extends React.Component<Props, State>{
             // negAveY = (negAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
 
+            this.compYList.push({y:compY,h:hNeg,r:ruleAgg.antecedent})
             this.yList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
+        })
+
+        /**
+         *  Not matched ruleaggs to see distribution
+         */
+        // positive, orange
+        let {unMatchedRules} = this.props
+        let posRulesUnMatched: JSX.Element[] = []
+        unMatchedRules.pos.forEach((ruleAgg, i) => {
+            
+            if(!isNaN(ruleAgg[1])){
+                posRulesUnMatched.push(
+                    <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.props.offset/4*3}, ${ruleAgg[1]-this.lineInterval})`} className="rule" >
+                        {
+                            this.drawRuleAgg(ruleAgg[0], true,i)
+                        }
+                    </g>
+                )
+                this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
+            }
+        })  
+        
+        // negtive, green
+        let negaRulesUnMatched: JSX.Element[] = [] 
+        unMatchedRules.neg.forEach((ruleAgg,i)=> {
+            i += unMatchedRules.pos.length 
+            if(!isNaN(ruleAgg[1])){
+               negaRulesUnMatched.push(
+                <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.props.offset/4*3}, ${ruleAgg[1]-this.lineInterval})`} className="rule">
+                    {
+                        this.drawRuleAgg(ruleAgg[0], false,i)
+                    }
+                </g>
+                ) 
+                this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
+            }            
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
@@ -824,6 +985,12 @@ export default class ComparePrime extends React.Component<Props, State>{
             <g className='negative rules'>
                 {negaRules}
             </g>
+            <g className='positive rules unMatched'>
+                {posRulesUnMatched}
+            </g>
+            <g className='negative rules unMatched'>
+                {negaRulesUnMatched}
+            </g>
         </g>
     }
     componentDidMount() {
@@ -834,16 +1001,44 @@ export default class ComparePrime extends React.Component<Props, State>{
         // ) {
         //     this.setState({ expandRules: {} })
         // }
+        // let { highlightRules } = this.state
+        // let { negativeRuleAgg, positiveRuleAgg } = this
+        // negativeRuleAgg.forEach(ruleAgg => {
+        //     if (!highlightRules[ruleAgg.id.toString()]) {
+        //         highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+        //     }
+        // })
+        // positiveRuleAgg.forEach(ruleAgg => {
+        //     if (!highlightRules[ruleAgg.id.toString()]) {
+        //         highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+        //     }
+        // })
+        // this.setState({ highlightRules })
+    }
+    componentWillReceiveProps(nextProps:Props){
+        //  don't know why i cannot call getDerivedStateFromProps, debug later
+        // rule aggregate
+        let { rules, samples, keyAttrNum, dragArray } = nextProps
+        // let samples_numerical = samples.slice(0,1000)
+        samples = samples.slice(Math.floor(samples.length / 2), samples.length)
+        let keyAttrs = dragArray.slice(0, keyAttrNum)
+
+        let { positiveRuleAgg, negativeRuleAgg } = ruleAggregate(rules, keyAttrs, samples)
+        this.positiveRuleAgg = positiveRuleAgg
+        this.negativeRuleAgg = negativeRuleAgg
+
+        // initial default highlight rules
         let { highlightRules } = this.state
-        let { negativeRuleAgg, positiveRuleAgg } = this
         negativeRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
-                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+                highlightRules[ruleAgg.id.toString()] = []
+                // highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
             }
         })
         positiveRuleAgg.forEach(ruleAgg => {
             if (!highlightRules[ruleAgg.id.toString()]) {
-                highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
+                highlightRules[ruleAgg.id.toString()] = []
+                // highlightRules[ruleAgg.id.toString()] = ruleAgg.nodes.map(node => node.rule.id.toString()).slice(0, 2)
             }
         })
         this.setState({ highlightRules })
@@ -929,9 +1124,9 @@ export default class ComparePrime extends React.Component<Props, State>{
         // compare model mode
         // for the prime model
         if(compareList.b2){
-            let compareIsSame = this.compareYList(this.yList,compareList.r)
+            let compareIsSame = this.compareYList(this.compYList,compareList.r)
             if(!compareIsSame){
-                this.props.onTransCompareList({b2:bubblePosition,r:this.yList,p:this.pLenght,yMax:this.borderHeight})
+                this.props.onTransCompareList({b2:bubblePosition,r:this.compYList,p:this.pLenght,yMax:this.borderHeight})
             }
         }
     }
@@ -966,13 +1161,14 @@ export default class ComparePrime extends React.Component<Props, State>{
         let maxBubble = this.findMaxRect(this.state.bubblePosition,this.state.bubblePosition.length)
         let svgHeight:number = 0
         if(maxBubble){
-            svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.1
+            svgHeight= Math.max(maxBubble.y + maxBubble.h,this.yMaxValue) + this.margin * 1.5
+        }
+        if(this.yList.length!=0&&this.bubblePosition.length!=0){
+            this.borderHeight = this.yList[this.yList.length-1].y + this.bubblePosition[this.bubblePosition.length-1].h/2
         }
 
-
         let borderHeight = document.getElementsByClassName('itemsetPrime').length?Math.max(document.getElementsByClassName('itemsetPrime')[0].clientHeight,svgHeight):'100%'
-        this.borderHeight = borderHeight
-        
+        // this.borderHeight = borderHeight
         let borderWidth:any = this.xMaxValue + this.props.offset + 10
         if(borderWidth<window.innerWidth*5/8){
             borderWidth='100%'

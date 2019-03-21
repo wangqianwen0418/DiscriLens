@@ -1,3 +1,5 @@
+import {RuleAgg} from 'Helpers'
+
 export interface DataItem{
     [key:string]: number|string
 }
@@ -68,5 +70,6 @@ export interface StoreState{
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}, // list of components for model comparison
     compareOffset:{y:number[],index:number[]}, // if compared view has overlapping
     expandRule:{id: number, newAttrs: string[], children: string[]},
-    causal: string[]
+    causal: string[],
+    unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}, // unmathed rules from compared models
 }
