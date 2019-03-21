@@ -19,6 +19,7 @@ export function mapStateToProps(state:StoreState) {
         fetchKeyStatus: state.fetchKeyStatus,
         compareList: state.compareList,
         compareOffset:state.compareOffset,
+        unMatchedRules:state.unMatchedRules,
     };
 }
 

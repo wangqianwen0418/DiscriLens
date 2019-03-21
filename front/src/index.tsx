@@ -75,7 +75,8 @@ if (TEST){
       compareOffset:{y:[],index:[]},
       expandRule:{id: 0, newAttrs:[], children: []},
       compareFlag:false,
-      causal
+      causal,
+      unMatchedRules:{pos:[],neg:[]}
   }
 }else{
   initState = {
@@ -104,7 +105,8 @@ if (TEST){
     compareOffset:{y:[],index:[]},
     expandRule:{id: 0, newAttrs:[], children: []},
     compareFlag:false,
-    causal: []
+    causal: [],
+    unMatchedRules:{pos:[],neg:[]}
 }
 }
 

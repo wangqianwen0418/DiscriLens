@@ -400,15 +400,14 @@ export default class Bubble extends React.Component<Props, State>{
     render() {
         let {ruleAgg} = this.props
         let {itemCircles, outlines, background} = this.draw()
-        console.info('render bubble')
-       
+        // console.info('render bub/ble')
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
             // transform={`translate(${this.circlePadding}, ${this.circlePadding})`}
             // transform={`scale(${this.scaleRatio})`}
             >
-            {/* <rect width={this.width} height={this.height} /> */}
+            {/* <rect width={this.width} height={this.height} fill='none' stroke='black'/> */}
                 {background}
                 {itemCircles}
                 <g className='highlight outlines'>

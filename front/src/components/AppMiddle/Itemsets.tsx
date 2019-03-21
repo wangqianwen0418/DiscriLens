@@ -98,7 +98,8 @@ export default class Itemset extends React.Component<Props, State>{
     yList:{y:number,h:number,r:string[]}[] = []; 
     // inital value for rect
     ySumList:number[] = [];
-
+    // origin yList without offset for lineConnection drawing
+    yListOrigin:{y:number,h:number,r:string[]}[] = []; 
     // record the max y-value
     yMaxValue = 0;
     // record the max x-value
@@ -399,7 +400,7 @@ export default class Itemset extends React.Component<Props, State>{
                     {rule.risk_dif.toFixed(2).replace('0.', '.')}
                 </text> */}
             </g>
-            <text fontSize={this.fontSize} y={this.lineInterval} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
+            <text fontSize={this.fontSize} y={this.lineInterval-2} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
                     {rule.risk_dif.toFixed(2)} */}
@@ -468,6 +469,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let opacity = 1
                     let barWidthTep = barWidth / ranges.length
                     let startX = barWidth / ranges.length * rangeIdx
+                    let rangeLabel:string[]= ['', '']
 
                     if(val.includes('<')||val.includes('>')){
                         let range = val
@@ -489,14 +491,17 @@ export default class Itemset extends React.Component<Props, State>{
                                 let split = range.split('<x<')
                                 rangeLeft = parseInt(split[0])
                                 rangeRight = parseInt(split[1])
+                                rangeLabel = split
                         }else if(range.includes('x<')){
                                 let split = range.split('x<')
                                 rangeLeft = minTemp
                                 rangeRight = parseInt(split[1]) 
+                                rangeLabel[1] = split[1]
                         }else if(range.includes('x>')){
                                 let split = range.split('x>')
                                 rangeLeft = parseInt(split[1])
                                 rangeRight = maxTemp
+                                rangeLabel[0] = split[1]
                         }
                         
                         barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
@@ -537,6 +542,24 @@ export default class Itemset extends React.Component<Props, State>{
                                     // this.props.onChangeSelectedBar(['', ''])
                                 }}
                         />
+                        <g className='range_label' 
+                        style={{fontSize:11, fill: '#555'}}
+                        transform={`translate(${step * dragArray.indexOf(attr) + startX}, ${this.lineInterval})`}
+                        >
+                        <text x={0}
+                            textAnchor='end'
+                            y={-3}
+                        >
+                            {rangeLabel[0]}
+                        </text>
+
+                        <text x={barWidthTep}
+                            textAnchor='start'
+                            y={-3}
+                        >
+                            {rangeLabel[1]}
+                        </text>
+                        </g>
                        
                         
                     </g>
@@ -667,7 +690,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
                 
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
-                startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
             }
 
             return <g key={attrVal} className='ruleagg attrvals'>
@@ -704,12 +727,14 @@ export default class Itemset extends React.Component<Props, State>{
                 >
                 <text x={0}
                     textAnchor='end'
+                    y={-3}
                 >
                     {rangeLabel[0]}
                 </text>
 
                 <text x={barWidthTep}
                     textAnchor='start'
+                    y={-3}
                 >
                     {rangeLabel[1]}
                 </text>
@@ -808,7 +833,7 @@ export default class Itemset extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == this.rulesLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
-                             h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${this.props.offset-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
 
                         // let connectionCurve:any
@@ -832,6 +857,7 @@ export default class Itemset extends React.Component<Props, State>{
                             onMouseEnter={this.props.buttonSwitch?hoverIn:null}
                             onMouseOut={this.props.buttonSwitch?hoverOut:null}
                             onClick={clickBubble}
+                            cursor={'pointer'}
                         >
                             {this.props.buttonSwitch?null:bubbleLine}
                             {bubble}
@@ -863,9 +889,10 @@ export default class Itemset extends React.Component<Props, State>{
                     let connectionCurve:any
                     if(bubblePosition.length == this.rulesLength){
                         connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
-                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yListOrigin[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                     }
-
+                    
+                    
                     return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                         transform={`translate(${transX},${transY})`}
                     >
@@ -890,7 +917,7 @@ export default class Itemset extends React.Component<Props, State>{
                     let connectionCurve:any
                     if(bubblePosition.length == this.rulesLength){
                         connectionCurve = <path d={this.connectionCurve({x:bubblePosition[i].w/2,y:bubblePosition[i].h/2}
-                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yList[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                            ,{x:this.props.offset-this.headWidth-transX-2*this.fontSize,y:this.yListOrigin[i].y-transY})} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                     }
 
                     return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
@@ -937,6 +964,7 @@ export default class Itemset extends React.Component<Props, State>{
         let switchOffset = 0
         let posRules: JSX.Element[] = []
         this.yList = []
+        this.yListOrigin = []
 
         let arrayLength = positiveRuleAgg.length + negativeRuleAgg.length
         // positive, orange
@@ -996,7 +1024,7 @@ export default class Itemset extends React.Component<Props, State>{
             }else{
                 if(i<this.yUp.i){
                     posOffset = this.yUp.offset
-                }else if(i>this.yUp.i){
+                }else if(i>this.yDown.i){
                     posOffset = this.yDown.offset
                 }else{
                     posOffset = this.yOffset
@@ -1005,6 +1033,7 @@ export default class Itemset extends React.Component<Props, State>{
             
             
             this.yList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
+            this.yListOrigin.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
         this.pLenght = positiveRuleAgg.length
@@ -1046,7 +1075,7 @@ export default class Itemset extends React.Component<Props, State>{
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
-                </g>
+                </g> 
             )
             offsetY = offsetY + 2 * this.lineInterval
             switchOffset += 2*this.lineInterval
@@ -1066,9 +1095,9 @@ export default class Itemset extends React.Component<Props, State>{
             if(!this.props.buttonSwitch){
                 negOffset = 0
             }else{
-                if(i+positiveRuleAgg.length<this.yUp.i){
+                if(i<this.yUp.i){
                     negOffset = this.yUp.offset
-                }else if(i+positiveRuleAgg.length>this.yUp.i){
+                }else if(i>this.yDown.i){
                     negOffset = this.yDown.offset
                 }else{
                     negOffset = this.yOffset
@@ -1076,6 +1105,7 @@ export default class Itemset extends React.Component<Props, State>{
             }
 
             this.yList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
+            this.yListOrigin.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
@@ -1291,15 +1321,12 @@ export default class Itemset extends React.Component<Props, State>{
             }
             this.ySumList.push(bSum)
         })
-        // console.log('size',this.bubbleSize)
     }
 
     render() {
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        // console.log('ylist',this.yList)
-        // console.log('bubble',this.state.bubblePosition)
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>

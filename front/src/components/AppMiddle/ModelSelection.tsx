@@ -25,6 +25,7 @@ export interface State{
     selectionCurves: curveData[][],
     selectedModel: number,
     selectedCompModel: number,
+    compareFlag:boolean,
 }
 export interface rules{
     rule: string[],
@@ -36,14 +37,14 @@ export default class modelSelection extends React.Component<Props,State>{
     public leftStart = 20 ; 
     // right end position
     rightEnd = window.innerWidth * 0.1; 
-    // bottom end position
-    bottomEnd = window.innerHeight * 0.8; 
+    // bottom end position, the height of top bar is 50
+    bottomEnd = (window.innerHeight-50) * 0.8; 
 
     models: string[] = this.getModel(this.props.showDataset);
-    // interval of different models' view
-    intervalHeight = 0.7 * window.innerHeight / this.models.length
     // top start position 
-    topStart = this.intervalHeight*0.2;
+    topStart = 0//this.intervalHeight*0.2;
+    // interval of different models' view
+    intervalHeight = (this.bottomEnd-20) / this.models.length
     // a standard reference length
     markSize = 14; 
     // line's color
@@ -62,6 +63,7 @@ export default class modelSelection extends React.Component<Props,State>{
             selectionCurves: [],
             selectedModel: 2,
             selectedCompModel: -1,
+            compareFlag:false,
         }
         this.reverseFold = this.reverseFold.bind(this)
         this.updateModels = this.updateModels.bind(this)
@@ -97,7 +99,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     updateModels(){
         this.models = this.getModel(this.props.showDataset)
-        this.intervalHeight = 0.7 * window.innerHeight / this.models.length
+        this.intervalHeight = (this.bottomEnd-20) / this.models.length
         this.setState({dataSet:this.props.showDataset})
     }
 
@@ -111,7 +113,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     modelSelection(){
         let {dragArray,keyAttrNum} = this.props
-        let {selectedModel,selectedCompModel} = this.state
+        let {selectedModel,selectedCompModel,compareFlag} = this.state
         let axis:any[] = []
         this.yScale = []
         this.yMax = []
@@ -182,84 +184,97 @@ export default class modelSelection extends React.Component<Props,State>{
                  * Draw area
                  * */ 
                 // some parameters for drawing
-                // bottom end position
-                let bottomEnd = this.bottomEnd;
-                // left start postition
                 let leftStart = this.leftStart;
-                // line's color
-                // let lineColor = this.lineColor;
-                let rightEnd = this.rightEnd;
+                // let rightEnd = this.rightEnd;
                 let intervalHeight = this.intervalHeight;
                 // xScale maps risk_dif to actual svg pixel length along x-axis
                 let xScale = d3.scaleLinear().domain([-maxAbsoluteX,maxAbsoluteX]).range([leftStart,this.rightEnd])
                 // yScale maps risk_dif to actual svg pixel length along x-axis
                 let yScale = d3.scaleLinear().domain([0,Math.max(...yMax)]).range([0,-intervalHeight*0.7])
-                 // area of rules filtered by key_attrs
-                // let curveKeyAttrs = d3.area<curveData>().x(d=>xScale(d.x)).y1(d=>bottomEnd).y0(d=>bottomEnd+yScale(d.y)).curve(d3.curveMonotoneX)
-                
                 this.yScale.push(yScale)
                 this.yMax.push(Math.max(...yMax))
-                let changeModel = () => {
-                    if(i!=selectedCompModel){
-                        this.props.onChangeModel(this.props.showDataset,model)
-                        this.setState({selectedModel:i})
-                    }
-                }
 
-                let changeCompModel = () =>{
-                    if(i!=selectedModel){
-                        if(selectedCompModel==i){
-                            if(this.props.compareFlag){
-                                this.props.onChangeCompareMode(false)
-                            }
-                            this.setState({selectedCompModel:-1})
-                        }else{
-                            if(!this.props.compareFlag){
-                                this.props.onChangeCompareMode(true)
-                            }
+                let changeModel = () => {
+                    let newState:boolean = compareFlag
+                    if(i==selectedModel){
+                        newState = !compareFlag
+                    }
+                    
+                    if(newState){
+                        if(i!=selectedModel&&i!=selectedCompModel){
+                            this.props.onChangeCompareMode(true)
                             this.props.onChangeCompModel(this.props.showDataset,model)
                             this.setState({selectedCompModel:i})
                         }
+                    }else{
+                        if(selectedCompModel!=-1){
+                            this.props.onChangeCompareMode(false)
+                            // this.props.onChangeCompModel('','')
+                            this.setState({selectedCompModel:-1})
+                        }
+                        if(i!=selectedModel){
+                            this.props.onChangeModel(this.props.showDataset,model)
+                            this.setState({selectedModel:i})
+                        }
                     }
+                    this.setState({compareFlag:newState})
                 }
 
-                let startY = bottomEnd - intervalHeight *0.7
+                // let changeCompModel = () =>{
+                //     if(i!=selectedModel){
+                //         if(selectedCompModel==i){
+                //             if(this.props.compareFlag){
+                //                 this.props.onChangeCompareMode(false)
+                //             }
+                //             this.setState({selectedCompModel:-1})
+                //         }else{
+                //             if(!this.props.compareFlag){
+                //                 this.props.onChangeCompareMode(true)
+                //             }
+                //             this.props.onChangeCompModel(this.props.showDataset,model)
+                //             this.setState({selectedCompModel:i})
+                //         }
+                //     }
+                // }
 
-                let buttonPathLeft = `M${1.10*rightEnd},${startY + 0.01*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} v${0.15*rightEnd} h${-0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${-0.15*rightEnd}`  
-
-                let buttonPathRight = `M${1.25*rightEnd},${startY + 0.01*bottomEnd+0.05*rightEnd} h${0.15*rightEnd} a${0.05*rightEnd},${0.1*rightEnd} 0 0 1 0,${0.15*rightEnd}
-                h${-0.15*rightEnd} v${-0.15*rightEnd}`
-                let fontSize = 14
+                let startY = 0
                 axis.push(xScale)
+                let widthText = 0
+                if(document.getElementById(`text${this.models[i]}`)){
+                    widthText = document.getElementById(`text${this.models[i]}`).getClientRects()[0].width
+                }
+                
+                let rectX = this.rightEnd * 1.25-(widthText+10)/2,
+                rectY = -0.5 * intervalHeight
 
-                let button1Color = '#4d4d4d', button2Color = '#4d4d4d'
-                if(selectedModel==i){
-                    button1Color='#ff7f00'
-                    button2Color='#d4d4d4'
+                let lineColor = '#999', textColor='#999'
+                if((selectedModel==i)&&(!compareFlag)){
+                    lineColor = '#1890ff'
+                    textColor = '#1890ff'
+                }
+                if((selectedModel==i)&&(compareFlag)){
+                    lineColor = '#bbb'
+                    textColor = 'white'
                 }
                 if(selectedCompModel==i){
-                    button2Color='#ff7f00'
-                    button1Color='#d4d4d4'
+                    lineColor = '#1890ff'
+                    textColor = '#1890ff'
                 }
-                return <g transform={`translate(0,${intervalHeight*(i+1)-bottomEnd})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
+
+                return <g transform={`translate(0,${intervalHeight*(i+1)})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
                     <g>
-                        {/* <path d={curveKeyAttrs(dataKeyAttr_new[i])} style={{fill:lineColor}} className='overview'/> */}
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
-                                return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
+                                return <circle cx={xScale(data.x)} cy={yScale(data.y)} r={3} 
                                 style={{fill:'none',stroke:color,strokeWidth:2}} className='overview'/>
                         })}
-                        <path d={buttonPathLeft} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
-                        <path d={buttonPathRight} style={{fill:'none',stroke:'#bbb',strokeWidth:1}}/>
-
-                        <text fill={button2Color} fontSize={fontSize} x={1.15*rightEnd} y={startY + 0.01*bottomEnd+0.1*rightEnd+fontSize/2} >S</text>
-                        <text fill={button1Color} fontSize={fontSize} x={1.31*rightEnd} y={startY + 0.01*bottomEnd+0.1*rightEnd+fontSize/2} >P</text>
-                        <path d={buttonPathLeft} style={{fill:'transparent'}} onClick={changeCompModel} cursor={i!=this.state.selectedModel?'pointer':null}/>
-                        <path d={buttonPathRight} style={{fill:'transparent'}} onClick={changeModel} cursor={i!=this.state.selectedCompModel?'pointer':null}/>
-
-                        <text fill='#0e4b8e' x={this.rightEnd * 1.17} y={startY}>{this.models[i]}</text>
-
-                        <text fill = '#0e4b8e' x={this.rightEnd*1.05} y={startY + 0.1*bottomEnd}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
+                        {(selectedModel==i&&compareFlag)?<rect rx={3} ry={3} x={rectX} y={rectY} width={widthText+10} height={20} 
+                            style={{fill:'#1890ff',stroke:lineColor,strokeWidth:1}}></rect>:null}
+                        <text id={'text'+this.models[i]} fill={textColor} x={this.rightEnd * 1.25-widthText/2} y={startY-0.35*intervalHeight}>{this.models[i]}</text>
+                        <rect rx={3} ry={3} x={rectX} y={rectY} width={widthText+10} height={20} 
+                            style={{fill:'transparent',stroke:lineColor,strokeWidth:1}}
+                            onClick={changeModel} cursor={'pointer'}/>
+                        <text fill={'#0e4b8e'} x={this.rightEnd*1.05} y={startY - 0.15*intervalHeight}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
                     </g>
                 </g>
             })
@@ -274,10 +289,10 @@ export default class modelSelection extends React.Component<Props,State>{
     switch(xMax:number){
         let {fold} = this.state
         let transX = fold?this.leftStart/2:this.rightEnd*1.5,
-            transY = this.intervalHeight*this.models.length/2+this.topStart,
             width = this.leftStart/2,
             height = this.intervalHeight/8,
-            cornerR = this.rightEnd * 0.1,
+            transY = this.bottomEnd/2-height/2,
+            // cornerR = this.rightEnd * 0.1,
             buttonWidth = 5
         
         let line = d3.line<curveData>().x(d=>d.x).y(d=>d.y) 
@@ -297,14 +312,16 @@ export default class modelSelection extends React.Component<Props,State>{
         let clickButton = () =>{
             this.reverseFold()
         }
-        // border
-        let borderLine = `M${-this.rightEnd*1.5},${this.topStart} h${this.rightEnd*1.5-cornerR} a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR} 
-        v${(this.models.length-1/2)/2*this.intervalHeight - cornerR} l${buttonWidth*3},${buttonWidth} v${this.intervalHeight/2-buttonWidth*2}
-        l${-buttonWidth*3},${buttonWidth} v${(this.models.length-1/2)/2*this.intervalHeight - cornerR}
-        a${cornerR},${cornerR} 0 0 1 ${-cornerR},${cornerR} h${cornerR-this.rightEnd*1.5} `
 
+        let buttonHeight = 1/12*window.innerHeight
+        // border
+        // a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR}
+        let borderLine = `M${0},${this.topStart}
+        v${this.bottomEnd/2-buttonHeight/8*5} l${buttonWidth*3},${buttonHeight/8} v${buttonHeight}
+        l${-buttonWidth*3},${buttonHeight/8} v${this.bottomEnd/2-buttonHeight/8*5}
+        `
         // mask
-        let mask = `M${0},${this.intervalHeight*this.models.length/2} v${this.topStart*2}`
+        let mask = `M${1.5*buttonWidth},${this.topStart+this.bottomEnd/2-buttonHeight/8*5} v${buttonHeight}`
         return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${0})`}>
                 <path id="mask" d={mask} style={{strokeWidth:width*1.5,stroke:'transparent'}}><title>{fold?'Expand':'Fold'}</title></path>
                 <path d={borderLine} style={{fill:'none', stroke:'#d9d9d9', strokeWidth:'1px'}} />
@@ -333,10 +350,10 @@ export default class modelSelection extends React.Component<Props,State>{
             let yAxis = d3.axisRight(this.yScale[i])
             .tickValues([this.yMax[i]])
 
-            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisY').attr('transform',`translate(${(this.state.fold?-this.rightEnd*1.4:0) + (this.rightEnd+this.leftStart)/2},${this.intervalHeight * (i+1)})`)
+            d3.select(this.ref.current).append('g').attr('class','axisSelection').attr('id','axisYM').attr('transform',`translate(${(this.state.fold?-this.rightEnd*1.4:0) + (this.rightEnd+this.leftStart)/2},${this.intervalHeight * (i+1)})`)
             .attr('stroke-width','1.5px').call(yAxis)
             } 
-        d3.selectAll('#axisY .tick text').attr('transform','translate(-15,-7)')
-        d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
+        d3.selectAll('#axisYM .tick text').attr('transform','translate(-15,-5)')
+        d3.selectAll('#axisYM .tick line').attr('x2','12').attr('transform','translate(-6,0)')
     }
 }
