@@ -104,6 +104,7 @@ export default class Compared extends React.Component<Props, State>{
     xMaxValue = 0;
     // match index
     matchedIndex:number[] = [];
+    unMatchedIndex:number[] = [];
     unMatchedRulesLength:number = 0;
     matchedRulesLength:number = 0;
     bubblePosition:rect[] =[];
@@ -539,6 +540,25 @@ export default class Compared extends React.Component<Props, State>{
 
         return content
     }
+
+    drawEmptyRuleAgg() {
+        
+        let itemSizeLabel = <text fontSize={this.fontSize} key='itemSize' y={this.lineInterval} textAnchor="end" x={-this.headWidth }>
+            {0}
+        </text>
+        let content = <g className='ruleagg' transform={`translate(${this.headWidth*1.3+2*this.fontSize},0)`}>
+            {/* <Bubble ruleAgg={ruleAgg}/> */}
+            <rect className='ruleBox'
+                stroke='#c3c3c3' fill='#fff'
+                strokeWidth='2px'
+                rx={2} ry={2}
+                x={-this.headWidth-2*this.fontSize} y={-0.5 * this.lineInterval}
+                height={this.lineInterval * 2} width={this.headWidth + 2*this.fontSize} />
+            {itemSizeLabel}
+        </g>
+
+        return content
+    }
     drawBubbles(ruleAggs: RuleAgg[], scoreDomain: [number, number], posFlag: boolean,matchFlag:boolean) {
         let { expandRules} = this.state
         let bubblePosition:any, listLength:number
@@ -784,10 +804,12 @@ export default class Compared extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${0}, ${switchOffset})`} className="rule" >
-                    {
-                        this.drawRuleAgg(ruleAgg, true)
-                    }
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} className="rule">
+                    <g  transform={`translate(${0}, ${switchOffset})`} >
+                        {
+                            this.drawRuleAgg(ruleAgg, true)
+                        }
+                    </g>
                 </g>
             )
             
@@ -871,6 +893,25 @@ export default class Compared extends React.Component<Props, State>{
         return {pos:posRules,neg:negaRules,bubble:unMathchedbubbles}
         
     }
+    drawEmptyRule(){
+        let emptyCounter = -1
+        return <g key={'emptyRule'}>
+            {this.props.compareList.r.map((list,i)=>{
+                if(this.unMatchedIndex.includes(i)){
+                    emptyCounter += 1
+                    return <g>
+                        {this.props.compareList.r[this.unMatchedIndex[emptyCounter]]?
+                        <g transform={`translate(${0},${this.props.compareList.r[this.unMatchedIndex[emptyCounter]].y-this.lineInterval})`}>
+                            <path d={`M${this.headWidth},${this.lineInterval} h${150-this.headWidth}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></path>
+                            <circle cx={155} cy={this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
+                            {this.drawEmptyRuleAgg()}
+                        </g>:null}
+                    </g>
+                }
+                else{return null}
+            })}
+        </g>
+    }
     draw() {
         
         let { rules, samples, keyAttrNum, dragArray} = this.props
@@ -884,6 +925,7 @@ export default class Compared extends React.Component<Props, State>{
         // aggregate based on key attributes
         let results = ruleAggregate(rules, dragArray.filter(attr => keyAttrs.includes(attr)), samples)
         this.matchedIndex = []  
+        this.unMatchedIndex = []
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         let matchedPos:RuleAgg[]=[], matchedNeg:RuleAgg[] = [],
@@ -894,7 +936,9 @@ export default class Compared extends React.Component<Props, State>{
             if(posMatching.rect!=-1){
                 matchedPos.push(ruleAgg)
                 this.matchedIndex.push(posMatching.index)
-            }else{unMatchedPos.push(ruleAgg)}
+            }else{
+                unMatchedPos.push(ruleAgg)
+            }
         })
 
         negativeRuleAgg.forEach((ruleAgg,i)=>{
@@ -902,7 +946,15 @@ export default class Compared extends React.Component<Props, State>{
             if(negMatching.rect!=-1){
                 matchedNeg.push(ruleAgg)
                 this.matchedIndex.push(negMatching.index)
-            }else{unMatchedNeg.push(ruleAgg)}
+            }else{
+                unMatchedNeg.push(ruleAgg)
+            }
+        })
+
+        this.props.compareList.r.forEach((list,i)=>{
+            if(!this.matchedIndex.includes(i)){
+                this.unMatchedIndex.push(i)
+            }
         })
     
         let match = this.drawMatched(matchedPos,matchedNeg)
@@ -927,6 +979,10 @@ export default class Compared extends React.Component<Props, State>{
             </g>
             <g className='match negative rules'>
                 {unMatch.neg}
+            </g>
+
+            <g className='empty rules'>
+                {this.drawEmptyRule()}
             </g>
         </g>
     }

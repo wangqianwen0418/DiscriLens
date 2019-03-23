@@ -948,6 +948,8 @@ export default class ComparePrime extends React.Component<Props, State>{
                         {
                             this.drawRuleAgg(ruleAgg[0], true,i)
                         }
+                        <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.props.offset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
+                        <circle cx={-this.headWidth-2*this.fontSize-this.props.offset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
                     </g>
                 )
                 this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
@@ -964,6 +966,8 @@ export default class ComparePrime extends React.Component<Props, State>{
                     {
                         this.drawRuleAgg(ruleAgg[0], false,i)
                     }
+                    <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.props.offset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
+                    <circle cx={-this.headWidth-2*this.fontSize-this.props.offset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
                 </g>
                 ) 
                 this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
