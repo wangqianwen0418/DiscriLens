@@ -108,6 +108,7 @@ export default class Itemset extends React.Component<Props, State>{
     pLenght = 0;
     rulesLength:number = 0;
     bubblePosition:rect[] =[];
+    expandedFlag:boolean=false;
     pdColor = [d3.hsl(115, 0.45, 0.72)+'', d3.interpolateOrRd(0.35)]
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
@@ -590,7 +591,7 @@ export default class Itemset extends React.Component<Props, State>{
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = this.yList[i].y - this.bubbleSize[i].h/2 - initPos
+            this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
             if(minRect&&(this.yList[i].y+this.bubbleSize[i].h/2>minRect.y)){
                 this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y}
@@ -631,6 +632,13 @@ export default class Itemset extends React.Component<Props, State>{
         let toggleExpand = (e: React.SyntheticEvent) => {
             e.stopPropagation();
             e.preventDefault();
+            this.expandedFlag = !this.expandedFlag
+            if(this.expandedFlag){
+              this.enterRect(listNum)  
+            }else{
+                this.leaveRect()
+            }
+            
             this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         }
         if(this.state.pressButton){
@@ -711,12 +719,16 @@ export default class Itemset extends React.Component<Props, State>{
                     opacity={opacity}
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseEnter={() => {
-                        this.enterRect(listNum)
+                        if(!this.expandedFlag){
+                            this.enterRect(listNum)
+                        }
                     }
                     }
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseLeave={() => {
-                        this.leaveRect()
+                        if(!this.expandedFlag){
+                            this.leaveRect()
+                        }
                     }
                     }
                 />

@@ -910,7 +910,7 @@ export default class Compared extends React.Component<Props, State>{
                 }
                 else{return null}
             })}
-        </g>
+        </g> 
     }
     draw() {
         
