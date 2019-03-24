@@ -279,11 +279,11 @@ export default class Itemset extends React.Component<Props, State>{
         // let progressBarWidth = 5
         // let inCircleRadius = this.lineInterval * 0.8 - progressBarWidth*1.5
 
-        let inConf = Math.min(rule.conf_pd, rule.conf_pnd)
+        // let inConf = Math.min(rule.conf_pd, rule.conf_pnd)
 
-        let progressBarWidth = this.lineInterval * 0.2
+        let progressBarWidth = this.lineInterval * 0.25
         let outRadius = itemScale(items.length)
-        let inRadius = outRadius - progressBarWidth * 1.1
+        let inRadius = outRadius - progressBarWidth-1
         let innerArc: any = d3.arc()
             .innerRadius(inRadius)
             .outerRadius(inRadius + progressBarWidth)
@@ -325,15 +325,18 @@ export default class Itemset extends React.Component<Props, State>{
                         endAngle: Math.PI * 2
                     })}
                     fill="#eee"
+                    // stroke="transparent"
                 />
 
                 <path
                     className="in bar"
                     d={innerArc({
                         startAngle: 0,
-                        endAngle: Math.PI * 2 * rule.conf_pd
+                        endAngle: Math.PI * 2 * (Math.min(rule.conf_pd, 0.999))
                     })}
-                    fill={this.pdColor[1]}
+                    // fill={this.pdColor[1]}
+                    fill={this.scoreColor(this.props.ruleThreshold[1]||0.001)}
+                    // stroke="white"
                 />
                 {/* <path
                     className="out bar"
@@ -344,7 +347,7 @@ export default class Itemset extends React.Component<Props, State>{
                     // fill="#FF9F1E"
                     fill="url(#negativeGradient)"
                 /> */}
-                <g className='in gradientArc'>
+                {/* <g className='in gradientArc'>
                     {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
                         .map(i => {
                             return <path key={i} className="out bar"
@@ -355,10 +358,11 @@ export default class Itemset extends React.Component<Props, State>{
                                 fill={this.scoreColor((i + 1) / 50)}
                             />
                         })}
-                </g>
+                </g> */}
                 <path
                     className="background out"
                     fill='#eee'
+                    // stroke="transparent"
                     d={outerArc({
                         startAngle: 0,
                         endAngle: Math.PI * 2
@@ -375,13 +379,16 @@ export default class Itemset extends React.Component<Props, State>{
                 <path
                     className="out conf bar"
                     // fill={d3.interpolateGreens(0.2)}
-                    fill={this.pdColor[0]}
+                    // fill={this.pdColor[0]}
+                    fill={this.scoreColor(this.props.ruleThreshold[0]||-0.001)}
                     d={outerArc({
                         startAngle: 0,
-                        endAngle: Math.PI * 2 * rule.conf_pnd
+                        // endAngle: Math.PI * 2 * rule.conf_pnd
+                        endAngle: Math.PI * 2 *(Math.min(rule.conf_pnd, 0.999))
                     })}
+                    // stroke="white"
                 />
-                <g className='out gradientArc'>
+                {/* <g className='out gradientArc'>
                     {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
                         .map(i => {
                             return <path key={i} className="out bar"
@@ -392,7 +399,7 @@ export default class Itemset extends React.Component<Props, State>{
                                 fill={this.scoreColor(-(i+1)/360)}
                             />
                         })}
-                </g>
+                </g> */}
                 
                 {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
 

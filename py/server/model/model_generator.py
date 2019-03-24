@@ -11,6 +11,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from sklearn.metrics import accuracy_score
 
+from sklearn.naive_bayes import GaussianNB
+
+
 from xgboost import XGBClassifier
 
 
@@ -42,6 +45,8 @@ rf = RandomForestClassifier(
     )
 
 dt = DecisionTreeClassifier(criterion= 'entropy', max_depth= 5, min_samples_split= 2)
+
+gnb = GaussianNB()
 
 class ModelGene(object):   
     def __init__(self, model_name='knn'):
@@ -83,6 +88,7 @@ class ModelGene(object):
             "adult_rf": rf,
             "adult_svm": svm,
             "adult_dt": dt,
+            "adult_gnb": gnb,
 
             "german_credit_xgb": xgb,
             "german_credit_knn":  knn,
