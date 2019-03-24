@@ -10,7 +10,6 @@ import * as d3 from 'd3';
 import Bubble from 'components/AppMiddle/BubblePack';
 
 import "./Itemsets.css";
-
 const PIN = <g transform={`scale(0.015) `}>
     <path
         stroke='gray'
@@ -51,6 +50,7 @@ export interface Props {
     onChangeSelectedBar: (selected_bar: string[]) => void
     onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}) =>void
     onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
+    onChangeOffsetLength:(offsetLength:number)=>void
 }
 export interface State {
     expandRules: { [id: string]: ExpandRule } // store the new show attributes of the rules that have been expaned
@@ -112,6 +112,7 @@ export default class ComparePrime extends React.Component<Props, State>{
     // length of pos 
     pLenght = 0;
     rulesLength:number = 0;
+    maxOffset:number=0;
     bubblePosition:rect[] =[];
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
@@ -260,7 +261,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
 
         let parent = <g className={`${ruleNode.rule.id} rule`}
-            transform={`translate(${this.props.offset*3/4}, ${switchOffset})`}
+            transform={`translate(${this.maxOffset}, ${switchOffset})`}
 
             // tslint:disable-next-line:jsx-no-lambda
             onMouseEnter={() => {
@@ -478,7 +479,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                         }
                         
                         barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
-                        startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                        startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
                     }
                     return <g key={attrVal}>
                         {/* <rect className='ruleBox' 
@@ -600,6 +601,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                                 minTemp = s[attr]
                             }
                         })
+                let falg = 0
                 if(range.includes('<x<')){
                         let split = range.split('<x<')
                         rangeLeft = parseInt(split[0])
@@ -615,10 +617,14 @@ export default class ComparePrime extends React.Component<Props, State>{
                         rangeLeft = parseInt(split[1])
                         rangeRight = maxTemp
                         rangeLabel[0] = split[1]
+                        falg=1
                 }
                 
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
                 startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
+                if(falg==1){
+                    console.log('2',step * dragArray.indexOf(attr) + startX)
+                }
             }
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
@@ -734,7 +740,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                         let bubbleLine:any
                         if(bubblePosition.length == this.rulesLength){
                             bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
-                             h${window.innerWidth*0.3-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
+                             h${window.innerWidth*0.2-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
@@ -843,7 +849,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             // calculate average y-value of an itemset
             let posAveY = switchOffset
             posRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset/4*3}, ${switchOffset})`} className="rule" >
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.maxOffset}, ${switchOffset})`} className="rule" >
                     {
                         this.drawRuleAgg(ruleAgg, true,i)
                     }
@@ -909,7 +915,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             let negAveY = switchOffset
 
             negaRules.push(
-                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.props.offset/4*3}, ${switchOffset})`} className="rule">
+                <g key={ruleAgg.id} id={`${ruleAgg.id}`} transform={`translate(${this.maxOffset}, ${switchOffset})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg, false,i)
                     }
@@ -944,12 +950,12 @@ export default class ComparePrime extends React.Component<Props, State>{
             
             if(!isNaN(ruleAgg[1])){
                 posRulesUnMatched.push(
-                    <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.props.offset/4*3}, ${ruleAgg[1]-this.lineInterval})`} className="rule" >
+                    <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule" >
                         {
                             this.drawRuleAgg(ruleAgg[0], true,i)
                         }
-                        <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.props.offset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
-                        <circle cx={-this.headWidth-2*this.fontSize-this.props.offset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
+                        <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.maxOffset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
+                        <circle cx={-this.headWidth-2*this.fontSize-this.maxOffset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
                     </g>
                 )
                 this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
@@ -962,12 +968,12 @@ export default class ComparePrime extends React.Component<Props, State>{
             i += unMatchedRules.pos.length 
             if(!isNaN(ruleAgg[1])){
                negaRulesUnMatched.push(
-                <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.props.offset/4*3}, ${ruleAgg[1]-this.lineInterval})`} className="rule">
+                <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule">
                     {
                         this.drawRuleAgg(ruleAgg[0], false,i)
                     }
-                    <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.props.offset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
-                    <circle cx={-this.headWidth-2*this.fontSize-this.props.offset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
+                    <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.maxOffset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
+                    <circle cx={-this.headWidth-2*this.fontSize-this.maxOffset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
                 </g>
                 ) 
                 this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
@@ -1090,10 +1096,12 @@ export default class ComparePrime extends React.Component<Props, State>{
     componentDidUpdate(prevProp: Props) {
         let {compareList} = this.props
         let bubblePosition: rect[] = []
+        let maxOffset:number = 0
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 1
         this.bubbleSize.forEach((bubble, i) => {
+            maxOffset = Math.max(maxOffset,bubble.w+20+this.headWidth+2*this.fontSize)
             let transX = 0,
                 transY = 0
             if (i == 0) {
@@ -1105,7 +1113,8 @@ export default class ComparePrime extends React.Component<Props, State>{
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
         })
-
+        this.maxOffset = maxOffset 
+        this.props.onChangeOffsetLength(maxOffset)
         // check whether update is needed
         let posIsSame = this.compareArray(this.state.bubblePosition,bubblePosition)
         // update state
@@ -1173,7 +1182,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
         let borderHeight = document.getElementsByClassName('itemsetPrime').length?Math.max(document.getElementsByClassName('itemsetPrime')[0].clientHeight,svgHeight):'100%'
         // this.borderHeight = borderHeight
-        let borderWidth:any = this.xMaxValue + this.props.offset + 10
+        let borderWidth:any = this.xMaxValue + this.maxOffset + 10
         if(borderWidth<window.innerWidth*5/8){
             borderWidth='100%'
         }

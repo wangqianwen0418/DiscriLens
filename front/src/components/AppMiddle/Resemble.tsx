@@ -301,15 +301,15 @@ export default class AppMiddel extends React.Component<Props, State>{
         let offsetComp = window.innerWidth 
         if(this.props.foldFlag){
             leftWidth = 23 / 24 * leftWidth
-            offsetComp = offsetComp * 23 / 24 /24*5
+            offsetComp = offsetComp * 23 / 24 /6
         }else{
             leftWidth = 5 / 6 * leftWidth
-            offsetComp = offsetComp * 5 /6/24*5
+            offsetComp = offsetComp * 5 /6/6
         }
 
         let offset = leftWidth * 0.25;
 
-        let compOffset = leftWidth / 24*5
+        let compOffset = leftWidth / 6
     
         let leftAppSpan = this.props.foldFlag?23:20 //
         let upAppHeight = 30 // [0, 100] height of the attribute row
@@ -426,13 +426,13 @@ export default class AppMiddel extends React.Component<Props, State>{
            </div>
            :<div className='itemset' style={{width: "100%", height: (100-upAppHeight)+"%",overflowY: "scroll"}}>
                <Row className='modelCompare'>
-                <Col span={5}>
+                <Col span={4}>
                     <div id='compareLeft'>
                         <Compared samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={compOffset}/>
                     </div>
                 </Col>
                 
-                <Col span={19}>
+                <Col span={20}>
                     <div style={{overflowX:'scroll'}} id='compareRight'>
                         <ComparePrime samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset}/>
                     </div>

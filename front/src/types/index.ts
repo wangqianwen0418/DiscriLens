@@ -73,4 +73,5 @@ export interface StoreState{
     causal: string[],
     unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}, // unmathed rules from compared models
     selectInfo : {dataset:string,model:string},// selected model and dataset
+    offsetLength:number, // for compare prime offset distance 
 }
