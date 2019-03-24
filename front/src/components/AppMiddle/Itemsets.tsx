@@ -92,9 +92,9 @@ export default class Itemset extends React.Component<Props, State>{
     // the selected bubble's offsite
     yOffset:number = 0
     // the offset of bubbles under the selected one
-    yDown:{i:number,offset:number}={i:0,offset:0};
+    yDown:{i:number,offset:number}={i:-1,offset:0};
     // the offset of bubbles upper of the selected one
-    yUp:{i:number,offset:number}={i:0,offset:0}
+    yUp:{i:number,offset:number}={i:-1,offset:0}
 
     // the list recording all rule rect position (left up point)
     yList:{y:number,h:number,r:string[]}[] = []; 
@@ -111,6 +111,7 @@ export default class Itemset extends React.Component<Props, State>{
     expandRulesIndex:number[] = [];
     rulesLength:number = 0;
     bubblePosition:rect[] =[];
+    bubblePositionOrigin:rect[]=[];
     expandedFlag:boolean=false;
     expandedNum:number=-1;
     pdColor = [d3.hsl(115, 0.45, 0.72)+'', d3.interpolateOrRd(0.35)]
@@ -598,20 +599,20 @@ export default class Itemset extends React.Component<Props, State>{
     }
 
     enterRect(i: number) {
-        let bubblePosition = this.state.bubblePosition
+        let bubblePosition = this.bubblePositionOrigin
         if((bubblePosition.length!=0)){
             let initPos = bubblePosition[i].y,
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
+            this.yOffset = (this.yListOrigin[i].y - this.bubbleSize[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h>minRect.y)){
-                this.yDown = {i:i,offset:this.yList[i].y +this.yList[i].h + this.bubbleSize[i].h/2-minRect.y}
+            if(minRect&&(this.yListOrigin[i].y+this.bubbleSize[i].h>minRect.y)){
+                this.yDown = {i:i,offset:this.yListOrigin[i].y +this.yListOrigin[i].h + this.bubbleSize[i].h/2-minRect.y}
             }
             // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
             if(maxRect){
-                this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
+                this.yUp = {i:i,offset:this.yListOrigin[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
             }
             this.setState({})
         }
@@ -620,10 +621,50 @@ export default class Itemset extends React.Component<Props, State>{
     leaveRect() {
         let bubblePosition = this.state.bubblePosition
         if(bubblePosition.length!=0){
-            this.yDown.offset = 0
-            this.yUp.offset = 0
+            this.yDown = {offset:0,i:-1}
+            this.yUp = {offset:0,i:-1}
             this.yOffset = 0
             this.setState({})
+        }
+    }
+    expandRule(listNum:number){
+        // no rules are expanded, expanding a rule now will focus on this rule
+        if(this.expandRulesIndex.length==0){
+            this.expandedFlag = true
+            this.expandRulesIndex.push(listNum)
+            this.expandedNum = listNum
+            this.enterRect(listNum)
+        }
+        // some rules are expanded, and the clicked one are the focused one
+        else if(this.expandRulesIndex.length!=0&&(this.expandedNum==listNum)){
+            // if the focused one is the only element expanded, reset everything
+            this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(this.expandedNum),1)
+            if(this.expandRulesIndex.length==0){
+                this.leaveRect()
+                this.expandedFlag = false
+                this.expandedNum = -1  
+            }
+            // if the focused one is not the only element, put the last element in list to focus
+            else{
+                this.leaveRect()
+                this.enterRect(this.expandRulesIndex[this.expandRulesIndex.length-1])
+                this.expandedNum = this.expandRulesIndex[this.expandRulesIndex.length-1]
+            }
+        }
+        // some rules are expanded, and the clicked one is not the focused one
+        else if(this.expandRulesIndex.length!=0&&(this.expandedNum!=listNum)){
+            // if the clicked one is in the list, simply remove it
+            if(this.expandRulesIndex.includes(listNum)){
+                this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
+            }
+            // if the clicked one is not in the list, add this new element into the list and replace the focus one with it
+            else{
+                this.expandRulesIndex.push(listNum)
+                this.expandedNum = listNum
+                this.leaveRect()
+                this.enterRect(listNum)
+            }
+            
         }
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean,listNum:number) {
@@ -645,20 +686,13 @@ export default class Itemset extends React.Component<Props, State>{
         let toggleExpand = (e: React.SyntheticEvent) => {
             e.stopPropagation();
             e.preventDefault();
+            this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
             
-            if(this.expandedFlag&&(this.expandedNum==listNum)){
-                this.leaveRect()
-                this.expandedFlag = false
-                this.expandedNum = -1
-            }else{
-                this.expandedFlag = true
-                this.expandedNum = listNum
-                this.enterRect(listNum)
-            }
+            this.expandRule(listNum)
             // if(this.expandRulesIndex.includes(listNum)){
             //     this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
             // }else{this.expandRulesIndex.push(listNum)}
-            this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
+            
         }
         if(this.state.pressButton){
             if(this.state.pressButton==id){
@@ -876,6 +910,7 @@ export default class Itemset extends React.Component<Props, State>{
                         }
                         let clickBubble = (e:any) =>{
                             this.setState({pressButton:ruleAgg.id})
+                            this.expandRule(i)
                         }
                         
                         let bubbleLine:any
@@ -1214,9 +1249,9 @@ export default class Itemset extends React.Component<Props, State>{
     /**
      * Divide and conquer method to find the best place to put the next bubble (greedy, not necessarily opt)
      */
-    findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number) {
+    findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number,listFlag:boolean) {
         let pos = bubblePosition
-        let yList = this.yList
+        let yList = listFlag?this.yList:this.yListOrigin
         let size = this.bubbleSize
         let length = pos.length
         if ((areaWidth < size[i].w) || (length == 0)) { return { x: Infinity, y: Infinity } }
@@ -1270,9 +1305,9 @@ export default class Itemset extends React.Component<Props, State>{
             } else {
                 let areaWidthNew = areaWidth - (maxB.x + maxB.w - startAxis),
                     startAxisNew = maxB.x + maxB.w
-                rightAxis = this.findBestAxis(rightRects, i, areaWidthNew, startAxisNew)
+                rightAxis = this.findBestAxis(rightRects, i, areaWidthNew, startAxisNew,listFlag)
             }
-            leftAxis = this.findBestAxis(leftRects, i, maxB.x - startAxis, startAxis)
+            leftAxis = this.findBestAxis(leftRects, i, maxB.x - startAxis, startAxis,listFlag)
             if ((rightAxis.y == Infinity) && (leftAxis.y == Infinity)) {
                 return { x: startAxis, y: maxB.y + maxB.h }
             }
@@ -1304,26 +1339,36 @@ export default class Itemset extends React.Component<Props, State>{
         return is_same
     }
     componentDidUpdate(prevProp: Props) {
-        let bubblePosition: rect[] = []
+        let bubblePosition: rect[] = [],
+        bubblePositionOrigin: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 0
         this.bubbleSize.forEach((bubble, i) => {
             let transX = 0,
-                transY = 0
+                transY = 0,
+                transYOrigin = 0
             if (i == 0) {
-                transY = this.yList[0].y - bubble.h/2
+                if(i!=this.yDown.i){
+                    transY = this.yList[0].y - bubble.h/2
+                    transYOrigin = this.yListOrigin[0].y - bubble.h/2
+                }else{
+                    transYOrigin = transY = this.yListOrigin[0].y + this.yListOrigin[i].h - bubble.h/2
+                }
             } else {
                 if(this.props.buttonSwitch){
-                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
+                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0,true)
+                    let greedyPosOrigin: axis = this.findBestAxis(bubblePositionOrigin, i, 250, 0,false)
                     if(i!=this.yDown.i){
                         greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
+                        greedyPosOrigin.y = Math.max(greedyPosOrigin.y, this.yListOrigin[i].y  - bubble.h / 2)
                     }else{
-                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
+                        greedyPosOrigin.y = greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
                     }
 
                     transX = greedyPos.x 
                     transY = greedyPos.y
+                    transYOrigin = greedyPosOrigin.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
@@ -1332,6 +1377,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
+            bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
         })
 
         // let bubblePositionNew:rect[] = bubblePosition
@@ -1373,6 +1419,7 @@ export default class Itemset extends React.Component<Props, State>{
         if (!posIsSame) { 
             this.setState({ bubblePosition }) 
             this.bubblePosition = bubblePosition
+            this.bubblePositionOrigin = bubblePositionOrigin
         }
 
         let bSum = 0
