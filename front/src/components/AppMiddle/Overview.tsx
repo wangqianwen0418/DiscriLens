@@ -531,7 +531,9 @@ export default class Overview extends React.Component<Props,State>{
                                 color = this.posColor
                             }
                             return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
-                            style={{fill:'none',opacity:opacity,stroke:color,strokeWidth:2}} className='overview'/>
+                            style={{fill:'white',opacity:opacity,stroke:color,strokeWidth:2}} className='overview'>
+                            <title>{`[${data.x.toFixed(2)}, ${data.y}]`}</title>
+                            </circle>
                         })}
                 </g>
                 {compDataKeyAttr?<g>

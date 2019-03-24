@@ -272,7 +272,9 @@ export default class modelSelection extends React.Component<Props,State>{
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
                                 return <circle cx={xScale(data.x)} cy={yScale(data.y)} r={3} 
-                                style={{fill:'none',stroke:color,strokeWidth:2}} className='overview'/>
+                                style={{fill:'white',stroke:color,strokeWidth:2}} className='overview'>
+                                <title>{`[${data.x.toFixed(2)}, ${data.y}]`}</title>
+                                </circle>
                         })}
                         {(selectedModel==i&&compareFlag)?<rect rx={3} ry={3} x={rectX} y={rectY} width={widthText+10} height={20} 
                             style={{fill:'#1890ff',stroke:lineColor,strokeWidth:1}}></rect>:null}
