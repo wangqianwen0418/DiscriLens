@@ -64,3 +64,6 @@ export type COMPARE_MODE = typeof COMPARE_MODE
 
 export const UNMATCHED = 'UNMATCHED'
 export type UNMATCHED = typeof UNMATCHED
+
+export const SELECTION = 'SELECTION'
+export type SELECTION = typeof SELECTION

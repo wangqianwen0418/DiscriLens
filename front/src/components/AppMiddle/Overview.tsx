@@ -532,7 +532,24 @@ export default class Overview extends React.Component<Props,State>{
                             style={{fill:'none',opacity:opacity,stroke:color,strokeWidth:2}} className='overview'/>
                         })}
                 </g>
-                {compDataKeyAttr?<g></g>:null}
+                {compDataKeyAttr?<g>
+                    {compDataKeyAttr.map((data,i)=>{
+                            let color = '#bbb'
+                            let opacity = 0.3
+                            if(data.x<xScaleReverse(this.state.transformXLeft)){
+                                opacity = 1
+                                color = this.negColor
+                            }else if((data.x>xScaleReverse(this.state.transformXRight))){
+                                opacity = 1
+                                color = this.posColor
+                            }
+                            let centerX = xScale(data.x), centerY = bottomEnd+yScale(data.y), crossLength = 6
+                            return <g>
+                                <path d={`M${centerX+crossLength/2},${centerY-crossLength/2} l${-crossLength},${crossLength}`}style={{fill:'none',opacity:opacity,stroke:color,strokeWidth:1.5}} className='overview'></path>
+                                <path d={`M${centerX-crossLength/2},${centerY-crossLength/2} l${crossLength},${crossLength}`}style={{fill:'none',opacity:opacity,stroke:color,strokeWidth:1.5}} className='overview'></path>
+                               </g> 
+                        })}
+                </g>:null}
                 {selectThr()}
             </g>
 

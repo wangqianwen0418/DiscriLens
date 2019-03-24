@@ -72,4 +72,5 @@ export interface StoreState{
     expandRule:{id: number, newAttrs: string[], children: string[]},
     causal: string[],
     unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}, // unmathed rules from compared models
+    selectInfo : {dataset:string,model:string},// selected model and dataset
 }

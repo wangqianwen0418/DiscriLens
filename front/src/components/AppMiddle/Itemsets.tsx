@@ -43,6 +43,7 @@ export interface Props {
     barWidth: number,
     offset: number,
     buttonSwitch: boolean,
+    selectInfo:{dataset:string,model:string},
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
 }
@@ -54,6 +55,7 @@ export interface State {
     bubblePosition: rect[],
     hoveredBubble:string[],
     pressButton:string,
+    selectInfo:{dataset:string,model:string},
 }
 export interface ExpandRule {
     id: string,
@@ -106,8 +108,11 @@ export default class Itemset extends React.Component<Props, State>{
     xMaxValue = 0;
     // length of pos 
     pLenght = 0;
+    expandRulesIndex:number[] = [];
     rulesLength:number = 0;
     bubblePosition:rect[] =[];
+    expandedFlag:boolean=false;
+    expandedNum:number=-1;
     pdColor = [d3.hsl(115, 0.45, 0.72)+'', d3.interpolateOrRd(0.35)]
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
@@ -156,6 +161,7 @@ export default class Itemset extends React.Component<Props, State>{
             bubblePosition:[],
             hoveredBubble:[],
             pressButton:'',
+            selectInfo:{dataset:'',model:''}
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
@@ -593,15 +599,15 @@ export default class Itemset extends React.Component<Props, State>{
 
     enterRect(i: number) {
         let bubblePosition = this.state.bubblePosition
-        if(bubblePosition.length!=0){
+        if((bubblePosition.length!=0)){
             let initPos = bubblePosition[i].y,
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = this.yList[i].y - this.bubbleSize[i].h/2 - initPos
+            this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h/2>minRect.y)){
-                this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y}
+            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h>minRect.y)){
+                this.yDown = {i:i,offset:this.yList[i].y +this.yList[i].h + this.bubbleSize[i].h/2-minRect.y}
             }
             // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
             if(maxRect){
@@ -639,6 +645,19 @@ export default class Itemset extends React.Component<Props, State>{
         let toggleExpand = (e: React.SyntheticEvent) => {
             e.stopPropagation();
             e.preventDefault();
+            
+            if(this.expandedFlag&&(this.expandedNum==listNum)){
+                this.leaveRect()
+                this.expandedFlag = false
+                this.expandedNum = -1
+            }else{
+                this.expandedFlag = true
+                this.expandedNum = listNum
+                this.enterRect(listNum)
+            }
+            // if(this.expandRulesIndex.includes(listNum)){
+            //     this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
+            // }else{this.expandRulesIndex.push(listNum)}
             this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         }
         if(this.state.pressButton){
@@ -719,12 +738,16 @@ export default class Itemset extends React.Component<Props, State>{
                     opacity={opacity}
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseEnter={() => {
-                        this.enterRect(listNum)
+                        if(!this.expandedFlag){
+                            this.enterRect(listNum)
+                        }
                     }
                     }
                     // tslint:disable-next-line:jsx-no-lambda
                     onMouseLeave={() => {
-                        this.leaveRect()
+                        if(!this.expandedFlag){
+                            this.leaveRect()
+                        }
                     }
                     }
                 />
@@ -837,11 +860,6 @@ export default class Itemset extends React.Component<Props, State>{
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
                         />
-                        let bubbleLine:any
-                        if(bubblePosition.length == this.rulesLength){
-                            bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
-                             h${this.props.offset-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
-                        }
 
                         // let connectionCurve:any
                         // if(bubblePosition.length == this.rulesLength){
@@ -858,6 +876,12 @@ export default class Itemset extends React.Component<Props, State>{
                         }
                         let clickBubble = (e:any) =>{
                             this.setState({pressButton:ruleAgg.id})
+                        }
+                        
+                        let bubbleLine:any
+                        if(bubblePosition.length == this.rulesLength){
+                            bubbleLine = <path d={`M${bubblePosition[i].x+bubblePosition[i].w/2},${bubblePosition[i].h/2-2}
+                             h${this.props.offset-bubblePosition[i].x},${0}`} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}/>
                         }
                         return <g key={'bubble_' + ruleAgg.id} className='bubblesAgg'
                             transform={`translate(${transX},${transY})`}
@@ -1292,10 +1316,14 @@ export default class Itemset extends React.Component<Props, State>{
             } else {
                 if(this.props.buttonSwitch){
                     let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
-                    greedyPos.y = Math.max(greedyPos.y, this.yList[i].y - bubble.h / 2)
+                    if(i!=this.yDown.i){
+                        greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
+                    }else{
+                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
+                    }
 
                     transX = greedyPos.x 
-                    transY = greedyPos.y 
+                    transY = greedyPos.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
@@ -1305,6 +1333,35 @@ export default class Itemset extends React.Component<Props, State>{
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
         })
+
+        // let bubblePositionNew:rect[] = bubblePosition
+        // bubblePosition.forEach((bubble,i)=>{
+        //     let initY = bubble.y
+        //     if(this.expandRulesIndex.includes(i)){
+        //         let y = this.yList[i].y + this.yList[i].h/2 - bubble.h/2 + this.lineInterval
+        //         if(y>initY){
+        //                 bubblePosition.forEach((bubbleP,j)=>{
+        //                 let yP = 0
+        //                 if(j>i){
+        //                     yP = bubbleP.y + (y-initY)
+        //                     bubblePositionNew[j] = { x: bubbleP.x, y: yP, w: bubbleP.w + interval, h: bubbleP.h + interval }
+        //                 }
+        //             })
+        //         }else if(y<initY){
+        //                 bubblePosition.forEach((bubbleM,j)=>{
+        //                 let yM = 0
+        //                 if(j<i){
+        //                     yM = bubbleM.y - (initY-y)
+        //                     bubblePositionNew[j] = { x: bubbleM.x, y: yM, w: bubbleM.w + interval, h: bubbleM.h + interval }
+        //                 }
+        //             })
+        //         }
+        //         bubblePositionNew[i] = { x: bubble.x, y: y, w: bubble.w + interval, h: bubble.h + interval }
+        //     }
+            
+        // })
+
+        // bubblePosition = bubblePositionNew
         // define new rect pos
         let yListButton:number[] = []
         bubblePosition.forEach((bubble,i)=>{
@@ -1334,6 +1391,12 @@ export default class Itemset extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
+        if((this.state.selectInfo.dataset!=this.props.selectInfo.dataset)||(this.state.selectInfo.model!=this.props.selectInfo.model)){
+            this.setState({selectInfo:this.props.selectInfo})
+            this.leaveRect()
+            this.expandRulesIndex = []
+            this.setState({expandRules:{}})
+        }
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>

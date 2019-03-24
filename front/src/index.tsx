@@ -76,7 +76,8 @@ if (TEST){
       expandRule:{id: 0, newAttrs:[], children: []},
       compareFlag:false,
       causal,
-      unMatchedRules:{pos:[],neg:[]}
+      unMatchedRules:{pos:[],neg:[]},
+      selectInfo : {dataset:'',model:''}
   }
 }else{
   initState = {
@@ -106,7 +107,8 @@ if (TEST){
     expandRule:{id: 0, newAttrs:[], children: []},
     compareFlag:false,
     causal: [],
-    unMatchedRules:{pos:[],neg:[]}
+    unMatchedRules:{pos:[],neg:[]},
+    selectInfo:{dataset:'',model:''}
 }
 }
 

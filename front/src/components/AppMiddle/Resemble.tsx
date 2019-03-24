@@ -5,7 +5,7 @@ import Overview from 'containers/Overview';
 import ModelSelection from 'containers/ModelSelection';
 import Compared from 'containers/Compared';
 import ComparePrime from 'containers/ComparePrime'
-import {Col, Row, Switch, Modal, Button} from 'antd';
+import {Col, Row, Switch, Modal, Button,Icon} from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
 // import RadioButton from 'antd/lib/radio/radioButton';
@@ -36,6 +36,7 @@ export interface State {
     selectedModel:string
     selectedCompareModel:string
     compareFlag:number
+    rightBorder:boolean
 }
 
 export interface Point{
@@ -57,7 +58,8 @@ export default class AppMiddel extends React.Component<Props, State>{
             selectionRect: ['',0,0,0],
             selectedCompareModel:'',
             selectedModel:'',
-            compareFlag:0
+            compareFlag:0,
+            rightBorder:false
         }
     }
     stringTransfer(input:string){
@@ -154,9 +156,9 @@ export default class AppMiddel extends React.Component<Props, State>{
                 let color = 'grey'
                 let content = node.label.split('-')[0]
                 if(keyAttrs.includes(this.stringTransfer(content))){
-                    color = '#ff4d4f'
+                    color = '#40a9ff'
                 }else if (protectedAttr==content.toLowerCase()){
-                    color='#40a9ff'
+                    color='rgb(253, 190, 136)'
                 }
 
                 let textWidth = 0
@@ -175,13 +177,30 @@ export default class AppMiddel extends React.Component<Props, State>{
                 }
                 let chooseKey=()=>{
                     if(content!='class'){
-                         this.setState({selectionRect:[this.stringTransfer(node.label.split('-')[0])
+                        if(nodeW+node.x+60>width+50){
+                            this.setState({selectionRect:[this.stringTransfer(node.label.split('-')[0])
+                        ,-nodeW/2+node.x-77,-rectHeight/2+node.y,rectHeight]})
+                            this.setState({rightBorder:true})
+                        }else{
+                            this.setState({selectionRect:[this.stringTransfer(node.label.split('-')[0])
                         ,nodeW/2+node.x,-rectHeight/2+node.y,rectHeight]})
+                            this.setState({rightBorder:false})
+                        }
                     }
                 }
-                // let leaveKey=()=>{
-                //     this.setState({selectionRect:['',0,0,0]})
-                // }
+                let keyChange=()=>{
+                    let newKeyAttrs = keyAttrs
+                     if(newKeyAttrs.indexOf(this.state.selectionRect[0])!=-1){
+                        newKeyAttrs.splice(newKeyAttrs.indexOf(this.state.selectionRect[0]),1)
+                        this.props.onChangeKeyAttrs(newKeyAttrs)
+                    }else{
+                        newKeyAttrs.push(this.state.selectionRect[0])
+                        this.props.onChangeKeyAttrs(newKeyAttrs)
+                    }
+                    
+                }
+                
+                let xRect = this.state.rightBorder?-nodeW/2-77:nodeW /2
                 return <g 
                     key={node.label} className='node'
                     transform={`translate(${node.x}, ${node.y})`}
@@ -212,12 +231,30 @@ export default class AppMiddel extends React.Component<Props, State>{
                         stroke='#999'
                         rx={4}
                         ry={4}
-                        fill={content=='class'?'#bbb':'transparent'}
+                        fill={content=='class'?'#40a9ff':'transparent'}
                         onMouseEnter={chooseKey}
                     />
 
                     {content=='class'?
                     <text fill={'white'} textAnchor='middle' y={rectHeight*0.2}>{content}</text>
+                    :null}
+
+                    {this.state.selectionRect[0]==this.stringTransfer(node.label.split('-')[0])?
+                    <g>
+                        <text fill='#999'fontSize={10} x={xRect+12} y={-rectHeight/2+10} >Key Attr</text>
+                        <rect x={xRect} y={-rectHeight/2} 
+                        width={77} 
+                        height={12}
+                        style={{fill:'transparent',stroke:'#999'}}
+                        onClick={keyChange} cursor='pointer'/>
+
+                        <text fill='#999' fontSize={10} x={xRect+12} y={-rectHeight/2+22} >Protected Attr</text>
+                        <rect x={xRect} y={-rectHeight/2+12} 
+                        width={77} 
+                        height={12}
+                        style={{fill:'transparent',stroke:'#999'}}
+                        cursor='pointer'/>
+                    </g>
                     :null}
                     
                 </g>
@@ -295,23 +332,11 @@ export default class AppMiddel extends React.Component<Props, State>{
             }
         }
 
-        let keyChange=()=>{
-            let newKeyAttrs = keyAttrs
-             if(newKeyAttrs.indexOf(this.state.selectionRect[0])!=-1){
-                newKeyAttrs.splice(newKeyAttrs.indexOf(this.state.selectionRect[0]),1)
-                this.props.onChangeKeyAttrs(newKeyAttrs)
-            }else{
-                newKeyAttrs.push(this.state.selectionRect[0])
-                this.props.onChangeKeyAttrs(newKeyAttrs)
-            }
-            
-        }
-
         let legend=()=>{
             return <g transform={`translate(${0},${0})`}>
-                <rect width={10} height={10} fill='#40a9ff'/>
+                <rect width={10} height={10} fill='rgb(253, 190, 136)'/>
                 <text fontSize={10} x={12} y={10}>Protected attribute</text>
-                <rect width={10} height={10} y={12} fill='#ff4d4f'/>
+                <rect width={10} height={10} y={12} fill='#40a9ff'/>
                 <text fontSize={10} x={12} y={21}>Key attributes</text>
             </g>
         }
@@ -426,13 +451,15 @@ export default class AppMiddel extends React.Component<Props, State>{
           footer={null}
         >
         {this.state.selectionRect[0]?
-        <div style={{position:'absolute',left:this.state.selectionRect[1]+25,top:this.state.selectionRect[2]
-            +25+(height+50)/3+this.state.selectionRect[3]/2-12}}>
-
-            <Button className={'protectedButton'} icon={includeText==2?'check':'close'}  size='small' type={includeText==2?'primary':null} ghost={includeText==2?true:false}></Button>
-
-            <Button className={'KeyButton'} icon={includeText==1?'check':'close'}  size='small'
-            onClick={keyChange} type={includeText==1?'danger':null} ghost={includeText==1?true:false}></Button>
+        <div>
+            <div style={{position:'absolute',left:this.state.selectionRect[1]+25,top:this.state.selectionRect[2]
+                +25+(height+50)/3+6}}>
+                <Icon type={includeText==2?'check':null} style={{fontSize:8}}></Icon>
+            </div>
+            <div style={{position:'absolute',left:this.state.selectionRect[1]+25,top:this.state.selectionRect[2]
+                +25+(height+50)/3-6}}>
+                <Icon type={includeText==1?'check':null} style={{fontSize:8}}></Icon>
+            </div>
         </div>:null}
         <svg  className='causal model' style={{width:width, height: height}}>
             <rect onMouseEnter={leaveKey} fill={'transparent'} x={0} y={0} width={width+50} height={height}/>

@@ -12,12 +12,14 @@ export interface Props{
     showDataset: string,
     accuracy:{[key:string]:number},
     compareFlag:boolean,
-    divideNum:number
+    divideNum:number,
+    selectInfo:{dataset:string,model:string},
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
     onChangeFoldFlag:(foldFlag:boolean) => void,
     onChangeCompareMode:(compareFlag:boolean)=>void,
+    onChangeSelectionInfo:(selectInfo:{dataset:string,model:string})=>void,
 }
 export interface State{
     fold: boolean,
@@ -215,6 +217,7 @@ export default class modelSelection extends React.Component<Props,State>{
                         }
                         if(i!=selectedModel){
                             this.props.onChangeModel(this.props.showDataset,model)
+                            this.props.onChangeSelectionInfo({dataset:this.props.showDataset,model:model})
                             this.setState({selectedModel:i})
                         }
                     }
@@ -332,6 +335,7 @@ export default class modelSelection extends React.Component<Props,State>{
 
     render(){
         if(this.state.dataSet!=this.props.showDataset){this.updateModels()}
+        if(this.props.selectInfo.model==''){this.props.onChangeSelectionInfo({dataset:this.props.showDataset,model:this.models[this.state.selectedModel]})}
         let modelSelection = this.modelSelection()
         return <g key={'overviewOut'} id="overviewOut" ref={this.ref}>
                 {modelSelection.path}
