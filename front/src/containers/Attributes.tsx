@@ -15,6 +15,7 @@ export function mapStateToProps(state:StoreState) {
         fetchKeyStatus: state.fetchKeyStatus,
         selected_bar: state.selected_bar,
         offsetLength:state.offsetLength,
+        compFlag: state.compareFlag
     };
 }
 

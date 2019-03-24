@@ -23,6 +23,7 @@ export interface Props {
     leftWidth:number,
     offset:number,
     offsetLength:number,
+    compFlag: boolean,
     onChangeKeyAttr: (keyAttrs:string[])=>void,
     onChangeDragArray: (dragArray: string[]) => void,
     onChangeShowAttr: (showAttrs: string[])=>void,
@@ -325,7 +326,7 @@ export default class Attributes extends React.Component<Props, State>{
         //******************** draw bars
         // the overall length of all bars of each attribute
         // let step = window.innerWidth * 0.4/  keyAttrs.length
-        
+        let shiftX = this.props.compFlag?(this.props.offset*3/4-this.props.offsetLength):0
         // loop all attributes and draw bars for each one
         let attrCharts = dragArray.map((attr: string, attr_i) => {
             // check whether numerical or categorical attribute
@@ -335,7 +336,8 @@ export default class Attributes extends React.Component<Props, State>{
             let onDragEnd = (e:any) =>{
                 e.preventDefault();
                 // e.stopPropagation();
-                let endNum = Math.floor((e.x - (window.innerWidth-this.props.leftWidth) - this.props.offset - this.props.offsetX+(this.props.offset*3/4-this.props.offsetLength))/ step)
+                
+                let endNum = Math.floor((e.x - (window.innerWidth-this.props.leftWidth) - this.props.offset - this.props.offsetX+shiftX)/ step)
                 let endReal = endNum
                 let startNum = this.props.dragArray.indexOf(attr)
                 if(showFlag){
@@ -446,7 +448,7 @@ export default class Attributes extends React.Component<Props, State>{
         let keyAttrBoarder:curveData[] = [{x:(keyAttrs.length - 0.2) * step,y:60,z:0},
             {x:(keyAttrs.length - 0.2)* step,y:0,z:0}] */
         return <g id={'attributes_draggable'}>
-            <g className='attrs' transform={`translate(${this.props.offsetX - (this.props.offset/4*3-this.props.offsetLength)}, ${this.attr_margin * 2})`}>
+            <g className='attrs' transform={`translate(${this.props.offsetX - shiftX}, ${this.attr_margin * 2})`}>
                 {attrCharts}
             </g>
         </g>

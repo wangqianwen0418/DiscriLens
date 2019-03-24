@@ -30,7 +30,10 @@ const range2num = (range:string|number):number=>{
 export const getAttrRanges =  (samples: DataItem[], attr:string):(string|number)[]=>{
     if (attrRanges[attr]){
         return attrRanges[attr]
-    }else {
+    }else if(attr=="workclass"){
+        return ['Without-pay', 'State-gov', 'Self-emp-not-inc', 'Private', 'Never-worked', 'Self-emp-inc', 'Local-gov', 'Federal-gov']
+    }
+    else {
         let ranges = samples.map(d=>d[attr])
             .filter((x:string, i:number, a:string[]) => a.indexOf(x) == i)
         
