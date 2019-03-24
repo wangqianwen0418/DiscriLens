@@ -171,6 +171,7 @@ export default class Attributes extends React.Component<Props, State>{
         // step length to merge data, to smooth curve
         function getStep() {
             if (ranges.length < 20) { return 2 }
+            else if(ranges.length>200){return Math.floor(ranges.length/20)}
             else { return 5}
         }
         let stepMerge = getStep()

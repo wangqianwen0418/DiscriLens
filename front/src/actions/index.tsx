@@ -3,7 +3,8 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,
     CHANGE_SAMPLES_FETCH_STATUS, CHANGE_KEY_FETCH_STATUS, 
     CHANGE_RULES_FETCH_STATUS, CHANGE_KEY_ATTR,CHANGE_SHOW_ATTRS,
     CHANGE_XSCALE,CHANGE_SHOW_DATASET,SELBAR,GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES
-    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE,UNMATCHED} from 'Const';
+    ,FOLDFLAG,ACCURACY,TRANS_COMPARE,TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE,
+    SELECTION,UNMATCHED} from 'Const';
 import axios, { AxiosResponse } from 'axios';
 import {DataItem, Status, Rule} from 'types';
 import { Dispatch } from 'react';
@@ -381,7 +382,20 @@ export const ChangeFoldFlag = (foldFlag:boolean):foldFlag =>{
     });
 }
 
+/*****************
+all about selection
+*****************/ 
+export interface selectionInfo{
+    type:SELECTION,
+    selectInfo:{dataset:string,model:string}
+}
 
+export const ChangeSelectionInfo = (selectInfo:{dataset:string,model:string}):selectionInfo =>{
+    return ({
+        type: SELECTION,
+        selectInfo
+    });
+}
 /*****************
 all about unMatchedRules
 *****************/ 
@@ -513,4 +527,4 @@ export const switchCompModel = (dataset:string,model:string)=>{
 export type AllActions = GenerateSamples|GenerateRules|GenerateCompRules|GenerateCompSamples|ChangeSamplesFetchStatus
 |ChangeRulesFetchStatus|ChangeKeyFetchStatus|ChangeRuleThresholds|ChangeProtectedAttr| GenerateAccuracy|compareOffset|
 ChangeDragArray|ChangeKeyAttr|ChangeShowAttr|showDataset|ChangeXScaleMax|selectedBar|foldFlag|compareList|expandRule|
-compareMode|unMatchedRules
+compareMode|unMatchedRules|selectionInfo

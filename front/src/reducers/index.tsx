@@ -5,7 +5,7 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
   CHANGE_XSCALE,CHANGE_SHOW_DATASET, GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES,
-  FOLDFLAG, SELBAR, TRANS_COMPARE, TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE, UNMATCHED} from 'Const';
+  FOLDFLAG, SELBAR, TRANS_COMPARE, TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE, UNMATCHED, SELECTION} from 'Const';
 
 import {filterRules} from 'Helpers';
 
@@ -93,6 +93,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         return {...state,compareFlag:action.compareFlag}
       case UNMATCHED:
         return {...state,unMatchedRules:action.unMatchedRules}
+      case SELECTION:
+      return  {...state,selectInfo:action.selectInfo}
       default:
         return state;
     }

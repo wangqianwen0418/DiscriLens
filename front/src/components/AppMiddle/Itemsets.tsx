@@ -43,6 +43,7 @@ export interface Props {
     barWidth: number,
     offset: number,
     buttonSwitch: boolean,
+    selectInfo:{dataset:string,model:string},
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
 }
@@ -54,6 +55,7 @@ export interface State {
     bubblePosition: rect[],
     hoveredBubble:string[],
     pressButton:string,
+    selectInfo:{dataset:string,model:string},
 }
 export interface ExpandRule {
     id: string,
@@ -110,6 +112,7 @@ export default class Itemset extends React.Component<Props, State>{
     rulesLength:number = 0;
     bubblePosition:rect[] =[];
     expandedFlag:boolean=false;
+    expandedNum:number=-1;
     pdColor = [d3.hsl(115, 0.45, 0.72)+'', d3.interpolateOrRd(0.35)]
     scoreColor = (score: number) => {
         let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
@@ -157,6 +160,7 @@ export default class Itemset extends React.Component<Props, State>{
             bubblePosition:[],
             hoveredBubble:[],
             pressButton:'',
+            selectInfo:{dataset:'',model:''}
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
@@ -587,15 +591,15 @@ export default class Itemset extends React.Component<Props, State>{
 
     enterRect(i: number) {
         let bubblePosition = this.state.bubblePosition
-        if((bubblePosition.length!=0)&&(this.yOffset==0)){
+        if((bubblePosition.length!=0)){
             let initPos = bubblePosition[i].y,
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
             this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h/2>minRect.y)){
-                this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y}
+            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h>minRect.y)){
+                this.yDown = {i:i,offset:this.yList[i].y +this.yList[i].h + this.bubbleSize[i].h/2-minRect.y}
             }
             // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
             if(maxRect){
@@ -634,11 +638,14 @@ export default class Itemset extends React.Component<Props, State>{
             e.stopPropagation();
             e.preventDefault();
             
-            this.expandedFlag = !this.expandedFlag
-            if(this.expandedFlag){
-                this.enterRect(listNum)
-            }else{
+            if(this.expandedFlag&&(this.expandedNum==listNum)){
                 this.leaveRect()
+                this.expandedFlag = false
+                this.expandedNum = -1
+            }else{
+                this.expandedFlag = true
+                this.expandedNum = listNum
+                this.enterRect(listNum)
             }
             // if(this.expandRulesIndex.includes(listNum)){
             //     this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
@@ -1376,6 +1383,12 @@ export default class Itemset extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
+        if((this.state.selectInfo.dataset!=this.props.selectInfo.dataset)||(this.state.selectInfo.model!=this.props.selectInfo.model)){
+            this.setState({selectInfo:this.props.selectInfo})
+            this.leaveRect()
+            this.expandRulesIndex = []
+            this.setState({expandRules:{}})
+        }
         switch (fetchKeyStatus) {
             case Status.INACTIVE:
                 content = <text>no data</text>
