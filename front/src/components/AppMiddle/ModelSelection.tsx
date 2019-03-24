@@ -133,12 +133,14 @@ export default class modelSelection extends React.Component<Props,State>{
                 let curveX:number[] = []
                 let dataKeyAttr: curveData[] = []
                 rules.forEach((rule,rule_i)=>{
-                    if(!curveX.includes(rule['favorPD'])){
-                        curveX.push(rule['favorPD'])
-                        dataKeyAttr.push({x:rule['favorPD'],y:rule['sup_pnd'],z:0})
-                    }else{
-                        dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule['sup_pnd']
-                    }
+                    // if(!curveX.includes(rule['favorPD'])){
+                    //     curveX.push(rule['favorPD'])
+                    //     dataKeyAttr.push({x:rule['favorPD'],y:rule.items.length,z:0})
+                    // }else{
+                    //     dataKeyAttr[curveX.indexOf(rule['favorPD'])].y += rule.items.length
+                    // }
+                    curveX.push(rule['favorPD'])
+                    dataKeyAttr.push({x:rule['favorPD'],y:rule.items.length,z:0})
                 })
 
                 // sort samples points by risk_dif
