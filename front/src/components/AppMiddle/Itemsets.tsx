@@ -635,12 +635,14 @@ export default class Itemset extends React.Component<Props, State>{
                 this.leaveRect()
                 this.expandedFlag = false
                 this.expandedNum = -1  
+                // console.log(1)
             }
             // if the focused one is not the only element, put the last element in list to focus
             else{
-                this.leaveRect()
+                // this.leaveRect()
                 this.enterRect(this.expandRulesIndex[this.expandRulesIndex.length-1])
                 this.expandedNum = this.expandRulesIndex[this.expandRulesIndex.length-1]
+                // console.log(2)
             }
         }
         // some rules are expanded, and the clicked one is not the focused one
@@ -648,16 +650,19 @@ export default class Itemset extends React.Component<Props, State>{
             // if the clicked one is in the list, simply remove it
             if(this.expandRulesIndex.includes(listNum)){
                 this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
+                // console.log(3)
             }
             // if the clicked one is not in the list, add this new element into the list and replace the focus one with it
             else{
                 this.expandRulesIndex.push(listNum)
                 this.expandedNum = listNum
-                this.leaveRect()
+                // this.leaveRect()
                 this.enterRect(listNum)
+                // console.log(4)
             }
             
         }
+        // console.log(this.expandRulesIndex,this.expandedNum)
     }
     drawRuleAgg(ruleAgg: RuleAgg, favorPD: boolean,listNum:number) {
         let { antecedent, items, id, nodes } = ruleAgg
