@@ -511,7 +511,7 @@ export default class Itemset extends React.Component<Props, State>{
                         }
                         
                         barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
-                        startX = (rangeLeft)*barWidth/(maxTemp-minTemp)
+                        startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
                     }
 
                     if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(String(id)))){opacity=0.3}
@@ -591,20 +591,20 @@ export default class Itemset extends React.Component<Props, State>{
     }
 
     enterRect(i: number) {
-        let bubblePosition = this.bubblePositionOrigin
+        let bubblePosition = this.bubblePosition
         if((bubblePosition.length!=0)){
             let initPos = bubblePosition[i].y,
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = (this.yListOrigin[i].y - this.bubbleSize[i].h/2 - initPos)
+            this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yListOrigin[i].y+this.bubbleSize[i].h>minRect.y)){
-                this.yDown = {i:i,offset:this.yListOrigin[i].y +this.yListOrigin[i].h + this.bubbleSize[i].h/2-minRect.y}
+            if(minRect&&(this.yList[i].y+this.bubbleSize[i].h>minRect.y)){
+                this.yDown = {i:i,offset:this.yList[i].y +this.yList[i].h + this.bubbleSize[i].h/2-minRect.y}
             }
             // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
             if(maxRect){
-                this.yUp = {i:i,offset:this.yListOrigin[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
+                this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
             }
             this.setState({})
         }
@@ -1241,9 +1241,10 @@ export default class Itemset extends React.Component<Props, State>{
     /**
      * Divide and conquer method to find the best place to put the next bubble (greedy, not necessarily opt)
      */
-    findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number,listFlag:boolean) {
+    findBestAxis(bubblePosition: rect[], i: number, areaWidth: number, startAxis: number,){//listFlag:boolean) {
         let pos = bubblePosition
-        let yList = listFlag?this.yList:this.yListOrigin
+        // let yList = listFlag?this.yList:this.yListOrigin
+        let yList = this.yList
         let size = this.bubbleSize
         let length = pos.length
         if ((areaWidth < size[i].w) || (length == 0)) { return { x: Infinity, y: Infinity } }
@@ -1297,9 +1298,9 @@ export default class Itemset extends React.Component<Props, State>{
             } else {
                 let areaWidthNew = areaWidth - (maxB.x + maxB.w - startAxis),
                     startAxisNew = maxB.x + maxB.w
-                rightAxis = this.findBestAxis(rightRects, i, areaWidthNew, startAxisNew,listFlag)
+                rightAxis = this.findBestAxis(rightRects, i, areaWidthNew, startAxisNew)//listFlag)
             }
-            leftAxis = this.findBestAxis(leftRects, i, maxB.x - startAxis, startAxis,listFlag)
+            leftAxis = this.findBestAxis(leftRects, i, maxB.x - startAxis, startAxis)//,listFlag)
             if ((rightAxis.y == Infinity) && (leftAxis.y == Infinity)) {
                 return { x: startAxis, y: maxB.y + maxB.h }
             }
@@ -1331,36 +1332,36 @@ export default class Itemset extends React.Component<Props, State>{
         return is_same
     }
     componentDidUpdate(prevProp: Props) {
-        let bubblePosition: rect[] = [],
-        bubblePositionOrigin: rect[] = []
+        let bubblePosition: rect[] = []
+        // bubblePositionOrigin: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 0
         this.bubbleSize.forEach((bubble, i) => {
             let transX = 0,
-                transY = 0,
-                transYOrigin = 0
+                transY = 0
+                // transYOrigin = 0
             if (i == 0) {
                 if(i!=this.yDown.i){
                     transY = this.yList[0].y - bubble.h/2
-                    transYOrigin = this.yListOrigin[0].y - bubble.h/2
+                    // transYOrigin = this.yListOrigin[0].y - bubble.h/2
                 }else{
-                    transYOrigin = transY = this.yListOrigin[0].y + this.yListOrigin[i].h - bubble.h/2
+                    transY = this.yListOrigin[0].y + this.yListOrigin[i].h - bubble.h/2
                 }
             } else {
                 if(this.props.buttonSwitch){
-                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0,true)
-                    let greedyPosOrigin: axis = this.findBestAxis(bubblePositionOrigin, i, 250, 0,false)
+                    let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
+                    // let greedyPosOrigin: axis = this.findBestAxis(bubblePositionOrigin, i, 250, 0,false)
                     if(i!=this.yDown.i){
                         greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
-                        greedyPosOrigin.y = Math.max(greedyPosOrigin.y, this.yListOrigin[i].y  - bubble.h / 2)
+                        // greedyPosOrigin.y = Math.max(greedyPosOrigin.y, this.yListOrigin[i].y  - bubble.h / 2)
                     }else{
-                        greedyPosOrigin.y = greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
+                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
                     }
 
-                    transX = greedyPos.x 
+                    transX = i==this.yDown.i?this.bubbleSize[i].w/2:greedyPos.x 
                     transY = greedyPos.y
-                    transYOrigin = greedyPosOrigin.y
+                    // transYOrigin = greedyPosOrigin.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
@@ -1369,7 +1370,7 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
-            bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
+            // bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
         })
 
         // let bubblePositionNew:rect[] = bubblePosition
@@ -1411,7 +1412,7 @@ export default class Itemset extends React.Component<Props, State>{
         if (!posIsSame) { 
             this.setState({ bubblePosition }) 
             this.bubblePosition = bubblePosition
-            this.bubblePositionOrigin = bubblePositionOrigin
+            // this.bubblePositionOrigin = bubblePositionOrigin
         }
 
         let bSum = 0
@@ -1434,6 +1435,8 @@ export default class Itemset extends React.Component<Props, State>{
             this.setState({selectInfo:this.props.selectInfo})
             this.leaveRect()
             this.expandRulesIndex = []
+            this.expandedNum = -1
+            this.expandedFlag = false
             this.setState({expandRules:{}})
         }
         switch (fetchKeyStatus) {

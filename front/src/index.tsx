@@ -77,7 +77,8 @@ if (TEST){
       compareFlag:false,
       causal,
       unMatchedRules:{pos:[],neg:[]},
-      selectInfo : {dataset:'',model:''}
+      selectInfo : {dataset:'',model:''},
+      offsetLength:0,
   }
 }else{
   initState = {
@@ -108,7 +109,8 @@ if (TEST){
     compareFlag:false,
     causal: [],
     unMatchedRules:{pos:[],neg:[]},
-    selectInfo:{dataset:'',model:''}
+    selectInfo:{dataset:'',model:''},
+    offsetLength:0,
 }
 }
 

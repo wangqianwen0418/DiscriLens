@@ -1,7 +1,7 @@
 import ComparePrime from 'components/AppMiddle/ComparePrime';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeShowAttr,ChangeSelectedBar,TransCompareList,TransExpandRule} from 'actions';
+import { ChangeShowAttr,ChangeSelectedBar,TransCompareList,TransExpandRule, ChangeOffestLength} from 'actions';
 // import { Dispatch } from 'redux';
 export interface rect {
     x: number,
@@ -29,7 +29,8 @@ export function mapDispatchToProps(dispatch: any) {
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
         onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
         onTransCompareList :(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any})=>dispatch(TransCompareList(compareList)),
-        onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>dispatch(TransExpandRule(expandRule))
+        onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>dispatch(TransExpandRule(expandRule)),
+        onChangeOffsetLength:(offsetLength:number)=>{dispatch(ChangeOffestLength(offsetLength))},
     }
 }
 
