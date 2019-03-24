@@ -1,5 +1,5 @@
 {
-   "keyAttrs": ["StudentAbsenceDays", "raisedhands", "VisITedResources"],
+   "keyAttrs": ["StudentAbsenceDays", "raisedhands", "VisITedResources", "Relation" ],
    "accuracy": {
       "knn": 0.890,
       "lr": 0.904,
