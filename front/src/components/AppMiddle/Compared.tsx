@@ -728,6 +728,9 @@ export default class Compared extends React.Component<Props, State>{
                     transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
                 }
             }
+            if(i==0){
+                transY = Math.max(compareList.r[this.matchedIndex[i]].y,transYOverlap) - this.lineInterval
+            }
             this.ruleID.push(ruleAgg.id)
             this.matchYList.y.push(transY)
             this.matchYList.index.push(this.matchedIndex[i])
