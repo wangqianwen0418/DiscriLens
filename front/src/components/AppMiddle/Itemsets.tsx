@@ -634,9 +634,15 @@ export default class Itemset extends React.Component<Props, State>{
             e.stopPropagation();
             e.preventDefault();
             
-            if(this.expandRulesIndex.includes(listNum)){
-                this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
-            }else{this.expandRulesIndex.push(listNum)}
+            this.expandedFlag = !this.expandedFlag
+            if(this.expandedFlag){
+                this.enterRect(listNum)
+            }else{
+                this.leaveRect()
+            }
+            // if(this.expandRulesIndex.includes(listNum)){
+            //     this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
+            // }else{this.expandRulesIndex.push(listNum)}
             this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
         }
         if(this.state.pressButton){
@@ -1296,13 +1302,13 @@ export default class Itemset extends React.Component<Props, State>{
                 if(this.props.buttonSwitch){
                     let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
                     if(i!=this.yDown.i){
-                        greedyPos.y = Math.max(greedyPos.y, this.yList[i].y + this.yList[i].h/2 - bubble.h / 2)
+                        greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
                     }else{
-                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y + this.yListOrigin[i].h/2- bubble.h / 2)
+                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
                     }
 
                     transX = greedyPos.x 
-                    transY = greedyPos.y 
+                    transY = greedyPos.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
