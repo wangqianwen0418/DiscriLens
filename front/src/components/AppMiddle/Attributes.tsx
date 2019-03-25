@@ -39,7 +39,7 @@ export interface curveData {
 }
 
 export default class Attributes extends React.Component<Props, State>{
-    public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 12; rotate = 90;
+    public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 15; rotate = 90;
     height = window.innerHeight / 10;
     posColor = 'rgb(253, 194, 140)';
     negColor = 'rgb(183, 226, 177)';

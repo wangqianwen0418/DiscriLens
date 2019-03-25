@@ -520,7 +520,15 @@ export default class Itemset extends React.Component<Props, State>{
                         
                         barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
                         startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
+                    }else{
+                        if (rangeIdx>=ranges.length/2){
+                            rangeLabel[0] = val
+                        }else{
+                            rangeLabel[1] = val
+                        }
                     }
+
+                    if(keyAttrs.includes(attr)){rangeLabel=['','']}
 
                     if((this.state.hoveredBubble.length!=0)&&(!this.state.hoveredBubble.includes(String(id)))){opacity=0.3}
 
@@ -756,6 +764,12 @@ export default class Itemset extends React.Component<Props, State>{
                 
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
                 startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
+            }else{
+                if (rangeIdx>=ranges.length/2){
+                    rangeLabel[0] = val
+                }else{
+                    rangeLabel[1] = val
+                }
             }
 
             return <g key={attrVal} className='ruleagg attrvals'>

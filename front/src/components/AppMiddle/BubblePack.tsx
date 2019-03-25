@@ -97,6 +97,7 @@ const extractItems = (rules: Rule[]): { id: any, score: number, groups: string[]
 
 export default class Bubble extends React.Component<Props, State>{
     width=0; height=0;  radius=4; circlePadding=0;ref: React.RefObject<SVGAElement>=React.createRef();
+    margin=5
     constructor(props: Props){
         super(props)
     }
@@ -104,7 +105,7 @@ export default class Bubble extends React.Component<Props, State>{
         // let box = this.ref.current.getBoundingClientRect()
         // // console.info(box)
         // return [box.width, box.height]
-        return [this.width, this.height]
+        return [this.width+this.margin*2, this.height+this.margin*2]
     }
     componentWillReceiveProps(props: Props){
         // console.info(props)
@@ -404,7 +405,7 @@ export default class Bubble extends React.Component<Props, State>{
         return <g className='bubbleSet' 
             id={`bubble_${ruleAgg.id}`} 
             ref={this.ref}
-            // transform={`translate(${this.circlePadding}, ${this.circlePadding})`}
+            transform={`translate(${this.margin}, ${this.margin})`}
             // transform={`scale(${this.scaleRatio})`}
             >
             {/* <rect width={this.width} height={this.height} fill='none' stroke='black'/> */}

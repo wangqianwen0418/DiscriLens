@@ -31,7 +31,7 @@ export const getAttrRanges =  (samples: DataItem[], attr:string):(string|number)
     if (attrRanges[attr]){
         return attrRanges[attr]
     }else if(attr=="workclass"){
-        return ['Without-pay', 'State-gov', 'Self-emp-not-inc', 'Private', 'Never-worked', 'Self-emp-inc', 'Local-gov', 'Federal-gov']
+        return ['Self-emp-not-inc', 'Private', 'Without-pay', 'State-gov', 'Never-worked', 'Self-emp-inc', 'Local-gov', 'Federal-gov']
     }
     else {
         let ranges = samples.map(d=>d[attr])
