@@ -9,3 +9,4 @@ export {getAttrRanges} from './getAttrRanges';
 export {groupByKey} from './groupByKey';
 export {filterRules, filterRulesNoThreshold} from './filterRules';
 export {getMinLinks, MinLink} from './minLinks';
+export {stringTransfer} from './stringTransfer'

@@ -8,6 +8,7 @@ import ComparePrime from 'containers/ComparePrime'
 import {Col, Row, Switch, Modal, Button,Icon} from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
+import {stringTransfer} from 'Helpers'
 // import RadioButton from 'antd/lib/radio/radioButton';
 // import RadioGroup from 'antd/lib/radio/group';
 import "./Resemble.css"
@@ -62,20 +63,7 @@ export default class AppMiddel extends React.Component<Props, State>{
             rightBorder:false
         }
     }
-    // match strings
-    stringTransfer(input:string){
-        let firstCha = input[0],
-        restCha = input.slice(1,input.length)
-        if((input=='Gender')||(input=='Raisedhands')){
-            return firstCha.toLowerCase() + restCha
-        }
-        else if(input=='AbsenceDays'){
-            return 'StudentAbsenceDays'
-        }
-        else{
-            return input
-        }
-    }
+    
     getModel(dataset:string){
         if(dataset=='academic'){
             return ['xgb', 'knn', 'lr','knn_post1','rf','dt']
@@ -160,7 +148,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                 let node = dag.node(v)
                 let color = 'grey'
                 let content = node.label.split('-')[0]
-                if(keyAttrs.includes(this.stringTransfer(content))){
+                if(keyAttrs.includes(stringTransfer(content))){
                     color = '#40a9ff'
                 }else if (protectedAttr==content.toLowerCase()){
                     color='rgb(253, 190, 136)'
@@ -183,11 +171,11 @@ export default class AppMiddel extends React.Component<Props, State>{
                 let chooseKey=()=>{
                     if(content!='class'){
                         if(nodeW+node.x+60>width+50){
-                            this.setState({selectionRect:[this.stringTransfer(node.label.split('-')[0])
+                            this.setState({selectionRect:[stringTransfer(node.label.split('-')[0])
                         ,-nodeW/2+node.x-77,-rectHeight/2+node.y,rectHeight]})
                             this.setState({rightBorder:true})
                         }else{
-                            this.setState({selectionRect:[this.stringTransfer(node.label.split('-')[0])
+                            this.setState({selectionRect:[stringTransfer(node.label.split('-')[0])
                         ,nodeW/2+node.x,-rectHeight/2+node.y,rectHeight]})
                             this.setState({rightBorder:false})
                         }
@@ -244,7 +232,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                     <text fill={'white'} textAnchor='middle' y={rectHeight*0.2}>{content}</text>
                     :null}
 
-                    {this.state.selectionRect[0]==this.stringTransfer(node.label.split('-')[0])?
+                    {this.state.selectionRect[0]==stringTransfer(node.label.split('-')[0])?
                     <g>
                         <text fill='#999'fontSize={10} x={xRect+12} y={-rectHeight/2+10} >Key Attr</text>
                         <rect x={xRect} y={-rectHeight/2} 
