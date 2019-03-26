@@ -601,7 +601,6 @@ export default class ComparePrime extends React.Component<Props, State>{
                                 minTemp = s[attr]
                             }
                         })
-                let falg = 0
                 if(range.includes('<x<')){
                         let split = range.split('<x<')
                         rangeLeft = parseInt(split[0])
@@ -617,15 +616,17 @@ export default class ComparePrime extends React.Component<Props, State>{
                         rangeLeft = parseInt(split[1])
                         rangeRight = maxTemp
                         rangeLabel[0] = split[1]
-                        falg=1
-                }
-                
+                }                
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
                 startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
-                if(falg==1){
-                    console.log('2',step * dragArray.indexOf(attr) + startX)
+            }else{
+                if (rangeIdx>=ranges.length/2){
+                    rangeLabel[0] = val
+                }else{
+                    rangeLabel[1] = val
                 }
             }
+            
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}

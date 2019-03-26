@@ -15,6 +15,7 @@ export interface Props{
     xScaleMax: number,
     offset:number,
     divideNum:number,
+    compareFlag:boolean,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -265,7 +266,7 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     drawArea(){
-        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax,compareFlag} = this.props
         let {inputLeft, inputRight} = this.state
         
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
@@ -388,7 +389,7 @@ export default class Overview extends React.Component<Props,State>{
                     <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                     <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 </g>
-                {compDataKeyAttr?<g>
+                {compareFlag?<g>
                     <clipPath id={'comp_middle'}>
                         <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#999'} clipPath={'url(#comp_overview_path)'}/>
                     </clipPath>
@@ -404,7 +405,7 @@ export default class Overview extends React.Component<Props,State>{
     
     }
     drawScatter(){
-        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax,compareFlag} = this.props
         let {inputLeft, inputRight} = this.state
         
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
@@ -536,7 +537,7 @@ export default class Overview extends React.Component<Props,State>{
                             </circle>
                         })}
                 </g>
-                {compDataKeyAttr?<g>
+                {compDataKeyAttr&&compareFlag?<g>
                     {compDataKeyAttr.map((data,i)=>{
                             let color = '#bbb'
                             let opacity = 0.3
