@@ -62,12 +62,17 @@ export default class AppMiddel extends React.Component<Props, State>{
             rightBorder:false
         }
     }
+    // match strings
     stringTransfer(input:string){
         let firstCha = input[0],
         restCha = input.slice(1,input.length)
         if((input=='Gender')||(input=='Raisedhands')){
             return firstCha.toLowerCase() + restCha
-        }else{
+        }
+        else if(input=='AbsenceDays'){
+            return 'StudentAbsenceDays'
+        }
+        else{
             return input
         }
     }

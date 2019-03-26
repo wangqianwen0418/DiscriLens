@@ -13,6 +13,7 @@ export interface Props{
     accuracy:{[key:string]:number},
     compareFlag:boolean,
     divideNum:number,
+    // ruleThreshold:number[],
     selectInfo:{dataset:string,model:string},
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
@@ -271,8 +272,14 @@ export default class modelSelection extends React.Component<Props,State>{
                     <g>
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
+                                let opacity = 1
+                                // if(data.x<this.props.ruleThreshold[0]){
+                                //     opacity = 1
+                                // }else if((data.x>this.props.ruleThreshold[1])){
+                                //     opacity = 1
+                                // }
                                 return <circle cx={xScale(data.x)} cy={yScale(data.y)} r={3} 
-                                style={{fill:'white',stroke:color,strokeWidth:2}} className='overview'>
+                                style={{fill:'white',stroke:color,strokeWidth:2,opacity:opacity}} className='overview'>
                                 <title>{`[${data.x.toFixed(2)}, ${data.y}]`}</title>
                                 </circle>
                         })}
