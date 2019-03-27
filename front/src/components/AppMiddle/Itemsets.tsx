@@ -54,7 +54,7 @@ export interface State {
     // record all the bubble position when button is true
     bubblePosition: rect[],
     hoveredBubble:string[],
-    pressButton:string,
+    pressButton:[string,number],
     selectInfo:{dataset:string,model:string},
 }
 export interface ExpandRule {
@@ -161,7 +161,7 @@ export default class Itemset extends React.Component<Props, State>{
             highlightRules: {},
             bubblePosition:[],
             hoveredBubble:[],
-            pressButton:'',
+            pressButton:['',-1],
             selectInfo:{dataset:'',model:''}
         }
         this.toggleExpand = this.toggleExpand.bind(this)
@@ -613,14 +613,38 @@ export default class Itemset extends React.Component<Props, State>{
             maxRect = this.findMaxRect(bubblePosition,i),
             minRect = this.findMinRect(bubblePosition,i)
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = (this.yList[i].y - this.bubbleSize[i].h/2 - initPos)
+            this.yOffset = (this.yList[i].y -bubblePosition[i].h/2 - initPos)
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
             if(minRect&&(this.yList[i].y+this.bubbleSize[i].h>minRect.y)){
-                this.yDown = {i:i,offset:this.yList[i].y +this.yList[i].h + this.bubbleSize[i].h/2-minRect.y}
+                this.yDown = {i:i,offset:this.yList[i].y  + this.bubbleSize[i].h/2-minRect.y}
             }
             // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
             if(maxRect){
-                this.yUp = {i:i,offset:this.yList[i].y - this.bubbleSize[i].h/2 - maxRect.y - maxRect.h}
+                this.yUp = {i:i,offset: Math.min(-this.state.bubblePosition[i].h/2  + this.yList[i].y - maxRect.y - maxRect.h,0)}
+            }
+            this.setState({})
+        }
+    }
+
+    expandRect(i: number,expandLength:number,flag:boolean=false) {
+        let bubblePosition = this.bubblePositionOrigin
+        this.yDown = {offset:0,i:-1}
+        this.yUp = {offset:0,i:-1}
+        this.yOffset = 0
+        if((bubblePosition.length!=0)&&this.yList.length!=0){
+            let initPos = bubblePosition[i].y,
+            maxRect = this.findMaxRect(bubblePosition,i),
+            minRect = this.findMinRect(bubblePosition,i),
+            expandH = this.yList[i].h + expandLength *1.3* this.lineInterval 
+            // the offset of selected bubble. Equal to bar's central y-value
+            this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos)
+            // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
+            if(minRect&&(this.yList[i].y+expandH+this.bubbleSize[i].h>minRect.y+expandLength*2*this.lineInterval)){
+                this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y+(!flag?0:this.yList[i].h/2)}
+            }
+            // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
+            if(maxRect&&(maxRect.y+maxRect.h+bubblePosition[i].h/2>this.yList[i].y+expandH)){
+                this.yUp = {i:i,offset: -bubblePosition[i].h/2 + expandH + this.yList[i].y - maxRect.y - maxRect.h}
             }
             this.setState({})
         }
@@ -635,13 +659,13 @@ export default class Itemset extends React.Component<Props, State>{
             this.setState({})
         }
     }
-    expandRule(listNum:number){
+    expandRule(listNum:number,expandLength:number){
         // no rules are expanded, expanding a rule now will focus on this rule
         if(this.expandRulesIndex.length==0){
             this.expandedFlag = true
             this.expandRulesIndex.push(listNum)
             this.expandedNum = listNum
-            this.enterRect(listNum)
+            this.expandRect(listNum,expandLength)
         }
         // some rules are expanded, and the clicked one are the focused one
         else if(this.expandRulesIndex.length!=0&&(this.expandedNum==listNum)){
@@ -655,9 +679,9 @@ export default class Itemset extends React.Component<Props, State>{
             }
             // if the focused one is not the only element, put the last element in list to focus
             else{
-                // this.leaveRect()
-                this.enterRect(this.expandRulesIndex[this.expandRulesIndex.length-1])
                 this.expandedNum = this.expandRulesIndex[this.expandRulesIndex.length-1]
+                // this.leaveRect()
+                this.expandRect(this.expandRulesIndex[this.expandRulesIndex.length-1],0,true)
                 // console.log(2)
             }
         }
@@ -673,7 +697,7 @@ export default class Itemset extends React.Component<Props, State>{
                 this.expandRulesIndex.push(listNum)
                 this.expandedNum = listNum
                 // this.leaveRect()
-                this.enterRect(listNum)
+                this.expandRect(listNum,expandLength)
                 // console.log(4)
             }
             
@@ -700,17 +724,18 @@ export default class Itemset extends React.Component<Props, State>{
             e.stopPropagation();
             e.preventDefault();
             this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()))
-            
-            this.expandRule(listNum)
+            this.expandRule(listNum,nodes.map(child => child.rule.id.toString()).length)
             // if(this.expandRulesIndex.includes(listNum)){
             //     this.expandRulesIndex.splice(this.expandRulesIndex.indexOf(listNum),1)
             // }else{this.expandRulesIndex.push(listNum)}
             
         }
-        if(this.state.pressButton){
-            if(this.state.pressButton==id){
-                         this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()));this.setState({pressButton:''});   
-            }
+        if(this.state.pressButton[0]){
+            if(this.state.pressButton[0]==id){
+                         this.toggleExpand(id.toString(), newAttrs, nodes.map(child => child.rule.id.toString()));
+                        //  this.expandRule(this.state.pressButton[1],nodes.map(child => child.rule.id.toString()).length)
+                         this.setState({pressButton:['',-1]})
+                        }
         }
 
         let isExpand = this.state.expandRules.hasOwnProperty(id)
@@ -928,8 +953,8 @@ export default class Itemset extends React.Component<Props, State>{
                             this.hoverColor(ruleAgg.id,false)
                         }
                         let clickBubble = (e:any) =>{
-                            this.setState({pressButton:ruleAgg.id})
-                            this.expandRule(i)
+                            this.setState({pressButton:[ruleAgg.id,i]})
+                            this.expandRule(i,ruleAgg.nodes.map(child => child.rule.id.toString()).length)
                         }
                         
                         let bubbleLine:any
@@ -1104,17 +1129,6 @@ export default class Itemset extends React.Component<Props, State>{
             posAveY += this.lineInterval
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             // record y-axis value of each rule bar
-            if(!this.props.buttonSwitch){
-                posOffset = 0
-            }else{
-                if(i<this.yUp.i){
-                    posOffset = this.yUp.offset
-                }else if(i>this.yDown.i){
-                    posOffset = this.yDown.offset
-                }else{
-                    posOffset = this.yOffset
-                }
-            }
             
             
             this.yList.push({y:posAveY+posOffset,h:hPos,r:ruleAgg.antecedent})
@@ -1176,18 +1190,6 @@ export default class Itemset extends React.Component<Props, State>{
             negAveY += this.lineInterval
             // negAveY = (negAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
-            // record offset distance of each rule bar
-            if(!this.props.buttonSwitch){
-                negOffset = 0
-            }else{
-                if(i<this.yUp.i){
-                    negOffset = this.yUp.offset
-                }else if(i>this.yDown.i){
-                    negOffset = this.yDown.offset
-                }else{
-                    negOffset = this.yOffset
-                }
-            }
 
             this.yList.push({y:negAveY+negOffset,h:hNeg,r:ruleAgg.antecedent})
             this.yListOrigin.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
@@ -1359,36 +1361,30 @@ export default class Itemset extends React.Component<Props, State>{
         return is_same
     }
     componentDidUpdate(prevProp: Props) {
-        let bubblePosition: rect[] = []
-        // bubblePositionOrigin: rect[] = []
+        let bubblePosition: rect[] = [],
+        bubblePositionOrigin: rect[] = []
         // let {compFlag} = this.props
         // use this value to control interval length
         let interval = 0
         this.bubbleSize.forEach((bubble, i) => {
+            
             let transX = 0,
-                transY = 0
-                // transYOrigin = 0
+                transY = 0,
+                transYOrigin = 0
             if (i == 0) {
-                if(i!=this.yDown.i){
-                    transY = this.yList[0].y - bubble.h/2
-                    // transYOrigin = this.yListOrigin[0].y - bubble.h/2
-                }else{
-                    transY = this.yListOrigin[0].y + this.yListOrigin[i].h - bubble.h/2
-                }
+                transY = this.yList[0].y - bubble.h/2
+                transYOrigin = this.yList[0].y - bubble.h/2
             } else {
                 if(this.props.buttonSwitch){
                     let greedyPos: axis = this.findBestAxis(bubblePosition, i, 250, 0)
-                    // let greedyPosOrigin: axis = this.findBestAxis(bubblePositionOrigin, i, 250, 0,false)
-                    if(i!=this.yDown.i){
-                        greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
-                        // greedyPosOrigin.y = Math.max(greedyPosOrigin.y, this.yListOrigin[i].y  - bubble.h / 2)
-                    }else{
-                        greedyPos.y = Math.max(greedyPos.y, this.yListOrigin[i].y +this.yListOrigin[i].h - bubble.h / 2)
-                    }
+                    let greedyPosOrigin: axis = this.findBestAxis(bubblePositionOrigin, i, 250, 0)
+                    
+                    greedyPos.y = Math.max(greedyPos.y, this.yList[i].y  - bubble.h / 2)
+                    greedyPosOrigin.y = Math.max(greedyPosOrigin.y, this.yList[i].y  - bubble.h / 2)
 
                     transX = i==this.yDown.i?this.bubbleSize[i].w/2:greedyPos.x 
                     transY = greedyPos.y
-                    // transYOrigin = greedyPosOrigin.y
+                    transYOrigin = greedyPosOrigin.y
                 }
                 else{
                     let directPos:number = this.findDirectAxis(bubblePosition,i)
@@ -1397,9 +1393,25 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
-            // bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
+            bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
         })
-
+        
+        bubblePosition.forEach((bubble,i)=>{
+            let offset = 0
+            let iPos = Math.max(this.yDown.i,this.yUp.i)
+            if(!this.props.buttonSwitch){
+                offset = 0
+            }else{
+                if(i<iPos){
+                    offset = this.yUp.offset
+                }else if(i>iPos){
+                    offset = this.yDown.offset
+                }else{
+                    offset = this.yOffset
+                }
+            }
+            bubblePosition[i].y = bubblePosition[i].y + offset
+        })
         // let bubblePositionNew:rect[] = bubblePosition
         // bubblePosition.forEach((bubble,i)=>{
         //     let initY = bubble.y
@@ -1439,7 +1451,7 @@ export default class Itemset extends React.Component<Props, State>{
         if (!posIsSame) { 
             this.setState({ bubblePosition }) 
             this.bubblePosition = bubblePosition
-            // this.bubblePositionOrigin = bubblePositionOrigin
+            this.bubblePositionOrigin = bubblePositionOrigin
         }
 
         let bSum = 0
