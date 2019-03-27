@@ -637,7 +637,7 @@ export default class Itemset extends React.Component<Props, State>{
             minRect = this.findMinRect(bubblePosition,i),
             expandH = this.yList[i].h + expandLength *1.3* this.lineInterval 
             // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos)
+            this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos) -  this.lineInterval
             // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
             if(minRect&&(this.yList[i].y+expandH+this.bubbleSize[i].h>minRect.y+expandLength*2*this.lineInterval)){
                 this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y+(!flag?0:this.yList[i].h/2)}
