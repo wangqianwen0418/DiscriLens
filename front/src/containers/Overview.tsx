@@ -11,6 +11,7 @@ export function mapStateToProps(state:StoreState) {
         keyAttrs: state.dragArray.slice(0, state.keyAttrNum),
         ruleThreshold: state.ruleThreshold,
         xScaleMax: state.xScaleMax,
+        compareFlag:state.compareFlag,
     };
 }
 

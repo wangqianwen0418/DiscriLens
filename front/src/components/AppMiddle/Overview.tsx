@@ -15,6 +15,7 @@ export interface Props{
     xScaleMax: number,
     offset:number,
     divideNum:number,
+    compareFlag:boolean,
     onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
 }
 export interface State{
@@ -265,7 +266,7 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     drawArea(){
-        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax,compareFlag} = this.props
         let {inputLeft, inputRight} = this.state
         
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
@@ -332,6 +333,8 @@ export default class Overview extends React.Component<Props,State>{
 
             let rightArrow = `M 0,${startYRight - 12} h 24 l 6,6 l -6,6 h -24 v -12 `
             let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
+            // console.log(this.state.transformXLeft)
+            // console.log(this.state.transformXRight)
             return <g>
                  <g id={'rectLeft'} className={'selectThr'}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
@@ -346,7 +349,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputLeft?
                         <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={-24} y={startYLeft - 14} className='inoutBoxLeft'>
                             <input type='number' 
-                            // defaultValue={this.props.ruleThreshold[0].toFixed(2)}
+                            defaultValue={this.state.transformXLeft.toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
@@ -367,7 +370,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputRight?
                         <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
-                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
+                            defaultValue={this.state.transformXRight.toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
@@ -388,7 +391,7 @@ export default class Overview extends React.Component<Props,State>{
                     <rect id='right' width={rightEnd - this.state.transformXRight} height={bottomEnd-topStart} x={this.state.transformXRight} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                     <rect id='left' width={this.state.transformXLeft-leftStart} height={bottomEnd-topStart} x={leftStart} y={topStart} fill={BAD_COLOR} clipPath={'url(#overview_path)'}/>
                 </g>
-                {compDataKeyAttr?<g>
+                {compareFlag?<g>
                     <clipPath id={'comp_middle'}>
                         <rect id='middle' width={this.state.transformXRight-this.state.transformXLeft} height={bottomEnd-topStart} x={this.state.transformXLeft} y={topStart} fill={'#999'} clipPath={'url(#comp_overview_path)'}/>
                     </clipPath>
@@ -404,7 +407,7 @@ export default class Overview extends React.Component<Props,State>{
     
     }
     drawScatter(){
-        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax} = this.props
+        let {ruleThreshold, allRules,compAllRules, keyAttrs, xScaleMax,compareFlag} = this.props
         let {inputLeft, inputRight} = this.state
         
         let dataPro = this.ruleProcessing(allRules,keyAttrs),
@@ -485,7 +488,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputLeft?
                         <foreignObject width={this.fontSize*3.5} height={this.fontSize*1.5} fontSize={this.fontSize} x={-this.fontSize*3} y={startYLeft - 14} className='inoutBoxLeft'>
                             <input type='number' 
-                            defaultValue={this.props.ruleThreshold[0].toFixed(2)}
+                            defaultValue={xScaleReverse(this.state.transformXLeft).toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputLeft} id='inputBoxLeft'/>
                         </foreignObject>
                         :
@@ -506,7 +509,7 @@ export default class Overview extends React.Component<Props,State>{
                         {inputRight?
                         <foreignObject width={24} height={this.fontSize*1.5} fontSize={this.fontSize} x={0} y={startYRight - 14} className='inputBoxRight'>
                             <input type='number' 
-                            defaultValue={this.props.ruleThreshold[1].toFixed(2)}
+                            defaultValue={xScaleReverse(this.state.transformXRight).toFixed(2)}
                             autoFocus={true} onKeyPress={this.inputRight} id='inputBoxRight'/>
                         </foreignObject>
                         :
@@ -522,7 +525,7 @@ export default class Overview extends React.Component<Props,State>{
                 <g>
                     {dataKeyAttr.map((data,i)=>{
                             let color = '#bbb'
-                            let opacity = 0.3
+                            let opacity = 0.2
                             if(data.x<xScaleReverse(this.state.transformXLeft)){
                                 opacity = 1
                                 color = this.negColor
@@ -536,7 +539,7 @@ export default class Overview extends React.Component<Props,State>{
                             </circle>
                         })}
                 </g>
-                {compDataKeyAttr?<g>
+                {compDataKeyAttr&&compareFlag?<g>
                     {compDataKeyAttr.map((data,i)=>{
                             let color = '#bbb'
                             let opacity = 0.3

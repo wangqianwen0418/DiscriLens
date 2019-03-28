@@ -601,7 +601,6 @@ export default class ComparePrime extends React.Component<Props, State>{
                                 minTemp = s[attr]
                             }
                         })
-                let falg = 0
                 if(range.includes('<x<')){
                         let split = range.split('<x<')
                         rangeLeft = parseInt(split[0])
@@ -617,15 +616,17 @@ export default class ComparePrime extends React.Component<Props, State>{
                         rangeLeft = parseInt(split[1])
                         rangeRight = maxTemp
                         rangeLabel[0] = split[1]
-                        falg=1
-                }
-                
+                }                
                 barWidthTep = (rangeRight - rangeLeft)*barWidth/(maxTemp-minTemp)
                 startX = (rangeLeft-minTemp)*barWidth/(maxTemp-minTemp)
-                if(falg==1){
-                    console.log('2',step * dragArray.indexOf(attr) + startX)
+            }else{
+                if (rangeIdx>=ranges.length/2){
+                    rangeLabel[0] = val
+                }else{
+                    rangeLabel[1] = val
                 }
             }
+            
             return <g key={attrVal} className='ruleagg attrvals'>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
@@ -946,39 +947,42 @@ export default class ComparePrime extends React.Component<Props, State>{
         // positive, orange
         let {unMatchedRules} = this.props
         let posRulesUnMatched: JSX.Element[] = []
-        unMatchedRules.pos.forEach((ruleAgg, i) => {
-            
-            if(!isNaN(ruleAgg[1])){
-                posRulesUnMatched.push(
-                    <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule" >
+        // negtive, green
+        let negaRulesUnMatched: JSX.Element[] = [] 
+        if(unMatchedRules.pos){
+            unMatchedRules.pos.forEach((ruleAgg, i) => {
+                
+                if(!isNaN(ruleAgg[1])){
+                    posRulesUnMatched.push(
+                        <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule" >
+                            {
+                                this.drawRuleAgg(ruleAgg[0], true,i)
+                            }
+                            <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.maxOffset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
+                            <circle cx={-this.headWidth-2*this.fontSize-this.maxOffset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
+                        </g>
+                    )
+                    this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
+                }
+            })  
+        }
+        if(unMatchedRules.neg){
+            unMatchedRules.neg.forEach((ruleAgg,i)=> {
+                i += unMatchedRules.pos.length 
+                if(!isNaN(ruleAgg[1])){
+                negaRulesUnMatched.push(
+                    <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule">
                         {
-                            this.drawRuleAgg(ruleAgg[0], true,i)
+                            this.drawRuleAgg(ruleAgg[0], false,i)
                         }
                         <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.maxOffset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
                         <circle cx={-this.headWidth-2*this.fontSize-this.maxOffset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
                     </g>
-                )
-                this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
-            }
-        })  
-        
-        // negtive, green
-        let negaRulesUnMatched: JSX.Element[] = [] 
-        unMatchedRules.neg.forEach((ruleAgg,i)=> {
-            i += unMatchedRules.pos.length 
-            if(!isNaN(ruleAgg[1])){
-               negaRulesUnMatched.push(
-                <g key={ruleAgg[0].id} id={`${ruleAgg[0].id}`} transform={`translate(${this.maxOffset}, ${ruleAgg[1]-this.lineInterval})`} className="rule">
-                    {
-                        this.drawRuleAgg(ruleAgg[0], false,i)
-                    }
-                    <path d={`M${-this.headWidth-2*this.fontSize},${this.lineInterval} h${-this.maxOffset/3}`} style={{stroke:'#bbb',strokeWidth:3}}></path>
-                    <circle cx={-this.headWidth-2*this.fontSize-this.maxOffset/3-5} cy = {this.lineInterval} r={5} style={{fill:'none',stroke:'#bbb',strokeWidth:3}}></circle>
-                </g>
-                ) 
-                this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
-            }            
-        })
+                    ) 
+                    this.yMaxValue = Math.max(this.yMaxValue,ruleAgg[1])
+                }            
+            })
+        }
         this.rulesLength = negativeRuleAgg.length + positiveRuleAgg.length
 
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
