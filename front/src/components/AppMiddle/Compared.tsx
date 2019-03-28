@@ -751,7 +751,6 @@ export default class Compared extends React.Component<Props, State>{
             //     }
             // }
         // })
-
         let scoreDomain = d3.extent(rules.map(rule => rule.risk_dif))
         let mathchedbubbles = this.drawBubbles(matchedRect.rule, scoreDomain, true,true)//, this.drawBubbles(matchedNeg, scoreDomain, false,true)]
         
@@ -957,6 +956,7 @@ export default class Compared extends React.Component<Props, State>{
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         let ruleAggs = positiveRuleAgg.concat(negativeRuleAgg)
+        console.log(ruleAggs)
         let matchedRect:{rule:RuleAgg[],pos:boolean[]}={rule:[],pos:[]}, //matchedNeg:RuleAgg[] = [],
         unMatchedRect:{rule:RuleAgg[],pos:boolean[]}={rule:[],pos:[]},//, unMatchedNeg:RuleAgg[] = []
         matchedIndexCompared:number[] = []

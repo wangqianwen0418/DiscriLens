@@ -284,6 +284,7 @@ export default class Bubble extends React.Component<Props, State>{
                 let itemCircle = isProtect? <circle
                     className='inner bubbles'
                     key={id} 
+                    id={id}
                     // cx={innerCircle.x} cy={innerCircle.y} 
                     transform={`translate(${innerCircle.x}, ${innerCircle.y})`}
                     r={innerCircle.r*0.8 }
@@ -298,6 +299,7 @@ export default class Bubble extends React.Component<Props, State>{
                 :<rect
                     className='inner bubbles'
                     key={id} 
+                    id={id}
                     fill={sample.class=="1"?itemColor :'white'}
                     stroke={itemColor}
                     strokeWidth={strokeWidth}

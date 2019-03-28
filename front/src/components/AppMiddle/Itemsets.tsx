@@ -1058,6 +1058,7 @@ export default class Itemset extends React.Component<Props, State>{
         let { rules, samples} = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
+        console.info(rules)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
 
         let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
@@ -1409,8 +1410,11 @@ export default class Itemset extends React.Component<Props, State>{
                     // the offset of selected bubble. Equal to bar's central y-value
                     this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos) -  this.lineInterval
                     // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-                    if(minRect&&(bubble.y+bubble.h+this.yOffset>minRect.y)){
-                        this.yDown = {i:i,offset:bubble.y+bubble.h+this.yOffset-minRect.y}
+                    if(this.yOffset<0){
+                        this.yDown.offset = this.yOffset
+                    }
+                    if(minRect&&(bubble.y+bubble.h+this.yOffset>minRect.y-this.yDown.offset)){
+                        this.yDown = {i:i,offset:bubble.y+bubble.h+this.yOffset-minRect.y+this.yDown.offset}
                     }
                     // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
                     if(maxRect&&(maxRect.y+maxRect.h>this.yList[i].y+expandH - this.bubbleSize[i].h/2-this.lineInterval)){
