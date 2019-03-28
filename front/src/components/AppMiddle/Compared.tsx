@@ -796,7 +796,7 @@ export default class Compared extends React.Component<Props, State>{
                     let formerRectY = 0
                     if(i!=0){
                         formerRectY = this.yList[i-1].y+this.yList[i-1].h*2 + this.lineInterval
-                    }
+                    } 
                     // subject2: whether the former bubble overlap
                     let bubbleY = 0
                     if(i!=0){
