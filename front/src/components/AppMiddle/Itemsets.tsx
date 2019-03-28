@@ -626,29 +626,29 @@ export default class Itemset extends React.Component<Props, State>{
         }
     }
 
-    expandRect(i: number,expandLength:number,flag:boolean=false) {
-        let bubblePosition = this.bubblePositionOrigin
-        this.yDown = {offset:0,i:-1}
-        this.yUp = {offset:0,i:-1}
-        this.yOffset = 0
-        if((bubblePosition.length!=0)&&this.yList.length!=0){
-            let initPos = bubblePosition[i].y,
-            maxRect = this.findMaxRect(bubblePosition,i),
-            minRect = this.findMinRect(bubblePosition,i),
-            expandH = this.yList[i].h + expandLength *1.3* this.lineInterval 
-            // the offset of selected bubble. Equal to bar's central y-value
-            this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos) -  this.lineInterval
-            // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
-            if(minRect&&(this.yList[i].y+expandH+this.bubbleSize[i].h>minRect.y+expandLength*2*this.lineInterval)){
-                this.yDown = {i:i,offset:this.yList[i].y + this.bubbleSize[i].h/2-minRect.y+(!flag?0:this.yList[i].h/2)}
-            }
-            // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
-            if(maxRect&&(maxRect.y+maxRect.h+bubblePosition[i].h/2>this.yList[i].y+expandH)){
-                this.yUp = {i:i,offset: -bubblePosition[i].h/2 + expandH + this.yList[i].y - maxRect.y - maxRect.h}
-            }
-            this.setState({})
-        }
-    }
+    // expandRect(i: number,expandLength:number,flag:boolean=false) {
+    //     let bubblePosition = this.bubblePositionOrigin
+    //     this.yDown = {offset:0,i:i}
+    //     this.yUp = {offset:0,i:i}
+    //     this.yOffset = 0
+    //     if((bubblePosition.length!=0)&&this.yList.length!=0){
+    //         let initPos = bubblePosition[i].y,
+    //         maxRect = this.findMaxRect(bubblePosition,i),
+    //         // minRect = this.findMinRect(bubblePosition,i),
+    //         expandH = this.yList[i].h + expandLength *1.3* this.lineInterval 
+    //         // the offset of selected bubble. Equal to bar's central y-value
+    //         this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos) -  this.lineInterval
+    //         // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
+    //         // if(minRect&&(>)){
+    //         //     this.yDown = {i:i,offset:}
+    //         // }
+    //         // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
+    //         if(maxRect&&(maxRect.y+maxRect.h>this.yList[i].y+expandH - this.bubbleSize[i].h/2-this.lineInterval)){
+    //             this.yUp = {i:i,offset:this.yList[i].y+expandH - this.bubbleSize[i].h/2-0.7*this.lineInterval-(maxRect.y+maxRect.h)}
+    //         }
+    //         this.setState({})
+    //     }
+    // }
 
     leaveRect() {
         let bubblePosition = this.state.bubblePosition
@@ -665,7 +665,7 @@ export default class Itemset extends React.Component<Props, State>{
             this.expandedFlag = true
             this.expandRulesIndex.push(listNum)
             this.expandedNum = listNum
-            this.expandRect(listNum,expandLength)
+            // this.expandRect(listNum,expandLength)
         }
         // some rules are expanded, and the clicked one are the focused one
         else if(this.expandRulesIndex.length!=0&&(this.expandedNum==listNum)){
@@ -681,7 +681,7 @@ export default class Itemset extends React.Component<Props, State>{
             else{
                 this.expandedNum = this.expandRulesIndex[this.expandRulesIndex.length-1]
                 // this.leaveRect()
-                this.expandRect(this.expandRulesIndex[this.expandRulesIndex.length-1],0,true)
+                // this.expandRect(this.expandRulesIndex[this.expandRulesIndex.length-1],0,true)
                 // console.log(2)
             }
         }
@@ -697,7 +697,7 @@ export default class Itemset extends React.Component<Props, State>{
                 this.expandRulesIndex.push(listNum)
                 this.expandedNum = listNum
                 // this.leaveRect()
-                this.expandRect(listNum,expandLength)
+                // this.expandRect(listNum,expandLength)
                 // console.log(4)
             }
             
@@ -1396,7 +1396,35 @@ export default class Itemset extends React.Component<Props, State>{
             bubblePosition.push({ x: transX, y: transY, w: bubble.w + interval, h: bubble.h + interval })
             bubblePositionOrigin.push({ x: transX, y: transYOrigin, w: bubble.w + interval, h: bubble.h + interval })
         })
-        
+
+        bubblePosition.forEach((bubble,i)=>{
+            if(i==this.expandedNum){
+                this.yDown = {offset:0,i:i}
+                this.yUp = {offset:0,i:i}
+                this.yOffset = 0
+                if((bubblePosition.length!=0)&&this.yList.length!=0){
+                    let initPos = bubble.y,
+                    maxRect = this.findMaxRect(bubblePosition,i),
+                    minRect = this.findMinRect(bubblePosition,i),
+                    expandH = this.yList[i].h 
+                    // the offset of selected bubble. Equal to bar's central y-value
+                    this.yOffset = (this.yList[i].y +expandH - this.bubbleSize[i].h/2 - initPos) -  this.lineInterval
+                    // if there is overlap between the selected bubble and down bubbles, move all of the down bubbles downstairs
+                    if(this.yOffset<0){
+                        this.yDown.offset = this.yOffset
+                    }
+                    if(minRect&&(bubble.y+bubble.h+this.yOffset>minRect.y-this.yDown.offset)){
+                        this.yDown = {i:i,offset:bubble.y+bubble.h+this.yOffset-minRect.y+this.yDown.offset}
+                    }
+                    // if there is overlap between the selected bubble and up bubbles, move all the up bubbles up
+                    if(maxRect&&(maxRect.y+maxRect.h>this.yList[i].y+expandH - this.bubbleSize[i].h/2-this.lineInterval)){
+                        this.yUp = {i:i,offset:this.yList[i].y+expandH - this.bubbleSize[i].h/2-0.7*this.lineInterval-(maxRect.y+maxRect.h)}
+                    }
+                    // this.setState({})
+                }
+            }
+        })
+
         bubblePosition.forEach((bubble,i)=>{
             let offset = 0
             let iPos = Math.max(this.yDown.i,this.yUp.i)
@@ -1405,9 +1433,9 @@ export default class Itemset extends React.Component<Props, State>{
             }else{
                 if(i<iPos){
                     offset = this.yUp.offset
-                }else if(i>iPos){
+                }else if((i>iPos)&&(iPos!=-1)){
                     offset = this.yDown.offset
-                }else{
+                }else if(i==iPos){
                     offset = this.yOffset
                 }
             }
