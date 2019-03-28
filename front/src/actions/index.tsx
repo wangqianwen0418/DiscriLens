@@ -325,10 +325,10 @@ all about transfer compareList
 *****************/ 
 export interface compareList{
     type:TRANS_COMPARE,
-    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}
+    compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any}
 }
 
-export const TransCompareList = (compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}):compareList =>{
+export const TransCompareList = (compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any}):compareList =>{
     return ({
         type: TRANS_COMPARE,
         compareList

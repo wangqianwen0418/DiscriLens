@@ -67,7 +67,7 @@ export interface StoreState{
     accuracy: {[key:string]:number}, // used to transfer models' accuracy to display
     compareFlag:boolean,
     // compare models, [[bubbleposition of compared model],[bubblePosition of prime model],[rect position of prime model]]
-    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}, // list of components for model comparison
+    compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any}, // list of components for model comparison
     compareOffset:{y:number[],index:number[]}, // if compared view has overlapping
     expandRule:{id: number, newAttrs: string[], children: string[]},
     causal: string[],
