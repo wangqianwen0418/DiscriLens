@@ -86,9 +86,10 @@ export default class modelSelection extends React.Component<Props,State>{
 
     getModel(dataset:string){
         if(dataset=='academic'){
-            // return ['xgb', 'knn', 'knn_post1','knn_post2','rf','dt']
-            // return ['xgb', 'knn', 'lr','svm','rf', 'dt']
-            return ['knn_post2', 'knn', 'knn_post1','rf','rf_post1','rf_post2','rf_post3']
+            // return ['xgb', 'knn', 'lr','rf_post00','rf_post3', 'rf']
+            return ['knn', 'knn_post0', 'dt', 'dt_post0', 'rf_post0','rf_post3','rf', 'rf_post00']
+            // return ['xgb', 'rf_post3', 'rf_post21','rf_post0','rf', 'dt']
+            // return ['knn_post2', 'knn', 'knn_post0','rf','rf_post1','rf_post2','rf_post3']
         }
         else if(dataset=='adult'){
             // return ['xgb', 'knn', 'lr','svm','rf', 'dt']

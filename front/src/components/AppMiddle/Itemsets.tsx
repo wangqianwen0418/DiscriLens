@@ -1033,6 +1033,7 @@ export default class Itemset extends React.Component<Props, State>{
         let { rules, samples} = this.props
         let { expandRules } = this.state
         // let samples_numerical = samples.slice(0,1000)
+        console.info(rules)
         samples = samples.slice(Math.floor(samples.length / 2), samples.length)
 
         let itemMax = Math.max(...rules.map(d => d.items.length)), itemMin = Math.min(...rules.map(d => d.items.length)),
