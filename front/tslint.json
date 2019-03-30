@@ -7,6 +7,10 @@
       "coverage/lcov-report/*.js"
     ]
   },
+  "allowJs": true,
+  "jsRules": {
+    "no-empty": true
+  },
   "rules":{
     "no-unused-variable": false,
     "no-console": false
