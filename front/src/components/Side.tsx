@@ -22,9 +22,9 @@ export default class Side extends React.Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      dataset_name: 'adult',
-      model_name: 'xgb',
-      protect_attr: 'sex',
+      dataset_name: 'academic',
+      model_name: 'lr',
+      protect_attr: 'gender',
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)

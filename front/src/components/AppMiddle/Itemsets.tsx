@@ -142,7 +142,7 @@ export default class Itemset extends React.Component<Props, State>{
             let t= d3.scaleLinear()
                     .domain([-maxAbs, 0])
                     .range([1, 0])(score)
-            return d3.hsl(115, 0.5-0.2*t, 0.9-0.6*t)+''
+            return d3.hsl(139, 0.5-0.2*t, 0.9-0.6*t)+''
         } else {
             return d3.interpolateOrRd(
                 d3.scaleLinear()
@@ -797,12 +797,26 @@ export default class Itemset extends React.Component<Props, State>{
                 }
             }
 
-            return <g key={attrVal} className='ruleagg attrvals'>
+            return <g key={attrVal} className='ruleagg attrvals'  
+                // tslint:disable-next-line:jsx-no-lambda
+                onMouseEnter={() => {
+                    if(!this.expandedFlag){
+                        this.enterRect(listNum)
+                    }
+                }
+                }
+                // tslint:disable-next-line:jsx-no-lambda
+                onMouseLeave={() => {
+                    if(!this.expandedFlag){
+                        this.leaveRect()
+                    }
+                }
+            }>
                 <rect className='background'
                     width={barWidth} height={this.lineInterval}
                     x={step * dragArray.indexOf(attr)}
                     // fill='#eee'
-                    fill='none'
+                    fill='white'
                     // stroke={favorPD ? "#98E090" : "#FF772D"}
                     stroke={favorPD ? this.pdColor[1] : this.pdColor[0]}
                     strokeWidth={3}
@@ -814,20 +828,7 @@ export default class Itemset extends React.Component<Props, State>{
                     // fill={favorPD ? "#98E090" : "#FF772D"} 
                     fill={favorPD ? this.pdColor[1] : this.pdColor[0]}
                     opacity={opacity}
-                    // tslint:disable-next-line:jsx-no-lambda
-                    onMouseEnter={() => {
-                        if(!this.expandedFlag){
-                            this.enterRect(listNum)
-                        }
-                    }
-                    }
-                    // tslint:disable-next-line:jsx-no-lambda
-                    onMouseLeave={() => {
-                        if(!this.expandedFlag){
-                            this.leaveRect()
-                        }
-                    }
-                    }
+                   
                 />
                 <g className='range_label' 
                 style={{fontSize:11, fill: '#555'}}

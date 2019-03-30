@@ -35,13 +35,13 @@ export interface rules{
 
 export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
-    public leftStart = 20 ; 
+    public leftStart = 100 ; 
     // right end position
     rightEnd = window.innerWidth * 0.15; 
     // bottom end position
-    bottomEnd = 120; 
+    bottomEnd = 140; 
     // top start position 
-    topStart = 40 ;
+    topStart = 30 ;
     // a standard reference length
     markSize = 14; 
     // interval of different models' view
@@ -592,17 +592,31 @@ export default class Overview extends React.Component<Props,State>{
                 .style('font-size', this.fontSize+'px')
 
             axisLabel.append('text')
-            .attr('x', this.rightEnd - this.leftStart*1.5)
-            .attr('y', 39)
-            .text(`favor ${this.props.protectedVal}`)
+            .attr('x', this.rightEnd)
+            .attr('y', -this.bottomEnd+this.topStart)
+            // .attr('text-achor', 'end')
+            .text(`favor`)
             .style('fill', 'gray')
 
             axisLabel.append('text')
-            .attr('x', 0)
-            .attr('y', 39)
-            .text(`against ${this.props.protectedVal}`)
+            .attr('x', this.rightEnd)
+            .attr('y', -this.bottomEnd+this.topStart+12)
+            // .attr('text-achor', 'end')
+            .text(`${this.props.protectedVal}`)
             .style('fill', 'gray')
-            .style('text-anchor', 'start')
+
+            axisLabel.append('text')
+            .attr('x', this.leftStart)
+            .attr('y', -this.bottomEnd+this.topStart)
+            .text(`against`)
+            .style('fill', 'gray')
+            // .style('text-anchor', 'start')
+
+            axisLabel.append('text')
+            .attr('x', this.leftStart)
+            .attr('y', -this.bottomEnd+this.topStart+12)
+            .text(`${this.props.protectedVal}`)
+            .style('fill', 'gray')
 
             d3.selectAll('#axisOver .tick text').attr('transform','translate(0,9)')
 
