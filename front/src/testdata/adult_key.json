@@ -1,5 +1,29 @@
-[
-    "education_num",
-    "relationship",
-    "hours_per_week"
-]
+{
+    "keyAttrs": [
+        "educational-num",
+        "workclass",
+        "hours-per-week"
+    ],
+    "accuracy": {
+        "svm":0.829,
+        "lr": 0.806,
+        "knn": 0.823,
+        "xgb": 0.833,
+        "dt": 0.811,
+        "rf": 0.823
+    },
+    "causal": [
+        "relationship --> class",
+        "hours-per-week --> class",
+        "gender --> hours-per-week",
+        "age --> educational-num",
+        "age --> hours-per-week",
+        "workclass --> class",
+        "educational-num --> class",
+        "country --> fnlwgt",
+        "hours-per-week --> workclass",
+        "educational-num --> country",
+        "race --> country",
+        "race --> fnlwgt"
+    ]
+}

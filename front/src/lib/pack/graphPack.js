@@ -30,19 +30,22 @@ function Node(circle) {
 
 function sortByAllNeighbors(circleID, graph) {
   var neighbors = graph.neighbors(circleID)
-  return neighbors.length > 0 ?
+  return neighbors? neighbors.length > 0 ?
     neighbors.reduce(
       (acc, cur) => { return acc + graph.edge(cur, circleID).weight }, 0
-    ) : 0
+    ) : 0 : 0
 }
 
 function sortByPackedNeighbors(circleID, graph, packedcircleIDs) {
+  if (!graph.neighbors(circleID)){
+    return 0
+  }
   var neighbors = graph.neighbors(circleID).filter(id => packedcircleIDs.includes(id))
 
-  return neighbors.length > 0 ?
+  return neighbors? neighbors.length > 0  ?
     neighbors.reduce(
       (acc, cur) => { return acc + graph.edge(cur, circleID).weight }, 0
-    ) : 0
+    ) : 0 :0
 }
 
 function sortCircle(circles, graph, packedCircles) {

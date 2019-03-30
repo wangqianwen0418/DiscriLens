@@ -1,0 +1,38 @@
+.glyph .ant-btn {
+    width: 12px !important;
+    padding: 0;
+    font-size: 6px !important;
+    border-radius: 50%;
+    height: 12px !important;
+  }
+
+text.icon{
+  transition: transform 0.2s linear;
+  fill:#c3c3c3;
+}
+
+g.rules g.rule{
+  transition: transform 0.2s linear;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+g.score circle{
+  transform: rotate(-90deg)
+}
+
+.bubblesAgg{
+  transition: transform 0.3s linear;
+}
+
+.itemset{
+  float:left;
+}

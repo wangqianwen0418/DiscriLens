@@ -109,4 +109,9 @@ def modifyConf(rule_file):
 
     rules.to_json(rule_file, orient='records') 
 
-modifyConf('./academic_lr_rules.json')
+
+rule_file = 'academic_lr_rules.json'
+rules = pd.read_json(rule_file)
+for idx, rule in rules.iterrows():
+    rules.at[idx, 'risk_dif'] = -1*rule['risk_dif']
+rules.to_json(rule_file, orient='records')

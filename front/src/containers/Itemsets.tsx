@@ -3,17 +3,23 @@ import { StoreState } from 'types';
 import { connect} from 'react-redux';
 import { ChangeShowAttr,ChangeSelectedBar} from 'actions';
 // import { Dispatch } from 'redux';
-
+export interface rect {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
 export function mapStateToProps(state:StoreState) {
     return {
-        rules: state.rules,
-        samples: state.samples,
         ruleThreshold: state.ruleThreshold,
         keyAttrNum:state.keyAttrNum,
         dragArray: state.dragArray, 
         protectedVal: state.protectedVal,
         showAttrNum: state.showAttrNum,
-        fetchKeyStatus: state.fetchKeyStatus
+        fetchKeyStatus: state.fetchKeyStatus,
+        compareList: state.compareList,
+        compareFlag:state.compareFlag,
+        selectInfo:state.selectInfo,
     };
 }
 
@@ -21,7 +27,7 @@ export function mapDispatchToProps(dispatch: any) {
     return {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
-        onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar))
+        onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
     }
 }
 

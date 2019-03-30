@@ -15,7 +15,7 @@ td, th{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 100px;
+    max-width: 170px;
     padding: 0 10px;
     border:1px solid #d9d9d9;
 }

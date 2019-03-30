@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'components/Side.css'
 
-import {Select,Row, Col, Button} from 'antd';
+import {Select, Col, Button} from 'antd';
 const Option = Select.Option;
 
 export interface Props{
@@ -18,12 +18,13 @@ export interface State{
 }
 
 export default class Side extends React.Component<Props, State>{
+  public height=(window.innerHeight-50)*0.2/3;
   constructor(props: Props) {
     super(props);
     this.state = {
-      dataset_name: 'adult',
-      model_name: 'xgb',
-      protect_attr: 'sex',
+      dataset_name: 'academic',
+      model_name: 'lr',
+      protect_attr: 'gender',
       };
     this.selectDataset = this.selectDataset.bind(this)
     this.selectModel = this.selectModel.bind(this)
@@ -67,38 +68,39 @@ export default class Side extends React.Component<Props, State>{
     this.props.onChange([this.props.ruleThreshold[0], max])
     this.setState({}) // force update
   }
-
+  
   public render(){
-      let { protect_attr, model_name} = this.state
+      let { protect_attr} = this.state
       return <div className='Side'>
-        <Row>
+          <div style={{height:this.height}}>
           <Col span={6}>
-            <h1 className='tool-title'>Data set</h1>
-            <h2 className='tool-title'>Model</h2>
-            <h3 className='tool-title'>Prot Attr</h3>
-          </Col>
-          <Col span={18}>
-            <Select size={'small'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
-                <Option value="academic">academic</Option>
-                <Option value="bank">bank</Option>
-                <Option value="adult">adult</Option>
-            </Select>
-
-            <Select size={'small'} value={model_name} style={{ width: '150px', height: '50%' }} onChange={this.selectModel}>
-                <Option value="lr">lr</Option>
-                <Option value="knn">knn</Option>
-                <Option value="xgb">xgb</Option>
-            </Select>
-
-            <Select size={'small'} value={protect_attr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>
-              <Option value={protect_attr}>{protect_attr}</Option>
-            </Select>
-
+            <text className='tool-title' y={this.height/2} fontSize={12} >Data set</text>
           </Col>
             
-        </Row>
-        <Button type='primary' shape='circle' icon='caret-right' padding-top={5} onClick={this.changeDataSet}/>
-        
+          <Col span={18}>
+            <Select size={'default'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
+                  <Option value="academic">academic</Option>
+                  <Option value="adult">adult</Option>
+              </Select>
+          </Col>
+            
+            
+          </div>
+          <div style={{height:this.height}}>
+            <Col span={6}>
+              <text className='tool-title' y={this.height/2} fontSize={12}>Prot Attr</text>
+            </Col>
+            <Col span={18}>
+              <Select size={'default'} value={protect_attr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>
+                <Option value={protect_attr}>{protect_attr}</Option>
+              </Select>
+            </Col>
+            
+
+          </div>
+          <div style={{height:this.height}}>
+              <Button type='primary' shape='circle' icon='caret-right' padding-top={5} onClick={this.changeDataSet}/>
+            </div>
     </div>
   }
 }

@@ -35,3 +35,8 @@
 g.attrLabel {
 	transition: transform 1s ease-in-out;
 }
+
+.rangeValue{
+	fill: #0e4b8e;
+	text-align: center;
+}

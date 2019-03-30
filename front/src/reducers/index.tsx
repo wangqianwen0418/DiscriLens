@@ -4,7 +4,9 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
   CHANGE_RULE_THRESHOLD,CHANGE_SAMPLES_FETCH_STATUS, 
   CHANGE_RULES_FETCH_STATUS, CHANGE_PROTECTED_ATTR, 
   CHANGE_KEY_FETCH_STATUS, CHANGE_KEY_ATTR, CHANGE_SHOW_ATTRS,
-  CHANGE_XSCALE,CHANGE_SHOW_DATASET, SELBAR} from 'Const';
+  CHANGE_XSCALE,CHANGE_SHOW_DATASET, GENERATE_COMP_SAMPLES,GENERATE_COMP_RULES,
+  FOLDFLAG, SELBAR, TRANS_COMPARE, TRANS_COMPARE_OFFSET,EXPAND_RULE,COMPARE_MODE,
+  OFFSET, UNMATCHED, SELECTION} from 'Const';
 
 import {filterRules} from 'Helpers';
 
@@ -15,6 +17,8 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
     switch (action.type) {
       case GENERATE_SAMPLES:
         return { ...state, samples:action.samples}
+      case GENERATE_COMP_SAMPLES:
+        return { ...state, compSamples:action.compSamples}
       case GENERATE_RULES:
         return { 
           ...state, 
@@ -25,8 +29,18 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
             dragArray.slice(0, keyAttrNum)
           )
         } 
+      case GENERATE_COMP_RULES:
+      return { 
+        ...state, 
+        compAllRules:action.compRules, 
+        compRules: filterRules(
+          action.compRules, 
+          ruleThreshold, 
+          dragArray.slice(0, keyAttrNum)
+        )
+      } 
       case CHANGE_PROTECTED_ATTR:  
-        return { ...state, protectedAttr:action.protectedAttr}
+        return { ...state, protectedAttr:action.protectedAttr, protectedVal: action.protectedVal}
       case CHANGE_SAMPLES_FETCH_STATUS:
         return { ...state, fetchSampleStatus: action.status}
       case CHANGE_RULES_FETCH_STATUS:
@@ -66,6 +80,24 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
         } 
       case CHANGE_XSCALE:
         return {...state, xScaleMax: action.xScaleMax}
+      case FOLDFLAG:
+        return {...state, foldFlag: action.foldFlag}
+      // case ACCURACY:
+      //   return {...state, accuracy:action.accuracy}
+      case TRANS_COMPARE:
+        return {...state, compareList:action.compareList}
+      case TRANS_COMPARE_OFFSET:
+        return {...state,compareOffset:action.compareOffset}
+      case EXPAND_RULE:
+        return {...state,expandRule:action.expandRule}
+      case COMPARE_MODE:
+        return {...state,compareFlag:action.compareFlag}
+      case UNMATCHED:
+        return {...state,unMatchedRules:action.unMatchedRules}
+      case SELECTION:
+      return  {...state,selectInfo:action.selectInfo}
+      case OFFSET:
+        return {...state,offsetLength:action.offsetLength}
       default:
         return state;
     }

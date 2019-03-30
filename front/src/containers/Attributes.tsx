@@ -14,6 +14,8 @@ export function mapStateToProps(state:StoreState) {
         protectedAttr: state.protectedAttr,
         fetchKeyStatus: state.fetchKeyStatus,
         selected_bar: state.selected_bar,
+        offsetLength:state.offsetLength,
+        compFlag: state.compareFlag
     };
 }
 

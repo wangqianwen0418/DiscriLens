@@ -5,6 +5,12 @@ export type GENERATE_SAMPLES = typeof GENERATE_SAMPLES
 export const GENERATE_RULES = 'GENERATE_RULES'
 export type GENERATE_RULES = typeof GENERATE_RULES
 
+export const GENERATE_COMP_SAMPLES = 'GENERATE_COMP_SAMPLES'
+export type GENERATE_COMP_SAMPLES = typeof GENERATE_COMP_SAMPLES
+
+export const GENERATE_COMP_RULES = 'GENERATE_COMP_RULES'
+export type GENERATE_COMP_RULES = typeof GENERATE_COMP_RULES
+
 export const CHANGE_PROTECTED_ATTR = 'CHANGE_PROTECTED_ATTR'
 export type CHANGE_PROTECTED_ATTR = typeof CHANGE_PROTECTED_ATTR
 
@@ -37,3 +43,30 @@ export type CHANGE_XSCALE = typeof CHANGE_XSCALE
 
 export const SELBAR = "SELBAR"
 export type SELBAR = typeof SELBAR
+
+export const FOLDFLAG = "FOLDFALG"
+export type FOLDFLAG = typeof FOLDFLAG
+
+export const ACCURACY = "ACCURACY"
+export type ACCURACY = typeof ACCURACY
+
+export const TRANS_COMPARE = 'TRANS_COMPARE'
+export type TRANS_COMPARE = typeof TRANS_COMPARE
+
+export const TRANS_COMPARE_OFFSET = 'TRANS_COMPARE_OFFSTE'
+export type TRANS_COMPARE_OFFSET = typeof TRANS_COMPARE_OFFSET
+
+export const EXPAND_RULE = 'EXPAND_RULE'
+export type EXPAND_RULE = typeof EXPAND_RULE
+
+export const COMPARE_MODE = 'COMPARE_MODE'
+export type COMPARE_MODE = typeof COMPARE_MODE
+
+export const UNMATCHED = 'UNMATCHED'
+export type UNMATCHED = typeof UNMATCHED
+
+export const SELECTION = 'SELECTION'
+export type SELECTION = typeof SELECTION
+
+export const OFFSET = 'OFFSET'
+export type OFFSET = typeof OFFSET

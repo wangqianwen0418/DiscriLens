@@ -29,13 +29,13 @@ def get_rules(dataset_name, protect_attr='',model_name=None):
 # get_rules('bank','marital=divorced','lr')
 
 
-get_rules('german_credit','gender=female','lr')
-get_rules('german_credit','gender=female','xgb')
-get_rules('german_credit','gender=female','knn')
+# get_rules('german_credit','gender=female','lr')
+# get_rules('german_credit','gender=female','xgb')
+# get_rules('german_credit','gender=female','knn')
 
-get_rules('academic','gender=F','knn') 
+# get_rules('academic','gender=F','knn') 
 get_rules('academic','gender=F','xgb')
-get_rules('academic','gender=F','lr')
+# get_rules('academic','gender=F','lr')
 
 
 

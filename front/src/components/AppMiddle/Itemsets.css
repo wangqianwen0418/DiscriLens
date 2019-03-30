@@ -32,3 +32,11 @@ g.score circle{
 .bubblesAgg{
   transition: transform 0.3s linear;
 }
+
+.lineConnection{
+  transition: transform 0.3s linear;
+}
+
+.itemset{
+  float:left;
+}
