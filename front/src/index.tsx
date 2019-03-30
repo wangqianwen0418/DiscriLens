@@ -20,7 +20,7 @@ let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
+    dataSelect = 0,
     modelSelect = 2,
 
     dataset = dataSets[dataSelect],
@@ -31,7 +31,7 @@ if (TEST){
     let {keyAttrs, accuracy, causal} = require('./testdata/'+dataset+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
-    let protectedVal = rules[0].pd
+    let protectedVal = ''//rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
     let ruleThreshold: [number, number] = [-0.2, 0.2]
 
