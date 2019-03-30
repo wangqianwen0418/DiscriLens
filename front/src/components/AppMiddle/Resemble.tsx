@@ -140,7 +140,6 @@ export default class AppMiddel extends React.Component<Props, State>{
         }
         
         let longStrings:string[] = []
-
         let nodes = <g className='causal nodes'>{
             
             dag.nodes()

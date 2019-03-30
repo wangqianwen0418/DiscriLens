@@ -457,8 +457,8 @@ export default class Overview extends React.Component<Props,State>{
         // initialization state
         let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
         let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
-        if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
-        if(xScaleMax!=this.state.xScaleMax){this.update(xScale,xScaleReverse)}
+        if((this.state.transformXLeft==null)&&(xScaleMax!=-1)){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
+        if((xScaleMax!=this.state.xScaleMax)&&(xScaleMax!=-1)){this.update(xScale,xScaleReverse)}
         // select rule filtering thresholds
         let selectThr = () =>{
 
@@ -474,6 +474,8 @@ export default class Overview extends React.Component<Props,State>{
             let leftArrow = `M 0,${startYRight - 11} h ${-this.fontSize*2.5} l ${-this.fontSize*0.75}, ${this.fontSize*0.55} l ${this.fontSize*0.75}, ${this.fontSize*0.55} h ${this.fontSize*2.5} v ${-this.fontSize*1.1} `
             
             // let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
+            console.log(xScaleReverse(this.state.transformXLeft))
+            console.log((this.props.ruleThreshold[0]))
             return <g>
                  <g id={'rectLeft'} className={'selectThr'}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
