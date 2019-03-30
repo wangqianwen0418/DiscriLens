@@ -474,8 +474,6 @@ export default class Overview extends React.Component<Props,State>{
             let leftArrow = `M 0,${startYRight - 11} h ${-this.fontSize*2.5} l ${-this.fontSize*0.75}, ${this.fontSize*0.55} l ${this.fontSize*0.75}, ${this.fontSize*0.55} h ${this.fontSize*2.5} v ${-this.fontSize*1.1} `
             
             // let leftArrow = `M 0,${startYLeft - 12} h -24 l -6,6 l 6,6 h 24 v -12 `
-            console.log(xScaleReverse(this.state.transformXLeft))
-            console.log((this.props.ruleThreshold[0]))
             return <g>
                  <g id={'rectLeft'} className={'selectThr'}
                  transform={`translate(${this.state.transformXLeft}, 0)`}>
