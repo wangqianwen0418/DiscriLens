@@ -28,7 +28,7 @@ export function mapDispatchToProps(dispatch: any) {
         onChangeShowAttr: (showAttrs: string[])=>dispatch(ChangeShowAttr(showAttrs)),
         // onChangeDragArray: (dragArray: string[])=>(dispatch(ChangeDragArray(dragArray)))
         onChangeSelectedBar: (selected_bar:string[])=>dispatch(ChangeSelectedBar(selected_bar)),
-        onTransCompareList :(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any})=>dispatch(TransCompareList(compareList)),
+        onTransCompareList :(compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any})=>dispatch(TransCompareList(compareList)),
         onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>dispatch(TransExpandRule(expandRule)),
         onChangeOffsetLength:(offsetLength:number)=>{dispatch(ChangeOffestLength(offsetLength))},
     }

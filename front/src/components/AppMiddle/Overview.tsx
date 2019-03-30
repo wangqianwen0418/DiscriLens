@@ -457,8 +457,8 @@ export default class Overview extends React.Component<Props,State>{
         // initialization state
         let leftInit = Math.max(xScale(ruleThreshold[0]),leftStart)
         let rightInit = Math.min(xScale(ruleThreshold[1]),rightEnd)
-        if(this.state.transformXLeft==null){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
-        if(xScaleMax!=this.state.xScaleMax){this.update(xScale,xScaleReverse)}
+        if((this.state.transformXLeft==null)&&(xScaleMax!=-1)){this.initTransformX(leftInit,rightInit,xScale(0),xScale,xScaleReverse)}
+        if((xScaleMax!=this.state.xScaleMax)&&(xScaleMax!=-1)){this.update(xScale,xScaleReverse)}
         // select rule filtering thresholds
         let selectThr = () =>{
 

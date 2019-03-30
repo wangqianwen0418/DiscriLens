@@ -42,7 +42,7 @@ export interface Props {
     barWidth: number,
     offset: number,
     expandRule:{id: number, newAttrs: string[], children: string[]},
-    compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
+    compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any},
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
     onChangeUnMathedRules:(unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]})=>void
     // onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
@@ -103,6 +103,7 @@ export default class Compared extends React.Component<Props, State>{
     // record the max x-value
     xMaxValue = 0;
     // match index
+    matchedIndexCompared:number[] = [];
     matchedIndex:number[] = [];
     unMatchedIndex:number[] = [];
     unMatchedRulesLength:number = 0;
@@ -925,19 +926,29 @@ export default class Compared extends React.Component<Props, State>{
             })}
         </g> 
     }
-    compareTransY(ruleAggs:any,ante:string[]){
+    compareTransY(ruleAggs:any,ante:string[],rule:boolean){
         let matchingFlag:boolean = false,
         matchedRuleAgg:any = null,
-        matchedIndex:number = -1
+        matchedIndex:number = -1,
+        repeatPos:number = -1
 
         ruleAggs.forEach((ruleAgg:any,i:number)=>{
-            if(this.compareString(ruleAgg.antecedent,ante)){
-                matchingFlag = true
-                matchedRuleAgg = ruleAgg
+            if((this.compareString(ruleAgg.antecedent,ante))){
+                
                 matchedIndex = i
+                if(this.matchedIndexCompared.includes(i)){
+                    if((rule==(ruleAgg.nodes[0].rule.risk_dif>0))){
+                        matchingFlag = true
+                        matchedRuleAgg = ruleAgg
+                        repeatPos = this.matchedIndexCompared.indexOf(i)
+                    }
+                }else{
+                    matchingFlag = true
+                    matchedRuleAgg = ruleAgg
+                }
             }
         }) 
-        return {matchingFlag,matchedRuleAgg,matchedIndex}
+        return {matchingFlag,matchedRuleAgg,matchedIndex,repeatPos}
     }
     draw() {
         
@@ -956,14 +967,19 @@ export default class Compared extends React.Component<Props, State>{
 
         let { positiveRuleAgg, negativeRuleAgg } = results
         let ruleAggs = positiveRuleAgg.concat(negativeRuleAgg)
-        console.log(ruleAggs)
         let matchedRect:{rule:RuleAgg[],pos:boolean[]}={rule:[],pos:[]}, //matchedNeg:RuleAgg[] = [],
-        unMatchedRect:{rule:RuleAgg[],pos:boolean[]}={rule:[],pos:[]},//, unMatchedNeg:RuleAgg[] = []
-        matchedIndexCompared:number[] = []
+        unMatchedRect:{rule:RuleAgg[],pos:boolean[]}={rule:[],pos:[]}//, unMatchedNeg:RuleAgg[] = []
+        this.matchedIndexCompared = []
 
         compareList.r.forEach((rule,i)=>{
-            let {matchingFlag,matchedRuleAgg,matchedIndex} = this.compareTransY(ruleAggs,rule.r)
+            let {matchingFlag,matchedRuleAgg,matchedIndex,repeatPos} = this.compareTransY(ruleAggs,rule.r,rule.risk)
             if(matchingFlag){
+                    if(repeatPos!=-1){
+                        matchedRect.rule.splice(repeatPos,1)
+                        matchedRect.pos.splice(repeatPos,1)
+                        this.matchedIndex.splice(repeatPos,1)
+                        this.matchedIndexCompared.splice(repeatPos,1)
+                    }
                     let posFlag = false
                     if(positiveRuleAgg.includes(matchedRuleAgg)){
                         posFlag = true
@@ -974,12 +990,12 @@ export default class Compared extends React.Component<Props, State>{
                     // for compare prime
                     this.matchedIndex.push(i)
                     // for compared
-                    matchedIndexCompared.push(matchedIndex)
+                    this.matchedIndexCompared.push(matchedIndex)
                 }
         })
-
+        
         ruleAggs.forEach((ruleAgg,i)=>{
-            if(!matchedIndexCompared.includes(i)){
+            if(!this.matchedIndexCompared.includes(i)){
                 let posFlag = false
                 if(positiveRuleAgg.includes(ruleAgg)){
                     posFlag = true

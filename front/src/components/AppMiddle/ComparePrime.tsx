@@ -48,7 +48,7 @@ export interface Props {
     compareOffset:{y:number[],index:number[]}
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
-    onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any}) =>void
+    onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any}) =>void
     onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
     onChangeOffsetLength:(offsetLength:number)=>void
 }
@@ -100,7 +100,7 @@ export default class ComparePrime extends React.Component<Props, State>{
 
     // the list recording all rule rect position (left up point)
     yList:{y:number,h:number,r:string[]}[] = []; 
-    compYList :{y:number,h:number,r:string[]}[] = []; 
+    compYList :{y:number,h:number,r:string[],risk:boolean}[] = []; 
     // inital value for rect
     ySumList:number[] = [];
 
@@ -871,7 +871,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             posAveY += this.lineInterval
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
             
-            this.compYList.push({y:compY,h:hPos,r:ruleAgg.antecedent})
+            this.compYList.push({y:compY,h:hPos,r:ruleAgg.antecedent,risk:ruleAgg.nodes[0].rule.risk_dif>0?true:false})
             this.yList.push({y:posAveY,h:hPos,r:ruleAgg.antecedent})
 
         })  
@@ -937,7 +937,7 @@ export default class ComparePrime extends React.Component<Props, State>{
             // negAveY = (negAveY + switchOffset) / 2
             this.yMaxValue = Math.max(this.yMaxValue,offsetY)
 
-            this.compYList.push({y:compY,h:hNeg,r:ruleAgg.antecedent})
+            this.compYList.push({y:compY,h:hNeg,r:ruleAgg.antecedent,risk:ruleAgg.nodes[0].rule.risk_dif>0?true:false})
             this.yList.push({y:negAveY,h:hNeg,r:ruleAgg.antecedent})
         })
 
