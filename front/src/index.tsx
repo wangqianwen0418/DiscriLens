@@ -31,9 +31,9 @@ if (TEST){
     let {keyAttrs, accuracy, causal} = require('./testdata/'+dataset+'_key.json')
     let samples = require('./testdata/'+filename+'_samples.json')
     let rules = require('./testdata/'+filename+'_rules.json')
-    let protectedVal = ''//rules[0].pd
+    let protectedVal = rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
-    let ruleThreshold: [number, number] = [-0.2, 0.2]
+    let ruleThreshold: [number, number] = [-0, 0]
 
     let dragArray = [...Object.keys(samples[0])]
     // remove the attribute 'id' and 'class'
