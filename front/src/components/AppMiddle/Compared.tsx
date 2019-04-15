@@ -41,6 +41,7 @@ export interface Props {
     step: number,
     barWidth: number,
     offset: number,
+    colorMapping:[number,number],
     expandRule:{id: number, newAttrs: string[], children: string[]},
     compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any},
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
@@ -111,7 +112,8 @@ export default class Compared extends React.Component<Props, State>{
     bubblePosition:rect[] =[];
     matchBubblePosition:rect[]=[];
     scoreColor = (score: number) => {
-        let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        let [minScore, maxScore] = this.props.colorMapping//d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        // console.log('2',minScore,maxScore);
         if (score < 0) {
             return d3.interpolateGreens(
                 d3.scaleLinear()

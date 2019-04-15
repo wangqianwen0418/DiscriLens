@@ -9,6 +9,7 @@ import {Col, Row, Switch, Modal, Button,Icon} from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
 import {stringTransfer} from 'Helpers'
+import * as d3 from 'd3';
 // import RadioButton from 'antd/lib/radio/radioButton';
 // import RadioGroup from 'antd/lib/radio/group';
 import "./Resemble.css"
@@ -333,6 +334,17 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
+        // consistant color mapping for compaare model and prime model
+        let [minScoreComp, maxScoreComp] = [0,0]
+        if(this.props.rules.length!=0){
+            [minScoreComp, maxScoreComp] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        }
+        let [minScorePrime, maxScorePrime] = [0,0]
+        if(this.props.compRules){
+            [minScorePrime, maxScorePrime] = d3.extent(this.props.compRules.map(rule => rule.risk_dif))
+        }
+        let minColorMapping = Math.min(minScoreComp,minScorePrime),
+        maxColorMapping = Math.max(maxScoreComp,maxScorePrime)
 
         if(this.props.compareFlag&&!this.state.compareFlag){this.setState({compareFlag:2})}
         else if(!this.props.compareFlag&&this.state.compareFlag){changeView();this.setState({compareFlag:this.state.compareFlag-1})}
@@ -420,13 +432,13 @@ export default class AppMiddel extends React.Component<Props, State>{
                <Row className='modelCompare'>
                 <Col span={4}>
                     <div id='compareLeft'>
-                        <Compared samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={compOffset}/>
+                        <Compared samples={this.props.compSamples} colorMapping={[minColorMapping,maxColorMapping]} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={compOffset}/>
                     </div>
                 </Col>
                 
                 <Col span={20}>
                     <div style={{overflowX:'scroll'}} id='compareRight'>
-                        <ComparePrime samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset}/>
+                        <ComparePrime samples={this.props.samples} colorMapping={[minColorMapping,maxColorMapping]} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset}/>
                     </div>
                 </Col>
                </Row>
