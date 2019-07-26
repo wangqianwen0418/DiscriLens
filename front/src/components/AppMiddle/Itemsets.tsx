@@ -44,6 +44,7 @@ export interface Props {
     offset: number,
     buttonSwitch: boolean,
     selectInfo:{dataset:string,model:string},
+    instanceAggregate: boolean
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
 }
@@ -938,6 +939,7 @@ export default class Itemset extends React.Component<Props, State>{
                             highlightRules={[...highlightRules[ruleAgg.id]] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
+                            instanceAggregate ={this.props.instanceAggregate}
                         />
 
                         // let connectionCurve:any

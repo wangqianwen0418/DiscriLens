@@ -46,6 +46,7 @@ export interface Props {
     compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any},
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
     onChangeUnMathedRules:(unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]})=>void
+    instanceAggregate: boolean
     // onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
 }
 export interface State {
@@ -616,6 +617,7 @@ export default class Compared extends React.Component<Props, State>{
                             highlightRules={this.state.highlightRules[ruleAgg.id] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
+                            instanceAggregate ={this.props.instanceAggregate}
                         />
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){

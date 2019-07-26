@@ -47,6 +47,7 @@ export interface Props {
     compareList:{b2:rect[],r:{y:number,r:string[]}[],p:number,yMax:any},
     compareOffset:{y:number[],index:number[]},
     colorMapping:[number,number],
+    instanceAggregate: boolean
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
     onTransCompareList:(compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any}) =>void
@@ -739,6 +740,7 @@ export default class ComparePrime extends React.Component<Props, State>{
                             highlightRules={this.state.highlightRules[ruleAgg.id] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
+                            instanceAggregate ={this.props.instanceAggregate}
                         />
                         let bubbleLine:any
                         if(bubblePosition.length == this.rulesLength){

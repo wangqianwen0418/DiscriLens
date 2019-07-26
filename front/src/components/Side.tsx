@@ -88,7 +88,7 @@ export default class Side extends React.Component<Props, State>{
           </div>
           <div style={{height:this.height}}>
             <Col span={6}>
-              <text className='tool-title' y={this.height/2} fontSize={12}>Prot Attr</text>
+              <text className='tool-title' y={this.height/2} fontSize={12}>Protected Attribute</text>
             </Col>
             <Col span={18}>
               <Select size={'default'} value={protect_attr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>

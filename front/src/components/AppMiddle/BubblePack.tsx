@@ -23,7 +23,8 @@ export interface Props {
     hoverRule: string,
     highlightRules: string[],
     samples: DataItem[],
-    protectedVal: string
+    protectedVal: string,
+    instanceAggregate: boolean
 }
 export interface State {
 
@@ -114,6 +115,7 @@ export default class Bubble extends React.Component<Props, State>{
         if(
             (nextProps.ruleAgg.id == this.props.ruleAgg.id)
             &&(this.props.hoverRule==nextProps.hoverRule)
+            &&(this.props.instanceAggregate==nextProps.instanceAggregate)
             && (nextProps.highlightRules.length == this.props.highlightRules.length)
             )
         {
@@ -257,7 +259,7 @@ export default class Bubble extends React.Component<Props, State>{
                 // cy={set.y}
                 r={outerCircle.r-0.5*circlePadding}
                 // fill={scoreColor}
-                fill="white"
+                fill= {this.props.instanceAggregate?strokeColor:"white"}
                 // opacity='0.5'
                 stroke={strokeColor}
                 // fill="transparent"
@@ -288,7 +290,7 @@ export default class Bubble extends React.Component<Props, State>{
                     // cx={innerCircle.x} cy={innerCircle.y} 
                     transform={`translate(${innerCircle.x}, ${innerCircle.y})`}
                     r={innerCircle.r*0.8 }
-                    fill={sample.class=="1"?itemColor :'white'}
+                    fill={sample.class=="1"||this.props.instanceAggregate?itemColor :'white'}
                     stroke={itemColor}
                     strokeWidth={strokeWidth}
                     opacity={opacity}
@@ -300,7 +302,7 @@ export default class Bubble extends React.Component<Props, State>{
                     className='inner bubbles'
                     key={id} 
                     id={id}
-                    fill={sample.class=="1"?itemColor :'white'}
+                    fill={sample.class=="1"||this.props.instanceAggregate?itemColor : 'white'}
                     stroke={itemColor}
                     strokeWidth={strokeWidth}
                     width={innerCircle.r* 1.2 }
