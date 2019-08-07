@@ -113,3 +113,6 @@ native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, 
 45222 if instances with unknown values ('?') are removed (train=30162, test=15060)
 in the trainin data, missing records 2399
 in the testing data, missing records 1221
+origin: 
+adult svm across validate accuracy: 0.8066441490458536
+adult svm test accuracy: 0.8052456839309429

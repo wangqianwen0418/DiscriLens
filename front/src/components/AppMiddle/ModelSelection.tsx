@@ -100,7 +100,7 @@ export default class modelSelection extends React.Component<Props,State>{
         else if(dataset=='bank'){
             return ['xgb', 'knn', 'lr']
         }
-        return null
+        else return ['xgb', 'knn', 'lr','rf']
     }
 
     updateModels(){
@@ -127,7 +127,7 @@ export default class modelSelection extends React.Component<Props,State>{
         let xMax = 0, yMax:number[] = []
         let ruleAvailable: boolean = false
         this.models.forEach((model,i)=>{
-                let ruleIn = require('../../testdata/'+ this.props.showDataset + '_' + model + '_rules.json')
+                let ruleIn = require('../../asset/'+ this.props.showDataset + '_' + model + '_rules.json')
                 /**
                  * Processing rules by key attrs
                  *  */ 

@@ -302,9 +302,9 @@ export const ruleAggregateCompare = (rules:Rule[], keyAttrs: string[], samples: 
 // /****
 // * Test 
 // ******/
-// let {keyAttrs} = require('../testdata/academic_lr_key.json'), 
-//     samples:DataItem[] = require('../testdata/academic_lr_samples.json'),
-//     rules:Rule[] = require('../testdata/academic_lr_rules.json')
+// let {keyAttrs} = require('../asset/academic_lr_key.json'), 
+//     samples:DataItem[] = require('../asset/academic_lr_samples.json'),
+//     rules:Rule[] = require('../asset/academic_lr_rules.json')
 
 // keyAttrs = ['StudentAbsenceDays', 'raisedhands', 'Discussion']
 // samples = samples.slice(1000, 2000)

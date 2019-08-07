@@ -18,9 +18,9 @@ const TEST = true
 
 let initState:StoreState
 
-let dataSets = ['adult', 'academic', 'bank'],
+let dataSets = ['adult', 'academic', 'bank','credit'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 1,
+    dataSelect = 3,
     modelSelect = 2,
 
     dataset = dataSets[dataSelect],
@@ -28,9 +28,9 @@ let dataSets = ['adult', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataset + '_' + model
-    let {keyAttrs, accuracy, causal} = require('./testdata/'+dataset+'_key.json')
-    let samples = require('./testdata/'+filename+'_samples.json')
-    let rules = require('./testdata/'+filename+'_rules.json')
+    let {keyAttrs, accuracy, causal} = require('./asset/'+dataset+'_key.json')
+    let samples = require('./asset/'+filename+'_samples.json')
+    let rules = require('./asset/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
     let ruleThreshold: [number, number] = [-0.2, 0.2]

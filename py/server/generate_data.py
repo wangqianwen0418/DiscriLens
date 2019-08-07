@@ -31,7 +31,7 @@ store_path = os.path.join(current_path, '../../front/src/asset/')
 
     
 
-def get_model_predictions(dataset_name='adult', models=['xgb'], protect_attr='', find_key=False):
+def get_model_predictions(dataset_name='adult', models=['xgb'], find_key=False, test=False):
     """
     train model on the training data,
     return the predictions on the testing data
@@ -40,18 +40,18 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], protect_attr='',
     data_path = os.path.join(current_path, data_path)
     mdlp_path = os.path.join(data_path, '{}_mdlp.pkl'.format(dataset_name))
     train_data_path = os.path.join( data_path, '{}.data.csv'.format(dataset_name, dataset_name) )
-    test_data_path = os.path.join( data_path,'{}.test.csv'.format(dataset_name, dataset_name) )
+    
 
     train_data = pd.read_csv(train_data_path)
-    test_data = pd.read_csv(test_data_path)
+    
     
     mdlp = num2cate_fit(train_data, 2)
 
     if find_key:
         # find key_attrs
-        key_attrs = findKeyAttrs(num2cate_transform(data, mdlp))
-        f = open(store_path + '{}_key.json'.format(dataset_name),'w')
-        json.dump(key_attrs, f)
+        key_attrs = findKeyAttrs(num2cate_transform(train_data, mdlp))
+        with open(store_path + '{}_key.json'.format(dataset_name),'w') as f:
+            json.dump({"keyAttrs":key_attrs}, f)
 
     #  save mdlp
     f=open(mdlp_path, 'wb')
@@ -65,7 +65,7 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], protect_attr='',
     
         # train model
         model, encoder, score = model_gene.fit_model( num2cate_transform(train_data, mdlp) )
-        model_path = os.path.join(current_path, './cache/models/model_{}_{}.pkl'.format(model_name, dataset_name))
+        model_path = os.path.join(data_path, './model_{}_{}.pkl'.format(model_name, dataset_name))
         f = open(model_path, 'wb')    
         pickle.dump(model, f) 
 
@@ -85,27 +85,47 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], protect_attr='',
         samples_path = os.path.join(store_path, '{}_samples.json'.format(data_model))
         dataOut.to_json(samples_path, orient='records')
         # dataOut.to_csv(samples_path, index=False)
-        
-        ###################################
-        # save model prediction on test data
-        test_ = test_data.drop(test_data.columns[-1], axis=1)
-        num_samples, cate_samples = generate_model_samples(test_, mdlp, model, encoder) 
-        
-        # add the ID col 
-        cate_samples.insert(loc=0, column='id', value= cate_samples.index)
-        num_samples.insert(loc=0, column='id', value= num_samples.index)
-        
-        # save mdeol & samples to cache
-        dataOut = pd.concat([num_samples,cate_samples])
-        
-        samples_path = os.path.join(store_path, '{}_test_samples.json'.format(data_model))
-        dataOut.to_json(samples_path, orient='records')
-        # dataOut.to_csv(samples_path, index=False)
+        print(dataset_name + ' ' + model_name + ' across validate accuracy: ' + str(score))
 
-        test_score = accuracy_score(test_data['class'].values, num_samples['class'].values)
+        # write the accuracy score
+        with open(store_path + '{}_key.json'.format(dataset_name),'r+') as f:
+            jsondata = json.load(f)
+        if not 'accuracy' in jsondata:
+            jsondata['accuracy']={}
+        jsondata['accuracy'][model_name]=score
+        with open(store_path + '{}_key.json'.format(dataset_name),'w') as f:
+            json.dump(jsondata,f)
+
         
-        print(dataset_name + ' ' + model_name + 'across validate accuracy: ' + str(score))
-        print(dataset_name + ' ' + model_name + 'test accuracy: ' + str(test_score))
+        if test:
+            ###################################
+            # save model prediction on test data
+            test_data_path = os.path.join( data_path,'{}.test.csv'.format(dataset_name, dataset_name) )
+            test_data = pd.read_csv(test_data_path)
+            test_ = test_data.drop(test_data.columns[-1], axis=1)
+            num_samples, cate_samples = generate_model_samples(test_, mdlp, model, encoder) 
+            
+            # add the ID col 
+            cate_samples.insert(loc=0, column='id', value= cate_samples.index)
+            num_samples.insert(loc=0, column='id', value= num_samples.index)
+            
+            # save mdeol & samples to cache
+            dataOut = pd.concat([num_samples,cate_samples])
+            
+            samples_path = os.path.join(store_path, '{}_test_samples.json'.format(data_model))
+            dataOut.to_json(samples_path, orient='records')
+            # dataOut.to_csv(samples_path, index=False)
+
+            test_score = accuracy_score(test_data['class'].values, num_samples['class'].values)
+            
+            
+            print(dataset_name + ' ' + model_name + ' test accuracy: ' + str(test_score))
+            # write the accuracy score
+            with open(store_path + '{}_key.json'.format(dataset_name),'r+') as f:
+                jsondata = json.load(f)
+            jsondata['accuracy'][model_name]=test_score
+            with open(store_path + '{}_key.json'.format(dataset_name),'w') as f:
+                json.dump(jsondata,f)
         
     print(dataset_name + 'model training and test, all done')
     
@@ -134,7 +154,7 @@ def get_all_rules(protect, models=['xgb','knn','lr'], dataset='adult'):
         # add item id to rules
         def item_within_rule(item, rule_context):
             for attr_val in rule_context:
-                attr, val = attr_val.split('=')
+                attr, val = attr_val.split('=',1)
                 if not item[attr] == val :
                     return False
             return True
@@ -151,10 +171,10 @@ def get_all_rules(protect, models=['xgb','knn','lr'], dataset='adult'):
 
 
 #%%
-models =['svm']
+models =['knn']
 dataset = 'adult'
-get_model_predictions(dataset, models)
-# get_all_rules('sex=Female', models, dataset)
+get_model_predictions(dataset, models, find_key=True)
+get_all_rules('sex=female', models, dataset)
 
 
 #%%

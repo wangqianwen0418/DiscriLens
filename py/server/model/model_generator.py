@@ -73,6 +73,7 @@ class ModelGene(object):
             "credit_knn":knn,
             "credit_xgb": xgb,
             "credit_lr": lr,
+            "credit_svm":svm,
 
             # the academic model is based https://www.kaggle.com/harunshimanto/student-s-academic-performance-with-ml-eda
             "academic_xgb": xgb,
