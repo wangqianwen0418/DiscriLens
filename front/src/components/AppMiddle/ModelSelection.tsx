@@ -13,7 +13,7 @@ export interface Props{
     accuracy:{[key:string]:number},
     compareFlag:boolean,
     divideNum:number,
-    // ruleThreshold:number[],
+    ruleThreshold:number[],
     selectInfo:{dataset:string,model:string},
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
@@ -64,7 +64,7 @@ export default class modelSelection extends React.Component<Props,State>{
             fold: false,
             dataSet: null,
             selectionCurves: [],
-            selectedModel: 2,
+            selectedModel: 0,
             selectedCompModel: -1,
             compareFlag:false,
         }
@@ -87,18 +87,21 @@ export default class modelSelection extends React.Component<Props,State>{
 
     getModel(dataset:string){
         if(dataset=='academic'){
-            // return ['xgb', 'rf', 'lr', 'dt', 'svm', 'knn']
+            return ['xgb', 'rf', 'lr', 'dt', 'svm', 'knn']
             // return ['knn_post00', 'knn', 'knn_post0','dt_post0','dt', 'dt_post00']
-            return ['xgb','knn','rf','rf_post0', 'rf_post00', 'rf_post3']
+            // return ['xgb','knn','rf','rf_post0', 'rf_post00', 'rf_post3']
             // return ['xgb', 'rf_post3', 'rf_post21','rf_post0','rf', 'dt']
             // return ['knn_post2', 'knn', 'knn_post0','rf','rf_post1','rf_post2','rf_post3']
         }
         else if(dataset=='adult'){
             // return ['xgb', 'knn', 'lr','svm','rf', 'dt']
-            return ['xgb', 'knn', 'lr','svm','rf', 'dt']
+            return ['xgb', 'lr','svm','rf', 'dt']
         }
         else if(dataset=='bank'){
             return ['xgb', 'knn', 'lr']
+        }
+        else if(dataset=='credit'){
+            return ['xgb', 'knn', 'lr','svm','dt']
         }
         else return ['xgb', 'knn', 'lr','rf']
     }
@@ -229,23 +232,6 @@ export default class modelSelection extends React.Component<Props,State>{
                     this.setState({compareFlag:newState})
                 }
 
-                // let changeCompModel = () =>{
-                //     if(i!=selectedModel){
-                //         if(selectedCompModel==i){
-                //             if(this.props.compareFlag){
-                //                 this.props.onChangeCompareMode(false)
-                //             }
-                //             this.setState({selectedCompModel:-1})
-                //         }else{
-                //             if(!this.props.compareFlag){
-                //                 this.props.onChangeCompareMode(true)
-                //             }
-                //             this.props.onChangeCompModel(this.props.showDataset,model)
-                //             this.setState({selectedCompModel:i})
-                //         }
-                //     }
-                // }
-
                 let startY = 0
                 axis.push(xScale)
                 let widthText = 0
@@ -274,7 +260,7 @@ export default class modelSelection extends React.Component<Props,State>{
                     <g>
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
-                                let opacity = 1
+                                let opacity = Math.abs(data.x)>this.props.ruleThreshold[1]? 1:0.1
                                 // if(data.x<this.props.ruleThreshold[0]){
                                 //     opacity = 1
                                 // }else if((data.x>this.props.ruleThreshold[1])){

@@ -12,6 +12,7 @@ export function mapStateToProps(state:StoreState) {
         accuracy: state.accuracy,
         compareFlag:state.compareFlag,
         selectInfo:state.selectInfo,
+        ruleThreshold: state.ruleThreshold
     };
 }
 

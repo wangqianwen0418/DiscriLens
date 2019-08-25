@@ -23,7 +23,7 @@ export default class Side extends React.Component<Props, State>{
     super(props);
     this.state = {
       dataset_name: 'academic',
-      model_name: 'lr',
+      model_name: 'xgb',
       protect_attr: 'gender',
       };
     this.selectDataset = this.selectDataset.bind(this)
@@ -38,7 +38,8 @@ export default class Side extends React.Component<Props, State>{
   selectDataset(e:string){
     this.setState({dataset_name: e})
     switch(e){
-      case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'lr'});break}
+      case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'xgb'});break}
+      case 'credit': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
       case 'bank': {this.setState({protect_attr:'maritary'});this.setState({model_name:'xgb'});break}
       case 'adult': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
     }
@@ -81,6 +82,7 @@ export default class Side extends React.Component<Props, State>{
             <Select size={'default'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                   <Option value="academic">academic</Option>
                   <Option value="adult">adult</Option>
+                  <Option value="credit">credit</Option>
               </Select>
           </Col>
             

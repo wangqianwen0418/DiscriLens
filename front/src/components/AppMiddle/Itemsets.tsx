@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
-import { Icon } from 'antd';
+import { Icon, Tooltip } from 'antd';
 import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, boundaryColor} from 'Helpers';
 import * as d3 from 'd3';
 
@@ -317,104 +317,57 @@ export default class Itemset extends React.Component<Props, State>{
             }
             }
         >
-            <g
-                className="score"
-                transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
-            // //tslint:disable-next-line:jsx-no-lambda
-            // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
-            // // tslint:disable-next-line:jsx-no-lambda
-            // onMouseLeave={()=> this.setState({highlightRule:''})}
-            >
+            <Tooltip title={`${rule.conf_pd.toFixed(2)}-${rule.conf_pnd.toFixed(2)}=${rule.risk_dif.toFixed(2)}`}>
+                <g
+                    className="score"
+                    transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
+                >
 
-                <path
-                    className="background in"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                    fill="#eee"
-                    // stroke="transparent"
-                />
+                    <path
+                        className="background in"
+                        d={innerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2
+                        })}
+                        fill="#eee"
+                        // stroke="transparent"
+                    />
 
-                <path
-                    className="in bar"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2 * (Math.min(rule.conf_pd, 0.999))
-                    })}
-                    // fill={this.pdColor[1]}
-                    fill={this.scoreColor(this.props.ruleThreshold[1]||0.001)}
-                    // stroke="white"
-                />
-                {/* <path
-                    className="out bar"
-                    d={outerArc({
-                        startAngle: Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pd
-                    })}
-                    // fill="#FF9F1E"
-                    fill="url(#negativeGradient)"
-                /> */}
-                {/* <g className='in gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={innerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 50),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
-                                })}
-                                fill={this.scoreColor((i + 1) / 50)}
-                            />
+                    <path
+                        className="in bar"
+                        d={innerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2 * (Math.min(rule.conf_pd, 0.999))
                         })}
-                </g> */}
-                <path
-                    className="background out"
-                    fill='#eee'
-                    // stroke="transparent"
-                    d={outerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                />
-                {/* <path
-                    className="in conf bar"
-                    fill="#98E090"
-                    d = {innerArc({
-                        startAngle:Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pnd
-                    })}
-                /> */}
-                <path
-                    className="out conf bar"
-                    // fill={d3.interpolateGreens(0.2)}
-                    // fill={this.pdColor[0]}
-                    fill={this.scoreColor(this.props.ruleThreshold[0]||-0.001)}
-                    d={outerArc({
-                        startAngle: 0,
-                        // endAngle: Math.PI * 2 * rule.conf_pnd
-                        endAngle: Math.PI * 2 *(Math.min(rule.conf_pnd, 0.999))
-                    })}
-                    // stroke="white"
-                />
-                {/* <g className='out gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={outerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 360),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
-                                })}
-                                fill={this.scoreColor(-(i+1)/360)}
-                            />
-                        })}
-                </g> */}
+                        // fill={this.pdColor[1]}
+                        fill={this.scoreColor(this.props.ruleThreshold[1]||0.001)}
+                        // stroke="white"
+                    />
                 
-                {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
+                    <path
+                        className="background out"
+                        fill='#eee'
+                        // stroke="transparent"
+                        d={outerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2
+                        })}
+                    />
+                    <path
+                        className="out conf bar"
+                        // fill={d3.interpolateGreens(0.2)}
+                        // fill={this.pdColor[0]}
+                        fill={this.scoreColor(this.props.ruleThreshold[0]||-0.001)}
+                        d={outerArc({
+                            startAngle: 0,
+                            // endAngle: Math.PI * 2 * rule.conf_pnd
+                            endAngle: Math.PI * 2 *(Math.min(rule.conf_pnd, 0.999))
+                        })}
+                        // stroke="white"
+                    />
+                </g>
 
-                {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
-                    {rule.risk_dif.toFixed(2).replace('0.', '.')}
-                </text> */}
-            </g>
+            </Tooltip>
             <text fontSize={this.fontSize} y={this.lineInterval-2} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
