@@ -11,6 +11,7 @@
 .ipynb_checkpoints/
 myenv/
 *.log
+*.pkl
 __pycache__/
 package-lock.json
 # cache/

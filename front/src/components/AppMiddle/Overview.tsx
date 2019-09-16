@@ -35,7 +35,7 @@ export interface rules{
 
 export default class Overview extends React.Component<Props,State>{
     // left start position of svg elements
-    public leftStart = 100 ; 
+    public leftStart = 20 ; 
     // right end position
     rightEnd = window.innerWidth * 0.15; 
     // bottom end position

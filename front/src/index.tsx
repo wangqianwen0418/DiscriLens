@@ -20,8 +20,8 @@ let initState:StoreState
 
 let dataSets = ['adult', 'academic', 'bank','credit'],
     models = ['xgb', 'knn', 'lr'],
-    dataSelect = 0,
-    modelSelect = 0,
+    dataSelect = 1,
+    modelSelect = 2,
 
     dataset = dataSets[dataSelect],
     model = models[modelSelect]
@@ -33,7 +33,7 @@ if (TEST){
     let rules = require('./asset/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
-    let ruleThreshold: [number, number] = [-0.25, 0.245]
+    let ruleThreshold: [number, number] = [-0.25, 0.248]
 
     let dragArray = [...Object.keys(samples[0])]
     // remove the attribute 'id' and 'class'

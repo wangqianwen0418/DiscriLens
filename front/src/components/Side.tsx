@@ -82,7 +82,7 @@ export default class Side extends React.Component<Props, State>{
             <Select size={'default'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                   <Option value="academic">academic</Option>
                   <Option value="adult">adult</Option>
-                  <Option value="credit">credit</Option>
+                  {/* <Option value="credit">credit</Option> */}
               </Select>
           </Col>
             

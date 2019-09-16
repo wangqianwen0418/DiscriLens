@@ -405,7 +405,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                         onClick={e=>this.setState({causalVisible:true})}
                     /> */}
                 </div>
-               <div style={{width: "100%", height: "90%",overflow: "auto"}}>
+               <div style={{width: "100%", height: "100%",overflow: "auto"}}>
                     <Itemsets 
                         buttonSwitch={!this.state.rippleCompact} 
                         samples={this.props.samples} 

@@ -277,7 +277,7 @@ export default class modelSelection extends React.Component<Props,State>{
                         <rect rx={3} ry={3} x={rectX} y={rectY} width={widthText+10} height={20} 
                             style={{fill:'transparent',stroke:lineColor,strokeWidth:1}}
                             onClick={changeModel} cursor={'pointer'}/>
-                        <text fill={'#0e4b8e'} x={this.rightEnd*1.05} y={startY - 0.15*intervalHeight}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
+                        <text fill={'#0e4b8e'} x={this.rightEnd} y={startY - 0.15*intervalHeight}>{'acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
                     </g>
                 </g>
             })
@@ -321,8 +321,9 @@ export default class modelSelection extends React.Component<Props,State>{
         // a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR}
         let borderLine = `M${0},${this.topStart}
         v${this.bottomEnd/2-buttonHeight/8*5} l${buttonWidth*3},${buttonHeight/8} v${buttonHeight}
-        l${-buttonWidth*3},${buttonHeight/8} v${this.bottomEnd/2-buttonHeight/8*5}
-        `
+        l${-buttonWidth*3},${buttonHeight/8} 
+        v${this.bottomEnd/2-buttonHeight/8*5}`
+        
         // mask
         let mask = `M${1.5*buttonWidth},${this.topStart+this.bottomEnd/2-buttonHeight/8*5} v${buttonHeight}`
         return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${0})`}>

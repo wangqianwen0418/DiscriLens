@@ -27,6 +27,7 @@ from itertools import chain
 current_path = os.path.dirname(os.path.realpath(__file__))
 store_path = os.path.join(current_path, '../../front/src/asset/')
 
+data_path = os.path.join(current_path, '../data/')
 
 
     
@@ -36,10 +37,9 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], find_key=False, 
     train model on the training data,
     return the predictions on the testing data
     """
-    data_path = '../data/{}/'.format(dataset_name)
-    data_path = os.path.join(current_path, data_path)
-    mdlp_path = os.path.join(data_path, '{}_mdlp.pkl'.format(dataset_name))
-    train_data_path = os.path.join( data_path, '{}.data.csv'.format(dataset_name, dataset_name) )
+    dataset_path = os.path.join(data_path, '{}/'.format(dataset_name))
+    mdlp_path = os.path.join(dataset_path, '{}_mdlp.pkl'.format(dataset_name))
+    train_data_path = os.path.join( dataset_path, '{}.data.csv'.format(dataset_name, dataset_name) )
     
 
     train_data = pd.read_csv(train_data_path)
@@ -65,7 +65,7 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], find_key=False, 
     
         # train model
         model, encoder, score = model_gene.fit_model( num2cate_transform(train_data, mdlp) )
-        model_path = os.path.join(data_path, './model_{}_{}.pkl'.format(model_name, dataset_name))
+        model_path = os.path.join(dataset_path, './model_{}_{}.pkl'.format(model_name, dataset_name))
         f = open(model_path, 'wb')    
         pickle.dump(model, f) 
 
@@ -100,7 +100,7 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], find_key=False, 
         if test:
             ###################################
             # save model prediction on test data
-            test_data_path = os.path.join( data_path,'{}.test.csv'.format(dataset_name, dataset_name) )
+            test_data_path = os.path.join( dataset_path,'{}.test.csv'.format(dataset_name, dataset_name) )
             test_data = pd.read_csv(test_data_path)
             test_ = test_data.drop(test_data.columns[-1], axis=1)
             num_samples, cate_samples = generate_model_samples(test_, mdlp, model, encoder) 
@@ -131,10 +131,13 @@ def get_model_predictions(dataset_name='adult', models=['xgb'], find_key=False, 
     
 def get_rules(dataset_name, protect_attr='',model_name=None, min_support = 5):
     
-    model_name = '{}_{}'.format(dataset_name, model_name)
-    sample_path = os.path.join(store_path, '{}_samples.json'.format(model_name))
-    model_samples = pd.read_json(sample_path)
-    model_samples = model_samples.iloc[int(len(model_samples)/2):]
+    if model_name=='origi':
+        model_samples = pd.read_csv
+    else:
+        model_name = '{}_{}'.format(dataset_name, model_name)
+        sample_path = os.path.join(store_path, '{}_samples.json'.format(model_name))
+        model_samples = pd.read_json(sample_path)
+        model_samples = model_samples.iloc[int(len(model_samples)/2):]
     rules = find_rules(model_samples, minimum_support=min_support, min_len=1, protect_attr = protect_attr, target_attr='class', elift_th=[1, 1])
 
     
@@ -171,10 +174,10 @@ def get_all_rules(protect, models=['xgb','knn','lr'], dataset='adult'):
 
 
 #%%
-models =['knn']
-dataset = 'adult'
-get_model_predictions(dataset, models, find_key=True)
-get_all_rules('sex=female', models, dataset)
+models =['lr']
+dataset = 'academic'
+# get_model_predictions(dataset, models, find_key=False)
+get_all_rules('gender=F', models, dataset)
 
 
 #%%
