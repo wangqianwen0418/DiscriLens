@@ -6,12 +6,14 @@
     "@dagrejs/graphlib": "^2.1.4",
     "@data-ui/histogram": "0.0.77",
     "@types/dagre": "^0.7.41",
+    "@types/intro.js": "^2.4.6",
     "antd": "^3.13.0",
     "axios": "^0.18.0",
     "color-interpolate": "^1.0.4",
     "d3": "^5.7.0",
     "dagre": "^0.8.4",
     "draggable": "^4.2.0",
+    "intro.js": "^2.9.3",
     "jquery": "^3.3.1",
     "just-animate": "^2.5.1",
     "react": "^16.7.0",
@@ -31,7 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build":"ode_modules/.bin/react-scripts-ts --max_old_space_size=12096 build",
+    "build": "ode_modules/.bin/react-scripts-ts --max_old_space_size=12096 build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },

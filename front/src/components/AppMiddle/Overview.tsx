@@ -628,7 +628,9 @@ export default class Overview extends React.Component<Props,State>{
     }
 
     render(){
-        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} className='overview'>
+        return <g key={'overviewOut'} ref={this.ref} 
+        transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} 
+        className='overview' data-step='4' data-intro='x axis stands for the risk difference and y axis stands for the size of itemset. Users can move the slider on x axis to change the threshold.'>
                 {this.drawScatter()}
         </g>
         // return <g>

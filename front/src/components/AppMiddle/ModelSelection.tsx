@@ -257,7 +257,7 @@ export default class modelSelection extends React.Component<Props,State>{
                     textColor = '#1890ff'
                 }
 
-                return <g transform={`translate(0,${intervalHeight*(i+1)})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
+                return <g transform={`translate(0,${intervalHeight*(i+1)})`} key={'multi_selection'+String(i)} className={'multi_models'} > 
                     <g>
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
@@ -338,7 +338,7 @@ export default class modelSelection extends React.Component<Props,State>{
         if(this.state.dataSet!=this.props.showDataset){this.updateModels()}
         if(this.props.model==''){this.props.onChangeSelectionInfo(this.props.showDataset,this.models[this.state.selectedModel])}
         let modelSelection = this.modelSelection()
-        return <g key={'overviewOut'} id="overviewOut" ref={this.ref}>
+        return <g key={'overviewOut'} id="overviewOut" ref={this.ref} data-step='3' data-intro='users can compare discriminatory itemsets in different models and choose one or two model for further analysis'>
                 {modelSelection.path}
                 {this.switch(modelSelection.xMax)} 
         </g>

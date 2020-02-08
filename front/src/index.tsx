@@ -13,6 +13,7 @@ import { StoreState, Status} from 'types';
 import {filterRules} from "Helpers";
 
 import 'antd/dist/antd.css';
+import 'intro.js/minified/introjs.min.css';
 
 const TEST = true
 

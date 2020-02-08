@@ -72,7 +72,7 @@ export default class Side extends React.Component<Props, State>{
   
   public render(){
       let { protect_attr} = this.state
-      return <div className='Side'>
+      return <div className='Side' data-step='1' data-intro='choose dataset and protected attribute'>
           <div style={{height:this.height}}>
           <Col span={6}>
             <text className='tool-title' y={this.height/2} fontSize={12} >Data set</text>

@@ -1160,18 +1160,21 @@ export default class Itemset extends React.Component<Props, State>{
         let connectionCurve = this.drawConnection(this)
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
-            
-            <g className='bubbles'>
-                {connectionCurve}
+            <g className='rippleSet' data-step='5' data-intro='RippleSet'>
+                <g className='bubbles'>
+                    {connectionCurve}
+                </g>
+                <g className='bubbles'>
+                    {bubbles}
+                </g>
             </g>
-            <g className='bubbles'>
-                {bubbles}
-            </g>
+            <g className="attribute matrix" data-step='7' data-intro='Each row is a group of individuals. The solid part in the rectangle indicates the range of an attribute.'>
             <g className='positive rules'>
                 {posRules}
             </g>
             <g className='negative rules'>
                 {negaRules}
+            </g>
             </g>
         </g>
     }

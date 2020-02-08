@@ -11,8 +11,8 @@ import {CHANGE_DRAG_ARRAY,GENERATE_SAMPLES,GENERATE_RULES,
 import {filterRules} from 'Helpers';
 
 const reducer = (state: StoreState, action: AllActions): StoreState => {
-  console.info('action',action)
-  console.info('state', state)
+  // console.info('action',action)
+  // console.info('state', state)
     var {ruleThreshold, keyAttrNum, dragArray, allRules} = state
     switch (action.type) {
       case GENERATE_SAMPLES:

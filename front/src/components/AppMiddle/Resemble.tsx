@@ -354,7 +354,7 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
-        let pngLegend = <img src="../legend.png" height="150px"/>
+        let pngLegend = <img src="../tutorials/legend.png" height="150px"/>
 
         // consistant color mapping for compaare model and prime model
         let [minScoreComp, maxScoreComp] = [0,0]
