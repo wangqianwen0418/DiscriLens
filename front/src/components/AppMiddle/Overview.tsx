@@ -561,17 +561,7 @@ export default class Overview extends React.Component<Props,State>{
             </g>
 
     }
-    render(){
-        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} className='overview'>
-                {this.drawScatter()}
-        </g>
-        // return <g>
-        //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
-        //         {this.ruleProcessing().path}
-        //     </g>:<text transform={`translate(0,${this.bottomEnd})`} fontSize={12}>Try different itemsets!</text>}
-        // </g>
-    }
-
+    
     private renderAxis=()=>{
         if(this.state.xScale){
             let axis = d3.axisBottom(this.state.xScale).tickFormat(d3.format('.2f'))
@@ -636,4 +626,17 @@ export default class Overview extends React.Component<Props,State>{
             d3.selectAll('#axisY .tick line').attr('x2','12').attr('transform','translate(-6,0)')
         }
     }
+
+    render(){
+        return <g key={'overviewOut'} ref={this.ref} transform={`translate(${this.props.offset/5-this.leftStart/4*3},0)`} className='overview'>
+                {this.drawScatter()}
+        </g>
+        // return <g>
+        //     {this.ruleProcessing().dataKeyAttr.length>1?<g ref={this.ref}>
+        //         {this.ruleProcessing().path}
+        //     </g>:<text transform={`translate(0,${this.bottomEnd})`} fontSize={12}>Try different itemsets!</text>}
+        // </g>
+    }
+
+    
 }

@@ -31,6 +31,7 @@ import "./Itemsets.css";
 
 export interface Props {
     rules: Rule[],
+    model:string,
     samples: DataItem[],
     ruleThreshold: [number, number],
     keyAttrNum: number,
@@ -1209,6 +1210,9 @@ export default class Compared extends React.Component<Props, State>{
         let borderHeight = document.getElementsByClassName('itemsetCompared').length!=0?Math.max(document.getElementsByClassName('itemsetCompared')[0].clientHeight,svgHeight):'100%'
 
         return (<svg className='itemsetCompared' style={{ width: '100%', height: borderHeight}}>
+            <path d='M36,30 l-6,6'  fill='none' stroke="black" />
+            <path d='M30,30 l6,6' fill='none' stroke="black" />
+            <text x='45' y="37">{this.props.model}</text>
             <g className='rules' key={'compared'}>
                 {content}
             </g>

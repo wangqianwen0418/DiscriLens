@@ -231,12 +231,14 @@ all about compMode
 *****************/ 
 export interface compareMode{
     type:COMPARE_MODE,
+    models:string[],
     compareFlag: boolean
 }
 
-export const changeCompareMode = (compareFlag:boolean):compareMode =>{
+export const changeCompareMode = (compareFlag:boolean, models:string[]):compareMode =>{
     return ({
         type: COMPARE_MODE,
+        models,
         compareFlag
     });
 }
@@ -401,13 +403,15 @@ all about selection
 *****************/ 
 export interface selectionInfo{
     type:SELECTION,
-    selectInfo:{dataset:string,model:string}
+    dataset:string,
+    model:string
 }
 
-export const ChangeSelectionInfo = (selectInfo:{dataset:string,model:string}):selectionInfo =>{
+export const ChangeSelectionInfo = (dataset:string,model:string):selectionInfo =>{
     return ({
         type: SELECTION,
-        selectInfo
+        dataset,
+        model
     });
 }
 /*****************

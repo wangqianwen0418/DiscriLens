@@ -33,6 +33,7 @@ const PIN = <g transform={`scale(0.015) `}>
 
 export interface Props {
     rules: Rule[],
+    model:string,
     samples: DataItem[],
     ruleThreshold: [number, number],
     keyAttrNum: number,
@@ -1195,6 +1196,8 @@ export default class ComparePrime extends React.Component<Props, State>{
             borderWidth='100%'
         }
         return (<svg className='itemsetPrime' style={{ width: borderWidth, height: borderHeight}}>
+            <circle r='4' stroke='black' fill='white' cx='30' cy='33' />
+            <text x='45' y='37'>{this.props.model}</text>
             <g className='rules' >
                 {content}
             </g>

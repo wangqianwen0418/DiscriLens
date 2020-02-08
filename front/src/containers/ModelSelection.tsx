@@ -11,7 +11,8 @@ export function mapStateToProps(state:StoreState) {
         keyAttrNum: state.keyAttrNum,
         accuracy: state.accuracy,
         compareFlag:state.compareFlag,
-        selectInfo:state.selectInfo,
+        model:state.models[0],
+        dataset:state.dataset,
         ruleThreshold: state.ruleThreshold
     };
 }
@@ -22,8 +23,8 @@ export function mapDispatchToProps(dispatch:any) {
         onChangeModel:(dataset:string,model:string)=>{dispatch(switchModel(dataset,model))},
         onChangeCompModel:(dataset:string,model:string)=>{dispatch(switchCompModel(dataset,model))},
         onChangeFoldFlag:(foldFlag:boolean)=>{dispatch(ChangeFoldFlag(foldFlag))},
-        onChangeCompareMode:(compareFlag:boolean)=>{dispatch(changeCompareMode(compareFlag))},
-        onChangeSelectionInfo:(selectInfo:{dataset:string,model:string})=>{dispatch(ChangeSelectionInfo(selectInfo))}
+        onChangeCompareMode:(compareFlag:boolean, models:string[])=>{dispatch(changeCompareMode(compareFlag, models))},
+        onChangeSelectionInfo:(dataset:string,model:string)=>{dispatch(ChangeSelectionInfo(dataset, model))}
     }
 }
 

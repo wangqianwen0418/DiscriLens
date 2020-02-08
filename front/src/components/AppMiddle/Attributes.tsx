@@ -481,6 +481,14 @@ export default class Attributes extends React.Component<Props, State>{
         }
 
         return (<g className='Attributes'>
+            <g className="attr_legend" fill="grey">
+                <rect width='20px' height='10px' fill="rgb(138, 201, 253)" y="20px"/> 
+                <text y="40px" font-size="8">beneficial</text>
+                <text y="50px" font-size="8">class</text>
+                <rect width='20px' height='10px' fill='rgb(206, 230, 253)' y="55px"/>
+                <text y="75px" font-size="8">unbeneficial</text>
+                <text y="85px" font-size="8">class</text>
+            </g>
             {content}
         </g>
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
-import { Icon, Tooltip } from 'antd';
+import { Icon, Tooltip} from 'antd';
 import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, boundaryColor} from 'Helpers';
 import * as d3 from 'd3';
 
@@ -43,7 +43,8 @@ export interface Props {
     barWidth: number,
     offset: number,
     buttonSwitch: boolean,
-    selectInfo:{dataset:string,model:string},
+    dataset:string,
+    model:string,
     instanceAggregate: boolean
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
@@ -56,7 +57,8 @@ export interface State {
     bubblePosition: rect[],
     hoveredBubble:string[],
     pressButton:[string,number],
-    selectInfo:{dataset:string,model:string},
+    dataset:string,
+    model:string,
 }
 export interface ExpandRule {
     id: string,
@@ -163,7 +165,8 @@ export default class Itemset extends React.Component<Props, State>{
             bubblePosition:[],
             hoveredBubble:[],
             pressButton:['',-1],
-            selectInfo:{dataset:'',model:''}
+            dataset:'',
+            model:''
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
@@ -1454,8 +1457,11 @@ export default class Itemset extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        if((this.state.selectInfo.dataset!=this.props.selectInfo.dataset)||(this.state.selectInfo.model!=this.props.selectInfo.model)){
-            this.setState({selectInfo:this.props.selectInfo})
+        if((this.state.dataset!=this.props.dataset)||(this.state.model!=this.props.model)){
+            this.setState({
+                dataset:this.props.dataset,
+                model: this.props.model
+            })
             this.leaveRect()
             this.expandRulesIndex = []
             this.expandedNum = -1
@@ -1491,6 +1497,7 @@ export default class Itemset extends React.Component<Props, State>{
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
         let borderWidth = this.xMaxValue + this.props.offset + 10
+
         return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}

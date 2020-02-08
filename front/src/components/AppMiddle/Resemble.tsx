@@ -6,6 +6,7 @@ import ModelSelection from 'containers/ModelSelection';
 import Compared from 'containers/Compared';
 import ComparePrime from 'containers/ComparePrime'
 import {Col, Row, Switch, Modal, Button,Icon} from 'antd';
+import { Popover } from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
 import {stringTransfer} from 'Helpers'
@@ -20,6 +21,7 @@ import "./Resemble.css"
 export interface Props{
    foldFlag:boolean,
    compSamples:DataItem[],
+   models:string[],
    rules:Rule[],
    samples:DataItem[],
    compRules:Rule[],
@@ -352,6 +354,8 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
+        let pngLegend = <img src="../legend.png" height="150px"/>
+
         // consistant color mapping for compaare model and prime model
         let [minScoreComp, maxScoreComp] = [0,0]
         if(this.props.rules.length!=0){
@@ -384,18 +388,29 @@ export default class AppMiddel extends React.Component<Props, State>{
          <svg className='attribute' style={{width:leftWidth-offset, height: upAppHeight+"%"}}>
                <Attributes step={this.step} barWidth={this.barWidth} offsetX={!this.props.compareFlag?(this.offsetX):(offsetComp-offset/4)} offset={offset} foldFlag={this.props.foldFlag} leftWidth={leftWidth}/>
            </svg>
+
            {!this.props.compareFlag?
            <div className='itemset' style={{width: "100%", height: (100-upAppHeight)+"%"}}>
                 <div style={{position:'absolute',left:switchX}} className='view_controller'>
                     {/* View Mode */}
                     <Switch  style={{float:'left',right:10, top: 6}} onChange={this.toggleCompact} checkedChildren="parallel" unCheckedChildren="compact"/>
                     <Switch  style={{float:'left', top: 6}} onChange={this.toggleAggregate} checkedChildren="aggregate"  unCheckedChildren="instance"/>
-                    <Button 
-                     icon="setting" 
+                    
+                    <Popover content={pngLegend} title="legend">
+                        <Button type="default" size="small"
+                        // style={{position: "absolute", top:"40%", left:"10px"}}
+                        style={{float:'left', top: 6, marginLeft:'6px'}}> 
+                        legend
+                        </Button>
+                    </Popover>
+
+                    {/* <Button 
+                     icon="rollback" 
                     style={{float:'left'}}
+                    size="small"
                     // tslint:disable-next-line:jsx-no-lambda
                     onClick={(e:React.MouseEvent)=>this.setState({causalVisible:true})}
-                    />
+                    /> */}
                     {/* <Icon 
                         type="eye" 
                         style={{width:'2em', height:'2em', float:'left'}}
@@ -422,6 +437,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                 <Col span={4}>
                     <div id='compareLeft'>
                         <Compared 
+                            model={this.props.models[1]}
                             samples={this.props.compSamples} 
                             colorMapping={[minColorMapping,maxColorMapping]} 
                             rules={this.props.compRules} 
@@ -436,6 +452,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                 <Col span={20}>
                     <div style={{overflowX:'scroll'}} id='compareRight'>
                         <ComparePrime 
+                            model={this.props.models[0]}
                             samples={this.props.samples} 
                             colorMapping={[minColorMapping,maxColorMapping]} 
                             rules={this.props.rules} 

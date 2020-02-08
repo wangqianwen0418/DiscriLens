@@ -51,7 +51,7 @@ if (TEST){
 
     initState = {
       dataset, 
-      model,
+      models:[model],
       keyAttrNum: keyAttrs.length, 
       samples,
       allRules: rules,
@@ -77,13 +77,12 @@ if (TEST){
       compareFlag:false,
       causal,
       unMatchedRules:{pos:[],neg:[]},
-      selectInfo : {dataset:'',model:''},
       offsetLength:0,
   }
 }else{
   initState = {
     dataset,
-    model,
+    models:[model],
     keyAttrNum: 0,
     samples: [],
     allRules: [],
@@ -109,7 +108,6 @@ if (TEST){
     compareFlag:false,
     causal: [],
     unMatchedRules:{pos:[],neg:[]},
-    selectInfo:{dataset:'',model:''},
     offsetLength:0,
 }
 }

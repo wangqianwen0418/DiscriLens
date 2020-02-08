@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build":"node --max_old_space_size=12096 node_modules/.bin/react-scripts-ts build",
+    "build":"ode_modules/.bin/react-scripts-ts --max_old_space_size=12096 build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
