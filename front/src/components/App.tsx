@@ -57,7 +57,7 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <p className="App-title">Discrimination in Machine Learning</p>
           <Button type="default" icon="search" onClick={()=>introJs().start()}>
-            Tutorial
+            A Walk-Through Tutorial
           </Button>
         </header>
         <AppMiddle />

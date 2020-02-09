@@ -481,7 +481,7 @@ export default class Attributes extends React.Component<Props, State>{
         }
 
         return (<g className='Attributes' data-step='6' 
-        data-intro='<img width="80px" src="../tutorials/attr_head_legend.png" /><br/>the distribution of data samples on each attribute'>
+        data-intro='<img width="200px" src="../tutorials/attr_head_legend.png" /><br/>This chart shows the distribution of data samples on each attribute. Users can drag and move an attribute. <br/> <img src="../tutorials/label_legend.png" width="100px"/><br/> Users can also click -/+ to collapse/expand an attribute'>
             <g className="attr_legend" fill="grey">
                 <rect width='20px' height='10px' fill="rgb(138, 201, 253)" y="20px"/> 
                 <text y="40px" font-size="8">beneficial</text>
