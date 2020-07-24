@@ -25,11 +25,11 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=
             antecedent (list of string, e.g., [VisITedResources=x>74, NationalITy=Jordan])
             pd (string): e.g., gender=F
             cls (string): e.g., class=M
-            conf_pnd(float): conf(antecedent -> cls)
+            conf_pnd(float): conf(antecedent+pnd -> cls)
             conf_pd(float): conf(antecedent+pd -> cls)
             risk_dif(float): conf_pd - conf_pnd
             elift(float): conf_pd / conf_pnd
-            sup_pnd(int): support(antecedent+cls)
+            sup_pnd(int): support(antecedent+pnd+cls)
             sup_pd(int): support(antecedent+pd+cls)
 
     """
@@ -73,10 +73,10 @@ def find_rules(df, minimum_support, min_len, protect_attr, target_attr, risk_th=
                 risk_dif = float(conf_pd-conf_pnd)
                 elift = float(conf_pd/conf_pnd)
                 if not risk_th[0] <= risk_dif <= risk_th[1]:
-                    if (cls_ == "class=0"):
-                        conf_pd = 1-conf_pd
-                        conf_pnd = 1-conf_pnd
-                        risk_dif = -risk_dif
+                    # if (cls_ == "class=0"):
+                    #     conf_pd = 1-conf_pd
+                    #     conf_pnd = 1-conf_pnd
+                    #     risk_dif = -risk_dif
                     pd_rules.loc[len(pd_rules)] = [all_items, pair.pd, "class=1", conf_pd, conf_pnd, risk_dif, elift, sup_pd, sup_pnd]
     
     pd_rules = pd_rules.sort_values(by=['risk_dif'])

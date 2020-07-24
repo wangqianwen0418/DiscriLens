@@ -13,14 +13,14 @@ export interface Props{
     accuracy:{[key:string]:number},
     compareFlag:boolean,
     divideNum:number,
-    // ruleThreshold:number[],
-    selectInfo:{dataset:string,model:string},
+    ruleThreshold:number[],
+    dataset:string,model:string,
     onChangeXScaleMax:(xScaleMax:number)=>void,
     onChangeModel:(dataset:string,model:string) => void,
     onChangeCompModel:(dataset:string,model:string) => void,
     onChangeFoldFlag:(foldFlag:boolean) => void,
-    onChangeCompareMode:(compareFlag:boolean)=>void,
-    onChangeSelectionInfo:(selectInfo:{dataset:string,model:string})=>void,
+    onChangeCompareMode:(compareFlag:boolean, models:string[])=>void,
+    onChangeSelectionInfo:(dataset:string,model:string)=>void,
 }
 export interface State{
     fold: boolean,
@@ -64,7 +64,7 @@ export default class modelSelection extends React.Component<Props,State>{
             fold: false,
             dataSet: null,
             selectionCurves: [],
-            selectedModel: 2,
+            selectedModel: 0,
             selectedCompModel: -1,
             compareFlag:false,
         }
@@ -89,18 +89,21 @@ export default class modelSelection extends React.Component<Props,State>{
         if(dataset=='academic'){
             return ['xgb', 'rf', 'lr', 'dt', 'svm', 'knn']
             // return ['knn_post00', 'knn', 'knn_post0','dt_post0','dt', 'dt_post00']
-            // return ['rf_post0','rf_post3','rf', 'rf_post00', 'rf_post0','rf_post3','rf', 'rf_post00']
+            // return ['xgb','knn','rf','rf_post0', 'rf_post00', 'rf_post3']
             // return ['xgb', 'rf_post3', 'rf_post21','rf_post0','rf', 'dt']
             // return ['knn_post2', 'knn', 'knn_post0','rf','rf_post1','rf_post2','rf_post3']
         }
         else if(dataset=='adult'){
             // return ['xgb', 'knn', 'lr','svm','rf', 'dt']
-            return ['xgb', 'knn', 'lr','svm','rf', 'dt']
+            return ['xgb', 'lr','svm','rf', 'dt']
         }
         else if(dataset=='bank'){
             return ['xgb', 'knn', 'lr']
         }
-        return null
+        else if(dataset=='credit'){
+            return ['xgb', 'knn', 'lr','svm','dt']
+        }
+        else return ['xgb', 'knn', 'lr','rf']
     }
 
     updateModels(){
@@ -127,7 +130,7 @@ export default class modelSelection extends React.Component<Props,State>{
         let xMax = 0, yMax:number[] = []
         let ruleAvailable: boolean = false
         this.models.forEach((model,i)=>{
-                let ruleIn = require('../../testdata/'+ this.props.showDataset + '_' + model + '_rules.json')
+                let ruleIn = require('../../asset/'+ this.props.showDataset + '_' + model + '_rules.json')
                 /**
                  * Processing rules by key attrs
                  *  */ 
@@ -210,41 +213,25 @@ export default class modelSelection extends React.Component<Props,State>{
                     
                     if(newState){
                         if(i!=selectedModel&&i!=selectedCompModel){
-                            this.props.onChangeCompareMode(true)
+                            
+                            this.props.onChangeCompareMode(true, [this.models[selectedModel], this.models[i]])
                             this.props.onChangeCompModel(this.props.showDataset,model)
                             this.setState({selectedCompModel:i})
                         }
                     }else{
                         if(selectedCompModel!=-1){
-                            this.props.onChangeCompareMode(false)
+                            this.props.onChangeCompareMode(false, [this.models[selectedModel]])
                             // this.props.onChangeCompModel('','')
                             this.setState({selectedCompModel:-1})
                         }
                         if(i!=selectedModel){
                             this.props.onChangeModel(this.props.showDataset,model)
-                            this.props.onChangeSelectionInfo({dataset:this.props.showDataset,model:model})
+                            this.props.onChangeSelectionInfo(this.props.showDataset, model)
                             this.setState({selectedModel:i})
                         }
                     }
                     this.setState({compareFlag:newState})
                 }
-
-                // let changeCompModel = () =>{
-                //     if(i!=selectedModel){
-                //         if(selectedCompModel==i){
-                //             if(this.props.compareFlag){
-                //                 this.props.onChangeCompareMode(false)
-                //             }
-                //             this.setState({selectedCompModel:-1})
-                //         }else{
-                //             if(!this.props.compareFlag){
-                //                 this.props.onChangeCompareMode(true)
-                //             }
-                //             this.props.onChangeCompModel(this.props.showDataset,model)
-                //             this.setState({selectedCompModel:i})
-                //         }
-                //     }
-                // }
 
                 let startY = 0
                 axis.push(xScale)
@@ -270,11 +257,11 @@ export default class modelSelection extends React.Component<Props,State>{
                     textColor = '#1890ff'
                 }
 
-                return <g transform={`translate(0,${intervalHeight*(i+1)})`} key={'multi_selection'+String(i)}id={'multi_models'} > 
+                return <g transform={`translate(0,${intervalHeight*(i+1)})`} key={'multi_selection'+String(i)} className={'multi_models'} > 
                     <g>
                         {dataKeyAttr_new[i].map((data,i)=>{
                                 let color = '#bbb'
-                                let opacity = 1
+                                let opacity = Math.abs(data.x)>this.props.ruleThreshold[1]? 1:0.1
                                 // if(data.x<this.props.ruleThreshold[0]){
                                 //     opacity = 1
                                 // }else if((data.x>this.props.ruleThreshold[1])){
@@ -291,7 +278,7 @@ export default class modelSelection extends React.Component<Props,State>{
                         <rect rx={3} ry={3} x={rectX} y={rectY} width={widthText+10} height={20} 
                             style={{fill:'transparent',stroke:lineColor,strokeWidth:1}}
                             onClick={changeModel} cursor={'pointer'}/>
-                        <text fill={'#0e4b8e'} x={this.rightEnd*1.05} y={startY - 0.15*intervalHeight}>{'Acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
+                        <text fill={'#0e4b8e'} x={this.rightEnd} y={startY - 0.15*intervalHeight}>{'acc:'+(this.props.accuracy[this.models[i]]*100).toFixed(1)+'%'}</text>
                     </g>
                 </g>
             })
@@ -335,8 +322,9 @@ export default class modelSelection extends React.Component<Props,State>{
         // a${cornerR},${cornerR} 0 0 1 ${cornerR},${cornerR}
         let borderLine = `M${0},${this.topStart}
         v${this.bottomEnd/2-buttonHeight/8*5} l${buttonWidth*3},${buttonHeight/8} v${buttonHeight}
-        l${-buttonWidth*3},${buttonHeight/8} v${this.bottomEnd/2-buttonHeight/8*5}
-        `
+        l${-buttonWidth*3},${buttonHeight/8} 
+        v${this.bottomEnd/2-buttonHeight/8*5}`
+        
         // mask
         let mask = `M${1.5*buttonWidth},${this.topStart+this.bottomEnd/2-buttonHeight/8*5} v${buttonHeight}`
         return <g id={'switchOverview'} cursor='pointer' onClick={clickButton}  transform={`translate(${transX},${0})`}>
@@ -348,9 +336,9 @@ export default class modelSelection extends React.Component<Props,State>{
 
     render(){
         if(this.state.dataSet!=this.props.showDataset){this.updateModels()}
-        if(this.props.selectInfo.model==''){this.props.onChangeSelectionInfo({dataset:this.props.showDataset,model:this.models[this.state.selectedModel]})}
+        if(this.props.model==''){this.props.onChangeSelectionInfo(this.props.showDataset,this.models[this.state.selectedModel])}
         let modelSelection = this.modelSelection()
-        return <g key={'overviewOut'} id="overviewOut" ref={this.ref}>
+        return <g key={'overviewOut'} id="overviewOut" ref={this.ref} data-step='3' data-intro='users can compare discriminatory itemsets in different models and choose one or two model for further analysis'>
                 {modelSelection.path}
                 {this.switch(modelSelection.xMax)} 
         </g>

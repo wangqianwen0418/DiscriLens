@@ -23,7 +23,7 @@ export default class Side extends React.Component<Props, State>{
     super(props);
     this.state = {
       dataset_name: 'academic',
-      model_name: 'lr',
+      model_name: 'xgb',
       protect_attr: 'gender',
       };
     this.selectDataset = this.selectDataset.bind(this)
@@ -38,7 +38,8 @@ export default class Side extends React.Component<Props, State>{
   selectDataset(e:string){
     this.setState({dataset_name: e})
     switch(e){
-      case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'lr'});break}
+      case 'academic': {this.setState({protect_attr:'gender'});this.setState({model_name:'xgb'});break}
+      case 'credit': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
       case 'bank': {this.setState({protect_attr:'maritary'});this.setState({model_name:'xgb'});break}
       case 'adult': {this.setState({protect_attr:'sex'});this.setState({model_name:'xgb'});break}
     }
@@ -71,16 +72,17 @@ export default class Side extends React.Component<Props, State>{
   
   public render(){
       let { protect_attr} = this.state
-      return <div className='Side'>
+      return <div className='Side' data-step='1' data-intro='choose dataset and protected attribute'>
           <div style={{height:this.height}}>
           <Col span={6}>
             <text className='tool-title' y={this.height/2} fontSize={12} >Data set</text>
           </Col>
             
           <Col span={18}>
-            <Select size={'default'} defaultValue='adult' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
+            <Select size={'default'} defaultValue='academic' style={{ width: '150px', height: '50%'}} onChange={this.selectDataset}>
                   <Option value="academic">academic</Option>
                   <Option value="adult">adult</Option>
+                  {/* <Option value="credit">credit</Option> */}
               </Select>
           </Col>
             
@@ -88,7 +90,7 @@ export default class Side extends React.Component<Props, State>{
           </div>
           <div style={{height:this.height}}>
             <Col span={6}>
-              <text className='tool-title' y={this.height/2} fontSize={12}>Prot Attr</text>
+              <text className='tool-title' y={this.height/2} fontSize={12}>Protected Attribute</text>
             </Col>
             <Col span={18}>
               <Select size={'default'} value={protect_attr} style={{ width: '150px', height: '50%' }} onChange={this.selectProtectAttr}>

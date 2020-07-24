@@ -6,9 +6,11 @@ import ModelSelection from 'containers/ModelSelection';
 import Compared from 'containers/Compared';
 import ComparePrime from 'containers/ComparePrime'
 import {Col, Row, Switch, Modal, Button,Icon} from 'antd';
+import { Popover } from 'antd';
 import {DataItem,Rule} from 'types';
 import * as dagre from 'dagre';
 import {stringTransfer} from 'Helpers'
+import * as d3 from 'd3';
 // import RadioButton from 'antd/lib/radio/radioButton';
 // import RadioGroup from 'antd/lib/radio/group';
 import "./Resemble.css"
@@ -19,6 +21,7 @@ import "./Resemble.css"
 export interface Props{
    foldFlag:boolean,
    compSamples:DataItem[],
+   models:string[],
    rules:Rule[],
    samples:DataItem[],
    compRules:Rule[],
@@ -37,7 +40,9 @@ export interface State {
     selectedModel:string
     selectedCompareModel:string
     compareFlag:number
-    rightBorder:boolean
+    rightBorder:boolean,
+    rippleCompact: boolean, // switch bettwen compact and parallel mode
+    instanceAggregate: boolean // swithch bettwen instance and aggreate
 }
 
 export interface Point{
@@ -49,18 +54,21 @@ export default class AppMiddel extends React.Component<Props, State>{
     public step = 120;
     barWidth = this.step * 0.9;
     offsetX=50;
-    viewSwitch = true;
     // divide number for curve
     divideNum = 10;
     constructor(props:Props){
         super(props)
+        this.toggleCompact = this.toggleCompact.bind(this)
+        this.toggleAggregate = this.toggleAggregate.bind(this)
         this.state={
             causalVisible: false,
             selectionRect: ['',0,0,0],
             selectedCompareModel:'',
             selectedModel:'',
             compareFlag:0,
-            rightBorder:false
+            rightBorder:false,
+            rippleCompact: false,
+            instanceAggregate: false
         }
     }
     
@@ -164,7 +172,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                     rectHeight = 1.5 * rectHeight
                     textFront = content.slice(0,Math.floor(content.length/2))
                     textEnd = content.slice(Math.floor(content.length/2),content.length)
-                    content = [textFront,textEnd]
+                    content = textFront+textEnd
                     multiFlag = true
                 }
                 let chooseKey=()=>{
@@ -281,12 +289,25 @@ export default class AppMiddel extends React.Component<Props, State>{
         return {nodes, edges, width, height}
     }
 
+    toggleCompact=()=>{
+        // this.viewSwitch = !this.viewSwitch
+        // this.setState({})
+        let {rippleCompact} = this.state
+        rippleCompact = ! rippleCompact
+        this.setState({rippleCompact})
+    }
+
+    toggleAggregate=()=>{
+        // this.viewSwitch = !this.viewSwitch
+        // this.setState({})
+        let {instanceAggregate} = this.state
+        instanceAggregate = ! instanceAggregate
+        this.setState({instanceAggregate})
+    }
+
+
     render(){
         let {nodes, edges, width, height} = this.drawGraph(this.props.causal)
-        let changeView=()=>{
-            this.viewSwitch = !this.viewSwitch
-            this.setState({})
-        }
         let switchX = this.props.foldFlag?window.innerWidth/4:window.innerWidth/5
         // alignment distance setting
         let leftWidth = window.innerWidth
@@ -333,52 +354,27 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
+        let pngLegend = <img src="../tutorials/pop_legend.png" height="150px"/>
+
+        // consistant color mapping for compaare model and prime model
+        let [minScoreComp, maxScoreComp] = [0,0]
+        if(this.props.rules.length!=0){
+            [minScoreComp, maxScoreComp] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        }
+        let [minScorePrime, maxScorePrime] = [0,0]
+        if(this.props.compRules){
+            [minScorePrime, maxScorePrime] = d3.extent(this.props.compRules.map(rule => rule.risk_dif))
+        }
+        let minColorMapping = Math.min(minScoreComp,minScorePrime),
+        maxColorMapping = Math.max(maxScoreComp,maxScorePrime)
 
         if(this.props.compareFlag&&!this.state.compareFlag){this.setState({compareFlag:2})}
-        else if(!this.props.compareFlag&&this.state.compareFlag){changeView();this.setState({compareFlag:this.state.compareFlag-1})}
+        else if(!this.props.compareFlag&&this.state.compareFlag){this.toggleCompact();this.setState({compareFlag:this.state.compareFlag-1})}
         
         return <Row className='App-middle'>
 
          <Col span={this.props.foldFlag?1:4} className='App-left' id='App-left' style={{height:"100%"}}>
-           {/* <RadioGroup size='small' defaultValue={'lr'} >
-           {this.props.foldFlag?null:this.getModel(this.props.showDataset).map((model,i)=>{
-               let {selectedCompareModel} = this.state
-               let changeModel = () => {
-                        if(model!=selectedCompareModel){
-                            this.props.onChangeModel(this.props.showDataset,model)
-                            this.setState({selectedModel:model})
-                        }
-                    } */}
-
-                {// let changeCompModel = () =>
-                //         if(model!=selectedModel){
-                //             if(selectedCompareModel==model){
-                //                 if(this.props.compareFlag){
-                //                     this.props.onChangeCompareMode(false)
-                //                 }
-                //                 this.setState({selectedCompareModel:'none'})
-                //             }else{
-                //                 if(!this.props.compareFlag){
-                //                     this.props.onChangeCompareMode(true)
-                //                 }
-                //                 this.props.onChangeCompModel(this.props.showDataset,model)
-                //                 this.setState({selectedCompareModel:model})
-                //             }
-                //         }
-                //     }
-        //         let bottomEnd = (window.innerHeight-50) * 0.8
-        //         let rightEnd = window.innerWidth * 0.1
-        //         let intervalHeight = (bottomEnd-20) / this.getModel(this.props.showDataset).length
-        //         let offsetText = 0
-        //         if(document.getElementById(`buttonText${model}`)){
-        //             offsetText = document.getElementById(`buttonText${model}`).getClientRects()[0].width/2
-        //         }
-        //        return <div id={'buttonText'+model}style={{position:'absolute',left:rightEnd*1.25-offsetText,top:intervalHeight*(i+0.35)}}>
-        //        <RadioButton  value={model} onChange={changeModel} >{model}</RadioButton>
-        //        </div>
-        //    })}
-        //   </RadioGroup>
-                }
+           
            <svg className='modelSelection' style={{width:"100%", height:"100%"}}>
               <ModelSelection divideNum={this.divideNum}/>
            </svg>
@@ -386,23 +382,35 @@ export default class AppMiddel extends React.Component<Props, State>{
 
          <Col span={leftAppSpan} className='App-right' style={{height:"100%"}}>
          <svg className='overview' style={{width:offset, height: upAppHeight+"%"}} >
-             <Overview offset={offset} divideNum={this.divideNum}/>
+             <Overview offset={offset} height = {upAppHeight} divideNum={this.divideNum}/>
          </svg>
          
          <svg className='attribute' style={{width:leftWidth-offset, height: upAppHeight+"%"}}>
                <Attributes step={this.step} barWidth={this.barWidth} offsetX={!this.props.compareFlag?(this.offsetX):(offsetComp-offset/4)} offset={offset} foldFlag={this.props.foldFlag} leftWidth={leftWidth}/>
            </svg>
+
            {!this.props.compareFlag?
            <div className='itemset' style={{width: "100%", height: (100-upAppHeight)+"%"}}>
                 <div style={{position:'absolute',left:switchX}} className='view_controller'>
                     {/* View Mode */}
-                    <Switch  style={{float:'left',right:10, top: 6}} onChange={changeView} checkedChildren="parallel" unCheckedChildren="compact"/>
-                    <Button 
-                     icon="setting" 
+                    <Switch  style={{float:'left',right:10, top: 6}} onChange={this.toggleCompact} checkedChildren="parallel" unCheckedChildren="compact"/>
+                    <Switch  style={{float:'left', top: 6}} onChange={this.toggleAggregate} checkedChildren="aggregate"  unCheckedChildren="instance"/>
+                    
+                    <Popover content={pngLegend} title="legend">
+                        <Button type="default" size="small"
+                        // style={{position: "absolute", top:"40%", left:"10px"}}
+                        style={{float:'left', top: 6, marginLeft:'6px'}}> 
+                        legend
+                        </Button>
+                    </Popover>
+
+                    {/* <Button 
+                     icon="rollback" 
                     style={{float:'left'}}
+                    size="small"
                     // tslint:disable-next-line:jsx-no-lambda
                     onClick={(e:React.MouseEvent)=>this.setState({causalVisible:true})}
-                    />
+                    /> */}
                     {/* <Icon 
                         type="eye" 
                         style={{width:'2em', height:'2em', float:'left'}}
@@ -412,21 +420,47 @@ export default class AppMiddel extends React.Component<Props, State>{
                         onClick={e=>this.setState({causalVisible:true})}
                     /> */}
                 </div>
-               <div style={{width: "100%", height: "90%",overflow: "auto"}}>
-                    <Itemsets buttonSwitch={this.viewSwitch} samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset+this.offsetX}/>
+               <div style={{width: "100%", height: "100%",overflow: "auto"}}>
+                    <Itemsets 
+                        buttonSwitch={!this.state.rippleCompact} 
+                        samples={this.props.samples} 
+                        rules={this.props.rules} 
+                        step={this.step} 
+                        barWidth={this.barWidth} 
+                        offset={offset+this.offsetX}
+                        instanceAggregate = {this.state.instanceAggregate}
+                    />
                </div>
            </div>
            :<div className='itemset' style={{width: "100%", height: (100-upAppHeight)+"%",overflowY: "scroll"}}>
                <Row className='modelCompare'>
                 <Col span={4}>
                     <div id='compareLeft'>
-                        <Compared samples={this.props.compSamples} rules={this.props.compRules} step={this.step} barWidth={this.barWidth} offset={compOffset}/>
+                        <Compared 
+                            model={this.props.models[1]}
+                            samples={this.props.compSamples} 
+                            colorMapping={[minColorMapping,maxColorMapping]} 
+                            rules={this.props.compRules} 
+                            step={this.step} 
+                            barWidth={this.barWidth} 
+                            offset={compOffset}
+                            instanceAggregate = {this.state.instanceAggregate}
+                        />
                     </div>
                 </Col>
                 
                 <Col span={20}>
                     <div style={{overflowX:'scroll'}} id='compareRight'>
-                        <ComparePrime samples={this.props.samples} rules={this.props.rules} step={this.step} barWidth={this.barWidth} offset={offset}/>
+                        <ComparePrime 
+                            model={this.props.models[0]}
+                            samples={this.props.samples} 
+                            colorMapping={[minColorMapping,maxColorMapping]} 
+                            rules={this.props.rules} 
+                            step={this.step} 
+                            barWidth={this.barWidth} 
+                            offset={offset}
+                            instanceAggregate = {this.state.instanceAggregate}
+                        />
                     </div>
                 </Col>
                </Row>

@@ -1,11 +1,12 @@
 // import axios from 'axios';
 import * as React from 'react';
 import './App.css';
-import {Col, Row} from 'antd';
+import {Col, Row, Button} from 'antd';
 
 import Samples from 'containers/Samples';
 import Side from 'containers/Side';
 import AppMiddle from 'components/AppMiddle';
+import * as introJs from 'intro.js';
 
 // const axiosInstance = axios.create({
 //   baseURL: `http://localhost:7777/api/`,
@@ -55,6 +56,9 @@ class App extends React.Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p className="App-title">Discrimination in Machine Learning</p>
+          <Button type="default" icon="search" onClick={()=>introJs().start()}>
+            A Walk-Through Tutorial
+          </Button>
         </header>
         <AppMiddle />
         <Row className='App-bottom'>

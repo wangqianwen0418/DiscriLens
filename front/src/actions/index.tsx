@@ -231,12 +231,14 @@ all about compMode
 *****************/ 
 export interface compareMode{
     type:COMPARE_MODE,
+    models:string[],
     compareFlag: boolean
 }
 
-export const changeCompareMode = (compareFlag:boolean):compareMode =>{
+export const changeCompareMode = (compareFlag:boolean, models:string[]):compareMode =>{
     return ({
         type: COMPARE_MODE,
+        models,
         compareFlag
     });
 }
@@ -401,13 +403,15 @@ all about selection
 *****************/ 
 export interface selectionInfo{
     type:SELECTION,
-    selectInfo:{dataset:string,model:string}
+    dataset:string,
+    model:string
 }
 
-export const ChangeSelectionInfo = (selectInfo:{dataset:string,model:string}):selectionInfo =>{
+export const ChangeSelectionInfo = (dataset:string,model:string):selectionInfo =>{
     return ({
         type: SELECTION,
-        selectInfo
+        dataset,
+        model
     });
 }
 /*****************
@@ -475,9 +479,9 @@ export const changeShowDataset = (showDataset: string): showDataset=>{
 // }
 
 export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string) =>{
-    let {keyAttrs,accuracy } = require('../testdata/'+ dataset + '_key.json'), 
-    jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
-    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json'),
+    let {keyAttrs,accuracy } = require('../asset/'+ dataset + '_key.json'), 
+    jsonSamples = require('../asset/'+ dataset + '_' + model + '_samples.json'),
+    jsonRule = require('../asset/'+ dataset + '_' + model + '_rules.json'),
     dragArray = [...Object.keys(jsonSamples[0])]
 
     // remove the attribute 'id' and 'class'
@@ -504,8 +508,8 @@ export const ChangeDataSet = (dataset:string, model:string, protectedAttr:string
 }
 
 export const switchModel=(dataset:string,model:string)=>{
-    let jsonSamples = require('../testdata/'+ dataset + '_' + model + '_samples.json'),
-    jsonRule = require('../testdata/'+ dataset + '_' + model + '_rules.json')
+    let jsonSamples = require('../asset/'+ dataset + '_' + model + '_samples.json'),
+    jsonRule = require('../asset/'+ dataset + '_' + model + '_rules.json')
 
     return (dispatch: any) =>{
         dispatch(GenerateRules(jsonRule))
@@ -522,8 +526,8 @@ export const switchCompModel = (dataset:string,model:string)=>{
         }
     }
     else{
-        let jsonSamples = require('../testdata/' + dataset + '_' + model + '_samples.json'),
-        jsonRule = require('../testdata/' + dataset + '_' + model + '_rules.json')
+        let jsonSamples = require('../asset/' + dataset + '_' + model + '_samples.json'),
+        jsonRule = require('../asset/' + dataset + '_' + model + '_rules.json')
         
         if(!model||!dataset){
             jsonRule = null

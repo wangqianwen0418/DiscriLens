@@ -35,12 +35,13 @@ export interface State {
 export interface curveData {
     x: number,
     y: number,
-    z: number
+    z: number,
+    items?: string[]
 }
 
 export default class Attributes extends React.Component<Props, State>{
     public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 15; rotate = 90;
-    height = window.innerHeight / 10;
+    height = window.innerHeight * 0.3-170;
     posColor = 'rgb(253, 194, 140)';
     negColor = 'rgb(183, 226, 177)';
 
@@ -271,7 +272,7 @@ export default class Attributes extends React.Component<Props, State>{
                     }
                 }
                 let rangeText = <text id={'rangeText'+attr+String(range_i)} fontSize={10} fill='#999'
-                transform={`translate(${range_i * (barWidthidth)+transXText},${this.height*1.2})`}>
+                transform={`translate(${range_i * (barWidthidth)+transXText},${this.height+20})`}>
                 {textShow}</text>
 
                 if(!document.getElementById(`rangeText${attr+String(range_i)}`)){
@@ -375,7 +376,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
 
             // label postition
-            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?1.5*this.height: this.fontSize*1.2*(attr_i-keyAttrNum+1)
+            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?this.height + 50: this.fontSize*1.2*(attr_i-keyAttrNum+1)
             const toggleShowAttr = (e:React.SyntheticEvent)=>{
                 this.toggleShowAttr(attr, showFlag)
             }
@@ -480,7 +481,16 @@ export default class Attributes extends React.Component<Props, State>{
 
         }
 
-        return (<g className='Attributes'>
+        return (<g className='Attributes' data-step='6' 
+        data-intro='<img width="200px" src="../tutorials/attr_head_legend.png" /><br/>This chart shows the distribution of data samples on each attribute. Users can drag and move an attribute. <br/> <img src="../tutorials/label_legend.png" width="100px"/><br/> Users can also click -/+ to collapse/expand an attribute'>
+            <g className="attr_legend" fill="grey">
+                <rect width='20px' height='10px' fill="rgb(138, 201, 253)" y="20px"/> 
+                <text y="40px" font-size="8">beneficial</text>
+                <text y="50px" font-size="8">class</text>
+                <rect width='20px' height='10px' fill='rgb(206, 230, 253)' y="55px"/>
+                <text y="75px" font-size="8">unbeneficial</text>
+                <text y="85px" font-size="8">class</text>
+            </g>
             {content}
         </g>
 

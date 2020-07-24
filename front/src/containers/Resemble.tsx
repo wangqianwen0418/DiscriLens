@@ -1,12 +1,13 @@
 import Resemble from 'components/AppMiddle/Resemble';
 import { StoreState } from 'types';
 import { connect} from 'react-redux';
-import { ChangeKeyAttr,switchCompModel,switchModel,changeCompareMode } from 'actions';
+import { ChangeKeyAttr,switchCompModel,switchModel} from 'actions';
 //import { Dispatch } from 'redux';
 
 export function mapStateToProps(state:StoreState) {
     return {
         foldFlag: state.foldFlag,
+        models:state.models,
         compSamples:state.compSamples,
         rules: state.rules,
         samples: state.samples,
@@ -25,7 +26,7 @@ export function mapDispatchToProps(dispatch: any) {
         onChangeKeyAttrs:(keyAttrs:string[])=>dispatch(ChangeKeyAttr(keyAttrs)),
         onChangeModel:(dataset:string,model:string)=>{dispatch(switchModel(dataset,model))},
         onChangeCompModel:(dataset:string,model:string)=>{dispatch(switchCompModel(dataset,model))},
-        onChangeCompareMode:(compareFlag:boolean)=>{dispatch(changeCompareMode(compareFlag))},
+        // onChangeCompareMode:(compareFlag:boolean, models:string[])=>{dispatch(changeCompareMode(compareFlag, models))},
     }
 }
 

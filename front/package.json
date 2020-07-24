@@ -6,6 +6,7 @@
     "@dagrejs/graphlib": "^2.1.4",
     "@data-ui/histogram": "0.0.77",
     "@types/dagre": "^0.7.41",
+    "@types/intro.js": "^2.4.6",
     "antd": "^3.13.0",
     "axios": "^0.18.0",
     "color-interpolate": "^1.0.4",
@@ -31,7 +32,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts-ts --max_old_space_size=4096 build",
+    "build": "node_modules/.bin/react-scripts-ts --max_old_space_size=12096 build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
@@ -43,8 +44,9 @@
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.12",
     "@types/redux-thunk": "^2.1.0",
+    "intro.js": "^2.9.3",
     "redux-devtools": "^3.5.0",
     "redux-thunk": "^2.3.0",
-    "typescript": "^3.2.2"
+    "typescript": "^3.6.2"
   }
 }

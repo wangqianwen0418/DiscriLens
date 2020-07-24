@@ -43,7 +43,7 @@ export enum Status {
 export interface StoreState{
     // key_attrs: string[], // record key attrs
     dataset: string,
-    model: string,
+    models: string[],
     keyAttrNum: number,
     samples: DataItem[],    // record all samples 
     compSamples: DataItem[], // record all samples of compared model
@@ -72,6 +72,5 @@ export interface StoreState{
     expandRule:{id: number, newAttrs: string[], children: string[]},
     causal: string[],
     unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]}, // unmathed rules from compared models
-    selectInfo : {dataset:string,model:string},// selected model and dataset
     offsetLength:number, // for compare prime offset distance 
 }

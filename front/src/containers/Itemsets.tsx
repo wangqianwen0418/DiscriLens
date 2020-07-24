@@ -19,7 +19,8 @@ export function mapStateToProps(state:StoreState) {
         fetchKeyStatus: state.fetchKeyStatus,
         compareList: state.compareList,
         compareFlag:state.compareFlag,
-        selectInfo:state.selectInfo,
+        model:state.models[0],
+        dataset: state.dataset
     };
 }
 

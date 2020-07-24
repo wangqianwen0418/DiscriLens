@@ -13,12 +13,13 @@ import { StoreState, Status} from 'types';
 import {filterRules} from "Helpers";
 
 import 'antd/dist/antd.css';
+import 'intro.js/minified/introjs.min.css';
 
 const TEST = true
 
 let initState:StoreState
 
-let dataSets = ['adult', 'academic', 'bank'],
+let dataSets = ['adult', 'academic', 'bank','credit'],
     models = ['xgb', 'knn', 'lr'],
     dataSelect = 1,
     modelSelect = 2,
@@ -28,12 +29,12 @@ let dataSets = ['adult', 'academic', 'bank'],
 
 if (TEST){
     let filename = dataset + '_' + model
-    let {keyAttrs, accuracy, causal} = require('./testdata/'+dataset+'_key.json')
-    let samples = require('./testdata/'+filename+'_samples.json')
-    let rules = require('./testdata/'+filename+'_rules.json')
+    let {keyAttrs, accuracy, causal} = require('./asset/'+dataset+'_key.json')
+    let samples = require('./asset/'+filename+'_samples.json')
+    let rules = require('./asset/'+filename+'_rules.json')
     let protectedVal = rules[0].pd
     let protectedAttr = protectedVal.split('=')[0]
-    let ruleThreshold: [number, number] = [-0.2, 0.2]
+    let ruleThreshold: [number, number] = [-0.25, 0.248]
 
     let dragArray = [...Object.keys(samples[0])]
     // remove the attribute 'id' and 'class'
@@ -51,7 +52,7 @@ if (TEST){
 
     initState = {
       dataset, 
-      model,
+      models:[model],
       keyAttrNum: keyAttrs.length, 
       samples,
       allRules: rules,
@@ -77,13 +78,12 @@ if (TEST){
       compareFlag:false,
       causal,
       unMatchedRules:{pos:[],neg:[]},
-      selectInfo : {dataset:'',model:''},
       offsetLength:0,
   }
 }else{
   initState = {
     dataset,
-    model,
+    models:[model],
     keyAttrNum: 0,
     samples: [],
     allRules: [],
@@ -109,7 +109,6 @@ if (TEST){
     compareFlag:false,
     causal: [],
     unMatchedRules:{pos:[],neg:[]},
-    selectInfo:{dataset:'',model:''},
     offsetLength:0,
 }
 }

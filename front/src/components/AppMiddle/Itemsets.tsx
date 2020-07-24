@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataItem, Status, Rule } from 'types';
-import { Icon } from 'antd';
+import { Icon, Tooltip} from 'antd';
 import { ruleAggregate, getAttrRanges, RuleAgg, RuleNode, boundaryColor} from 'Helpers';
 import * as d3 from 'd3';
 
@@ -43,7 +43,9 @@ export interface Props {
     barWidth: number,
     offset: number,
     buttonSwitch: boolean,
-    selectInfo:{dataset:string,model:string},
+    dataset:string,
+    model:string,
+    instanceAggregate: boolean
     onChangeShowAttr: (showAttrs: string[]) => void
     onChangeSelectedBar: (selected_bar: string[]) => void
 }
@@ -55,7 +57,8 @@ export interface State {
     bubblePosition: rect[],
     hoveredBubble:string[],
     pressButton:[string,number],
-    selectInfo:{dataset:string,model:string},
+    dataset:string,
+    model:string,
 }
 export interface ExpandRule {
     id: string,
@@ -162,7 +165,8 @@ export default class Itemset extends React.Component<Props, State>{
             bubblePosition:[],
             hoveredBubble:[],
             pressButton:['',-1],
-            selectInfo:{dataset:'',model:''}
+            dataset:'',
+            model:''
         }
         this.toggleExpand = this.toggleExpand.bind(this)
         this.toggleHighlight = this.toggleHighlight.bind(this)
@@ -316,104 +320,57 @@ export default class Itemset extends React.Component<Props, State>{
             }
             }
         >
-            <g
-                className="score"
-                transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
-            // //tslint:disable-next-line:jsx-no-lambda
-            // onMouseEnter={()=>this.setState({highlightRule: rule.id.toString()})}
-            // // tslint:disable-next-line:jsx-no-lambda
-            // onMouseLeave={()=> this.setState({highlightRule:''})}
-            >
+            <Tooltip title={`${rule.conf_pd.toFixed(2)}-${rule.conf_pnd.toFixed(2)}=${rule.risk_dif.toFixed(2)}`}>
+                <g
+                    className="score"
+                    transform={`translate(${-itemScale.range()[1] + indent - this.headWidth * 0.1}, ${this.lineInterval * 0.5})`}
+                >
 
-                <path
-                    className="background in"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                    fill="#eee"
-                    // stroke="transparent"
-                />
+                    <path
+                        className="background in"
+                        d={innerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2
+                        })}
+                        fill="#eee"
+                        // stroke="transparent"
+                    />
 
-                <path
-                    className="in bar"
-                    d={innerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2 * (Math.min(rule.conf_pd, 0.999))
-                    })}
-                    // fill={this.pdColor[1]}
-                    fill={this.scoreColor(this.props.ruleThreshold[1]||0.001)}
-                    // stroke="white"
-                />
-                {/* <path
-                    className="out bar"
-                    d={outerArc({
-                        startAngle: Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pd
-                    })}
-                    // fill="#FF9F1E"
-                    fill="url(#negativeGradient)"
-                /> */}
-                {/* <g className='in gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pd - inConf) * 50))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={innerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 50),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 50),
-                                })}
-                                fill={this.scoreColor((i + 1) / 50)}
-                            />
+                    <path
+                        className="in bar"
+                        d={innerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2 * (Math.min(rule.conf_pd, 0.999))
                         })}
-                </g> */}
-                <path
-                    className="background out"
-                    fill='#eee'
-                    // stroke="transparent"
-                    d={outerArc({
-                        startAngle: 0,
-                        endAngle: Math.PI * 2
-                    })}
-                />
-                {/* <path
-                    className="in conf bar"
-                    fill="#98E090"
-                    d = {innerArc({
-                        startAngle:Math.PI*2*inConf,
-                        endAngle: Math.PI*2*rule.conf_pnd
-                    })}
-                /> */}
-                <path
-                    className="out conf bar"
-                    // fill={d3.interpolateGreens(0.2)}
-                    // fill={this.pdColor[0]}
-                    fill={this.scoreColor(this.props.ruleThreshold[0]||-0.001)}
-                    d={outerArc({
-                        startAngle: 0,
-                        // endAngle: Math.PI * 2 * rule.conf_pnd
-                        endAngle: Math.PI * 2 *(Math.min(rule.conf_pnd, 0.999))
-                    })}
-                    // stroke="white"
-                />
-                {/* <g className='out gradientArc'>
-                    {d3.range(Math.floor((rule.conf_pnd - inConf) * 360))
-                        .map(i => {
-                            return <path key={i} className="out bar"
-                                d={outerArc({
-                                    startAngle: Math.PI * 2 * (inConf + i / 360),
-                                    endAngle: Math.PI * 2 * (inConf + (i + 1) / 360),
-                                })}
-                                fill={this.scoreColor(-(i+1)/360)}
-                            />
-                        })}
-                </g> */}
+                        // fill={this.pdColor[1]}
+                        fill={this.scoreColor(this.props.ruleThreshold[1]||0.001)}
+                        // stroke="white"
+                    />
                 
-                {/* <g className='pin icon' transform={`translate(${0}, ${-itemScale.range()[1]})`} opacity={0}>{PIN}</g> */}
+                    <path
+                        className="background out"
+                        fill='#eee'
+                        // stroke="transparent"
+                        d={outerArc({
+                            startAngle: 0,
+                            endAngle: Math.PI * 2
+                        })}
+                    />
+                    <path
+                        className="out conf bar"
+                        // fill={d3.interpolateGreens(0.2)}
+                        // fill={this.pdColor[0]}
+                        fill={this.scoreColor(this.props.ruleThreshold[0]||-0.001)}
+                        d={outerArc({
+                            startAngle: 0,
+                            // endAngle: Math.PI * 2 * rule.conf_pnd
+                            endAngle: Math.PI * 2 *(Math.min(rule.conf_pnd, 0.999))
+                        })}
+                        // stroke="white"
+                    />
+                </g>
 
-                {/* <text textAnchor='middle' fontSize={this.lineInterval-progressBarWidth} y={ (this.lineInterval-progressBarWidth)/2 }>
-                    {rule.risk_dif.toFixed(2).replace('0.', '.')}
-                </text> */}
-            </g>
+            </Tooltip>
             <text fontSize={this.fontSize} y={this.lineInterval-2} textAnchor="end" x={-this.headWidth - 2 * outRadius}>
                 {/* {items.length} */}
                 {/* -
@@ -938,6 +895,7 @@ export default class Itemset extends React.Component<Props, State>{
                             highlightRules={[...highlightRules[ruleAgg.id]] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
+                            instanceAggregate ={this.props.instanceAggregate}
                         />
 
                         // let connectionCurve:any
@@ -1202,18 +1160,21 @@ export default class Itemset extends React.Component<Props, State>{
         let connectionCurve = this.drawConnection(this)
         return <g key='rules' transform={`translate(${0}, ${this.margin})`}>
             {/* <foreignObject><Euler ruleAgg={positiveRuleAgg[1]}/></foreignObject> */}
-            
-            <g className='bubbles'>
-                {connectionCurve}
+            <g className='rippleSet' data-step='5' data-intro='<h4>RippleSet</h4><br/><img height="150px" src="../tutorials/legend.png">'>
+                <g className='bubbles'>
+                    {connectionCurve}
+                </g>
+                <g className='bubbles'>
+                    {bubbles}
+                </g>
             </g>
-            <g className='bubbles'>
-                {bubbles}
-            </g>
+            <g className="attribute matrix" data-step='7' data-intro='<h4>Attribute Matrix</h4>Each row is a group of individuals. <br/> The solid part in the rectangle indicates the range of an attribute. <br/> Users can click ► to expand for more details.<br/> <img width="200px" src="../tutorials/glyph_legend.png"/>'>
             <g className='positive rules'>
                 {posRules}
             </g>
             <g className='negative rules'>
                 {negaRules}
+            </g>
             </g>
         </g>
     }
@@ -1499,8 +1460,11 @@ export default class Itemset extends React.Component<Props, State>{
         let { fetchKeyStatus } = this.props
         let content: JSX.Element = <g />
         this.bubbleSize = []
-        if((this.state.selectInfo.dataset!=this.props.selectInfo.dataset)||(this.state.selectInfo.model!=this.props.selectInfo.model)){
-            this.setState({selectInfo:this.props.selectInfo})
+        if((this.state.dataset!=this.props.dataset)||(this.state.model!=this.props.model)){
+            this.setState({
+                dataset:this.props.dataset,
+                model: this.props.model
+            })
             this.leaveRect()
             this.expandRulesIndex = []
             this.expandedNum = -1
@@ -1536,6 +1500,7 @@ export default class Itemset extends React.Component<Props, State>{
         }
         let borderHeight = document.getElementsByClassName('itemset').length!=0?Math.max(document.getElementsByClassName('itemset')[0].clientHeight,svgHeight):'100%'
         let borderWidth = this.xMaxValue + this.props.offset + 10
+
         return (<svg className='itemset' style={{ width: borderWidth, height: borderHeight}}>
             <g className='rules' >
                 {content}

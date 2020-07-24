@@ -91,11 +91,11 @@ const reducer = (state: StoreState, action: AllActions): StoreState => {
       case EXPAND_RULE:
         return {...state,expandRule:action.expandRule}
       case COMPARE_MODE:
-        return {...state,compareFlag:action.compareFlag}
+        return {...state,compareFlag:action.compareFlag, models:action.models}
       case UNMATCHED:
         return {...state,unMatchedRules:action.unMatchedRules}
       case SELECTION:
-      return  {...state,selectInfo:action.selectInfo}
+        return  {...state, dataset:action.dataset, models:[action.model]}
       case OFFSET:
         return {...state,offsetLength:action.offsetLength}
       default:

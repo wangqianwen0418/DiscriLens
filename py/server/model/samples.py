@@ -81,15 +81,15 @@ def get_numAttrs(data):
 
 def generate_model_samples(samplesInit, mdlp, model, encoder):
     """
-    models behavior on generated sample data:
+    get model prediction
     Args:
-        sampleInit(pandas DataFrame): synthetic data
+        sampleInit(pandas DataFrame): data to predict
         mdlp (MDLP instance): mdlp transformer
         model(sklearn model object): already trained model
         encoder(instance of DataGene): instance of DataGene, already fit 
     Return:
         model_samples(pandas DataFrame): generated samples(not-categorized) for front-end
-        storeData(pandas DataFrame): generated samples(categorized) for storing (saving as file)
+        cate_samples(pandas DataFrame): generated samples(categorized) for storing (saving as file)
     """
     samples = num2cate_transform(samplesInit, mdlp)
     # model predict
@@ -102,10 +102,9 @@ def generate_model_samples(samplesInit, mdlp, model, encoder):
     model_samples = samplesInit.copy()
     model_samples['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
 
-    storeData = samples.copy()
-    storeData['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
-    return model_samples, storeData
-    # return pd.concat([model_samples,storeData]), storeData
+    cate_samples = samples.copy()
+    cate_samples['class'] = pd.Series(np.asarray(y_samples), index= samples.index) 
+    return model_samples, cate_samples
 
 def findKeyAttrs(samples, protect_attr='', result_attr = 'class'):
     """

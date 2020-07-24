@@ -31,6 +31,7 @@ import "./Itemsets.css";
 
 export interface Props {
     rules: Rule[],
+    model:string,
     samples: DataItem[],
     ruleThreshold: [number, number],
     keyAttrNum: number,
@@ -41,10 +42,12 @@ export interface Props {
     step: number,
     barWidth: number,
     offset: number,
+    colorMapping:[number,number],
     expandRule:{id: number, newAttrs: string[], children: string[]},
     compareList:{b2:rect[],r:{y:number,r:string[],risk:boolean}[],p:number,yMax:any},
     onTransCompareOffset:(compareOffset:{y:number[],index:number[]}) =>void
     onChangeUnMathedRules:(unMatchedRules:{pos:[RuleAgg,number][],neg:[RuleAgg,number][]})=>void
+    instanceAggregate: boolean
     // onTransExpandRule:(expandRule:{id: number, newAttrs: string[], children: string[]})=>void
 }
 export interface State {
@@ -111,7 +114,8 @@ export default class Compared extends React.Component<Props, State>{
     bubblePosition:rect[] =[];
     matchBubblePosition:rect[]=[];
     scoreColor = (score: number) => {
-        let [minScore, maxScore] = d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        let [minScore, maxScore] = this.props.colorMapping//d3.extent(this.props.rules.map(rule => rule.risk_dif))
+        // console.log('2',minScore,maxScore);
         if (score < 0) {
             return d3.interpolateGreens(
                 d3.scaleLinear()
@@ -614,6 +618,7 @@ export default class Compared extends React.Component<Props, State>{
                             highlightRules={this.state.highlightRules[ruleAgg.id] || []}
                             samples={this.props.samples}
                             protectedVal={this.props.protectedVal}
+                            instanceAggregate ={this.props.instanceAggregate}
                         />
                         let bubbleLine:any
                         if(bubblePosition.length == listLength){
@@ -1205,6 +1210,9 @@ export default class Compared extends React.Component<Props, State>{
         let borderHeight = document.getElementsByClassName('itemsetCompared').length!=0?Math.max(document.getElementsByClassName('itemsetCompared')[0].clientHeight,svgHeight):'100%'
 
         return (<svg className='itemsetCompared' style={{ width: '100%', height: borderHeight}}>
+            <path d='M36,30 l-6,6'  fill='none' stroke="black" />
+            <path d='M30,30 l6,6' fill='none' stroke="black" />
+            <text x='45' y="37">{this.props.model}</text>
             <g className='rules' key={'compared'}>
                 {content}
             </g>

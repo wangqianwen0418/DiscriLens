@@ -8,6 +8,12 @@ export const stringTransfer=(input:string)=>{
     else if(input=='AbsenceDays'){
         return 'StudentAbsenceDays'
     }
+    else if(input=='hours'){
+        return "hours-per-week"
+    }
+    else if(input=='educational'){
+        return "educational-num"
+    }
     else{
         return input
     }
