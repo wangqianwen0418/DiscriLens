@@ -172,7 +172,7 @@ export default class AppMiddel extends React.Component<Props, State>{
                     rectHeight = 1.5 * rectHeight
                     textFront = content.slice(0,Math.floor(content.length/2))
                     textEnd = content.slice(Math.floor(content.length/2),content.length)
-                    content = [textFront,textEnd]
+                    content = textFront+textEnd
                     multiFlag = true
                 }
                 let chooseKey=()=>{
@@ -354,7 +354,7 @@ export default class AppMiddel extends React.Component<Props, State>{
             </g>
         }
 
-        let pngLegend = <img src="../tutorials/legend.png" height="150px"/>
+        let pngLegend = <img src="../tutorials/pop_legend.png" height="150px"/>
 
         // consistant color mapping for compaare model and prime model
         let [minScoreComp, maxScoreComp] = [0,0]
@@ -382,7 +382,7 @@ export default class AppMiddel extends React.Component<Props, State>{
 
          <Col span={leftAppSpan} className='App-right' style={{height:"100%"}}>
          <svg className='overview' style={{width:offset, height: upAppHeight+"%"}} >
-             <Overview offset={offset} divideNum={this.divideNum}/>
+             <Overview offset={offset} height = {upAppHeight} divideNum={this.divideNum}/>
          </svg>
          
          <svg className='attribute' style={{width:leftWidth-offset, height: upAppHeight+"%"}}>

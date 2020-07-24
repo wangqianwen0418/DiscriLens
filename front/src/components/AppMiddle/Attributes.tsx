@@ -35,12 +35,13 @@ export interface State {
 export interface curveData {
     x: number,
     y: number,
-    z: number
+    z: number,
+    items?: string[]
 }
 
 export default class Attributes extends React.Component<Props, State>{
     public bar_margin = 1; attr_margin = 8; viewSwitch = -1; fontSize = 15; rotate = 90;
-    height = window.innerHeight / 10;
+    height = window.innerHeight * 0.3-170;
     posColor = 'rgb(253, 194, 140)';
     negColor = 'rgb(183, 226, 177)';
 
@@ -271,7 +272,7 @@ export default class Attributes extends React.Component<Props, State>{
                     }
                 }
                 let rangeText = <text id={'rangeText'+attr+String(range_i)} fontSize={10} fill='#999'
-                transform={`translate(${range_i * (barWidthidth)+transXText},${this.height*1.2})`}>
+                transform={`translate(${range_i * (barWidthidth)+transXText},${this.height+20})`}>
                 {textShow}</text>
 
                 if(!document.getElementById(`rangeText${attr+String(range_i)}`)){
@@ -375,7 +376,7 @@ export default class Attributes extends React.Component<Props, State>{
             }
 
             // label postition
-            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?1.5*this.height: this.fontSize*1.2*(attr_i-keyAttrNum+1)
+            let labelX = showFlag?0:0.3*this.height,  labelY = showFlag?this.height + 50: this.fontSize*1.2*(attr_i-keyAttrNum+1)
             const toggleShowAttr = (e:React.SyntheticEvent)=>{
                 this.toggleShowAttr(attr, showFlag)
             }

@@ -16,7 +16,8 @@ export interface Props{
     offset:number,
     divideNum:number,
     compareFlag:boolean,
-    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void
+    onChangeRuleThreshold : (ruleThreshold:[number, number])=>void,
+    height:number
 }
 export interface State{
     transformXLeft: number,
@@ -39,7 +40,7 @@ export default class Overview extends React.Component<Props,State>{
     // right end position
     rightEnd = window.innerWidth * 0.15; 
     // bottom end position
-    bottomEnd = 140; 
+    bottomEnd = window.innerHeight*0.3 - 150; 
     // top start position 
     topStart = 30 ;
     // a standard reference length
@@ -228,7 +229,7 @@ export default class Overview extends React.Component<Props,State>{
             //     dataKeyAttr[curveX.indexOf(rule['favorPD'])].y = rule.items.length
             // }
             curveX.push(rule['favorPD'])
-                dataKeyAttr.push({x:rule['favorPD'],y:rule.items.length,z:0})
+            dataKeyAttr.push({x:rule['favorPD'],y:rule.items.length, z:0, items: rule.items})
         })
 
         // sort sample points by risk_dif
@@ -521,6 +522,8 @@ export default class Overview extends React.Component<Props,State>{
                     
                 </g>
         }
+
+        
         return <g>
                 <g>
                     {dataKeyAttr.map((data,i)=>{
@@ -533,8 +536,32 @@ export default class Overview extends React.Component<Props,State>{
                                 opacity = 1
                                 color = this.posColor
                             }
-                            return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} 
-                            style={{fill:'white',opacity:opacity,stroke:color,strokeWidth:2}} className='overview'>
+                            return <circle cx={xScale(data.x)} cy={bottomEnd+yScale(data.y)} r={3} key={i}
+                            style={{fill:'white',opacity:opacity,stroke:color,strokeWidth:2}} className='overview'
+                            cursor="pointer"
+                            onMouseEnter={
+                                // tslint:disable-next-line:jsx-no-lambda
+                                ()=>{ 
+                                d3.selectAll('.inner.bubbles')
+                                .style('opacity', 0.1);
+
+                                d3.selectAll('.inner.bubbles')
+                                .filter(
+                                    function(){
+                                        return data.items
+                                            .map(d=>d.toString())
+                                            .includes(
+                                            d3.select(this).attr('id')
+                                            )
+                                    })
+                                .style('opacity', 1)
+                            }}
+                            onMouseLeave={
+                                // tslint:disable-next-line:jsx-no-lambda
+                                ()=>{ d3.selectAll('.inner.bubbles')
+                                .style('opacity', 1)
+                            }}
+                            >
                             <title>{`[${data.x.toFixed(2)}, ${data.y}]`}</title>
                             </circle>
                         })}
