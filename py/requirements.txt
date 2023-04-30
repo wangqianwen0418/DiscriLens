@@ -23,7 +23,7 @@ jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.2.4
 jupyter-console==6.0.0
-jupyter-core==4.4.0
+jupyter-core==4.11.2
 MarkupSafe==1.1.0
 -e git+https://github.com/hlin117/mdlp-discretization@205a67faefac9ed4a8102de0c991b580c1a9a922#egg=mdlp_discretization
 mistune==0.8.4
