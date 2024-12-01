@@ -45,7 +45,7 @@ py==1.8.0
 py-d3==0.3.0
 -e git://github.com/bd2kccd/py-causal@0c0052ddd184b12658af15d3a088f95490d4b4e2#egg=pycausal
 pydot==1.4.1
-Pygments==2.3.1
+Pygments==2.7.4
 pyparsing==2.3.0
 pytest==4.3.0
 python-dateutil==2.7.5
