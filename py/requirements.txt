@@ -26,7 +26,7 @@ jupyter-console==6.0.0
 jupyter-core==4.4.0
 MarkupSafe==1.1.0
 -e git+https://github.com/hlin117/mdlp-discretization@205a67faefac9ed4a8102de0c991b580c1a9a922#egg=mdlp_discretization
-mistune==0.8.4
+mistune==2.0.3
 more-itertools==6.0.0
 nbconvert==5.4.0
 nbformat==4.4.0
